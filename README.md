@@ -59,7 +59,7 @@
 
 ## Версія і оновлення
 
-Версія написана дрібним під меню — `v1.0.9`, а поруч кнопка **«🔄 Оновити»** просто на головній:
+Версія написана дрібним під меню — `v1.1.0`, а поруч кнопка **«🔄 Оновити»** просто на головній:
 вона тягне сторінку повз кеш і порівнює номер.
 Якщо на сервері новіша — чистить офлайн-кеш і service worker і перезавантажує гру.
 Якщо та сама — так і каже. Без інтернету не мовчить, а повідомляє.
@@ -76,8 +76,8 @@
 
 ## Звуки тварин
 
-Двадцять тварин звучать **справжніми записами**, не синтезом. Записи взято з
-[BigSoundBank](https://bigsoundbank.com) — там усе під ліцензією **CC0** (суспільне надбання),
+Сорок дві тварини з сорока чотирьох звучать **справжніми записами**, не синтезом. Записи взято з
+Перші двадцять — з [BigSoundBank](https://bigsoundbank.com) — там усе під ліцензією **CC0** (суспільне надбання),
 вказувати автора не обов'язково, але чесно це зробити:
 
 | Тварина | Запис | Файл у `sounds/` |
@@ -103,9 +103,51 @@
 | 🐦 соловей | [Common Nightingale #2](https://bigsoundbank.com/common-nightingale-2-s3087.html) | `nightingale.mp3` |
 | 🪰 муха | [Fly and Glass](https://bigsoundbank.com/fly-and-glass-s0759.html) | `fly.mp3` |
 
+### Ще 22 — дикі тварини (з 1.1.0)
+
+Диких тварин на BigSoundBank немає, тож вони звідси:
+
+- **Служба національних парків США (NPS)** і **U.S. Fish & Wildlife Service** — роботи федерального уряду США, **суспільне надбання**;
+- **[SoundBible.com](https://soundbible.com)** — або суспільне надбання, або **CC BY 3.0**. Для CC BY автора *обовʼязково* вказати — тому в грі, на екрані «🎤 Свої голоси», внизу є подяка авторам.
+
+| Тварина | Запис | Автор · ліцензія | Файл у `sounds/` |
+|---|---|---|---|
+| 🐻 ведмідь | [запис](https://soundbible.com/241) | U.S. Fish & Wildlife Service · public domain | `bear.mp3` |
+| 🦊 лисиця | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLMJ23200837redfox.mp3) | NPS / Shan Burson · public domain | `fox.mp3` |
+| 🐿️ білка | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLSGYredsquirrel2004320.mp3) | NPS / Shan Burson · public domain | `squirrel.mp3` |
+| 🦁 лев | [запис](https://soundbible.com/1272) | Mike Koenig, SoundBible.com · CC BY 3.0 | `lion.mp3` |
+| 🐘 слон | [запис](https://soundbible.com/1136) | Mike Koenig, SoundBible.com · CC BY 3.0 | `elephant.mp3` |
+| 🐒 мавпа | [запис](https://soundbible.com/1188) | Mike Koenig, SoundBible.com · CC BY 3.0 | `monkey.mp3` |
+| 🐯 тигр | [запис](https://soundbible.com/1485) | Mike Koenig, SoundBible.com · CC BY 3.0 | `tiger.mp3` |
+| 🪿 гусак | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-CanadaGoose.mp3) | NPS · public domain | `goose.mp3` |
+| 🦃 індик | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/romo-WITUROMO5192016AlluvialFan.mp3) | NPS Rocky Mountain / J. Job | `turkey.mp3` |
+| 🕊️ голуб | [запис](https://soundbible.com/1850) | Mike Koenig, SoundBible.com · CC BY 3.0 | `dove.mp3` |
+| 🦟 комар | [запис](https://soundbible.com/398) | Mike Koenig, SoundBible.com · CC BY 3.0 | `mosquito.mp3` |
+| 🦌 олень | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-ElkBuglingGRSA.mp3) | NPS · public domain | `deer.mp3` |
+| 🦅 орел | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-BaldEagleYELL.mp3) | NPS · public domain | `eagle.mp3` |
+| 🦢 лебідь | [запис](https://soundbible.com/275) | U.S. Fish & Wildlife Service · public domain | `swan.mp3` |
+| 🐳 кит | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-HumpbackGLBA.mp3) | NPS Glacier Bay · public domain | `whale.mp3` |
+| 🦭 тюлень | [запис](https://soundbible.com/142) | Mike Koenig, SoundBible.com · CC BY 3.0 | `seal.mp3` |
+| 🐊 крокодил | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-AlligatorEVER1.mp3) | NPS Everglades · public domain | `crocodile.mp3` |
+| 🐍 змія | [запис](https://soundbible.com/237) | U.S. Fish & Wildlife Service · public domain | `snake.mp3` |
+| 🦍 горила | [запис](https://soundbible.com/1149) | SoundBible.com · public domain | `gorilla.mp3` |
+| 🦬 зубр | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLMM8K2005914Bison.mp3) | NPS / Shan Burson · public domain | `bison.mp3` |
+| 🦇 кажан | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-SpottedBatYOSE.mp3) | NPS Yosemite · public domain | `bat.mp3` |
+| 🦚 павич | [запис](https://soundbible.com/1430) | Caroline Ford, SoundBible.com · CC BY 3.0 | `peacock.mp3` |
+
+У кожної дикої тварини є ще й запасна адреса (крім кількох): якщо головна не відповідає — гра пробує другу, а вже потім синтез.
+
+### Нові тварини відкриваються поступово
+
+Спершу в грі дванадцять знайомих — корова, песик, котик… Кожна правильна відповідь відкриває
+ще одного звіра, і гра каже: «Новий звір: 🦁 лев». Порядок — від свійських до екзотичних,
+тож кит і павич зʼявляться, коли дитина вже впевнено знає двір. Що відкрито — памʼятається.
+
+Схожі на слух не стоять в одному завданні: лев і тигр, ведмідь і горила, комар і муха,
+гусак і лебідь, зубр і корова тощо.
+
 🐷 **Свинки** й 🐺 **вовка** серед вільних записів немає (є лише людська імітація свині),
-тож вони лишаються синтезованими. Лева, слона, мавпи, ведмедя, гуски чи індика
-серед вільних записів там немає зовсім — тому їх і не додано.
+тож вони лишаються синтезованими.
 
 Звуки, які дитина на слух не розрізнить (бджілка й муха, мишка й курча, соловей
 і папуга), в одному завданні не випадають. Тварин, чий емодзі старий телефон не
@@ -120,14 +162,14 @@
 1. **Свій запис** батьків. Батьківський куточок → **🎤 Свої голоси** → біля тварини 🎤,
    сказати в мікрофон (до 4 с). Лежить лише на цьому пристрої.
 2. **Файл у папці `sounds/`** поруч із грою. Працює **без інтернету**.
-3. **Той самий запис з інтернету** — напряму з BigSoundBank. Працює одразу, нічого
+3. **Той самий запис з інтернету** — напряму з BigSoundBank, NPS чи SoundBible. Працює одразу, нічого
    класти не треба, але потрібен інтернет.
 4. **Синтез.** Якщо нічого з переліченого не вийшло — або запис не почав грати
    за 2,5 секунди — гра синтезує звук сама.
 
 ### Щоб звуки працювали й офлайн
 
-У теці гри запустити `get-sounds.ps1` — він скачає двадцять записів у `sounds/`.
+У теці гри запустити `get-sounds.ps1` — він скачає всі 42 записи в `sounds/`.
 Потім залити папку `sounds` у репозиторій поруч з `index.html`.
 
 ```powershell
@@ -140,7 +182,7 @@ powershell -ExecutionPolicy Bypass -File .\get-sounds.ps1
 - Мелодії, ефекти й голоси свинки та вовка синтезуються через Web Audio API. Решта тварин — справжні записи (див. вище).
 - PWA: можна додати на головний екран і грати в літаку (`sw.js` кешує оболонку).
 - Прогрес (зірочки, наліпки, рекорд і швидкість у змійці, свої записи) зберігається в `localStorage` лише на цьому пристрої.
-- Запити в мережу: перевірка `sounds/cow.mp3` при вході в «Хто як говорить» (немає папки — у консолі буде 404, це нормально), записи тварин з BigSoundBank, якщо папки `sounds/` немає, і кнопка «Оновити» в батьківському куточку.
+- Запити в мережу: перевірка `sounds/cow.mp3` при вході в «Хто як говорить» (немає папки — у консолі буде 404, це нормально), записи тварин з BigSoundBank, nps.gov і soundbible.com, якщо папки `sounds/` немає, і кнопка «Оновити» в батьківському куточку.
 
 ### Файли
 
@@ -162,4 +204,4 @@ sounds/                    необовʼязково — справжні за�
 
 ---
 
-Версія 1.0.9
+Версія 1.1.0

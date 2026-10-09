@@ -91,6 +91,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t17{background:linear-gradient(170deg,#d7c4ff,#8e64ff)}
 
 /* ---------- ігри на памʼять ---------- */
+.credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
 .mbar{height:8px;border-radius:5px;background:#ffffff14;overflow:hidden;max-width:360px;width:100%;margin:-4px auto 8px}
 .mbar:empty{visibility:hidden}
 .mbar i{display:block;height:100%;width:100%;background:var(--yel);border-radius:5px}
@@ -543,6 +544,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 <section class="scr" id="s-rec">
   <div class="ask" id="recAsk">Запишіть голоси самі<small>🎤 — записати (до 4 с) · ▶ — послухати</small></div>
   <div class="reclist" id="recList"></div>
+  <p class="credits">Звуки тварин: BigSoundBank (CC0); Служба національних парків США та U.S. Fish &amp; Wildlife
+    Service (суспільне надбання); SoundBible.com — Mike Koenig, Caroline Ford (CC BY 3.0) та записи в суспільному
+    надбанні. Повний перелік — у README.</p>
 </section>
 
 <!-- наліпки -->
@@ -557,7 +561,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.0.9';
+const APP_VERSION = '1.1.0';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -932,14 +936,23 @@ $('#letters').onclick = (e) => {
 /* ================================================================
    5. ХТО ЯК ГОВОРИТЬ
    ================================================================ */
+/* Порядок важливий: гра відкриває тварин поступово, від знайомих зі двору
+   до екзотичних. Спершу дванадцять, далі по одній новій за кожну правильну відповідь. */
 const ANI_SET = [['🐮', 'корова', 'мууу'], ['🐶', 'песик', 'гав-гав'], ['🐱', 'котик', 'няв-няв'],
                  ['🐑', 'вівця', 'бее-бее'], ['🐷', 'свинка', 'хрю-хрю'], ['🐸', 'жабка', 'ква-ква'],
                  ['🐔', 'курочка', 'ко-ко-ко'], ['🐓', 'півник', 'кукуріку'], ['🦆', 'качка', 'кря-кря'],
                  ['🐴', 'конячка', 'і-го-го'], ['🐭', 'мишка', 'пі-пі-пі'], ['🐺', 'вовк', 'уууу'],
-                 ['🦉', 'сова', 'угу-угу'], ['🐐', 'коза', 'ме-е-е'], ['🫏', 'ослик', 'іа-іа'],
-                 ['🐝', 'бджілка', 'дз-з-з'], ['🐦‍⬛', 'ворона', 'кар-кар'], ['🦗', 'цвіркун', 'цвір-цвір'],
-                 ['🐥', 'курча', 'пі-пі'], ['🦜', 'папуга', 'чірік'], ['🐦', 'соловей', 'тьох-тьох'],
-                 ['🪰', 'муха', 'ж-ж-ж']];
+                 ['🐥', 'курча', 'пі-пі'], ['🐐', 'коза', 'ме-е-е'], ['🫏', 'ослик', 'іа-іа'],
+                 ['🐝', 'бджілка', 'дз-з-з'], ['🪰', 'муха', 'ж-ж-ж'], ['🐻', 'ведмідь', 'р-р-р'],
+                 ['🦊', 'лисиця', 'тяв-тяв'], ['🐿️', 'білка', 'цок-цок'], ['🦉', 'сова', 'угу-угу'],
+                 ['🐦‍⬛', 'ворона', 'кар-кар'], ['🦁', 'лев', 'р-р-р-а-а'], ['🐘', 'слон', 'ту-у-у'],
+                 ['🐒', 'мавпа', 'у-у-а-а'], ['🐯', 'тигр', 'гр-р-р'], ['🪿', 'гусак', 'га-га-га'],
+                 ['🦃', 'індик', 'бл-бл-бл'], ['🕊️', 'голуб', 'гур-гур'], ['🦜', 'папуга', 'чірік'],
+                 ['🐦', 'соловей', 'тьох-тьох'], ['🦗', 'цвіркун', 'цвір-цвір'], ['🦟', 'комар', 'з-з-з'],
+                 ['🦌', 'олень', 'у-у-у'], ['🦅', 'орел', 'кі-кі-кі'], ['🦢', 'лебідь', 'ґа-ґу'],
+                 ['🐳', 'кит', 'у-у-у-ум'], ['🦭', 'тюлень', 'арф-арф'], ['🐊', 'крокодил', 'гр-р-м'],
+                 ['🐍', 'змія', 'тр-р-р'], ['🦍', 'горила', 'у-у-у'], ['🦬', 'зубр', 'му-у-у'],
+                 ['🦇', 'кажан', 'пі-пі'], ['🦚', 'павич', 'а-а-у']];
 /* ---------- голос тварини: джерело + форманти ----------
    Одна «пилка крізь фільтр» звучить як синтезатор, а не як тварина.
    Живий голос - це гудіння зв'язок, пропущене крізь два-три резонанси
@@ -1137,7 +1150,12 @@ const ANI = { cur: null, busy: false, first: true };
 const ANI_FILE = { корова: 'cow', песик: 'dog', котик: 'cat', вівця: 'sheep', свинка: 'pig', жабка: 'frog',
                    курочка: 'hen', півник: 'rooster', качка: 'duck', конячка: 'horse', мишка: 'mouse', вовк: 'wolf',
                    сова: 'owl', коза: 'goat', ослик: 'donkey', бджілка: 'bee', ворона: 'crow', цвіркун: 'cricket',
-                   курча: 'chick', папуга: 'parrot', соловей: 'nightingale', муха: 'fly' };
+                   курча: 'chick', папуга: 'parrot', соловей: 'nightingale', муха: 'fly',
+                   ведмідь: 'bear', лисиця: 'fox', білка: 'squirrel', лев: 'lion', слон: 'elephant',
+                   мавпа: 'monkey', тигр: 'tiger', гусак: 'goose', індик: 'turkey', голуб: 'dove',
+                   комар: 'mosquito', олень: 'deer', орел: 'eagle', лебідь: 'swan', кит: 'whale',
+                   тюлень: 'seal', крокодил: 'crocodile', змія: 'snake', горила: 'gorilla', зубр: 'bison',
+                   кажан: 'bat', павич: 'peacock' };
 const REC = LS.get('rec', {});     // {назва тварини: запис у вигляді data-URL}
 let SND_PACK = null;               // чи є поруч папка sounds/
 let CUR_AUDIO = null;
@@ -1165,9 +1183,42 @@ const ANI_SRC = {
   бджілка: { id: '1000', max: 3 }, ворона: { id: '3463', max: 3 }, цвіркун: { id: '1020', max: 3 },
   курча: { id: '0430', max: 3 }, папуга: { id: '2774', max: 2.5 }, соловей: { id: '3087', max: 3.5 },
   муха: { id: '0759', max: 3 },
+  /* 1.1.0. Диких тварин на BigSoundBank немає, тож вони звідси:
+     - Служба національних парків США (NPS) і Служба рибних ресурсів і дикої природи (USFWS):
+       роботи федерального уряду США, суспільне надбання;
+     - SoundBible.com: або суспільне надбання, або CC BY 3.0 - тоді автор у полі cr.
+     Перша адреса - головна, друга - запасна. */
+  ведмідь: { url: ['https://soundbible.com/grab.php?id=241&type=mp3'], max: 3.5, cr: 'U.S. Fish & Wildlife Service · public domain' },
+  лисиця: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLMJ23200837redfox.mp3'], max: 3.5, cr: 'NPS / Shan Burson · public domain' },
+  білка: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLSGYredsquirrel2004320.mp3', 'https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-SquirrelYELL.mp3'], max: 3, cr: 'NPS / Shan Burson · public domain' },
+  лев: { url: ['https://soundbible.com/grab.php?id=1272&type=mp3', 'https://soundbible.com/grab.php?id=1282&type=mp3'], max: 3.5, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  слон: { url: ['https://soundbible.com/grab.php?id=1136&type=mp3', 'https://soundbible.com/grab.php?id=1140&type=mp3'], max: 3.5, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  мавпа: { url: ['https://soundbible.com/grab.php?id=1188&type=mp3'], max: 3.5, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  тигр: { url: ['https://soundbible.com/grab.php?id=1485&type=mp3'], max: 3.5, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  гусак: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-CanadaGoose.mp3', 'https://soundbible.com/grab.php?id=1202&type=mp3'], max: 3, cr: 'NPS · public domain' },
+  індик: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/romo-WITUROMO5192016AlluvialFan.mp3', 'https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/romo-WITU2ROMO5192016AlluvialFan.mp3'], max: 3.5, cr: 'NPS Rocky Mountain / J. Job' },
+  голуб: { url: ['https://soundbible.com/grab.php?id=1850&type=mp3'], max: 3.5, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  комар: { url: ['https://soundbible.com/grab.php?id=398&type=mp3'], max: 3, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  олень: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-ElkBuglingGRSA.mp3', 'https://soundbible.com/grab.php?id=957&type=mp3'], max: 3.5, cr: 'NPS · public domain' },
+  орел: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-BaldEagleYELL.mp3', 'https://soundbible.com/grab.php?id=981&type=mp3'], max: 3, cr: 'NPS · public domain' },
+  лебідь: { url: ['https://soundbible.com/grab.php?id=275&type=mp3'], max: 3.5, cr: 'U.S. Fish & Wildlife Service · public domain' },
+  кит: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-HumpbackGLBA.mp3'], max: 3.5, cr: 'NPS Glacier Bay · public domain' },
+  тюлень: { url: ['https://soundbible.com/grab.php?id=142&type=mp3', 'https://www.nps.gov/nps-audiovideo/audiovideo/c014d5aa-ed06-4d04-9f12-517fd2041065.mp3'], max: 3, cr: 'Mike Koenig, SoundBible.com · CC BY 3.0' },
+  крокодил: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-AlligatorEVER1.mp3'], max: 3.5, cr: 'NPS Everglades · public domain' },
+  змія: { url: ['https://soundbible.com/grab.php?id=237&type=mp3'], max: 3, cr: 'U.S. Fish & Wildlife Service · public domain' },
+  горила: { url: ['https://soundbible.com/grab.php?id=1149&type=mp3', 'https://soundbible.com/grab.php?id=1147&type=mp3'], max: 3.5, cr: 'SoundBible.com · public domain' },
+  зубр: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLMM8K2005914Bison.mp3', 'https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-BisonYELL.mp3'], max: 3.5, cr: 'NPS / Shan Burson · public domain' },
+  кажан: { url: ['https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-SpottedBatYOSE.mp3', 'https://soundbible.com/grab.php?id=238&type=mp3'], max: 3, cr: 'NPS Yosemite · public domain' },
+  павич: { url: ['https://soundbible.com/grab.php?id=1430&type=mp3', 'https://soundbible.com/grab.php?id=1443&type=mp3'], max: 3.5, cr: 'Caroline Ford, SoundBible.com · CC BY 3.0' },
 };
 /* Звуки, які дитина на слух не розрізнить, в одному завданні не стоять. */
-const ANI_CONF = [['бджілка', 'муха'], ['мишка', 'курча'], ['соловей', 'папуга']];
+const ANI_CONF = [['бджілка', 'муха'], ['мишка', 'курча'], ['соловей', 'папуга'],
+  // 1.1.0: ричать, гудуть і пищать схоже - разом не ставимо
+  ['лев', 'тигр'], ['лев', 'ведмідь'], ['тигр', 'ведмідь'], ['горила', 'мавпа'], ['горила', 'ведмідь'],
+  ['комар', 'муха'], ['комар', 'бджілка'], ['гусак', 'качка'], ['гусак', 'лебідь'], ['лебідь', 'качка'],
+  ['зубр', 'корова'], ['крокодил', 'зубр'], ['крокодил', 'ведмідь'], ['кажан', 'мишка'], ['кажан', 'курча'],
+  ['кажан', 'білка'], ['голуб', 'сова'], ['лисиця', 'вовк'], ['лисиця', 'песик'], ['павич', 'котик'],
+  ['тюлень', 'песик'], ['змія', 'цвіркун'], ['олень', 'ослик'], ['кит', 'вовк'], ['орел', 'курча']];
 const aniClash = (a, b) => ANI_CONF.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 /* Новіші емодзі (віслюк, ворона, муха) старий телефон малює порожнім квадратиком.
@@ -1192,10 +1243,22 @@ function emojiOk(e) {
   return (EMO_OK[e] = ok);
 }
 /** Тварини, які на цьому пристрої зараз можна і показати, і почути. */
+/* Скільки тварин уже відкрито. 44 нараз для чотирирічки - забагато й незнайомо:
+   починаємо з дванадцяти з двору, кожна правильна відповідь відкриває ще одну. */
+const ANI_START = 12;
+let ANI_N = Math.max(ANI_START, +LS.get('aniN', ANI_START) || ANI_START);
+function aniGrow() {
+  if (ANI_N >= ANI_SET.length) return;
+  ANI_N++; LS.set('aniN', ANI_N);
+  const a = ANI_SET[ANI_N - 1];
+  if (a && emojiOk(a[0])) setTimeout(() => toast(`Новий звір: ${a[0]} ${a[1]}`), 1300);
+}
 function aniPool() {
   const online = navigator.onLine !== false;
   const can = ([, nm]) => REC[nm] || ANI_SOUND[nm] || (ANI_SRC[nm] && (online || SND_PACK));
-  let pool = ANI_SET.filter((a) => emojiOk(a[0]) && can(a));
+  const open = ANI_SET.slice(0, ANI_N);
+  let pool = open.filter((a) => emojiOk(a[0]) && can(a));
+  if (pool.length < 4) pool = ANI_SET.filter((a) => emojiOk(a[0]) && can(a));   // відкрите не звучить - беремо ширше
   if (pool.length < 4) pool = ANI_SET.filter(can);   // перевірка емодзі збрехала - не лишаємо гру порожньою
   return pool;
 }
@@ -1253,8 +1316,9 @@ function aniVoice(name) {
   };
   if (REC[name]) { playUrl(REC[name], synth, 4.5); return; }
   const src = ANI_SRC[name];
-  const remote = () => (src && navigator.onLine !== false)
-    ? playUrl(ANI_REMOTE(src.id), synth, src.max) : synth();
+  const urls = src ? (src.url || [ANI_REMOTE(src.id)]) : [];
+  const tryUrl = (k) => (k < urls.length ? playUrl(urls[k], () => tryUrl(k + 1), src.max) : synth());
+  const remote = () => (urls.length && navigator.onLine !== false) ? tryUrl(0) : synth();
   if (SND_PACK && ANI_FILE[name]) { playUrl(`sounds/${ANI_FILE[name]}.mp3`, remote, src ? src.max : 3.5); return; }
   remote();
 }
@@ -1278,7 +1342,7 @@ $('#aniPlay').onclick = aniSay;
 $('#animals').onclick = (e) => {
   const b = e.target.closest('.anim'); if (!b || ANI.busy) return;
   if (b.dataset.n === ANI.cur[1]) {
-    ANI.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
+    ANI.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar(); aniGrow();
     $('#aniAsk').innerHTML = `Так! Це ${ANI.cur[1]}<small>каже «${ANI.cur[2]}»</small>`;
     say(`Так! Це ${ANI.cur[1]}`);
     setTimeout(aniNew, 1900);

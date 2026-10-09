@@ -1,5 +1,5 @@
 /* Гралик — офлайн-оболонка. Гра повністю в одному файлі, тому кеш маленький. */
-const VERSION = 'gralyk-v1.0.8';
+const VERSION = 'gralyk-v1.1.0';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest'];
 const OPTIONAL = ['icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
 
