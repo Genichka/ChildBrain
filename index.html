@@ -48,17 +48,30 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .scr.on{display:flex}
 
 /* ---------- меню ---------- */
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 10px}
+.pager button{
+  border-radius:16px;background:var(--card);border:3px solid var(--line);
+  padding:8px 6px;font-size:15px;color:var(--dim)
+}
+.pager button.on{background:#ffd93d26;border-color:#ffd93d99;color:var(--yel)}
+.pages{
+  flex:1;min-height:0;display:flex;gap:12px;position:relative;
+  overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain
+}
+.pages::-webkit-scrollbar{display:none}
+.page{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
 .menu{
-  flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;
-  grid-auto-rows:minmax(118px,1fr);gap:12px;overflow:auto;padding-bottom:6px
+  height:100%;display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(5,minmax(0,1fr));gap:10px;padding:2px 2px 9px
 }
 .tile{
-  border-radius:var(--r);padding:18px 10px 14px;display:flex;flex-direction:column;
-  align-items:center;gap:7px;color:#1b1038;box-shadow:0 7px 0 #0003;min-height:132px;justify-content:center;
+  border-radius:var(--r);padding:6px 8px;display:flex;flex-direction:column;min-height:0;
+  align-items:center;gap:4px;color:#1b1038;box-shadow:0 6px 0 #0003;justify-content:center;
 }
-.tile:active{transform:translateY(4px);box-shadow:0 3px 0 #0003}
-.tile .em{font-size:46px;line-height:1;filter:drop-shadow(0 3px 2px #0002)}
-.tile .nm{font-size:16px;text-align:center;line-height:1.15;font-weight:900}
+.tile:active{transform:translateY(4px);box-shadow:0 2px 0 #0003}
+.tile .em{font-size:clamp(26px,5.6vh,44px);line-height:1;filter:drop-shadow(0 3px 2px #0002)}
+.tile .nm{font-size:clamp(12.5px,2vh,16px);text-align:center;line-height:1.12;font-weight:900}
 .t1{background:linear-gradient(170deg,#ffe066,#ffb703)}
 .t2{background:linear-gradient(170deg,#7ee8a2,#38b676)}
 .t3{background:linear-gradient(170deg,#8ec5ff,#4a90ff)}
@@ -70,6 +83,67 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t9{background:linear-gradient(170deg,#7af0e0,#1fa7c9)}
 .t10{background:linear-gradient(170deg,#ffd3a8,#f08a5d)}
 .t11{background:linear-gradient(170deg,#c7cbe0,#7f86a8)}
+.t12{background:linear-gradient(170deg,#ffb3b3,#ff6b6b)}
+.t13{background:linear-gradient(170deg,#ffe0a3,#f5a623)}
+.t14{background:linear-gradient(170deg,#b8f5c8,#3cc47c)}
+.t15{background:linear-gradient(170deg,#c3d3ff,#6b85ff)}
+.t16{background:linear-gradient(170deg,#ffc2ec,#e45bc0)}
+.t17{background:linear-gradient(170deg,#d7c4ff,#8e64ff)}
+
+/* ---------- ігри на памʼять ---------- */
+.mbar{height:8px;border-radius:5px;background:#ffffff14;overflow:hidden;max-width:360px;width:100%;margin:-4px auto 8px}
+.mbar:empty{visibility:hidden}
+.mbar i{display:block;height:100%;width:100%;background:var(--yel);border-radius:5px}
+.mrow{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
+  background:var(--card);border:3px solid var(--line);border-radius:var(--r);
+  padding:14px 10px;min-height:96px;transition:opacity .2s
+}
+.mrow.blink{opacity:0}
+.mcell,.slot{width:62px;height:62px;border-radius:16px;display:grid;place-items:center;font-size:38px;background:#ffffff10;animation:in .3s backwards}
+.mcell.q{color:var(--yel);background:#ffd93d1f;border:3px dashed #ffd93d88;font-size:28px}
+.mcell.back{background:#4ecb7133}
+.slot{border:3px dashed var(--line);background:none}
+.slot.ok{border:3px solid var(--ok);background:#4ecb7126}
+.mopt{width:80px;height:80px;font-size:42px}
+.mopt.used{visibility:hidden}
+.mopt.got{background:#4ecb7133;border-color:var(--ok)}
+.mopt.hint{animation:wig .6s 2}
+@keyframes wig{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+.houses{display:flex;flex-wrap:wrap;gap:18px 24px;justify-content:center}
+.house{
+  width:88px;height:96px;position:relative;margin-top:26px;border-radius:12px 12px 16px 16px;
+  background:linear-gradient(175deg,#ffcf8a,#f29b4b);box-shadow:0 6px 0 #0004;
+  display:grid;place-items:end center;padding-bottom:9px
+}
+.house::before{
+  content:"";position:absolute;left:-8px;right:-8px;top:-26px;height:30px;
+  background:#e2574c;clip-path:polygon(50% 0,100% 100%,0 100%)
+}
+.house .door{
+  width:48px;height:56px;border-radius:12px 12px 4px 4px;background:#8a4b2a;
+  display:grid;place-items:center;font-size:38px;transition:background .2s;color:#3a2470
+}
+.house.open .door{background:#ffe6c2}
+.house.ok{outline:4px solid var(--ok);outline-offset:3px}
+.house.no{animation:shake .4s}
+.gridb{display:grid;gap:10px;margin:0 auto;width:min(84vw,330px)}
+.gcell{aspect-ratio:1;border-radius:16px;background:var(--card);border:3px solid var(--line);transition:background .15s,transform .15s}
+.gcell.lit{background:var(--yel);border-color:#fff;transform:scale(1.04)}
+.gcell.good{background:var(--ok);border-color:#fff}
+.gcell.no{background:#ff5a5f66;animation:shake .4s}
+.bkstage{position:relative;height:160px;display:flex;align-items:flex-end;justify-content:center}
+.basket{font-size:92px;line-height:1;position:relative;z-index:2}
+.bkdrop{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:56px;z-index:1}
+.bkdrop.fall{animation:fall 1s ease-in forwards}
+@keyframes fall{
+  0%{transform:translate(-50%,0) scale(1);opacity:1}
+  70%{transform:translate(-50%,74px) scale(.9);opacity:1}
+  100%{transform:translate(-50%,94px) scale(.6);opacity:0}
+}
+.scard{aspect-ratio:1;border-radius:18px;background:linear-gradient(165deg,#ff9fd0,#d0459a);display:grid;place-items:center;font-size:34px;box-shadow:0 6px 0 #0004}
+.scard.open{background:linear-gradient(165deg,#ffe066,#ffb703)}
+.scard.done{background:#4ecb7140;border:3px solid var(--ok)}
 .menu-note{color:var(--dim);font-size:12.5px;text-align:center;margin:10px 2px 0;font-weight:700;line-height:1.5}
 .ver{color:var(--dim);opacity:.65;font-size:11px;text-align:center;margin:4px 0 0;font-weight:700;letter-spacing:.4px}
 .mini{
@@ -276,18 +350,32 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <!-- меню -->
 <section class="scr on" id="s-menu">
-  <div class="menu">
-    <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
-    <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
-    <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
-    <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
-    <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
-    <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
-    <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
-    <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
-    <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
-    <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
-    <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
+  <div class="pager" id="pager">
+    <button data-pg="0" class="on">🎲 Ігри</button>
+    <button data-pg="1">🧠 Памʼять</button>
+  </div>
+  <div class="pages" id="pages">
+    <div class="page"><div class="menu">
+      <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
+      <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
+      <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
+      <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
+      <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
+      <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
+      <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
+      <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
+      <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
+    </div></div>
+    <div class="page"><div class="menu">
+      <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
+      <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
+      <button class="tile t12" data-go="gone"><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
+      <button class="tile t13" data-go="hide"><span class="em">🏠</span><span class="nm">Хто<br>сховався?</span></button>
+      <button class="tile t14" data-go="grid"><span class="em">🟩</span><span class="nm">Повтори<br>візерунок</span></button>
+      <button class="tile t15" data-go="basket"><span class="em">🧺</span><span class="nm">Що<br>в кошику?</span></button>
+      <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
+      <button class="tile t17" data-go="order"><span class="em">🚂</span><span class="nm">Як<br>стояли?</span></button>
+    </div></div>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
   <p class="ver"><span id="verLine"></span> <button class="mini" id="updNow">🔄 Оновити</button>
@@ -402,6 +490,55 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   </div>
 </section>
 
+<!-- що зникло -->
+<section class="scr" id="s-gone">
+  <div class="ask" id="gnAsk">Запамʼятай усе</div>
+  <div class="mbar" id="gnBar"></div>
+  <div class="play">
+    <div class="mrow" id="gnRow"></div>
+    <div class="row" id="gnOpts"></div>
+  </div>
+</section>
+
+<!-- хто сховався -->
+<section class="scr" id="s-hide">
+  <div class="ask" id="hdAsk">Запамʼятай, хто де живе</div>
+  <div class="mbar" id="hdBar"></div>
+  <div class="play"><div class="houses" id="houses"></div></div>
+</section>
+
+<!-- повтори візерунок -->
+<section class="scr" id="s-grid">
+  <div class="ask" id="grAsk">Дивись уважно</div>
+  <div class="mbar" id="grBar"></div>
+  <div class="play"><div class="gridb" id="gridb"></div></div>
+</section>
+
+<!-- що в кошику -->
+<section class="scr" id="s-basket">
+  <div class="ask" id="bkAsk">Дивись, що кладемо в кошик</div>
+  <div class="play">
+    <div class="bkstage"><div class="bkdrop" id="bkDrop"></div><div class="basket">🧺</div></div>
+    <div class="row" id="bkOpts"></div>
+  </div>
+</section>
+
+<!-- звукові пари -->
+<section class="scr" id="s-spairs">
+  <div class="ask" id="spAsk">Знайди однакові звуки</div>
+  <div class="play"><div class="cards" id="spCards"></div></div>
+</section>
+
+<!-- як стояли -->
+<section class="scr" id="s-order">
+  <div class="ask" id="orAsk">Запамʼятай, як стоять</div>
+  <div class="mbar" id="orBar"></div>
+  <div class="play">
+    <div class="mrow" id="orRow"></div>
+    <div class="row" id="orPool"></div>
+  </div>
+</section>
+
 <!-- свої голоси (батьківський куточок) -->
 <section class="scr" id="s-rec">
   <div class="ask" id="recAsk">Запишіть голоси самі<small>🎤 — записати (до 4 с) · ▶ — послухати</small></div>
@@ -420,7 +557,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.0.8';
+const APP_VERSION = '1.0.9';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -615,6 +752,8 @@ const TITLES = { menu: 'Гралик', melody: 'Повтори мелодію', 
                  letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка',
                  shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
                  arcade: 'Зореліт', ttt: 'Хрестики-нулики', mines: 'Сапер',
+                 gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
+                 basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
                  rec: 'Свої голоси' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
@@ -796,7 +935,11 @@ $('#letters').onclick = (e) => {
 const ANI_SET = [['🐮', 'корова', 'мууу'], ['🐶', 'песик', 'гав-гав'], ['🐱', 'котик', 'няв-няв'],
                  ['🐑', 'вівця', 'бее-бее'], ['🐷', 'свинка', 'хрю-хрю'], ['🐸', 'жабка', 'ква-ква'],
                  ['🐔', 'курочка', 'ко-ко-ко'], ['🐓', 'півник', 'кукуріку'], ['🦆', 'качка', 'кря-кря'],
-                 ['🐴', 'конячка', 'і-го-го'], ['🐭', 'мишка', 'пі-пі-пі'], ['🐺', 'вовк', 'уууу']];
+                 ['🐴', 'конячка', 'і-го-го'], ['🐭', 'мишка', 'пі-пі-пі'], ['🐺', 'вовк', 'уууу'],
+                 ['🦉', 'сова', 'угу-угу'], ['🐐', 'коза', 'ме-е-е'], ['🫏', 'ослик', 'іа-іа'],
+                 ['🐝', 'бджілка', 'дз-з-з'], ['🐦‍⬛', 'ворона', 'кар-кар'], ['🦗', 'цвіркун', 'цвір-цвір'],
+                 ['🐥', 'курча', 'пі-пі'], ['🦜', 'папуга', 'чірік'], ['🐦', 'соловей', 'тьох-тьох'],
+                 ['🪰', 'муха', 'ж-ж-ж']];
 /* ---------- голос тварини: джерело + форманти ----------
    Одна «пилка крізь фільтр» звучить як синтезатор, а не як тварина.
    Живий голос - це гудіння зв'язок, пропущене крізь два-три резонанси
@@ -992,7 +1135,9 @@ const ANI = { cur: null, busy: false, first: true };
    2) справжній файл sounds/<тварина>.mp3, якщо покладений поруч із грою,
    3) синтезований звук — працює завжди, нічого качати не треба. */
 const ANI_FILE = { корова: 'cow', песик: 'dog', котик: 'cat', вівця: 'sheep', свинка: 'pig', жабка: 'frog',
-                   курочка: 'hen', півник: 'rooster', качка: 'duck', конячка: 'horse', мишка: 'mouse', вовк: 'wolf' };
+                   курочка: 'hen', півник: 'rooster', качка: 'duck', конячка: 'horse', мишка: 'mouse', вовк: 'wolf',
+                   сова: 'owl', коза: 'goat', ослик: 'donkey', бджілка: 'bee', ворона: 'crow', цвіркун: 'cricket',
+                   курча: 'chick', папуга: 'parrot', соловей: 'nightingale', муха: 'fly' };
 const REC = LS.get('rec', {});     // {назва тварини: запис у вигляді data-URL}
 let SND_PACK = null;               // чи є поруч папка sounds/
 let CUR_AUDIO = null;
@@ -1015,7 +1160,54 @@ const ANI_SRC = {
   вівця: { id: '2343', max: 3 }, жабка: { id: '0819', max: 3 }, курочка: { id: '0453', max: 3.5 },
   півник: { id: '0283', max: 3.5 }, качка: { id: '0276', max: 3 }, конячка: { id: '0284', max: 3 },
   мишка: { id: '0459', max: 1.6 },
+  // 1.0.9: ще десять, теж CC0 і теж справжні тварини, не імітації
+  сова: { id: '3459', max: 2.5 }, коза: { id: '0279', max: 2.5 }, ослик: { id: '1550', max: 3.5 },
+  бджілка: { id: '1000', max: 3 }, ворона: { id: '3463', max: 3 }, цвіркун: { id: '1020', max: 3 },
+  курча: { id: '0430', max: 3 }, папуга: { id: '2774', max: 2.5 }, соловей: { id: '3087', max: 3.5 },
+  муха: { id: '0759', max: 3 },
 };
+/* Звуки, які дитина на слух не розрізнить, в одному завданні не стоять. */
+const ANI_CONF = [['бджілка', 'муха'], ['мишка', 'курча'], ['соловей', 'папуга']];
+const aniClash = (a, b) => ANI_CONF.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
+
+/* Новіші емодзі (віслюк, ворона, муха) старий телефон малює порожнім квадратиком.
+   Таку тварину на цьому пристрої просто не показуємо. */
+const EMO_OK = {};
+function emojiOk(e) {
+  if (e in EMO_OK) return EMO_OK[e];
+  let ok = true;
+  try {
+    const c = document.createElement('canvas'); c.width = c.height = 44;
+    const g = c.getContext('2d');
+    g.textBaseline = 'top'; g.font = `34px "Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",serif`;
+    const px = (t) => { g.clearRect(0, 0, 44, 44); g.fillText(t, 2, 2); return g.getImageData(0, 0, 44, 44).data; };
+    const a = px(e), z = px('\uFFFF');
+    let same = true;
+    for (let i = 3; i < a.length; i += 4) if (a[i] !== z[i]) { same = false; break; }
+    if (same) ok = false;
+    if (ok && e.includes('\u200d')) {          // склеєний знак має стати одним, а не двома
+      if (g.measureText(e).width > g.measureText([...e][0]).width * 1.5) ok = false;
+    }
+  } catch (x) { ok = true; }
+  return (EMO_OK[e] = ok);
+}
+/** Тварини, які на цьому пристрої зараз можна і показати, і почути. */
+function aniPool() {
+  const online = navigator.onLine !== false;
+  const can = ([, nm]) => REC[nm] || ANI_SOUND[nm] || (ANI_SRC[nm] && (online || SND_PACK));
+  let pool = ANI_SET.filter((a) => emojiOk(a[0]) && can(a));
+  if (pool.length < 4) pool = ANI_SET.filter(can);   // перевірка емодзі збрехала - не лишаємо гру порожньою
+  return pool;
+}
+/** k тварин без пар, які звучать майже однаково. */
+function aniPick(pool, k) {
+  const out = [];
+  for (const a of shuffle(pool)) {
+    if (out.every((b) => !aniClash(a[1], b[1]))) out.push(a);
+    if (out.length === k) break;
+  }
+  return out;
+}
 const ANI_REMOTE = (id) => `https://bigsoundbank.com/UPLOAD/mp3/${id}.mp3`;
 
 /** Грає файл не довше max секунд, з коротким згасанням. onFail - рівно один раз:
@@ -1053,7 +1245,12 @@ function playUrl(url, onFail, max) {
    той самий запис з інтернету → синтез. Кожен крок, якщо не вийшов,
    передає слово наступному. */
 function aniVoice(name) {
-  const synth = () => { const f = ANI_SOUND[name]; if (f) { ac(); f(); } };
+  const synth = () => {
+    const f = ANI_SOUND[name];
+    if (f) { ac(); f(); return; }
+    const a = ANI_SET.find((x) => x[1] === name);    // для нових тварин синтезу немає
+    if (a) { toast(`${a[0]} ${a[2]}`); say(a[2]); }
+  };
   if (REC[name]) { playUrl(REC[name], synth, 4.5); return; }
   const src = ANI_SRC[name];
   const remote = () => (src && navigator.onLine !== false)
@@ -1068,7 +1265,7 @@ function aniSay() {
   sp.classList.remove('ring'); void sp.offsetWidth; sp.classList.add('ring');
 }
 function aniNew() {
-  const opts = shuffle(ANI_SET).slice(0, 3);
+  const opts = aniPick(aniPool(), 3);
   ANI.cur = pick(opts); ANI.busy = false;
   $('#aniAsk').innerHTML = 'Хто так говорить?<small>натисни 🔊, щоб почути ще раз</small>';
   $('#animals').innerHTML = opts.map((a) => `<button class="big anim" data-n="${a[1]}">${a[0]}</button>`).join('');
@@ -1471,17 +1668,22 @@ function arAt(s) {
   return [p[lo][0] + (p[hi][0] - p[lo][0]) * k, p[lo][1] + (p[hi][1] - p[lo][1]) * k];
 }
 function arNewLevel() {
-  const L = AR.lvl, n = Math.min(54, 14 + L * 4);
+  /* 1.0.9: складніше. Ланцюжок швидший і довшає з рівнем, бонусів із рівнями
+     меншає, а за рівень ланцюжок розганяється до +30 %. Без цього навіть
+     неточна гра проходила 12 рівнів, а ланцюжок до 6-го ледь рушав з місця. */
+  const L = AR.lvl, n = Math.min(64, 18 + Math.round(L * 3.5));
+  const every = L <= 3 ? 6 : L <= 6 ? 7 : 8;
   AR.cells = [];
   let b = 0;
   for (let i = 0; i < n; i++) {
-    const bonus = i > 2 && i % 6 === 3;
-    const hp = bonus ? 2 + L : Math.min(99, 1 + L + Math.floor(i * (L + 1) / 5) + rnd(2));
+    const bonus = i > 2 && i % every === 3;
+    const hp = bonus ? 3 + 2 * L : Math.min(99, 1 + L + Math.floor(i * (L + 1) / 5) + rnd(L > 3 ? 3 : 2));
     AR.cells.push({ s: -i * AR.sp, hp, kind: bonus ? AR_ORDER[b++ % AR_ORDER.length] : null, hit: 0 });
   }
   AR.total = n; AR.shots = []; AR.fx = []; AR.txt = [];
   AR.ships = 1; AR.guns = 1; AR.rate = 4; AR.cool = 0;
-  AR.spd = AR.R * Math.min(1.1, 0.5 + 0.06 * L);
+  AR.spd0 = AR.R * Math.min(1.5, 0.66 + 0.06 * L);
+  AR.spd = AR.spd0; AR.age = 0;
   $('#arcLvl').textContent = `Рівень ${L}`;
   arLeftUI();
 }
@@ -1507,8 +1709,8 @@ function arPop(i, p) {
   if (AR.t - AR.popT > 0.06) { beep(600 + rnd(300), 0.09, 'triangle', 0.14); AR.popT = AR.t; }
   if (c.kind) {
     const k = c.kind;
-    if (k === 'gun') AR.guns = Math.min(4, AR.guns + 1);
-    if (k === 'rate') AR.rate = Math.min(10, AR.rate + 1.5);
+    if (k === 'gun') AR.guns = Math.min(3, AR.guns + 1);
+    if (k === 'rate') AR.rate = Math.min(8, AR.rate + 1.25);
     if (k === 'ship') AR.ships = Math.min(3, AR.ships + 1);
     AR.txt.push({ x: p[0], y: p[1], t: AR_BONUS[k].em + ' ' + AR_BONUS[k].nm, life: 1.4 });
     [784, 988, 1175].forEach((f, j) => setTimeout(() => beep(f, 0.1, 'square', 0.09), j * 60));
@@ -1517,6 +1719,8 @@ function arPop(i, p) {
 }
 function arStep(dt) {
   AR.t += dt;
+  AR.age = (AR.age || 0) + dt;
+  AR.spd = (AR.spd0 || AR.spd) * Math.min(1.3, 1 + AR.age * 0.006);   // +0,6 % за секунду, до +30 %
   const cs = AR.cells, v = AR.spd;
   // ланцюжок: перша кулька повзе рівно, решта підтягується, якщо між ними дірка
   if (cs.length) {
@@ -1858,6 +2062,301 @@ $('#mines').onclick = (e) => { const b = e.target.closest('[data-i]'); if (b) mn
 $('#mines').oncontextmenu = (e) => { const b = e.target.closest('[data-i]'); if (b) { e.preventDefault(); mnTap(+b.dataset.i, true); } };
 $('#mnFlag').onclick = () => { MN.flag = !MN.flag; $('#mnFlag').classList.toggle('on', MN.flag); blip(); mnAsk(); };
 $('#mnNew').onclick = () => { blip(); mnNew(); };
+
+/* ================================================================
+   ІГРИ НА ПАМʼЯТЬ — спільне
+   ================================================================ */
+const MP = [['🍎', 'яблуко'], ['🍌', 'банан'], ['🍓', 'полуниця'], ['🍇', 'виноград'], ['🍐', 'груша'],
+            ['🍒', 'вишні'], ['🍉', 'кавун'], ['🥕', 'морква'], ['🌽', 'кукурудза'], ['🐶', 'песик'],
+            ['🐱', 'котик'], ['🐰', 'зайчик'], ['🐻', 'ведмедик'], ['🦊', 'лисичка'], ['🐸', 'жабка'],
+            ['🚗', 'машинка'], ['🚂', 'потяг'], ['✈️', 'літак'], ['⛵', 'човник'], ['🎈', 'кулька'],
+            ['⚽', 'мʼяч'], ['🎁', 'подарунок'], ['⭐', 'зірка'], ['🌸', 'квітка'], ['☀️', 'сонце'],
+            ['🌙', 'місяць'], ['🍄', 'грибок'], ['🦋', 'метелик'], ['🔔', 'дзвіночок'], ['🐢', 'черепаха']];
+const MP_POOL = MP.map((x) => x[0]);
+const MP_NAME = Object.fromEntries(MP);
+/** Жовта смужка «час запамʼятовувати», тане за ms. */
+function memBar(el, ms) {
+  el.innerHTML = '<i></i>';
+  const i = el.firstChild;
+  i.style.transition = 'none'; i.style.width = '100%';
+  void i.offsetWidth;
+  i.style.transition = `width ${ms}ms linear`; i.style.width = '0%';
+}
+function memWin(msg) { cheer(); confetti(); vibe(40); addStar(); say(msg || 'Молодець!'); }
+function memNo(b) { b.classList.add('no'); oops(); vibe(120); setTimeout(() => b.classList.remove('no'), 500); }
+const pairsWord = (n) => (n >= 2 && n <= 4 ? 'пари' : 'пар');
+
+/* ================================================================
+   12. ЩО ЗНИКЛО?  (спершу видно, де була річ; з 5 речей - вже ні)
+   ================================================================ */
+const GN = { gen: 0, n: 3, ok: 0, busy: true, miss: null };
+async function gnNew() {
+  const gen = ++GN.gen; GN.busy = true;
+  const set = shuffle(MP_POOL).slice(0, GN.n);
+  const miss = GN.miss = pick(set);
+  const keepSlot = GN.n <= 4;
+  $('#gnOpts').innerHTML = '';
+  $('#gnRow').innerHTML = set.map((e) => `<span class="mcell">${e}</span>`).join('');
+  $('#gnAsk').innerHTML = 'Запамʼятай усе<small>зараз щось зникне</small>';
+  const ms = 2200 + GN.n * 650;
+  memBar($('#gnBar'), ms); say('Запамʼятай усе');
+  await sleep(ms); if (gen !== GN.gen) return;
+  $('#gnRow').classList.add('blink'); $('#gnBar').innerHTML = '';
+  await sleep(450); if (gen !== GN.gen) return;
+  const rest = keepSlot ? set.map((e) => (e === miss ? '❔' : e)) : shuffle(set.filter((e) => e !== miss));
+  $('#gnRow').innerHTML = rest.map((e) => `<span class="mcell${e === '❔' ? ' q' : ''}">${e}</span>`).join('');
+  $('#gnRow').classList.remove('blink');
+  const opts = shuffle([miss, ...shuffle(MP_POOL.filter((e) => !set.includes(e))).slice(0, 2)]);
+  $('#gnOpts').innerHTML = opts.map((e) => `<button class="big mopt" data-e="${e}">${e}</button>`).join('');
+  $('#gnAsk').innerHTML = 'Що зникло?<small>натисни те, чого не стало</small>';
+  say('Що зникло?');
+  GN.busy = false;
+}
+START.gone = () => { GN.n = 3; GN.ok = 0; gnNew(); };
+STOP.gone = () => { GN.gen++; };
+$('#gnOpts').onclick = (e) => {
+  const b = e.target.closest('.mopt'); if (!b || GN.busy) return;
+  if (b.dataset.e !== GN.miss) { memNo(b); say('Спробуй ще'); return; }
+  GN.busy = true; b.classList.add('ok');
+  const q = $('#gnRow .q'); if (q) { q.textContent = GN.miss; q.className = 'mcell back'; }
+  memWin('Так! ' + (MP_NAME[GN.miss] || ''));
+  if (++GN.ok >= 2) { GN.ok = 0; GN.n = Math.min(7, GN.n + 1); }
+  setTimeout(gnNew, 1800);
+};
+
+/* ================================================================
+   13. ХТО СХОВАВСЯ?  (запамʼятати, хто в якому будиночку)
+   ================================================================ */
+const HD_SET = [['🐱', 'котик'], ['🐶', 'песик'], ['🐰', 'зайчик'], ['🐻', 'ведмедик'], ['🦊', 'лисичка'],
+                ['🐸', 'жабка'], ['🐥', 'курча'], ['🐷', 'свинка'], ['🐼', 'панда'], ['🦁', 'левеня'],
+                ['🐭', 'мишка'], ['🐮', 'корівка']];
+const HD = { gen: 0, n: 3, ok: 0, homes: [], ask: [], cur: null, busy: true };
+async function hdNew() {
+  const gen = ++HD.gen; HD.busy = true;
+  HD.homes = shuffle(HD_SET).slice(0, HD.n);
+  HD.ask = shuffle(HD.homes).slice(0, HD.n >= 4 ? 2 : 1);   // з 4 будиночків питаємо двох
+  $('#houses').innerHTML = HD.homes.map((a, i) =>
+    `<button class="house open" data-i="${i}" aria-label="будиночок"><span class="door">${a[0]}</span></button>`).join('');
+  $('#hdAsk').innerHTML = 'Запамʼятай, хто де живе<small>зараз двері зачиняться</small>';
+  const ms = 2200 + HD.n * 800;
+  memBar($('#hdBar'), ms); say('Запамʼятай, хто де живе');
+  await sleep(ms); if (gen !== HD.gen) return;
+  $('#hdBar').innerHTML = '';
+  $$('#houses .house').forEach((h) => { h.classList.remove('open'); h.querySelector('.door').textContent = ''; });
+  blip();
+  hdNext();
+}
+function hdNext() {
+  HD.cur = HD.ask.shift(); HD.busy = false;
+  $('#hdAsk').innerHTML = `Де ${HD.cur[1]}?<small>натисни на будиночок</small>`;
+  say(`Де ${HD.cur[1]}?`);
+}
+START.hide = () => { HD.n = 3; HD.ok = 0; hdNew(); };
+STOP.hide = () => { HD.gen++; };
+$('#houses').onclick = (e) => {
+  const h = e.target.closest('.house'); if (!h || HD.busy || h.classList.contains('open')) return;
+  const a = HD.homes[+h.dataset.i], door = h.querySelector('.door');
+  h.classList.add('open'); door.textContent = a[0];
+  if (a !== HD.cur) {
+    h.classList.add('no'); oops(); vibe(120); say(`Тут ${a[1]}`);
+    const gen = HD.gen;
+    setTimeout(() => { if (gen !== HD.gen) return; h.classList.remove('open', 'no'); door.textContent = ''; }, 1100);
+    return;
+  }
+  HD.busy = true; h.classList.add('ok');
+  if (HD.ask.length) { cheer(); vibe(30); say(`Так! Тут ${a[1]}`); setTimeout(hdNext, 1300); return; }
+  memWin(`Так! Тут ${a[1]}`);
+  if (++HD.ok >= 2) { HD.ok = 0; HD.n = Math.min(6, HD.n + 1); }
+  setTimeout(hdNew, 1800);
+};
+
+/* ================================================================
+   14. ПОВТОРИ ВІЗЕРУНОК  (засвічуються клітинки - натисни ті самі)
+   ================================================================ */
+const GR = { gen: 0, size: 3, k: 2, ok: 0, cells: [], got: new Set(), busy: true };
+async function grShow(fresh) {
+  const gen = ++GR.gen; GR.busy = true; GR.got = new Set();
+  if (fresh) {
+    GR.size = GR.k >= 5 ? 4 : 3;
+    GR.cells = shuffle([...Array(GR.size * GR.size).keys()]).slice(0, GR.k);
+  }
+  const g = $('#gridb');
+  g.style.gridTemplateColumns = `repeat(${GR.size},1fr)`;
+  g.innerHTML = Array.from({ length: GR.size * GR.size }, (_, i) =>
+    `<button class="gcell${GR.cells.includes(i) ? ' lit' : ''}" data-i="${i}"></button>`).join('');
+  $('#grAsk').innerHTML = `Дивись уважно<small>світиться ${GR.k}</small>`;
+  const ms = 1300 + GR.k * 380;
+  memBar($('#grBar'), ms);
+  if (fresh) say('Запамʼятай, які світяться');
+  await sleep(ms); if (gen !== GR.gen) return;
+  $('#grBar').innerHTML = '';
+  $$('#gridb .gcell').forEach((c) => c.classList.remove('lit'));
+  $('#grAsk').innerHTML = 'Тепер ти!<small>натисни ті, що світились</small>';
+  GR.busy = false;
+}
+START.grid = () => { GR.k = 2; GR.ok = 0; grShow(true); };
+STOP.grid = () => { GR.gen++; };
+$('#gridb').onclick = (e) => {
+  const c = e.target.closest('.gcell'); if (!c || GR.busy) return;
+  const i = +c.dataset.i;
+  if (GR.got.has(i)) return;
+  if (!GR.cells.includes(i)) {
+    GR.busy = true; c.classList.add('no'); oops(); vibe(120); say('Подивись ще раз');
+    setTimeout(() => grShow(false), 900);    // той самий візерунок ще раз, без покарання
+    return;
+  }
+  GR.got.add(i); c.classList.add('good'); blip();
+  if (GR.got.size < GR.k) return;
+  GR.busy = true; memWin();
+  if (++GR.ok >= 2) { GR.ok = 0; GR.k = Math.min(8, GR.k + 1); }
+  setTimeout(() => grShow(true), 1500);
+};
+
+/* ================================================================
+   15. ЩО В КОШИКУ?  (речі падають у кошик, потім знайти всі)
+   ================================================================ */
+const BK = { gen: 0, n: 2, ok: 0, items: [], found: new Set(), busy: true };
+async function bkNew() {
+  const gen = ++BK.gen; BK.busy = true; BK.found = new Set();
+  BK.items = shuffle(MP_POOL).slice(0, BK.n);
+  $('#bkOpts').innerHTML = '';
+  $('#bkAsk').innerHTML = 'Дивись, що кладемо в кошик';
+  say('Дивись, що кладемо в кошик');
+  await sleep(1300); if (gen !== BK.gen) return;
+  const d = $('#bkDrop');
+  for (const e of BK.items) {
+    d.classList.remove('fall'); d.textContent = e; void d.offsetWidth; d.classList.add('fall');
+    say(MP_NAME[e] || ''); blip();
+    await sleep(1400); if (gen !== BK.gen) return;
+  }
+  d.textContent = ''; d.classList.remove('fall');
+  const extra = Math.min(8, BK.n + 3) - BK.n;
+  const opts = shuffle([...BK.items, ...shuffle(MP_POOL.filter((e) => !BK.items.includes(e))).slice(0, extra)]);
+  $('#bkOpts').innerHTML = opts.map((e) => `<button class="big mopt" data-e="${e}">${e}</button>`).join('');
+  $('#bkAsk').innerHTML = `Що в кошику?<small>знайди все, що поклали: ${BK.n}</small>`;
+  say('Що в кошику?');
+  BK.busy = false;
+}
+START.basket = () => { BK.n = 2; BK.ok = 0; bkNew(); };
+STOP.basket = () => { BK.gen++; };
+$('#bkOpts').onclick = (e) => {
+  const b = e.target.closest('.mopt'); if (!b || BK.busy || b.classList.contains('got')) return;
+  if (!BK.items.includes(b.dataset.e)) { memNo(b); say('Цього не клали'); return; }
+  BK.found.add(b.dataset.e); b.classList.add('got'); blip();
+  if (BK.found.size < BK.n) return;
+  BK.busy = true; memWin('Усе знайшов!');
+  if (++BK.ok >= 2) { BK.ok = 0; BK.n = Math.min(6, BK.n + 1); }
+  setTimeout(bkNew, 1800);
+};
+
+/* ================================================================
+   16. ЗВУКОВІ ПАРИ  (картки звучать голосами тварин - знайди однакові)
+   ================================================================ */
+const SP = { gen: 0, pairs: 2, open: [], done: 0, busy: false };
+function spDeal() {
+  SP.gen++;
+  const set = aniPick(aniPool(), SP.pairs);
+  const deck = shuffle([...set, ...set]);
+  SP.open = []; SP.done = 0; SP.busy = false; SP.pairs = set.length;
+  const el = $('#spCards');
+  el.style.gridTemplateColumns = `repeat(${deck.length <= 4 ? 2 : deck.length <= 6 ? 3 : 4},1fr)`;
+  el.innerHTML = deck.map((a, i) =>
+    `<button class="scard" data-i="${i}" data-n="${a[1]}" data-e="${a[0]}">🎵</button>`).join('');
+  $('#spAsk').innerHTML = `Знайди однакові звуки<small>${SP.pairs} ${pairsWord(SP.pairs)} · натискай і слухай</small>`;
+}
+START.spairs = () => { SP.pairs = 2; probePack(); spDeal(); say('Знайди картки, що звучать однаково'); };
+STOP.spairs = () => { SP.gen++; if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; } };
+$('#spCards').onclick = async (e) => {
+  const c = e.target.closest('.scard');
+  if (!c || SP.busy || c.classList.contains('open') || c.classList.contains('done')) return;
+  c.classList.add('open'); c.textContent = '🔊';
+  aniVoice(c.dataset.n);
+  SP.open.push(c);
+  if (SP.open.length < 2) return;
+  SP.busy = true;
+  const [a, b] = SP.open, gen = SP.gen;
+  await sleep(1800); if (gen !== SP.gen) return;
+  if (a.dataset.n === b.dataset.n) {
+    [a, b].forEach((x) => { x.classList.remove('open'); x.classList.add('done'); x.textContent = x.dataset.e; });
+    cheer(); vibe(30); SP.done++;
+    say(a.dataset.n);
+    if (SP.done === SP.pairs) {
+      confetti(); addStar();
+      $('#spAsk').innerHTML = 'Усі пари знайдено! 🎉';
+      setTimeout(() => { if (gen !== SP.gen) return; SP.pairs = Math.min(5, SP.pairs + 1); spDeal(); }, 2000);
+      SP.open = []; return;
+    }
+  } else {
+    [a, b].forEach((x) => { x.classList.remove('open'); x.textContent = '🎵'; });
+  }
+  SP.open = []; SP.busy = false;
+};
+
+/* ================================================================
+   17. ЯК СТОЯЛИ?  (запамʼятати порядок і відновити зліва направо)
+   ================================================================ */
+const OR = { gen: 0, n: 3, ok: 0, seq: [], pos: 0, miss: 0, busy: true };
+async function orNew() {
+  const gen = ++OR.gen; OR.busy = true; OR.pos = 0; OR.miss = 0;
+  OR.seq = shuffle(MP_POOL).slice(0, OR.n);
+  $('#orPool').innerHTML = '';
+  $('#orRow').innerHTML = OR.seq.map((e) => `<span class="mcell">${e}</span>`).join('');
+  $('#orAsk').innerHTML = 'Запамʼятай, як стоять<small>зліва направо</small>';
+  const ms = 2000 + OR.n * 800;
+  memBar($('#orBar'), ms); say('Запамʼятай, як стоять');
+  await sleep(ms); if (gen !== OR.gen) return;
+  $('#orBar').innerHTML = '';
+  $('#orRow').innerHTML = OR.seq.map(() => '<span class="slot"></span>').join('');
+  $('#orPool').innerHTML = shuffle(OR.seq).map((e) => `<button class="big mopt" data-e="${e}">${e}</button>`).join('');
+  $('#orAsk').innerHTML = 'Постав так, як було<small>натискай по черзі зліва направо</small>';
+  say('Постав так, як було');
+  OR.busy = false;
+}
+START.order = () => { OR.n = 3; OR.ok = 0; orNew(); };
+STOP.order = () => { OR.gen++; };
+$('#orPool').onclick = (e) => {
+  const b = e.target.closest('.mopt'); if (!b || OR.busy || b.classList.contains('used')) return;
+  if (b.dataset.e !== OR.seq[OR.pos]) {
+    memNo(b);
+    if (++OR.miss >= 2) {           // двічі поспіль не те - легенько підказуємо наступну
+      const h = $(`#orPool .mopt:not(.used)[data-e="${OR.seq[OR.pos]}"]`);
+      if (h) { h.classList.add('hint'); setTimeout(() => h.classList.remove('hint'), 1300); }
+    }
+    return;
+  }
+  const slot = $$('#orRow .slot')[OR.pos];
+  slot.textContent = b.dataset.e; slot.classList.add('ok');
+  b.classList.add('used'); OR.pos++; OR.miss = 0; blip();
+  if (OR.pos < OR.n) return;
+  OR.busy = true; memWin('Усе на місці!');
+  if (++OR.ok >= 2) { OR.ok = 0; OR.n = Math.min(6, OR.n + 1); }
+  setTimeout(orNew, 1800);
+};
+
+/* ================================================================
+   МЕНЮ НА ДВІ СТОРІНКИ  (гортається пальцем або кнопками вгорі)
+   ================================================================ */
+(() => {
+  const pg = $('#pages'), bs = $$('#pager button');
+  const mark = (i) => bs.forEach((b) => b.classList.toggle('on', +b.dataset.pg === i));
+  const goPage = (i, smooth) => {
+    const p = pg.children[i]; if (!p) return;
+    pg.scrollTo({ left: p.offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
+    mark(i); LS.set('page', i);
+  };
+  bs.forEach((b) => { b.onclick = () => { blip(); goPage(+b.dataset.pg, true); }; });
+  let t = null;
+  pg.addEventListener('scroll', () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      const w = pg.clientWidth || 1;
+      const i = Math.round(pg.scrollLeft / (w + 12));
+      mark(i); LS.set('page', i);
+    }, 90);
+  }, { passive: true });
+  START.menu = () => goPage(LS.get('page', 0), false);
+  requestAnimationFrame(() => goPage(LS.get('page', 0), false));
+})();
 
 /* ================================================================
    НАЛІПКИ
