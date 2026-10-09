@@ -67,6 +67,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t6{background:linear-gradient(170deg,#ffc09f,#ff7a45)}
 .t7{background:linear-gradient(170deg,#9be7ff,#2fb8e0)}
 .t8{background:linear-gradient(170deg,#d8f07a,#8bbf1f)}
+.t9{background:linear-gradient(170deg,#7af0e0,#1fa7c9)}
+.t10{background:linear-gradient(170deg,#ffd3a8,#f08a5d)}
+.t11{background:linear-gradient(170deg,#c7cbe0,#7f86a8)}
 .menu-note{color:var(--dim);font-size:12.5px;text-align:center;margin:10px 2px 0;font-weight:700;line-height:1.5}
 .ver{color:var(--dim);opacity:.65;font-size:11px;text-align:center;margin:4px 0 0;font-weight:700;letter-spacing:.4px}
 .mini{
@@ -177,6 +180,33 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 /* ---------- що зайве ---------- */
 .odd{width:96px;height:96px;font-size:46px}
 
+/* ---------- зореліт ---------- */
+.arc-top{display:flex;justify-content:space-between;font-size:17px;padding:0 6px 8px}
+#arcC{
+  flex:1;min-height:0;width:100%;display:block;background:#07051a;
+  border:3px solid var(--line);border-radius:18px;touch-action:none;
+}
+.arc-hint{color:var(--dim);font-size:12.5px;text-align:center;margin-top:6px;font-weight:700}
+
+/* ---------- хрестики-нулики ---------- */
+.ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(86vw,340px);margin:0 auto}
+.ttc{aspect-ratio:1;font-size:clamp(46px,15vw,66px);line-height:1}
+.ttc.win{background:#ffd93d33;border-color:#ffd93d;animation:pop .5s}
+.tx{color:#ff5a5f} .to{color:#4aa8ff}
+
+/* ---------- сапер ---------- */
+.mines{display:grid;gap:5px;width:min(92vw,400px);margin:0 auto}
+.mc{
+  aspect-ratio:1;border-radius:10px;background:linear-gradient(165deg,#7b5cff,#5433d6);
+  box-shadow:0 4px 0 #0004;font-size:clamp(15px,5vw,24px);display:grid;place-items:center;padding:0;
+}
+.mc:active{transform:translateY(2px)}
+.mc.op{background:#ffffff12;border:2px solid #ffffff1c;box-shadow:none}
+.mc.boom{background:#ff5a5f77}
+.m1{color:#6ab8ff} .m2{color:#4ecb71} .m3{color:#ff6b6b} .m4{color:#c08bff}
+.m5{color:#ff9f43} .m6{color:#2fd8d0} .m7{color:#fff} .m8{color:#bbb}
+#mnFlag.on{background:#ffd93d26;border-color:#ffd93d99;color:var(--yel)}
+
 /* ---------- свої голоси ---------- */
 .reclist{display:flex;flex-direction:column;gap:8px;overflow:auto;padding-bottom:6px}
 .rrow{
@@ -255,9 +285,13 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
     <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
     <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
+    <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
+    <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
+    <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
-  <p class="ver" id="verLine"></p>
+  <p class="ver"><span id="verLine"></span> <button class="mini" id="updNow">🔄 Оновити</button>
+    <span class="updmsg" id="updMsg"></span></p>
 </section>
 
 <!-- мелодія -->
@@ -340,6 +374,34 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   <div class="play"><div class="row" id="odds"></div></div>
 </section>
 
+<!-- зореліт -->
+<section class="scr" id="s-arcade">
+  <div class="arc-top"><span id="arcLvl">Рівень 1</span><span id="arcLeft"></span></div>
+  <canvas id="arcC"></canvas>
+  <div class="arc-hint">веди пальцем — кораблик стріляє сам</div>
+</section>
+
+<!-- хрестики-нулики -->
+<section class="scr" id="s-ttt">
+  <div class="ask" id="tttAsk">Ти ставиш <b class="tx">✕</b></div>
+  <div class="play">
+    <div class="ttt" id="ttt"></div>
+    <div class="score" id="tttScore"></div>
+  </div>
+</section>
+
+<!-- сапер -->
+<section class="scr" id="s-mines">
+  <div class="ask" id="mnAsk">Відкривай клітинки</div>
+  <div class="play">
+    <div class="mines" id="mines"></div>
+    <div class="row">
+      <button class="btn" id="mnFlag">🚩 Прапорець</button>
+      <button class="btn" id="mnNew">🔁 Нова гра</button>
+    </div>
+  </div>
+</section>
+
 <!-- свої голоси (батьківський куточок) -->
 <section class="scr" id="s-rec">
   <div class="ask" id="recAsk">Запишіть голоси самі<small>🎤 — записати (до 4 с) · ▶ — послухати</small></div>
@@ -358,7 +420,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.0.7';
+const APP_VERSION = '1.0.8';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -552,6 +614,7 @@ const closeDialog = () => $('#ov').classList.add('hid');
 const TITLES = { menu: 'Гралик', melody: 'Повтори мелодію', memory: 'Знайди пару', count: 'Скільки?',
                  letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка',
                  shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
+                 arcade: 'Зореліт', ttt: 'Хрестики-нулики', mines: 'Сапер',
                  rec: 'Свої голоси' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
@@ -1342,6 +1405,461 @@ $('#recList').onclick = (e) => {
 };
 
 /* ================================================================
+   9. ЗОРЕЛІТ  (аркада: ланцюжок кульок із числами повзе звивистою
+   трасою до чорної діри, кораблик знизу стріляє сам — дитина лише
+   водить його пальцем. Кожне влучання зменшує число на 1, на нулі
+   кулька лопається. Кольорові кульки — бонуси.)
+   ================================================================ */
+const AR = {
+  run: false, raf: 0, last: 0, w: 0, h: 0, dpr: 1, R: 20, sp: 40,
+  pts: [], cum: [], len: 0, cells: [], total: 0, shots: [], fx: [], txt: [], stars: [],
+  x: 0, tx: 0, ships: 1, guns: 1, rate: 4, cool: 0, spd: 0, t: 0,
+  lvl: LS.get('arcLvl', 1), popT: 0,
+};
+const AR_BONUS = {
+  gun:  { em: '🔥', col: '#ff9f43', nm: '+ постріл' },
+  rate: { em: '⚡', col: '#ffd93d', nm: 'швидше!' },
+  ship: { em: '🚀', col: '#2fd8d0', nm: '+ кораблик' },
+};
+const AR_ORDER = ['gun', 'rate', 'ship', 'gun', 'rate', 'gun', 'ship', 'rate', 'gun'];
+
+/** Будуємо трасу «змійкою» згори вниз: рядки з півколами на краях. */
+function arLayout() {
+  const c = $('#arcC'), r = c.getBoundingClientRect();
+  const dpr = AR.dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  const w = AR.w = c.width = Math.max(240, Math.round(r.width * dpr));
+  const h = AR.h = c.height = Math.max(320, Math.round(r.height * dpr));
+  const R = AR.R = Math.min(w / 12.5, h / 19);
+  AR.sp = R * 2.05;
+  const gap = R * 2.5, tr = gap / 2, m = R * 1.15, y0 = R * 1.5, step = R / 5;
+  const rows = Math.max(2, Math.min(5, Math.floor((h * 0.6 - y0) / gap) + 1));
+  const pts = [];
+  const line = (x1, y1, x2, y2) => {
+    const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / step));
+    for (let i = pts.length ? 1 : 0; i <= n; i++) pts.push([x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n]);
+  };
+  const arc = (cx, cy, a0, a1) => {
+    const n = Math.max(2, Math.ceil(Math.abs(a1 - a0) * tr / step));
+    for (let i = 1; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; pts.push([cx + Math.cos(a) * tr, cy + Math.sin(a) * tr]); }
+  };
+  const xL = m + tr, xR = w - m - tr;
+  let y = y0;
+  line(-AR.sp * 1.5, y, rows === 1 ? xR + tr : xR, y);
+  for (let j = 1; j < rows; j++) {
+    const fromRight = (j - 1) % 2 === 0;
+    if (fromRight) arc(xR, y + tr, -Math.PI / 2, Math.PI / 2);
+    else arc(xL, y + tr, -Math.PI / 2, -Math.PI * 1.5);
+    y += gap;
+    const right = j % 2 === 0, last = j === rows - 1;
+    const to = right ? (last ? xR + tr * 0.4 : xR) : (last ? xL - tr * 0.4 : xL);
+    line(fromRight ? xR : xL, y, to, y);
+  }
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  AR.pts = pts; AR.cum = cum; AR.len = cum[cum.length - 1];
+  AR.shipY = h - R * 1.9;
+  if (!AR.x) AR.x = AR.tx = w / 2;
+  AR.x = Math.min(AR.x, w); AR.tx = Math.min(AR.tx, w);
+}
+function arAt(s) {
+  const c = AR.cum, p = AR.pts;
+  if (s <= 0) return p[0];
+  if (s >= AR.len) return p[p.length - 1];
+  let lo = 0, hi = c.length - 1;
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (c[mid] <= s) lo = mid; else hi = mid; }
+  const k = (s - c[lo]) / ((c[hi] - c[lo]) || 1);
+  return [p[lo][0] + (p[hi][0] - p[lo][0]) * k, p[lo][1] + (p[hi][1] - p[lo][1]) * k];
+}
+function arNewLevel() {
+  const L = AR.lvl, n = Math.min(54, 14 + L * 4);
+  AR.cells = [];
+  let b = 0;
+  for (let i = 0; i < n; i++) {
+    const bonus = i > 2 && i % 6 === 3;
+    const hp = bonus ? 2 + L : Math.min(99, 1 + L + Math.floor(i * (L + 1) / 5) + rnd(2));
+    AR.cells.push({ s: -i * AR.sp, hp, kind: bonus ? AR_ORDER[b++ % AR_ORDER.length] : null, hit: 0 });
+  }
+  AR.total = n; AR.shots = []; AR.fx = []; AR.txt = [];
+  AR.ships = 1; AR.guns = 1; AR.rate = 4; AR.cool = 0;
+  AR.spd = AR.R * Math.min(1.1, 0.5 + 0.06 * L);
+  $('#arcLvl').textContent = `Рівень ${L}`;
+  arLeftUI();
+}
+const arLeftUI = () => { $('#arcLeft').textContent = `🎯 ${AR.total - AR.cells.length} з ${AR.total}`; };
+function arShipXs() {
+  const xs = [AR.x], d = AR.R * 2.3;
+  if (AR.ships > 1) xs.push(AR.x - d);
+  if (AR.ships > 2) xs.push(AR.x + d);
+  return xs;
+}
+function arBurst(x, y, col, n = 14) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 7, v = AR.R * (1.5 + Math.random() * 4);
+    AR.fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.5 + Math.random() * 0.4, col });
+  }
+}
+function arPop(i, p) {
+  const c = AR.cells[i];
+  AR.cells.splice(i, 1);
+  const col = c.kind ? AR_BONUS[c.kind].col : '#9dff6a';
+  arBurst(p[0], p[1], col, c.kind ? 26 : 14);
+  vibe(15);
+  if (AR.t - AR.popT > 0.06) { beep(600 + rnd(300), 0.09, 'triangle', 0.14); AR.popT = AR.t; }
+  if (c.kind) {
+    const k = c.kind;
+    if (k === 'gun') AR.guns = Math.min(4, AR.guns + 1);
+    if (k === 'rate') AR.rate = Math.min(10, AR.rate + 1.5);
+    if (k === 'ship') AR.ships = Math.min(3, AR.ships + 1);
+    AR.txt.push({ x: p[0], y: p[1], t: AR_BONUS[k].em + ' ' + AR_BONUS[k].nm, life: 1.4 });
+    [784, 988, 1175].forEach((f, j) => setTimeout(() => beep(f, 0.1, 'square', 0.09), j * 60));
+  }
+  arLeftUI();
+}
+function arStep(dt) {
+  AR.t += dt;
+  const cs = AR.cells, v = AR.spd;
+  // ланцюжок: перша кулька повзе рівно, решта підтягується, якщо між ними дірка
+  if (cs.length) {
+    cs[0].s += v * dt;
+    for (let i = 1; i < cs.length; i++) {
+      const tgt = cs[i - 1].s - AR.sp, c = cs[i];
+      c.s += (tgt - c.s > 2 ? v * 5 : v) * dt;
+      if (c.s > tgt) c.s = tgt;
+    }
+  }
+  // кораблик
+  AR.x += (AR.tx - AR.x) * Math.min(1, dt * 14);
+  // постріли
+  AR.cool -= dt;
+  if (AR.cool <= 0) {
+    AR.cool = 1 / AR.rate;
+    arShipXs().forEach((sx, k) => {
+      const y = AR.shipY - AR.R * (k ? 0.5 : 0.9);
+      for (let g = 0; g < AR.guns; g++) AR.shots.push({ x: sx + (g - (AR.guns - 1) / 2) * AR.R * 0.38, y });
+    });
+  }
+  const pos = cs.map((c) => (c.s > -AR.R ? arAt(c.s) : null));
+  const vy = AR.h * 1.5 * dt, hr = AR.R * 0.95;
+  for (let j = AR.shots.length - 1; j >= 0; j--) {
+    const b = AR.shots[j];
+    b.y -= vy;
+    if (b.y < -20) { AR.shots.splice(j, 1); continue; }
+    for (let i = 0; i < cs.length; i++) {
+      const p = pos[i];
+      if (!p || Math.abs(b.x - p[0]) > hr || Math.abs(b.y - p[1]) > hr) continue;
+      AR.shots.splice(j, 1);
+      cs[i].hp--; cs[i].hit = 0.08;
+      if (cs[i].hp <= 0) { arPop(i, p); pos.splice(i, 1); }
+      break;
+    }
+  }
+  cs.forEach((c) => { if (c.hit > 0) c.hit -= dt; });
+  AR.fx = AR.fx.filter((f) => { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 0.94; f.vy *= 0.94; return (f.life -= dt) > 0; });
+  AR.txt = AR.txt.filter((t) => { t.y -= AR.R * 0.8 * dt; return (t.life -= dt) > 0; });
+  // кінець рівня
+  if (!cs.length) arEnd(true);
+  else if (cs[0].s >= AR.len) arEnd(false);
+}
+function arHex(g, x, y, r) {
+  g.beginPath();
+  for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; g[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r, y + Math.sin(a) * r); }
+  g.closePath();
+}
+function arShip(g, x, y, s, col) {
+  g.save(); g.translate(x, y); g.lineJoin = 'round';
+  g.beginPath();
+  g.moveTo(0, -s); g.lineTo(s * 0.32, -s * 0.2); g.lineTo(s * 0.9, s * 0.45); g.lineTo(s * 0.3, s * 0.38);
+  g.lineTo(s * 0.2, s * 0.75); g.lineTo(-s * 0.2, s * 0.75); g.lineTo(-s * 0.3, s * 0.38);
+  g.lineTo(-s * 0.9, s * 0.45); g.lineTo(-s * 0.32, -s * 0.2); g.closePath();
+  g.fillStyle = '#0d1a2a'; g.fill();
+  g.strokeStyle = col + '55'; g.lineWidth = s * 0.22; g.stroke();
+  g.strokeStyle = col; g.lineWidth = s * 0.08; g.stroke();
+  g.fillStyle = '#9be7ff'; g.beginPath(); g.ellipse(0, -s * 0.25, s * 0.12, s * 0.25, 0, 0, 7); g.fill();
+  // вогник із сопла
+  g.fillStyle = `hsl(${30 + rnd(30)},100%,60%)`;
+  g.beginPath(); g.moveTo(-s * 0.15, s * 0.78); g.lineTo(0, s * (1.05 + Math.random() * 0.3)); g.lineTo(s * 0.15, s * 0.78); g.fill();
+  g.restore();
+}
+function arDraw() {
+  const g = $('#arcC').getContext('2d'), { w, h, R } = AR;
+  g.clearRect(0, 0, w, h);
+  // зірки, що повільно пливуть униз
+  g.fillStyle = '#ffffff';
+  AR.stars.forEach((s) => {
+    const y = ((s[1] + AR.t * s[2] * 0.02) % 1) * h;
+    g.globalAlpha = 0.25 + s[2] * 0.35; g.fillRect(s[0] * w, y, s[2] * AR.dpr, s[2] * AR.dpr);
+  });
+  g.globalAlpha = 1;
+  // траса — ледь помітна стежка, щоб було видно, куди повзе ланцюжок
+  g.strokeStyle = '#ffffff12'; g.lineWidth = R * 1.9; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.beginPath(); AR.pts.forEach((p, i) => g[i ? 'lineTo' : 'moveTo'](p[0], p[1])); g.stroke();
+  // чорна діра в кінці траси
+  const e = AR.pts[AR.pts.length - 1], pulse = 1 + Math.sin(AR.t * 4) * 0.07;
+  for (let k = 3; k >= 1; k--) {
+    g.strokeStyle = `hsla(${280 + k * 20},100%,65%,${0.25 + 0.2 * (3 - k)})`;
+    g.lineWidth = R * 0.18;
+    g.beginPath(); g.arc(e[0], e[1], R * (0.45 + k * 0.32) * pulse, AR.t * k, AR.t * k + 5); g.stroke();
+  }
+  g.fillStyle = '#000'; g.beginPath(); g.arc(e[0], e[1], R * 0.55, 0, 7); g.fill();
+  // кульки
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  for (let i = AR.cells.length - 1; i >= 0; i--) {
+    const c = AR.cells[i];
+    if (c.s < -AR.R) continue;
+    const [x, y] = arAt(c.s);
+    const col = c.kind ? AR_BONUS[c.kind].col : `hsl(${(150 - Math.min(c.hp, 60) * 5 + 360) % 360},90%,62%)`;
+    const r = R * (c.hit > 0 ? 0.88 : 0.95);
+    arHex(g, x, y, r);
+    g.fillStyle = c.kind ? '#1a0f33' : '#0b0820'; g.fill();
+    g.strokeStyle = col; g.globalAlpha = 0.3; g.lineWidth = R * 0.32; g.stroke();
+    g.globalAlpha = 1; g.lineWidth = R * 0.1; g.strokeStyle = c.hit > 0 ? '#fff' : col; g.stroke();
+    if (c.kind) {
+      g.font = `${Math.round(R * 0.8)}px ${EMOJI_FONT}`;
+      g.fillText(AR_BONUS[c.kind].em, x, y - R * 0.12);
+      g.font = `900 ${Math.round(R * 0.42)}px Nunito,system-ui,sans-serif`; g.fillStyle = '#fff';
+      g.fillText(c.hp, x, y + R * 0.55);
+    } else {
+      g.fillStyle = '#fff';
+      g.font = `900 ${Math.round(R * (c.hp > 9 ? 0.72 : 0.85))}px Nunito,system-ui,sans-serif`;
+      g.fillText(c.hp, x, y + R * 0.05);
+    }
+  }
+  // постріли
+  g.strokeStyle = '#b8ff5c'; g.lineWidth = Math.max(2, R * 0.1); g.lineCap = 'round';
+  g.beginPath(); AR.shots.forEach((b) => { g.moveTo(b.x, b.y); g.lineTo(b.x, b.y + R * 0.5); }); g.stroke();
+  // кораблики
+  arShipXs().forEach((sx, k) => arShip(g, sx, AR.shipY + (k ? R * 0.4 : 0), R * (k ? 0.75 : 1), k ? '#2fd8d0' : '#b8ff5c'));
+  // іскри й написи
+  AR.fx.forEach((f) => { g.globalAlpha = Math.min(1, f.life * 2); g.fillStyle = f.col; g.fillRect(f.x - R * 0.08, f.y - R * 0.08, R * 0.16, R * 0.16); });
+  g.globalAlpha = 1;
+  AR.txt.forEach((t) => {
+    g.globalAlpha = Math.min(1, t.life);
+    g.font = `900 ${Math.round(R * 0.6)}px Nunito,system-ui,${EMOJI_FONT}`;
+    g.lineWidth = R * 0.15; g.strokeStyle = '#000a'; g.strokeText(t.t, t.x, t.y); g.fillStyle = '#fff'; g.fillText(t.t, t.x, t.y);
+  });
+  g.globalAlpha = 1;
+}
+function arLoop(ts) {
+  if (!AR.run) return;
+  const dt = AR.last ? Math.min(0.05, (ts - AR.last) / 1000) : 0;
+  AR.last = ts;
+  arStep(dt);
+  if (!AR.run) return;   // рівень щойно закінчився
+  arDraw();
+  AR.raf = requestAnimationFrame(arLoop);
+}
+function arEnd(win) {
+  AR.run = false; cancelAnimationFrame(AR.raf); arDraw();
+  if (win) {
+    cheer(); confetti(); vibe(60); addStar(AR.lvl >= 3 ? 2 : 1);
+    const done = AR.lvl;
+    AR.lvl++; LS.set('arcLvl', AR.lvl);
+    say('Молодець!');
+    setTimeout(() => dialog({
+      em: '🏆', h: `Рівень ${done} пройдено!`, p: 'Усі кульки лопнули',
+      btn: `🚀 Рівень ${AR.lvl}`, btn2: '🏠 Меню',
+      onBtn: arStart, onBtn2: () => go('menu'),
+    }), 500);
+  } else {
+    oops(); vibe(150);
+    setTimeout(() => dialog({
+      em: '🌀', h: 'Кульки долетіли до діри', p: 'Нічого страшного — спробуй ще!',
+      btn: '🔁 Ще раз', btn2: '🏠 Меню', btn3: AR.lvl > 1 ? '⬇️ Легше' : '',
+      onBtn: arStart, onBtn2: () => go('menu'),
+      onBtn3: () => { AR.lvl = Math.max(1, AR.lvl - 1); LS.set('arcLvl', AR.lvl); arStart(); },
+    }), 400);
+  }
+}
+function arStart() {
+  cancelAnimationFrame(AR.raf);
+  if (!AR.stars.length) for (let i = 0; i < 70; i++) AR.stars.push([Math.random(), Math.random(), 0.5 + Math.random() * 1.5]);
+  arLayout(); arNewLevel();
+  AR.x = AR.tx = AR.w / 2;
+  AR.run = true; AR.last = 0;
+  AR.raf = requestAnimationFrame(arLoop);
+}
+START.arcade = () => { arStart(); say('Веди кораблик пальцем'); };
+STOP.arcade = () => { AR.run = false; cancelAnimationFrame(AR.raf); };
+(() => {
+  const c = $('#arcC');
+  const aim = (e) => {
+    const r = c.getBoundingClientRect();
+    AR.tx = Math.max(AR.R, Math.min(AR.w - AR.R, (e.clientX - r.left) * AR.dpr));
+  };
+  c.addEventListener('pointerdown', (e) => { ac(); aim(e); try { c.setPointerCapture(e.pointerId); } catch (x) { /* */ } });
+  c.addEventListener('pointermove', (e) => { if (e.buttons || e.pointerType === 'touch') aim(e); });
+  document.addEventListener('keydown', (e) => {
+    if (SCR !== 'arcade') return;
+    const d = { ArrowLeft: -1, ArrowRight: 1 }[e.key];
+    if (d) { e.preventDefault(); AR.tx = Math.max(AR.R, Math.min(AR.w - AR.R, AR.tx + d * AR.R * 1.5)); }
+  });
+  window.addEventListener('resize', () => { if (SCR === 'arcade' && AR.run) arLayout(); });
+})();
+
+/* ================================================================
+   10. ХРЕСТИКИ-НУЛИКИ  (дитина ✕ і ходить першою, Гралик ◯;
+   Гралик розумнішає після перемог дитини і поступається після програшів)
+   ================================================================ */
+const TT = { b: [], busy: false, lvl: LS.get('tttLvl', 0), me: 0, bot: 0, wins: 0 };
+const TT_LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+function tttLine(b) {
+  for (const L of TT_LINES) if (b[L[0]] && b[L[0]] === b[L[1]] && b[L[0]] === b[L[2]]) return L;
+  return null;
+}
+function tttBot() {
+  const b = TT.b, free = [];
+  b.forEach((v, i) => { if (!v) free.push(i); });
+  const find = (m) => { for (const i of free) { b[i] = m; const w = tttLine(b); b[i] = ''; if (w) return i; } return -1; };
+  // 0 - здебільшого навмання; 1 - завжди виграє/блокує; 2 - ще й займає центр і кути
+  if (TT.lvl >= 1 || Math.random() < 0.35) {
+    let i = find('o'); if (i >= 0) return i;
+    i = find('x'); if (i >= 0) return i;
+  }
+  if (TT.lvl >= 2) {
+    if (!b[4]) return 4;
+    const cn = [0, 2, 6, 8].filter((i) => !b[i]);
+    if (cn.length) return pick(cn);
+  }
+  return pick(free);
+}
+function tttUI(win) {
+  $('#ttt').innerHTML = TT.b.map((v, i) =>
+    `<button class="big ttc${win && win.includes(i) ? ' win' : ''}" data-i="${i}">${v === 'x' ? '<span class="tx">✕</span>' : v === 'o' ? '<span class="to">◯</span>' : ''}</button>`).join('');
+  $('#tttScore').innerHTML = `Ти <span class="tx">${TT.me}</span> : <span class="to">${TT.bot}</span> Гралик`;
+}
+function tttNew() {
+  TT.b = Array(9).fill(''); TT.busy = false;
+  $('#tttAsk').innerHTML = 'Твій хід! Ти ставиш <b class="tx">✕</b><small>склади три в ряд</small>';
+  tttUI();
+}
+function tttCheck() {
+  const w = tttLine(TT.b);
+  if (w) {
+    TT.busy = true; tttUI(w);
+    if (TT.b[w[0]] === 'x') {
+      TT.me++; TT.wins++; cheer(); confetti(); vibe(40); addStar();
+      $('#tttAsk').innerHTML = 'Ти переміг! 🎉';
+      say('Ти переміг!');
+      if (TT.wins >= 2 && TT.lvl < 2) { TT.lvl++; TT.wins = 0; LS.set('tttLvl', TT.lvl); }
+    } else {
+      TT.bot++; oops(); TT.wins = 0;
+      $('#tttAsk').innerHTML = 'Цього разу Гралик 🙂<small>граймо ще!</small>';
+      if (TT.lvl > 0) { TT.lvl--; LS.set('tttLvl', TT.lvl); }
+    }
+    tttUI(w);
+    setTimeout(tttNew, 2200);
+    return true;
+  }
+  if (TT.b.every(Boolean)) {
+    TT.busy = true; beep(523, 0.2, 'triangle', 0.18);
+    $('#tttAsk').innerHTML = 'Нічия! 🤝<small>ніхто не переміг</small>';
+    setTimeout(tttNew, 1900);
+    return true;
+  }
+  return false;
+}
+START.ttt = () => { TT.me = 0; TT.bot = 0; tttNew(); say('Склади три хрестики в ряд'); };
+STOP.ttt = () => { TT.busy = true; };
+$('#ttt').onclick = (e) => {
+  const c = e.target.closest('[data-i]'); if (!c || TT.busy) return;
+  const i = +c.dataset.i; if (TT.b[i]) return;
+  TT.b[i] = 'x'; beep(660, 0.1, 'triangle', 0.18); tttUI();
+  if (tttCheck()) return;
+  TT.busy = true;
+  $('#tttAsk').innerHTML = 'Гралик думає… 🤔';
+  setTimeout(() => {
+    if (SCR !== 'ttt') return;
+    TT.b[tttBot()] = 'o'; beep(440, 0.1, 'triangle', 0.16); tttUI();
+    if (!tttCheck()) { TT.busy = false; $('#tttAsk').innerHTML = 'Твій хід! Ти ставиш <b class="tx">✕</b><small>склади три в ряд</small>'; }
+  }, 650);
+};
+
+/* ================================================================
+   11. САПЕР  (перший дотик ніколи не на міні; поле росте з перемогами)
+   ================================================================ */
+const MN_LV = [{ n: 5, m: 3 }, { n: 6, m: 5 }, { n: 7, m: 7 }, { n: 8, m: 10 }, { n: 9, m: 13 }];
+const MN = { n: 5, m: 3, c: [], first: true, flag: false, over: false, left: 0, lvl: LS.get('mnLvl', 0) };
+function mnNb(i) {
+  const n = MN.n, x = i % n, y = (i / n) | 0, r = [];
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    if (!dx && !dy) continue;
+    const X = x + dx, Y = y + dy;
+    if (X >= 0 && Y >= 0 && X < n && Y < n) r.push(Y * n + X);
+  }
+  return r;
+}
+function mnNew() {
+  MN.lvl = Math.min(MN.lvl, MN_LV.length - 1);
+  const L = MN_LV[MN.lvl];
+  MN.n = L.n; MN.m = L.m;
+  MN.c = Array.from({ length: L.n * L.n }, () => ({ mine: false, open: false, flag: false, k: 0 }));
+  MN.first = true; MN.over = false; MN.left = L.n * L.n - L.m;
+  MN.flag = false; $('#mnFlag').classList.remove('on');
+  $('#mines').style.gridTemplateColumns = `repeat(${L.n},1fr)`;
+  mnAsk();
+  mnUI();
+}
+const mnAsk = () => {
+  const flags = MN.c.filter((c) => c.flag).length;
+  $('#mnAsk').innerHTML = `Сховано мін: 💣 ${MN.m}<small>${MN.flag ? '🚩 зараз ставиш прапорці' : 'цифра — скільки мін поруч'} · 🚩 ${flags}</small>`;
+};
+function mnPlace(safe) {
+  const ban = new Set([safe, ...mnNb(safe)]);
+  const ids = shuffle(MN.c.map((_, i) => i).filter((i) => !ban.has(i))).slice(0, MN.m);
+  ids.forEach((i) => { MN.c[i].mine = true; });
+  MN.c.forEach((c, i) => { c.k = mnNb(i).filter((j) => MN.c[j].mine).length; });
+}
+function mnUI(boom) {
+  $('#mines').innerHTML = MN.c.map((c, i) => {
+    let cls = 'mc', t = '';
+    if (c.open || (MN.over && c.mine)) {
+      cls += ' op';
+      if (c.mine) { t = '💣'; if (i === boom) cls += ' boom'; } else if (c.k) { t = c.k; cls += ' m' + c.k; }
+    } else if (c.flag) t = '🚩';
+    return `<button class="${cls}" data-i="${i}">${t}</button>`;
+  }).join('');
+}
+function mnOpen(i) {
+  const q = [i];
+  while (q.length) {
+    const j = q.pop(), c = MN.c[j];
+    if (c.open || c.flag) continue;
+    c.open = true; MN.left--;
+    if (!c.k) mnNb(j).forEach((k) => { if (!MN.c[k].open) q.push(k); });
+  }
+}
+function mnTap(i, asFlag) {
+  if (MN.over) return;
+  const c = MN.c[i];
+  if (c.open) return;
+  if (asFlag) { c.flag = !c.flag; blip(); mnUI(); mnAsk(); return; }
+  if (c.flag) return;
+  if (MN.first) { mnPlace(i); MN.first = false; }
+  if (c.mine) {
+    MN.over = true; mnUI(i); oops(); vibe(200);
+    $('#mnAsk').innerHTML = 'Бабах! 💥<small>нічого — спробуй ще раз</small>';
+    setTimeout(() => dialog({ em: '💥', h: 'Ой, міна!', p: 'Тепер ти знаєш, де її шукати',
+      btn: '🔁 Ще раз', btn2: '🏠 Меню', onBtn: mnNew, onBtn2: () => go('menu') }), 900);
+    return;
+  }
+  mnOpen(i); beep(620 + rnd(200), 0.08, 'triangle', 0.15);
+  mnUI(); mnAsk();
+  if (MN.left === 0) {
+    MN.over = true; mnUI(); cheer(); confetti(); vibe(60); addStar(MN.lvl >= 2 ? 2 : 1);
+    const up = MN.lvl < MN_LV.length - 1;
+    if (up) { MN.lvl++; LS.set('mnLvl', MN.lvl); }
+    say('Усі міни знайдено!');
+    setTimeout(() => dialog({ em: '🏆', h: 'Поле розміновано!', p: up ? 'Наступне поле буде більшим' : 'Ти справжній сапер!',
+      btn: '▶️ Далі', btn2: '🏠 Меню', onBtn: mnNew, onBtn2: () => go('menu') }), 700);
+  }
+}
+START.mines = () => { mnNew(); say('Відкривай клітинки, обходь міни'); };
+$('#mines').onclick = (e) => { const b = e.target.closest('[data-i]'); if (b) mnTap(+b.dataset.i, MN.flag); };
+$('#mines').oncontextmenu = (e) => { const b = e.target.closest('[data-i]'); if (b) { e.preventDefault(); mnTap(+b.dataset.i, true); } };
+$('#mnFlag').onclick = () => { MN.flag = !MN.flag; $('#mnFlag').classList.toggle('on', MN.flag); blip(); mnAsk(); };
+$('#mnNew').onclick = () => { blip(); mnNew(); };
+
+/* ================================================================
    НАЛІПКИ
    ================================================================ */
 START.album = () => {
@@ -1409,6 +1927,7 @@ async function checkUpdate() {
     if (!m) throw new Error('версію не знайдено');
     if (m[1] === APP_VERSION) {
       set(`у вас найновіша версія (${APP_VERSION})`);
+      setTimeout(() => set(''), 4000);
       updBusy = false; if (btn) btn.disabled = false;
       return;
     }
@@ -1435,8 +1954,7 @@ function parentPanel() {
         Голос: <b>${voiceInfo()}</b><br>
         Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'справжні, з папки sounds' : 'справжні записи з інтернету')}</b><br>
         Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>
-        Версія <b>${APP_VERSION}</b> <button class="mini" id="updNow">Оновити</button>
-        <span class="updmsg" id="updMsg"></span>${hint}`,
+        Версія <b>${APP_VERSION}</b> (оновлення — кнопкою під меню)${hint}`,
     btn: 'Закрити', btn2: 'Змінити', btn3: '🎤 Свої голоси',
     onBtn3: () => go('rec'),
     onBtn2: () => {
@@ -1449,13 +1967,12 @@ function parentPanel() {
       });
     },
   });
-  const u = $('#updNow');
-  if (u) u.onclick = checkUpdate;
 }
 
 /* ---------- старт ---------- */
 $('#starN').textContent = S.stars;
 $('#verLine').textContent = 'v' + APP_VERSION;
+$('#updNow').onclick = (e) => { e.stopPropagation(); checkUpdate(); };
 $('#back').style.visibility = 'hidden';
 document.addEventListener('click', () => { ac(); loadVoices(); }, { once: true });
 if ('serviceWorker' in navigator) {
