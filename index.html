@@ -65,7 +65,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t4{background:linear-gradient(170deg,#ffafd0,#ff6fae)}
 .t5{background:linear-gradient(170deg,#d0b3ff,#9a6bff)}
 .t6{background:linear-gradient(170deg,#ffc09f,#ff7a45)}
+.t7{background:linear-gradient(170deg,#9be7ff,#2fb8e0)}
+.t8{background:linear-gradient(170deg,#d8f07a,#8bbf1f)}
 .menu-note{color:var(--dim);font-size:12.5px;text-align:center;margin:10px 2px 0;font-weight:700;line-height:1.5}
+.ver{color:var(--dim);opacity:.65;font-size:11px;text-align:center;margin:4px 0 0;font-weight:700;letter-spacing:.4px}
+.mini{
+  border:2px solid var(--line);background:var(--card);border-radius:12px;
+  padding:4px 11px;font-size:13px;color:var(--txt);vertical-align:middle
+}
+.mini:active{transform:scale(.95)}
+.mini:disabled{opacity:.5}
+.updmsg{display:block;margin-top:6px;color:var(--dim);font-size:12.5px}
 
 /* ---------- спільне для ігор ---------- */
 .ask{
@@ -144,6 +154,45 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .dpad button:active{background:#ffffff2e}
 .d-up{grid-area:1/2} .d-left{grid-area:2/1} .d-down{grid-area:2/2} .d-right{grid-area:2/3}
 .score{font-size:19px;text-align:center}
+.speed{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:360px;margin:0 auto}
+.sbtn{
+  border-radius:16px;background:var(--card);border:3px solid var(--line);
+  padding:8px 4px;font-size:12.5px;display:flex;align-items:center;justify-content:center;
+  gap:5px;color:var(--dim);min-width:0
+}
+.sbtn span{font-size:17px}
+.sbtn.on{background:#ffd93d26;border-color:#ffd93d99;color:var(--yel)}
+.sbtn:active{transform:scale(.94)}
+
+/* ---------- колір і форма ---------- */
+/* Фігури малюються самим CSS, а не емодзі: колір має бути рівно той,
+   що названо голосом, а емодзі на кожному телефоні свого відтінку. */
+.shp{width:118px;height:118px}
+.shp i{width:66%;aspect-ratio:1;display:block}
+.f-circle{border-radius:50%}
+.f-square{border-radius:12px}
+.f-tri{clip-path:polygon(50% 3%,97% 95%,3% 95%)}
+.f-star{clip-path:polygon(50% 2%,61% 36%,98% 36%,68% 58%,79% 95%,50% 73%,21% 95%,32% 58%,2% 36%,39% 36%)}
+
+/* ---------- що зайве ---------- */
+.odd{width:96px;height:96px;font-size:46px}
+
+/* ---------- свої голоси ---------- */
+.reclist{display:flex;flex-direction:column;gap:8px;overflow:auto;padding-bottom:6px}
+.rrow{
+  display:flex;align-items:center;gap:9px;background:var(--card);
+  border:2px solid var(--line);border-radius:16px;padding:9px 11px
+}
+.rrow .rem{font-size:28px;line-height:1}
+.rrow .rnm{flex:1;font-size:15px;text-align:left;min-width:0}
+.rrow .rnm small{display:block;color:var(--dim);font-size:11.5px;font-weight:700;margin-top:2px}
+.rbtn{
+  width:46px;height:46px;flex:0 0 auto;border-radius:14px;background:#ffffff14;
+  border:2px solid var(--line);font-size:19px;display:grid;place-items:center
+}
+.rbtn:active{transform:scale(.92)}
+.rbtn.rec{background:#ff5a5f33;border-color:var(--no);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.45}}
 
 /* ---------- наліпки ---------- */
 .album{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;overflow:auto;align-content:start}
@@ -204,8 +253,11 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
     <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
     <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
+    <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
+    <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
+  <p class="ver" id="verLine"></p>
 </section>
 
 <!-- мелодія -->
@@ -265,6 +317,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     <div class="snake-wrap">
       <canvas id="snakeC" width="360" height="360"></canvas>
       <div class="score" id="snScore">0</div>
+      <div class="speed" id="snSpeed"></div>
       <div class="dpad">
         <button class="d-up" data-d="u">⬆️</button>
         <button class="d-left" data-d="l">⬅️</button>
@@ -273,6 +326,24 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       </div>
     </div>
   </div>
+</section>
+
+<!-- колір і форма -->
+<section class="scr" id="s-shape">
+  <div class="ask" id="shpAsk">Знайди фігуру</div>
+  <div class="play"><div class="row" id="shapes"></div></div>
+</section>
+
+<!-- що зайве -->
+<section class="scr" id="s-odd">
+  <div class="ask" id="oddAsk">Що тут зайве?<small>натисни те, що не підходить</small></div>
+  <div class="play"><div class="row" id="odds"></div></div>
+</section>
+
+<!-- свої голоси (батьківський куточок) -->
+<section class="scr" id="s-rec">
+  <div class="ask" id="recAsk">Запишіть голоси самі<small>🎤 — записати (до 4 с) · ▶ — послухати</small></div>
+  <div class="reclist" id="recList"></div>
 </section>
 
 <!-- наліпки -->
@@ -287,7 +358,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '1.0.6';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -298,12 +369,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 /* ---------- памʼять пристрою ---------- */
 const LS = {
   get(k, d) { try { const v = localStorage.getItem('gralyk.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem('gralyk.' + k, JSON.stringify(v)); } catch (e) { /* памʼять заповнена */ } },
+  set(k, v) {
+    try { localStorage.setItem('gralyk.' + k, JSON.stringify(v)); return true; }
+    catch (e) { return false; }   // памʼять заповнена
+  },
 };
 const S = {
   stars: LS.get('stars', 0),
   got: LS.get('got', []),        // здобуті наліпки
   best: LS.get('best', 0),       // рекорд у змійці
+  speed: LS.get('speed', 'mid'), // швидкість змійки
   sound: LS.get('sound', true),
   voice: LS.get('voice', true),
 };
@@ -462,19 +537,22 @@ function addStar(n = 1) {
 }
 
 /* ---------- діалог ---------- */
-function dialog({ em, h, p, btn = 'Далі', btn2, onBtn, onBtn2 }) {
+function dialog({ em, h, p, btn = 'Далі', btn2, btn3, onBtn, onBtn2, onBtn3 }) {
   const box = $('#ovBox');
   box.innerHTML = `<div class="em">${em || ''}</div><h2>${h}</h2>${p ? `<p>${p}</p>` : ''}
-    <div><button class="btn go" id="ovOk">${btn}</button>${btn2 ? `<button class="btn" id="ovNo">${btn2}</button>` : ''}</div>`;
+    <div><button class="btn go" id="ovOk">${btn}</button>${btn2 ? `<button class="btn" id="ovNo">${btn2}</button>` : ''}${btn3 ? `<button class="btn" id="ovX">${btn3}</button>` : ''}</div>`;
   $('#ov').classList.remove('hid');
   $('#ovOk').onclick = () => { closeDialog(); onBtn && onBtn(); };
   if (btn2) $('#ovNo').onclick = () => { closeDialog(); onBtn2 && onBtn2(); };
+  if (btn3) $('#ovX').onclick = () => { closeDialog(); onBtn3 && onBtn3(); };
 }
 const closeDialog = () => $('#ov').classList.add('hid');
 
 /* ---------- перемикання екранів ---------- */
 const TITLES = { menu: 'Гралик', melody: 'Повтори мелодію', memory: 'Знайди пару', count: 'Скільки?',
-                 letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка', album: 'Мої наліпки' };
+                 letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка',
+                 shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
+                 rec: 'Свої голоси' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -656,59 +734,233 @@ const ANI_SET = [['🐮', 'корова', 'мууу'], ['🐶', 'песик', '�
                  ['🐑', 'вівця', 'бее-бее'], ['🐷', 'свинка', 'хрю-хрю'], ['🐸', 'жабка', 'ква-ква'],
                  ['🐔', 'курочка', 'ко-ко-ко'], ['🐓', 'півник', 'кукуріку'], ['🦆', 'качка', 'кря-кря'],
                  ['🐴', 'конячка', 'і-го-го'], ['🐭', 'мишка', 'пі-пі-пі'], ['🐺', 'вовк', 'уууу']];
-/* голоси — кожен зібраний вручну, без синтезатора мови */
+/* ---------- голос тварини: джерело + форманти ----------
+   Одна «пилка крізь фільтр» звучить як синтезатор, а не як тварина.
+   Живий голос - це гудіння зв'язок, пропущене крізь два-три резонанси
+   горла й пащі (форманти). Саме вони роблять «мууу» коровою, а «няв» котом:
+   у няв форманти їдуть від «і» до «ау», і цей переїзд і впізнається.
+   Додано ще три речі, без яких голос мертвий: дрібне тремтіння висоти
+   (jitter), тремтіння гучності (бекання вівці, іржання) і шум-придих. */
+function curve(pts, n) {
+  const out = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const x = i / (n - 1);
+    let k = 0;
+    while (k < pts.length - 2 && pts[k + 1][0] < x) k++;
+    const [x0, y0] = pts[k], [x1, y1] = pts[k + 1];
+    const t = x1 === x0 ? 0 : (x - x0) / (x1 - x0);
+    out[i] = y0 + (y1 - y0) * Math.max(0, Math.min(1, t));
+  }
+  return out;
+}
+const FLAT = (v) => [[0, v], [1, v]];
+
+function voice(o) {
+  if (!S.sound) return;
+  const a = ac(); if (!a) return;
+  const N = 96;
+  const t = a.currentTime + (o.t0 || 0), dur = o.dur;
+  const vol = o.vol == null ? 0.3 : o.vol;
+  const atk = o.atk == null ? Math.min(0.03, dur * 0.2) : o.atk;
+  const rel = o.rel == null ? Math.min(0.2, dur * 0.5) : o.rel;
+
+  const out = a.createGain();
+  out.gain.setValueAtTime(0.0001, t);
+  out.gain.exponentialRampToValueAtTime(vol, t + atk);
+  out.gain.setValueAtTime(vol, t + Math.max(atk + 0.001, dur - rel));
+  out.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  out.connect(a.destination);
+
+  let bus = out;
+  if (o.trem) {                       // тремтіння гучності
+    const tg = a.createGain(); tg.gain.value = 1;
+    const l = a.createOscillator(), lg = a.createGain();
+    l.frequency.value = o.trem[0]; lg.gain.value = o.trem[1];
+    l.connect(lg); lg.connect(tg.gain);
+    l.start(t); l.stop(t + dur + 0.05);
+    tg.connect(out); bus = tg;
+  }
+
+  const src = a.createOscillator();
+  src.type = o.type || 'sawtooth';
+  const f0 = curve(o.f0, N);
+  if (o.jitter) for (let i = 0; i < N; i++) f0[i] *= 1 + (Math.random() * 2 - 1) * o.jitter;
+  src.frequency.setValueCurveAtTime(f0, t, dur);
+  if (o.vib) {
+    const l = a.createOscillator(), lg = a.createGain();
+    l.frequency.value = o.vib[0]; lg.gain.value = o.vib[1];
+    l.connect(lg); lg.connect(src.frequency);
+    l.start(t); l.stop(t + dur + 0.05);
+  }
+
+  (o.F || []).forEach((pts, i) => {
+    const bp = a.createBiquadFilter(); bp.type = 'bandpass';
+    bp.Q.value = (o.q && o.q[i]) || 9;
+    bp.frequency.setValueCurveAtTime(curve(pts, N), t, dur);
+    const g = a.createGain();
+    g.gain.value = (o.g && o.g[i] != null) ? o.g[i] : [1, 0.6, 0.3][i] || 0.2;
+    src.connect(bp); bp.connect(g); g.connect(bus);
+  });
+  // трохи неотфільтрованого джерела - інакше самі смугові фільтри звучать порожньо
+  const lp = a.createBiquadFilter(); lp.type = 'lowpass';
+  lp.frequency.value = o.lp || 2600;
+  const og = a.createGain(); og.gain.value = o.open == null ? 0.16 : o.open;
+  src.connect(lp); lp.connect(og); og.connect(bus);
+  src.start(t); src.stop(t + dur + 0.05);
+
+  if (o.noise) {                      // придих і шурхіт
+    const ns = a.createBufferSource(); ns.buffer = noiseBuf(a);
+    const bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = o.nq || 1.2;
+    bp.frequency.setValueCurveAtTime(curve(o.nf || [[0, 1600], [1, 900]], N), t, dur);
+    const g = a.createGain(); g.gain.value = o.noise;
+    ns.connect(bp); bp.connect(g); g.connect(bus);
+    ns.start(t); ns.stop(t + dur + 0.03);
+  }
+}
+
+/* голоси - кожен зібраний вручну за тим, як звучить справжня тварина:
+   висота, форманти, тремтіння й шум. Синтезатора мови тут немає. */
 const ANI_SOUND = {
-  корова: () => envOsc({ pts: [[0, 118], [.18, 168], [.72, 152], [1, 104]], dur: 1.2, vol: .17,
-                         fpts: [[0, 480], [.3, 950], [1, 360]], vib: [5.5, 5] }),
-  песик: () => [0, .28].forEach((t0) => {
-    envOsc({ pts: [[0, 520], [.2, 260], [1, 165]], dur: .17, vol: .22, t0, fpts: [[0, 1900], [1, 480]] });
-    envNoise({ dur: .11, vol: .1, t0, fpts: [[0, 1600], [1, 650]] });
+  // довге «мууу»: низький голос, форманти «у», ледь помітне тремтіння
+  корова: () => voice({
+    dur: 1.25, vol: 0.546, jitter: 0.008, vib: [4.5, 3], noise: 0.025,
+    nf: [[0, 700], [1, 400]],
+    f0: [[0, 140], [0.12, 168], [0.68, 152], [1, 100]],
+    F: [[[0, 300], [0.2, 430], [1, 320]], [[0, 780], [0.25, 1020], [1, 690]], FLAT(2300)],
+    q: [7, 8, 6], atk: 0.07, rel: 0.5,
   }),
-  котик: () => envOsc({ pts: [[0, 500], [.28, 900], [.58, 820], [1, 420]], dur: .8, vol: .42,
-                        filt: 'bandpass', q: 2.5, fpts: [[0, 850], [.35, 1700], [1, 650]], vib: [6, 9] }),
-  вівця: () => envOsc({ pts: [[0, 430], [1, 320]], dur: .95, vol: .16,
-                        fpts: [[0, 1500], [1, 750]], vib: [13, 30] }),
-  свинка: () => [0, .18, .36].forEach((t0) => {
-    envOsc({ pts: [[0, 155], [1, 92]], dur: .13, vol: .2, t0, fpts: [[0, 720], [1, 280]] });
-    envNoise({ dur: .13, vol: .09, t0, fpts: [[0, 620], [1, 330]] });
+  // гавкіт: дуже різкий початок, швидкий зліт висоти вниз і багато шуму
+  песик: () => [0, 0.27].forEach((t0) => voice({
+    t0, dur: 0.15, vol: 0.29, jitter: 0.03, noise: 0.5, nq: 0.9,
+    nf: [[0, 2300], [1, 800]],
+    f0: [[0, 430], [0.12, 330], [1, 175]],
+    F: [[[0, 720], [1, 540]], [[0, 1750], [1, 1150]], FLAT(2800)],
+    q: [6, 6, 5], atk: 0.004, rel: 0.1, open: 0.22,
+  })),
+  // «няв»: форманти їдуть від «і» до «ау» - у цьому переїзді весь кіт
+  котик: () => voice({
+    dur: 0.78, vol: 0.756, jitter: 0.012, vib: [5.5, 7],
+    f0: [[0, 470], [0.18, 700], [0.5, 660], [1, 410]],
+    F: [[[0, 300], [0.32, 360], [1, 730]], [[0, 2200], [0.32, 1950], [1, 1000]], FLAT(3000)],
+    q: [9, 9, 7], atk: 0.04, rel: 0.3,
   }),
-  жабка: () => [0, .46].forEach((t0) => {
-    for (let i = 0; i < 10; i++)
-      envOsc({ type: 'square', pts: [[0, 175], [1, 148]], dur: .024, vol: .13, t0: t0 + i * .033,
-               fpts: [[0, 950], [1, 560]] });
+  // бекання: головне тут не висота, а часте тремтіння гучності
+  вівця: () => voice({
+    dur: 0.92, vol: 0.484, jitter: 0.02, trem: [19, 0.55], noise: 0.07,
+    nf: [[0, 1800], [1, 1200]],
+    f0: [[0, 430], [0.2, 400], [1, 330]],
+    F: [[[0, 640], [1, 560]], [[0, 1950], [1, 1700]], FLAT(2700)],
+    q: [8, 9, 6], atk: 0.05, rel: 0.3,
   }),
-  курочка: () => [0, .21, .42].forEach((t0) =>
-    envOsc({ pts: [[0, 920], [.4, 760], [1, 620]], dur: .11, vol: .42, t0,
-             filt: 'bandpass', q: 2, fpts: [[0, 1700], [1, 1050]] })),
-  півник: () => {   // ку-ку-рі-ку, чотири склади
-    envOsc({ pts: [[0, 600], [1, 780]], dur: .19, vol: .3, filt: 'bandpass', q: 1.6, fpts: [[0, 1400], [1, 1900]] });
-    envOsc({ pts: [[0, 920], [1, 900]], dur: .17, vol: .3, t0: .21, filt: 'bandpass', q: 1.6, fpts: [[0, 1900], [1, 1850]] });
-    envOsc({ pts: [[0, 1180], [1, 1040]], dur: .32, vol: .32, t0: .4, filt: 'bandpass', q: 1.6,
-             fpts: [[0, 2100], [1, 1500]], vib: [8, 16] });
-    envOsc({ pts: [[0, 780], [1, 590]], dur: .5, vol: .28, t0: .74, filt: 'bandpass', q: 1.6,
-             fpts: [[0, 1500], [1, 860]], vib: [6, 13] });
+  // рохкання: три коротких, низько й шумно
+  свинка: () => [0, 0.19, 0.38].forEach((t0) => voice({
+    t0, dur: 0.15, vol: 0.325, jitter: 0.04, noise: 0.38, nq: 0.8,
+    nf: [[0, 950], [1, 380]],
+    f0: [[0, 145], [1, 85]],
+    F: [[[0, 530], [1, 380]], [[0, 1150], [1, 820]], FLAT(2100)],
+    q: [5, 5, 4], atk: 0.006, rel: 0.09, open: 0.26,
+  })),
+  // кумкання: гучність пульсує - саме це й чути як «ква»
+  жабка: () => [0, 0.45].forEach((t0) => voice({
+    t0, dur: 0.34, vol: 0.278, jitter: 0.025, trem: [34, 0.85], noise: 0.09,
+    nf: [[0, 1200], [1, 700]],
+    f0: [[0, 172], [1, 148]],
+    F: [[[0, 520], [1, 470]], [[0, 1280], [1, 1080]], FLAT(2400)],
+    q: [7, 8, 5], atk: 0.012, rel: 0.12,
+  })),
+  // кудкудакання: три короткі «ко» зі спадом
+  курочка: () => [0, 0.2, 0.4].forEach((t0) => voice({
+    t0, dur: 0.11, vol: 0.545, jitter: 0.02, noise: 0.16,
+    nf: [[0, 2600], [1, 1600]],
+    f0: [[0, 800], [1, 560]],
+    F: [[[0, 1150], [1, 820]], [[0, 2500], [1, 1900]], FLAT(3400)],
+    q: [7, 7, 5], atk: 0.005, rel: 0.07,
+  })),
+  // ку-ку-рі-ку: чотири склади, останній довгий і з придихом
+  півник: () => {
+    voice({ dur: 0.2, vol: 0.602, f0: [[0, 620], [1, 760]],
+            F: [[[0, 520], [1, 620]], [[0, 1200], [1, 1500]], FLAT(2800)], q: [8, 8, 6], jitter: 0.015 });
+    voice({ t0: 0.22, dur: 0.17, vol: 0.602, f0: [[0, 900], [1, 880]],
+            F: [[[0, 700], [1, 700]], [[0, 1650], [1, 1600]], FLAT(2900)], q: [8, 8, 6], jitter: 0.015 });
+    voice({ t0: 0.42, dur: 0.3, vol: 0.645, f0: [[0, 1150], [1, 1020]], vib: [9, 14], jitter: 0.02,
+            F: [[[0, 400], [1, 390]], [[0, 2400], [1, 2150]], FLAT(3200)], q: [9, 9, 6] });
+    voice({ t0: 0.76, dur: 0.55, vol: 0.602, f0: [[0, 810], [1, 560]], vib: [6, 11], jitter: 0.025,
+            noise: 0.12, nf: [[0, 1800], [1, 900]],
+            F: [[[0, 600], [1, 470]], [[0, 1550], [1, 900]], FLAT(2600)], q: [8, 8, 5], rel: 0.3 });
   },
-  качка: () => [0, .32].forEach((t0) => {
-    for (let i = 0; i < 8; i++)
-      envOsc({ pts: [[0, 330], [1, 265]], dur: .02, vol: .45, t0: t0 + i * .027,
-               filt: 'bandpass', q: 2, fpts: [[0, 1250], [1, 880]] });
-  }),
-  конячка: () => {   // іржання: тремтливий спуск і довгий видих
-    for (let i = 0; i < 11; i++)
-      envOsc({ pts: [[0, 720 - i * 24], [1, 640 - i * 24]], dur: .058, vol: .14, t0: i * .066,
-               fpts: [[0, 2100], [1, 1150]] });
-    envOsc({ pts: [[0, 430], [1, 250]], dur: .55, vol: .13, t0: .74, fpts: [[0, 1300], [1, 480]] });
+  // кря: гугнявий звук - вузькі форманти й швидке пульсування
+  качка: () => [0, 0.3].forEach((t0) => voice({
+    t0, dur: 0.17, vol: 0.441, jitter: 0.03, trem: [45, 0.6], noise: 0.12,
+    nf: [[0, 2200], [1, 1400]],
+    f0: [[0, 300], [1, 245]],
+    F: [[[0, 920], [1, 800]], [[0, 2150], [1, 1800]], FLAT(3100)],
+    q: [11, 11, 7], atk: 0.008, rel: 0.1, open: 0.08,
+  })),
+  // іржання: спад висоти з сильним тремтінням, у кінці видих
+  конячка: () => {
+    voice({ dur: 1.0, vol: 0.231, jitter: 0.025, trem: [15, 0.6], noise: 0.09,
+            nf: [[0, 2000], [1, 900]],
+            f0: [[0, 700], [0.22, 630], [1, 330]],
+            F: [[[0, 620], [1, 470]], [[0, 1800], [1, 1100]], FLAT(2800)],
+            q: [7, 7, 5], atk: 0.03, rel: 0.35 });
+    envNoise({ t0: 0.95, dur: 0.4, vol: 0.069, fpts: [[0, 900], [1, 400]], q: 0.8 });
   },
-  мишка: () => [0, .15, .3].forEach((t0) =>
-    envOsc({ type: 'sine', pts: [[0, 2300], [1, 1950]], dur: .075, vol: .2, t0 })),
-  вовк: () => envOsc({ type: 'triangle', pts: [[0, 290], [.22, 520], [.68, 495], [1, 320]], dur: 1.7, vol: .14,
-                       fpts: [[0, 850], [.3, 1700], [1, 650]], vib: [4.5, 7] }),
+  // писк: високо й коротко, три рази
+  мишка: () => [0, 0.14, 0.28].forEach((t0) => voice({
+    t0, dur: 0.085, vol: 0.454, type: 'triangle', jitter: 0.02, noise: 0.05,
+    nf: [[0, 5000], [1, 3500]],
+    f0: [[0, 2450], [1, 1980]],
+    F: [[[0, 3000], [1, 2600]], [[0, 4600], [1, 4100]]],
+    q: [4, 4], g: [1, 0.4], atk: 0.006, rel: 0.05, lp: 6000, open: 0.3,
+  })),
+  // виття: довге, висота підіймається й тримається, форманти «у»
+  вовк: () => voice({
+    dur: 1.9, vol: 0.467, jitter: 0.006, vib: [4.2, 5], noise: 0.035,
+    nf: [[0, 900], [1, 600]],
+    f0: [[0, 300], [0.16, 480], [0.72, 470], [1, 330]],
+    F: [[[0, 350], [0.2, 370], [1, 330]], [[0, 880], [0.2, 950], [1, 800]], FLAT(2500)],
+    q: [8, 9, 6], atk: 0.12, rel: 0.6,
+  }),
 };
 const ANI = { cur: null, busy: false, first: true };
+
+/* Звук тварини береться в такому порядку:
+   1) свій запис (батьки записали в «Своїх голосах»),
+   2) справжній файл sounds/<тварина>.mp3, якщо покладений поруч із грою,
+   3) синтезований звук — працює завжди, нічого качати не треба. */
+const ANI_FILE = { корова: 'cow', песик: 'dog', котик: 'cat', вівця: 'sheep', свинка: 'pig', жабка: 'frog',
+                   курочка: 'hen', півник: 'rooster', качка: 'duck', конячка: 'horse', мишка: 'mouse', вовк: 'wolf' };
+const REC = LS.get('rec', {});     // {назва тварини: запис у вигляді data-URL}
+let SND_PACK = null;               // чи є поруч папка sounds/
+let CUR_AUDIO = null;
+function probePack() {
+  if (SND_PACK !== null) return;
+  SND_PACK = false;
+  try {
+    fetch('sounds/cow.mp3', { method: 'HEAD' })
+      .then((r) => { SND_PACK = !!(r && r.ok); })
+      .catch(() => { SND_PACK = false; });
+  } catch (e) { SND_PACK = false; }
+}
+function playUrl(url, onFail) {
+  try {
+    if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; }
+    const a = new Audio(url);
+    a.onerror = () => onFail && onFail();
+    const p = a.play();
+    if (p && p.catch) p.catch(() => onFail && onFail());
+    CUR_AUDIO = a;
+  } catch (e) { onFail && onFail(); }
+}
+function aniVoice(name) {
+  const synth = () => { const f = ANI_SOUND[name]; if (f) { ac(); f(); } };
+  if (REC[name]) { playUrl(REC[name], synth); return; }
+  if (SND_PACK && ANI_FILE[name]) { playUrl(`sounds/${ANI_FILE[name]}.mp3`, synth); return; }
+  synth();
+}
 function aniSay() {
   if (!ANI.cur) return;
-  const fn = ANI_SOUND[ANI.cur[1]];
-  if (fn) { ac(); fn(); }
+  aniVoice(ANI.cur[1]);
   const sp = $('#aniPlay');
   sp.classList.remove('ring'); void sp.offsetWidth; sp.classList.add('ring');
 }
@@ -720,7 +972,8 @@ function aniNew() {
   if (ANI.first) { ANI.first = false; say('Хто так говорить?'); setTimeout(aniSay, 1200); }
   else setTimeout(aniSay, 450);
 }
-START.animal = () => { ANI.first = true; aniNew(); };
+START.animal = () => { ANI.first = true; probePack(); aniNew(); };
+STOP.animal = () => { if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; } };
 $('#aniPlay').onclick = aniSay;
 $('#animals').onclick = (e) => {
   const b = e.target.closest('.anim'); if (!b || ANI.busy) return;
@@ -809,6 +1062,25 @@ function snOver() {
     onBtn: () => snStart(), onBtn2: () => go('menu'),
   });
 }
+const SN_SPEED = [
+  { k: 'slow', em: '🐢', nm: 'Поволі', ms: 480 },
+  { k: 'mid', em: '🐰', nm: 'Звичайно', ms: 320 },
+  { k: 'fast', em: '🚀', nm: 'Швидко', ms: 195 },
+];
+const snMs = () => (SN_SPEED.find((s) => s.k === S.speed) || SN_SPEED[1]).ms;
+function snSpeedUI() {
+  $('#snSpeed').innerHTML = SN_SPEED.map((s) =>
+    `<button class="sbtn${s.k === S.speed ? ' on' : ''}" data-s="${s.k}"><span>${s.em}</span>${s.nm}</button>`).join('');
+}
+function snSetSpeed(k) {
+  if (!SN_SPEED.some((s) => s.k === k)) return;
+  S.speed = k; LS.set('speed', k); snSpeedUI(); blip();
+  if (SN.timer && !SN.over) {   // міняємо на ходу, не перериваючи гру
+    clearInterval(SN.timer);
+    SN.timer = setInterval(snStep, snMs());
+  }
+}
+$('#snSpeed').onclick = (e) => { const b = e.target.closest('[data-s]'); if (b) snSetSpeed(b.dataset.s); };
 function snStart() {
   const c = $('#snakeC');
   // поле під щільність екрана — щоб не було розмитим на телефоні
@@ -820,9 +1092,9 @@ function snStart() {
   SN.dir = [1, 0]; SN.next = [1, 0]; SN.score = 0; SN.over = false;
   $('#snScore').textContent = '0';
   $('#snAsk').textContent = 'Збирай яблучка 🍎';
-  snFoodNew(); snDraw();
+  snFoodNew(); snDraw(); snSpeedUI();
   clearInterval(SN.timer);
-  SN.timer = setInterval(snStep, 320);   // повільно - для малят
+  SN.timer = setInterval(snStep, snMs());
 }
 START.snake = () => snStart();
 STOP.snake = () => clearInterval(SN.timer);
@@ -846,6 +1118,188 @@ document.addEventListener('keydown', (e) => {
     snTurn(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'r' : 'l') : (dy > 0 ? 'd' : 'u'));
   }, { passive: true });
 })();
+
+/* ================================================================
+   7. КОЛІР І ФОРМА
+   ================================================================ */
+/* Три сходинки складності, дитина переходить на наступну сама:
+   1 - фігури однакові, різниця лише в кольорі;
+   2 - колір один, різниця лише у формі;
+   3 - і те, і те разом. */
+const SHP_COL = [
+  { id: 'red', css: '#ff5a5f', m: 'червоний', f: 'червона', n: 'червоне' },
+  { id: 'blu', css: '#4aa8ff', m: 'синій', f: 'синя', n: 'синє' },
+  { id: 'yel', css: '#ffd93d', m: 'жовтий', f: 'жовта', n: 'жовте' },
+  { id: 'grn', css: '#4ecb71', m: 'зелений', f: 'зелена', n: 'зелене' },
+  { id: 'vio', css: '#b06bff', m: 'фіолетовий', f: 'фіолетова', n: 'фіолетове' },
+  { id: 'org', css: '#ff9f43', m: 'помаранчевий', f: 'помаранчева', n: 'помаранчеве' },
+];
+// g - рід назви фігури, щоб прикметник узгоджувався: синє коло, синій квадрат, синя зірка
+const SHP_FORM = [
+  { id: 'circle', g: 'n', nm: 'коло' },
+  { id: 'square', g: 'm', nm: 'квадрат' },
+  { id: 'tri', g: 'm', nm: 'трикутник' },
+  { id: 'star', g: 'f', nm: 'зірка' },
+];
+const SHP = { key: '', busy: false, lvl: 1, ok: 0 };
+const shpName = (c, f) => `${c[f.g]} ${f.nm}`;
+
+function shpNew() {
+  const col = pick(SHP_COL), form = pick(SHP_FORM);
+  SHP.key = col.id + '|' + form.id; SHP.busy = false;
+  let opts = [{ c: col, f: form }];
+  if (SHP.lvl === 1) {
+    shuffle(SHP_COL.filter((c) => c.id !== col.id)).slice(0, 2)
+      .forEach((c) => opts.push({ c, f: form }));
+  } else if (SHP.lvl === 2) {
+    shuffle(SHP_FORM.filter((f) => f.id !== form.id)).slice(0, 2)
+      .forEach((f) => opts.push({ c: col, f }));
+  } else {
+    const seen = new Set([SHP.key]);
+    let guard = 0;
+    while (opts.length < 4 && guard++ < 200) {
+      const c = pick(SHP_COL), f = pick(SHP_FORM), k = c.id + '|' + f.id;
+      if (seen.has(k)) continue;        // двох однакових бути не може
+      seen.add(k); opts.push({ c, f });
+    }
+  }
+  $('#shapes').innerHTML = shuffle(opts).map((o) =>
+    `<button class="big shp" data-k="${o.c.id}|${o.f.id}" aria-label="${shpName(o.c, o.f)}">` +
+    `<i class="f-${o.f.id}" style="background:${o.c.css}"></i></button>`).join('');
+  const what = shpName(col, form);
+  $('#shpAsk').innerHTML = `Знайди ${what}<small>натисни потрібну фігуру</small>`;
+  say('Знайди ' + what);
+}
+START.shape = () => { SHP.lvl = 1; SHP.ok = 0; shpNew(); };
+$('#shapes').onclick = (e) => {
+  const b = e.target.closest('.shp'); if (!b || SHP.busy) return;
+  if (b.dataset.k === SHP.key) {
+    SHP.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
+    say('Так!');
+    SHP.ok++;
+    if (SHP.ok >= 3 && SHP.lvl < 3) { SHP.lvl++; SHP.ok = 0; }
+    setTimeout(shpNew, 1400);
+  } else {
+    b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   8. ЩО ЗАЙВЕ?
+   ================================================================ */
+const ODD_SET = [
+  { id: 'animal', nm: 'тварини', items: ['🐶', '🐱', '🐮', '🐷', '🐰', '🦊', '🐻', '🐸', '🐥', '🐴'] },
+  { id: 'fruit', nm: 'фрукти', items: ['🍎', '🍌', '🍓', '🍇', '🍐', '🍒', '🍉', '🍊'] },
+  { id: 'veg', nm: 'овочі', items: ['🥕', '🥔', '🍅', '🥒', '🌽', '🧅', '🥦'] },
+  { id: 'car', nm: 'транспорт', items: ['🚗', '🚌', '🚂', '🚲', '✈️', '🚜', '🚑', '🚁', '⛵'] },
+  { id: 'cloth', nm: 'одяг', items: ['👕', '👖', '🧥', '🧦', '👟', '🧤', '🧢', '🧣', '👗'] },
+  { id: 'toy', nm: 'іграшки', items: ['🧸', '🪀', '🎈', '🎲', '🪁', '🏀', '🎸', '🎀'] },
+];
+/* Фрукти й овочі для малюка - однаково «те, що їдять», і зайвого там не видно.
+   Таку пару не ставимо. */
+const ODD_NO = [['fruit', 'veg']];
+const oddBad = (a, b) => ODD_NO.some(([x, y]) =>
+  (a === x && b === y) || (a === y && b === x));
+const ODD = { key: '', nm: '', busy: false, n: 3, ok: 0 };
+
+function oddNew() {
+  const base = pick(ODD_SET);
+  const other = pick(ODD_SET.filter((g) => g.id !== base.id && !oddBad(base.id, g.id)));
+  const main = shuffle(base.items).slice(0, ODD.n);
+  const extra = pick(other.items);
+  ODD.key = extra; ODD.nm = base.nm; ODD.busy = false;
+  $('#odds').innerHTML = shuffle(main.concat([extra])).map((em) =>
+    `<button class="big odd" data-e="${em}">${em}</button>`).join('');
+  $('#oddAsk').innerHTML = 'Що тут зайве?<small>натисни те, що не підходить</small>';
+  say('Що тут зайве?');
+}
+START.odd = () => { ODD.n = 3; ODD.ok = 0; oddNew(); };
+$('#odds').onclick = (e) => {
+  const b = e.target.closest('.odd'); if (!b || ODD.busy) return;
+  if (b.dataset.e === ODD.key) {
+    ODD.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
+    $('#oddAsk').innerHTML = `Так! Решта — ${ODD.nm}`;
+    say(`Так! Решта — ${ODD.nm}`);
+    ODD.ok++;
+    if (ODD.ok >= 4 && ODD.n < 4) { ODD.n = 4; ODD.ok = 0; }
+    setTimeout(oddNew, 1700);
+  } else {
+    b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   СВОЇ ГОЛОСИ — батьки записують звуки тварин своїм голосом
+   ================================================================ */
+let MR = null, MR_CHUNKS = [], MR_NAME = null, MR_STOP = null;
+const canRec = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+function recUI() {
+  const on = MR && MR.state === 'recording';
+  $('#recList').innerHTML = ANI_SET.map(([em, nm]) => {
+    const own = !!REC[nm], live = on && MR_NAME === nm;
+    const src = own ? 'свій запис ✓' : (SND_PACK ? 'готовий звук' : 'звук гри');
+    return `<div class="rrow">
+      <span class="rem">${em}</span>
+      <div class="rnm">${nm}<small>${live ? 'записую… говоріть' : src}</small></div>
+      <button class="rbtn${live ? ' rec' : ''}" data-rec="${nm}" aria-label="Записати">${live ? '⏹' : '🎤'}</button>
+      <button class="rbtn" data-play="${nm}" aria-label="Послухати">▶</button>
+      ${own ? `<button class="rbtn" data-del="${nm}" aria-label="Видалити">🗑</button>` : ''}
+    </div>`;
+  }).join('');
+}
+async function recStart(name) {
+  if (!canRec()) { toast('Мікрофон тут недоступний'); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    MR_CHUNKS = []; MR_NAME = name;
+    MR = new MediaRecorder(stream);
+    MR.ondataavailable = (e) => { if (e.data && e.data.size) MR_CHUNKS.push(e.data); };
+    MR.onstop = () => {
+      clearTimeout(MR_STOP);
+      stream.getTracks().forEach((t) => t.stop());
+      const blob = new Blob(MR_CHUNKS, { type: MR.mimeType || 'audio/webm' });
+      MR = null;
+      if (!blob.size) { recUI(); toast('Нічого не записалось'); return; }
+      const fr = new FileReader();
+      fr.onload = () => {
+        const prev = REC[MR_NAME];
+        REC[MR_NAME] = fr.result;
+        if (LS.set('rec', REC)) { recUI(); toast('Записано ✓'); blip(); }
+        else {                      // памʼять телефона заповнена
+          if (prev) REC[MR_NAME] = prev; else delete REC[MR_NAME];
+          recUI(); toast('Не влізло в памʼять — видаліть зайві записи');
+        }
+      };
+      fr.onerror = () => { recUI(); toast('Не вдалося зберегти'); };
+      fr.readAsDataURL(blob);
+    };
+    MR.start();
+    recUI();
+    MR_STOP = setTimeout(() => { if (MR && MR.state === 'recording') MR.stop(); }, 4000);
+  } catch (e) { toast('Немає доступу до мікрофона'); }
+}
+START.rec = () => { probePack(); recUI(); };
+STOP.rec = () => {
+  clearTimeout(MR_STOP);
+  if (MR && MR.state === 'recording') MR.stop();
+  if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; }
+};
+$('#recList').onclick = (e) => {
+  const b = e.target.closest('[data-rec],[data-play],[data-del]'); if (!b) return;
+  if (b.dataset.rec) {
+    if (MR && MR.state === 'recording') MR.stop();
+    else recStart(b.dataset.rec);
+  } else if (b.dataset.play) {
+    aniVoice(b.dataset.play);
+  } else if (b.dataset.del) {
+    const n = b.dataset.del;
+    dialog({ em: '🗑', h: `Видалити запис?`, p: `Для «${n}» знову звучатиме звук гри.`,
+      btn: 'Видалити', btn2: 'Лишити',
+      onBtn: () => { delete REC[n]; LS.set('rec', REC); recUI(); toast('Видалено'); } });
+  }
+};
 
 /* ================================================================
    НАЛІПКИ
@@ -887,6 +1341,46 @@ function parentGate() {
   };
   setTimeout(() => $('#gate').focus(), 60);
 }
+/* ---------- оновлення програми ----------
+   Уся гра в одному index.html, тож перевірка проста: тягнемо ту саму
+   сторінку повз кеш і дивимось, який у ній APP_VERSION. Якщо новіший -
+   чистимо кеші й service worker і перезавантажуємось, інакше оновлення
+   могло б зависнути в офлайн-кеші надовго. */
+async function wipeCaches() {
+  try { const ks = await caches.keys(); await Promise.all(ks.map((k) => caches.delete(k))); } catch (e) { /* */ }
+  try {
+    const rs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(rs.map((r) => r.unregister()));
+  } catch (e) { /* */ }
+}
+let updBusy = false;
+async function checkUpdate() {
+  const btn = $('#updNow'), msg = $('#updMsg');
+  const set = (t) => { if (msg) msg.textContent = t; };
+  if (updBusy) return;
+  if (!navigator.onLine) { set('немає інтернету — спробуйте пізніше'); return; }
+  updBusy = true; if (btn) btn.disabled = true;
+  set('перевіряю…');
+  try {
+    const url = location.href.split('#')[0].split('?')[0] + '?t=' + Date.now();
+    const r = await fetch(url, { cache: 'reload' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const m = (await r.text()).match(/APP_VERSION\s*=\s*'([^']+)'/);
+    if (!m) throw new Error('версію не знайдено');
+    if (m[1] === APP_VERSION) {
+      set(`у вас найновіша версія (${APP_VERSION})`);
+      updBusy = false; if (btn) btn.disabled = false;
+      return;
+    }
+    set(`є версія ${m[1]} — оновлюю…`);
+    await wipeCaches();
+    setTimeout(() => location.reload(), 400);
+  } catch (e) {
+    set('не вдалося перевірити');
+    updBusy = false; if (btn) btn.disabled = false;
+  }
+}
+
 function parentPanel() {
   const noVoice = VOICE_READY && !UA_VOICE;
   const hint = noVoice
@@ -899,8 +1393,12 @@ function parentPanel() {
     em: '⚙️', h: 'Налаштування',
     p: `Звуки: <b>${S.sound ? 'увімкнено' : 'вимкнено'}</b> · Озвучка: <b>${S.voice ? 'увімкнено' : 'вимкнено'}</b><br>
         Голос: <b>${voiceInfo()}</b><br>
-        Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>Версія ${APP_VERSION}${hint}`,
-    btn: 'Закрити', btn2: 'Змінити',
+        Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'готові файли' : 'вбудовані')}</b><br>
+        Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>
+        Версія <b>${APP_VERSION}</b> <button class="mini" id="updNow">Оновити</button>
+        <span class="updmsg" id="updMsg"></span>${hint}`,
+    btn: 'Закрити', btn2: 'Змінити', btn3: '🎤 Свої голоси',
+    onBtn3: () => go('rec'),
     onBtn2: () => {
       dialog({
         em: '⚙️', h: 'Що змінити?',
@@ -911,10 +1409,13 @@ function parentPanel() {
       });
     },
   });
+  const u = $('#updNow');
+  if (u) u.onclick = checkUpdate;
 }
 
 /* ---------- старт ---------- */
 $('#starN').textContent = S.stars;
+$('#verLine').textContent = 'v' + APP_VERSION;
 $('#back').style.visibility = 'hidden';
 document.addEventListener('click', () => { ac(); loadVoices(); }, { once: true });
 if ('serviceWorker' in navigator) {
