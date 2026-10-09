@@ -358,7 +358,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.0.6';
+const APP_VERSION = '1.0.7';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -942,21 +942,61 @@ function probePack() {
       .catch(() => { SND_PACK = false; });
   } catch (e) { SND_PACK = false; }
 }
-function playUrl(url, onFail) {
+/* Справжні записи тварин - CC0 (суспільне надбання) з bigsoundbank.com.
+   id - номер запису там, max - скільки секунд грати: частина записів довга
+   (качки - 22 с), а дитині потрібна одна впізнавана фраза.
+   Свинки й вовка там немає (є лише людська імітація свині), тож вони
+   лишаються синтезованими. */
+const ANI_SRC = {
+  корова: { id: '2383', max: 3.5 }, песик: { id: '2955', max: 3 }, котик: { id: '1890', max: 3.5 },
+  вівця: { id: '2343', max: 3 }, жабка: { id: '0819', max: 3 }, курочка: { id: '0453', max: 3.5 },
+  півник: { id: '0283', max: 3.5 }, качка: { id: '0276', max: 3 }, конячка: { id: '0284', max: 3 },
+  мишка: { id: '0459', max: 1.6 },
+};
+const ANI_REMOTE = (id) => `https://bigsoundbank.com/UPLOAD/mp3/${id}.mp3`;
+
+/** Грає файл не довше max секунд, з коротким згасанням. onFail - рівно один раз:
+ *  і коли файлу немає, і коли він не почав грати за 2,5 с (повільний інтернет). */
+function playUrl(url, onFail, max) {
+  let failed = false, started = false;
+  const fail = () => { if (failed || started) return; failed = true; try { a && a.pause(); } catch (e) { /* */ } onFail && onFail(); };
+  let a = null;
   try {
     if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; }
-    const a = new Audio(url);
-    a.onerror = () => onFail && onFail();
+    a = new Audio(url);
+    a.preload = 'auto';
+    a.onerror = fail;
+    a.onplaying = () => {
+      started = true;
+      if (max) {
+        const t0 = Date.now(), lim = max * 1000, fade = 300;
+        const tick = () => {
+          if (a.paused || a !== CUR_AUDIO) return;
+          const left = lim - (Date.now() - t0);
+          if (left <= 0) { a.pause(); return; }
+          if (left < fade) a.volume = Math.max(0, left / fade);
+          setTimeout(tick, 40);
+        };
+        tick();
+      }
+    };
     const p = a.play();
-    if (p && p.catch) p.catch(() => onFail && onFail());
+    if (p && p.catch) p.catch(fail);
     CUR_AUDIO = a;
-  } catch (e) { onFail && onFail(); }
+    setTimeout(() => { if (!started) fail(); }, 2500);
+  } catch (e) { fail(); }
 }
+/* Порядок: свій запис батьків → файл поруч у sounds/ (працює офлайн) →
+   той самий запис з інтернету → синтез. Кожен крок, якщо не вийшов,
+   передає слово наступному. */
 function aniVoice(name) {
   const synth = () => { const f = ANI_SOUND[name]; if (f) { ac(); f(); } };
-  if (REC[name]) { playUrl(REC[name], synth); return; }
-  if (SND_PACK && ANI_FILE[name]) { playUrl(`sounds/${ANI_FILE[name]}.mp3`, synth); return; }
-  synth();
+  if (REC[name]) { playUrl(REC[name], synth, 4.5); return; }
+  const src = ANI_SRC[name];
+  const remote = () => (src && navigator.onLine !== false)
+    ? playUrl(ANI_REMOTE(src.id), synth, src.max) : synth();
+  if (SND_PACK && ANI_FILE[name]) { playUrl(`sounds/${ANI_FILE[name]}.mp3`, remote, src ? src.max : 3.5); return; }
+  remote();
 }
 function aniSay() {
   if (!ANI.cur) return;
@@ -1239,7 +1279,7 @@ function recUI() {
   const on = MR && MR.state === 'recording';
   $('#recList').innerHTML = ANI_SET.map(([em, nm]) => {
     const own = !!REC[nm], live = on && MR_NAME === nm;
-    const src = own ? 'свій запис ✓' : (SND_PACK ? 'готовий звук' : 'звук гри');
+    const src = own ? 'свій запис ✓' : (ANI_SRC[nm] ? 'справжній запис' : 'звук гри');
     return `<div class="rrow">
       <span class="rem">${em}</span>
       <div class="rnm">${nm}<small>${live ? 'записую… говоріть' : src}</small></div>
@@ -1393,7 +1433,7 @@ function parentPanel() {
     em: '⚙️', h: 'Налаштування',
     p: `Звуки: <b>${S.sound ? 'увімкнено' : 'вимкнено'}</b> · Озвучка: <b>${S.voice ? 'увімкнено' : 'вимкнено'}</b><br>
         Голос: <b>${voiceInfo()}</b><br>
-        Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'готові файли' : 'вбудовані')}</b><br>
+        Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'справжні, з папки sounds' : 'справжні записи з інтернету')}</b><br>
         Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>
         Версія <b>${APP_VERSION}</b> <button class="mini" id="updNow">Оновити</button>
         <span class="updmsg" id="updMsg"></span>${hint}`,
