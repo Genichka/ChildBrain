@@ -96,6 +96,31 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t18{background:linear-gradient(170deg,#ffc9a8,#ff7a59)}
 .t19{background:linear-gradient(170deg,#e6f5a0,#9ccf2f)}
 .t20{background:linear-gradient(170deg,#a8f0c6,#2fbf71)}
+.t21{background:linear-gradient(170deg,#ffe3a3,#ff9f43)}
+/* ---------- рахуємо ---------- */
+.mtlv{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin:0 0 6px}
+.mtl{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:15px;padding:6px 0}
+.mtl.on{background:#ffd93d33;border-color:var(--yel);color:var(--yel)}
+.mtl.lock{opacity:.45}
+.mtprog{text-align:center;font-size:13px;color:var(--dim);font-weight:700;line-height:1.5}
+.mtprog b{color:var(--txt)}
+.mtprog i{display:inline-block;width:12px;height:12px;border-radius:50%;margin:3px 3px 0;background:var(--line)}
+.mtprog i.on{background:var(--grn)}
+.mtask{font-size:34px;letter-spacing:1px;margin-top:8px}
+.mtpic{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;min-height:80px}
+.mtg{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:100%;font-size:34px;line-height:1.15}
+.mtpic.big .mtg{font-size:24px}
+.mtg i{font-style:normal}
+.mtg i.gone{position:relative}
+.mtg i.gone s{opacity:.3;text-decoration:none}
+.mtg i.gone::after{content:'✕';position:absolute;inset:0;color:var(--red);font-weight:900;text-align:center;font-size:.9em}
+.mtg.bsk{border:3px dashed #ffffff55;border-radius:16px;padding:4px 6px;font-size:24px;max-width:46%}
+.mtop{font-size:30px}
+.mtfr{width:100%;text-align:center;font-size:30px;border-top:2px dashed var(--line);padding-top:6px}
+.mtfr i{font-style:normal}
+#mtAns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+#mtAns .num{min-width:0;width:auto;font-size:30px}
+#mtAns .num.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -406,6 +431,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     <div class="page" data-grp="Лічба"><p class="gdesc">🔢 <b>Лічба</b> — рахувати й упізнавати перші букви</p><div class="menu">
       <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
       <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
+      <button class="tile t21" data-go="math"><span class="em">🧮</span><span class="nm">Рахуємо</span></button>
     </div></div>
     <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
       <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
@@ -537,6 +563,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   </div>
 </section>
 
+<!-- рахуємо -->
+<section class="scr" id="s-math">
+  <div class="mtlv" id="mtLv"></div>
+  <div class="mtprog" id="mtProg"></div>
+  <div class="ask mtask" id="mtAsk">2 + 3 = ?</div>
+  <div class="play">
+    <div class="mtpic" id="mtPic"></div>
+    <div class="row" id="mtAns"></div>
+  </div>
+</section>
+
 <!-- хрестики-нулики -->
 <section class="scr" id="s-ttt">
   <div class="ask" id="tttAsk">Ти ставиш <b class="tx">✕</b></div>
@@ -638,7 +675,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.2.6';
+const APP_VERSION = '1.2.7';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -778,7 +815,7 @@ function voiceInfo() {
    Грає через Web Audio (той самий AudioContext, що й ефекти гри):
    після першого дотику браузер його вже не блокує. */
 const VOICE_IDX = {};
-'v000eb3f1,0,11041;v0020b6d4,11041,4459;v0118f1be,15500,9944;v01237f1a,25444,10101;v01da4f3a,35545,4929;v029cb487,40474,10571;v02d74627,51045,11982;v044d55cb,63027,8534;v045e586f,71561,4929;v0469adf6,76490,11198;v05763e24,87688,9788;v06c54cba,97476,13079;v073994e1,110555,11041;v07b02c17,121596,10258;v0b0e04f7,131854,9788;v0b18fcc0,141642,9944;v0b25a21d,151586,7123;v0d18ffe6,158709,10728;v0d1ca269,169437,11041;v0d3f5c43,180478,10415;v0d67bc66,190893,12295;v0dbc4d2b,203188,9788;v0e4182b4,212976,5086;v0fb542f9,218062,4772;v1232d7ba,222834,11198;v12ca8d87,234032,12766;v135edbe8,246798,5556;v13f28094,252354,6183;v13fc98f7,258537,3675;v145e920e,262212,11198;v15df46fb,273410,7280;v163617c0,280690,5242;v169cf91d,285932,10415;v16a06079,296347,8847;v172d376e,305194,10885;v175d1c78,316079,4615;v1761fed4,320694,11825;v18a7ed45,332519,6183;v19261860,338702,3832;v1a817ede,342534,6496;v1b4e6f81,349030,12295;v1c4d342a,361325,5242;v1d4e319a,366567,6183;v1df0d45b,372750,9944;v1dfd4db2,382694,4772;v1e71fa35,387466,11668;v1ef2a92a,399134,6183;v1f68bf4c,405317,7280;v20191dcf,412597,9944;v2216710e,422541,12766;v225e84a2,435307,10728;v226cf46f,446035,11355;v227e2c0f,457390,5869;v22c8e473,463259,12609;v22d6f3a9,475868,8534;v23192288,484402,9944;v23823c1d,494346,11198;v2419241b,505544,9788;v25009dad,515332,7280;v25af53b1,522612,6496;v28503973,529108,10415;v28a0f095,539523,9788;v29081b88,549311,11041;v29d2a29a,560352,8534;v2a081d1b,568886,10415;v2a2939e8,579301,11198;v2ceb2393,590499,11198;v2cf31187,601697,5242;v2d22cc3f,606939,12766;v2d904411,619705,10571;v2e082367,630276,9631;v2f6b4342,639907,8377;v30cbb868,648284,4302;v3426e0e4,652586,10101;v348297f1,662687,4615;v356bb878,667302,11668;v35a04999,678970,6653;v35cb24d8,685623,8690;v3814eb90,694313,7123;v38275495,701436,4615;v3bbc3099,706051,3518;v3bd3ee2e,709569,11198;v3bfed9e4,720767,11041;v3cba9fbd,731808,9944;v3d1d1eb4,741752,4772;v3d74d4d5,746524,8377;v3eaa2466,754901,9944;v3f472d60,764845,5399;v3f52a34e,770244,9631;v3fb7dea4,779875,4302;v4209b0b7,784177,9317;v434472de,793494,8847;v437cf8ca,802341,6653;v44043c7a,808994,11512;v44894c4a,820506,3361;v46f25eb4,823867,11668;v4801781c,835535,11825;v48bcf5d0,847360,11198;v48cc788c,858558,5556;v4949ab34,864114,11198;v4966ff51,875312,4615;v49a78f47,879927,10258;v4ace9cdf,890185,9944;v4b78bc1c,900129,4615;v4ba3bbde,904744,9788;v4e934b93,914532,5869;v4ecee5b8,920401,5242;v4ee38bdc,925643,19662;v4ef2374e,945305,4772;v4fba652f,950077,10728;v5089cb04,960805,9474;v5383b38f,970279,9474;v545ebc94,979753,6026;v54a42236,985779,9788;v54bc8c72,995567,7280;v552a4986,1002847,13706;v556d0141,1016553,9474;v58980c6a,1026027,4459;v5927e932,1030486,10728;v59d31bcf,1041214,5242;v5ac07578,1046456,10885;v5c286709,1057341,14803;v5f57bd47,1072144,8690;v5fe4f13f,1080834,10728;v6076568a,1091562,13549;v609dc765,1105111,4615;v65333b11,1109726,5086;v654431d1,1114812,6183;v65acf92f,1120995,5712;v66eee64f,1126707,4929;v68ab00c5,1131636,11041;v6944809b,1142677,4615;v69e76585,1147292,5399;v6b980e35,1152691,4615;v6bca5530,1157306,8534;v6d0ccfcf,1165840,10258;v6d1180f0,1176098,10258;v6d40302a,1186356,11668;v6d76f91f,1198024,9788;v6f363df4,1207812,10258;v6fba2283,1218070,10571;v701e519c,1228641,10258;v707b2c42,1238899,11668;v710f14b2,1250567,10728;v7182548f,1261295,11825;v72d2f046,1273120,4929;v73316683,1278049,4302;v738b08e8,1282351,5869;v74012383,1288220,3675;v74804d7c,1291895,7123;v75c1d745,1299018,9944;v780954ed,1308962,6183;v78928be1,1315145,10571;v795274a8,1325716,7593;v7ab7159d,1333309,9631;v7ca63afe,1342940,10258;v7e04ae68,1353198,12139;v7e492507,1365337,8847;v7e4fe79b,1374184,8534;v7ef40a57,1382718,6183;v80315224,1388901,4615;v80a3f14e,1393516,6810;v829599ee,1400326,5869;v853519a9,1406195,4145;v866ba7dd,1410340,5086;v86ce1c3c,1415426,13079;v889827e8,1428505,10728;v88d42960,1439233,12295;v89628711,1451528,10258;v896c6931,1461786,11982;v8b3b7545,1473768,11512;v8b4d304a,1485280,9004;v8e68fc37,1494284,9474;v945adcdf,1503758,6026;v947ec1a3,1509784,5242;v97ee622e,1515026,4459;v98b1fb14,1519485,10415;v992380df,1529900,5399;v9a3ba894,1535299,11041;v9cd6d1e9,1546340,8847;v9cdaf6f8,1555187,4772;v9d23b032,1559959,5242;v9d6df793,1565201,4615;v9e2256de,1569816,9161;v9f766c7b,1578977,11198;va166e452,1590175,5242;va24c45d9,1595417,11198;va3424b0d,1606615,6183;va7c9a24d,1612798,9944;va8a9e780,1622742,5712;va8abed17,1628454,4145;va9e8173f,1632599,5086;vaaef0b66,1637685,5712;vab65699d,1643397,3988;vab7bdd45,1647385,12452;vac87f60e,1659837,4929;vacc065b3,1664766,14176;vaeac3669,1678942,5086;vaf4b0ed9,1684028,13863;vb1dbf46b,1697891,9631;vb2fb7f84,1707522,11512;vb3b6a5f5,1719034,6653;vb3c60ff8,1725687,6653;vb46d8cea,1732340,6026;vb4c78db1,1738366,4615;vb4ece4fd,1742981,6026;vb5f0ba36,1749007,10571;vb64851ab,1759578,5399;vb68c51b8,1764977,10728;vb74b4cdf,1775705,11668;vb7d286df,1787373,17468;vb8b7b07a,1804841,5086;vb92b533a,1809927,9788;vbb8d8b3f,1819715,7437;vbbc88d68,1827152,6183;vbc60cd35,1833335,13236;vbd0d54e4,1846571,10415;vbd7f3fb8,1856986,9474;vbe0d5677,1866460,8847;vbe22f365,1875307,11198;vbe2df22e,1886505,9161;vbf996876,1895666,9317;vc00d599d,1904983,10258;vc02fb468,1915241,9788;vc17b886b,1925029,4145;vc2a588a0,1929174,11982;vc39f1b27,1941156,19035;vc4a00304,1960191,11668;vc659d7bc,1971859,5399;vc6719744,1977258,4615;vc6f2d73e,1981873,9788;vc71b5578,1991661,17311;vc76af380,2008972,7907;vc99eafde,2016879,4772;vc9a35eab,2021651,4772;vca636ae4,2026423,8847;vccf46917,2035270,11041;vcdde0ca1,2046311,9474;vceb3385b,2055785,4145;vcf624dab,2059930,11825;vcf98f31f,2071755,5712;vcfdeef14,2077467,3675;vcfff7969,2081142,12609;vd193ff09,2093751,8534;vd2e08650,2102285,10571;vd2f5ada3,2112856,11512;vd32a5c46,2124368,10571;vd51f5581,2134939,10728;vd5f75f5b,2145667,6026;vd6699e33,2151693,11198;vd6fcb1d6,2162891,5712;vd8884ef9,2168603,11041;vd8f6d9b1,2179644,11825;vdb0ba350,2191469,5399;vde054d1d,2196868,4929;vde5e0626,2201797,4615;vdf851d22,2206412,6183;ve00bfc28,2212595,6026;ve1373d37,2218621,8690;ve29850ae,2227311,8377;ve2f05afa,2235688,11512;ve38320ca,2247200,5242;ve4bce258,2252442,6026;ve56cb2c8,2258468,14176;ve7231dae,2272644,6496;ve78ee812,2279140,8690;ve88ee9a5,2287830,9161;ve98eeb38,2296991,8534;vea0a81f4,2305525,4459;vea16571b,2309984,4459;vea8eeccb,2314443,8220;veb08bb33,2322663,9317;veb8eee5e,2331980,9788;vec8eeff1,2341768,8377;vecb8a58f,2350145,4459;veccd8636,2354604,4459;ved8ef184,2359063,7750;vedea5bba,2366813,4459;vee18cf19,2371272,10885;vee8ef317,2382157,7437;vf0062b7a,2389594,10728;vf08ef63d,2400322,7907;vf10584c9,2408229,9944;vf118d3d2,2418173,8847;vf1701e33,2427020,10101;vf17a0782,2437121,10258;vf1a3bad4,2447379,3832;vf2d7f2e0,2451211,9788;vf307c686,2460999,9004;vf318d6f8,2470003,10571;vf344df9e,2480574,16684;vf499dc61,2497258,10571;vf5052feb,2507829,9004;vf507c9ac,2516833,10885;vf53bb405,2527718,11355;vf607cb3f,2539073,9317;vf8b2f805,2548390,4459;vf918e06a,2552849,10415;vfa8b2adb,2563264,10415;vfbbb4f5d,2573679,10258;vfca48a14,2583937,5242;vfd04f3bb,2589179,13549;vfd16acdb,2602728,10101;vfd80d62b,2612829,10415;vfe38fb3e,2623244,4302;vfe94e6f9,2627546,6183;vfee5b4db,2633729,11355'.split(';').forEach((r) => { const [k, o, l] = r.split(','); if (l) VOICE_IDX[k] = [+o, +l]; });
+'v000eb3f1,0,11041;v0020b6d4,11041,4459;v0118f1be,15500,9944;v01237f1a,25444,10101;v0167f1fc,35545,6810;v01da4f3a,42355,4929;v029cb487,47284,10571;v02ca10d3,57855,5556;v02d74627,63411,11982;v044d55cb,75393,8534;v045e586f,83927,4929;v0469adf6,88856,11198;v05763e24,100054,9788;v06c54cba,109842,13079;v073994e1,122921,11041;v07b02c17,133962,10258;v0aca1d6b,144220,5712;v0b0e04f7,149932,9788;v0b18fcc0,159720,9944;v0b25a21d,169664,7123;v0d18ffe6,176787,10728;v0d1ca269,187515,11041;v0d3f5c43,198556,10415;v0d67bc66,208971,12295;v0dbc4d2b,221266,9788;v0e4182b4,231054,5086;v0eeb850a,236140,5086;v0fb542f9,241226,4772;v1232d7ba,245998,11198;v12ca8d87,257196,12766;v12e9e3eb,269962,5242;v135edbe8,275204,5556;v13f28094,280760,6183;v13fc98f7,286943,3675;v145e920e,290618,11198;v15df46fb,301816,7280;v163617c0,309096,5242;v165a3e48,314338,9004;v169cf91d,323342,10415;v16a06079,333757,8847;v16a69aec,342604,6810;v172d376e,349414,10885;v175d1c78,360299,4615;v1761fed4,364914,11825;v1806c191,376739,9788;v1852f2cb,386527,7123;v18a7ed45,393650,6183;v19261860,399833,3832;v1a817ede,403665,6496;v1b4e6f81,410161,12295;v1b6e924f,422456,3988;v1c4d342a,426444,5242;v1d4e319a,431686,6183;v1df0d45b,437869,9944;v1dfd4db2,447813,4772;v1e5b6f71,452585,4615;v1e71fa35,457200,11668;v1ef2a92a,468868,6183;v1f68bf4c,475051,7280;v20191dcf,482331,9944;v21d6d5b4,492275,9161;v2216710e,501436,12766;v225e84a2,514202,10728;v226cf46f,524930,11355;v227e2c0f,536285,5869;v22c8e473,542154,12609;v22d6f3a9,554763,8534;v23192288,563297,9944;v23823c1d,573241,11198;v2419241b,584439,9788;v25009dad,594227,7280;v25af53b1,601507,6496;v28503973,608003,10415;v28a0f095,618418,9788;v29081b88,628206,11041;v29d2a29a,639247,8534;v2a081d1b,647781,10415;v2a2939e8,658196,11198;v2ceb2393,669394,11198;v2cf31187,680592,5242;v2d22cc3f,685834,12766;v2d904411,698600,10571;v2e082367,709171,9631;v2f6b4342,718802,8377;v30cbb868,727179,4302;v3180e36f,731481,6496;v3426e0e4,737977,10101;v342bbd4a,748078,4615;v348297f1,752693,4615;v356bb878,757308,11668;v35a04999,768976,6653;v35cb24d8,775629,8690;v3814eb90,784319,7123;v38275495,791442,4615;v38b78916,796057,3988;v3bbc3099,800045,3518;v3bd3ee2e,803563,11198;v3bfed9e4,814761,11041;v3cba9fbd,825802,9944;v3d1d1eb4,835746,4772;v3d74d4d5,840518,8377;v3eaa2466,848895,9944;v3f472d60,858839,5399;v3f52a34e,864238,9631;v3fb7dea4,873869,4302;v41245963,878171,13706;v4209b0b7,891877,9317;v434472de,901194,8847;v437cf8ca,910041,6653;v44043c7a,916694,11512;v44894c4a,928206,3361;v4637540e,931567,4929;v46f25eb4,936496,11668;v4801781c,948164,11825;v48bcf5d0,959989,11198;v48cc788c,971187,5556;v4949ab34,976743,11198;v4966ff51,987941,4615;v49a78f47,992556,10258;v4ace9cdf,1002814,9944;v4b78bc1c,1012758,4615;v4ba3bbde,1017373,9788;v4e6941b6,1027161,4459;v4e934b93,1031620,5869;v4ecee5b8,1037489,5242;v4ee38bdc,1042731,19662;v4ef2374e,1062393,4772;v4f295739,1067165,6496;v4fba652f,1073661,10728;v5089cb04,1084389,9474;v5383b38f,1093863,9474;v545ebc94,1103337,6026;v54a42236,1109363,9788;v54bc8c72,1119151,7280;v552a4986,1126431,13706;v556d0141,1140137,9474;v58980c6a,1149611,4459;v5927e932,1154070,10728;v59d31bcf,1164798,5242;v5ac07578,1170040,10885;v5c286709,1180925,14803;v5c8ae4b3,1195728,5869;v5f57bd47,1201597,8690;v5fe4f13f,1210287,10728;v6076568a,1221015,13549;v609dc765,1234564,4615;v64f30404,1239179,5712;v65333b11,1244891,5086;v654431d1,1249977,6183;v65acf92f,1256160,5712;v66eee64f,1261872,4929;v66fecb78,1266801,5399;v68ab00c5,1272200,11041;v6944809b,1283241,4615;v69e76585,1287856,5399;v6b980e35,1293255,4615;v6bca5530,1297870,8534;v6bd37ce4,1306404,6966;v6d0ccfcf,1313370,10258;v6d1180f0,1323628,10258;v6d40302a,1333886,11668;v6d76f91f,1345554,9788;v6eaee4d9,1355342,4302;v6f363df4,1359644,10258;v6f94d181,1369902,6966;v6fba2283,1376868,10571;v701e519c,1387439,10258;v707b2c42,1397697,11668;v710f14b2,1409365,10728;v7182548f,1420093,11825;v72d2f046,1431918,4929;v73316683,1436847,4302;v738b08e8,1441149,5869;v73db53d2,1447018,5399;v74012383,1452417,3675;v743bd475,1456092,5869;v74804d7c,1461961,7123;v75c1d745,1469084,9944;v768b0da1,1479028,5399;v780954ed,1484427,6183;v78928be1,1490610,10571;v795274a8,1501181,7593;v7ab7159d,1508774,9631;v7b883047,1518405,8847;v7ca63afe,1527252,10258;v7db77a9a,1537510,7123;v7dfee0b7,1544633,6966;v7e04ae68,1551599,12139;v7e492507,1563738,8847;v7e4fe79b,1572585,8534;v7ef40a57,1581119,6183;v80315224,1587302,4615;v80a3f14e,1591917,6810;v829599ee,1598727,5869;v836219f2,1604596,4459;v853519a9,1609055,4145;v866ba7dd,1613200,5086;v86ce1c3c,1618286,13079;v87f2bc44,1631365,4929;v881651d2,1636294,5086;v889827e8,1641380,10728;v88d42960,1652108,12295;v89628711,1664403,10258;v896c6931,1674661,11982;v8b3b7545,1686643,11512;v8b4d304a,1698155,9004;v8d04e900,1707159,7437;v8e68fc37,1714596,9474;v93670bf5,1724070,9944;v945adcdf,1734014,6026;v947ec1a3,1740040,5242;v94d3f105,1745282,5242;v94dfcd15,1750524,6496;v96d726f5,1757020,5242;v97c98418,1762262,6339;v97ee622e,1768601,4459;v98b1fb14,1773060,10415;v992380df,1783475,5399;v9a3ba894,1788874,11041;v9cd6d1e9,1799915,8847;v9cdaf6f8,1808762,4772;v9d23b032,1813534,5242;v9d6df793,1818776,4615;v9e2256de,1823391,9161;v9f766c7b,1832552,11198;va0968e62,1843750,7593;va166e452,1851343,5242;va24c45d9,1856585,11198;va3424b0d,1867783,6183;va4ce5076,1873966,3675;va7c9a24d,1877641,9944;va8a9e780,1887585,5712;va8abed17,1893297,4145;va9e8173f,1897442,5086;va9f52872,1902528,8847;vaae97013,1911375,5556;vaaef0b66,1916931,5712;vab261159,1922643,6653;vab65699d,1929296,3988;vab7bdd45,1933284,12452;vac87f60e,1945736,4929;vacc065b3,1950665,14176;vacf40095,1964841,5556;vadf78faa,1970397,5556;vaeac3669,1975953,5086;vaf4b0ed9,1981039,13863;vb0807f44,1994902,6496;vb1dbf46b,2001398,9631;vb2fb7f84,2011029,11512;vb3b6a5f5,2022541,6653;vb3c60ff8,2029194,6653;vb46d8cea,2035847,6026;vb4c78db1,2041873,4615;vb4ece4fd,2046488,6026;vb4f40d2d,2052514,5712;vb5f0ba36,2058226,10571;vb64851ab,2068797,5399;vb68c51b8,2074196,10728;vb6a6d25c,2084924,3832;vb74b4cdf,2088756,11668;vb7d286df,2100424,17468;vb8b7b07a,2117892,5086;vb92b533a,2122978,9788;vbb8d8b3f,2132766,7437;vbbc88d68,2140203,6183;vbc60cd35,2146386,13236;vbd0d54e4,2159622,10415;vbd7f3fb8,2170037,9474;vbe0d5677,2179511,8847;vbe22f365,2188358,11198;vbe2df22e,2199556,9161;vbf5927e9,2208717,6810;vbf996876,2215527,9317;vc00d599d,2224844,10258;vc02fb468,2235102,9788;vc17b886b,2244890,4145;vc2a588a0,2249035,11982;vc3696af0,2261017,4772;vc39f1b27,2265789,19035;vc4a00304,2284824,11668;vc659d7bc,2296492,5399;vc6719744,2301891,4615;vc6f2d73e,2306506,9788;vc71b5578,2316294,17311;vc76af380,2333605,7907;vc99eafde,2341512,4772;vc9a35eab,2346284,4772;vca636ae4,2351056,8847;vcc96c3f1,2359903,8690;vccf46917,2368593,11041;vcd5b8509,2379634,8534;vcdde0ca1,2388168,9474;vceb3385b,2397642,4145;vcf624dab,2401787,11825;vcf98f31f,2413612,5712;vcfdeef14,2419324,3675;vcfff7969,2422999,12609;vd193ff09,2435608,8534;vd2e08650,2444142,10571;vd2f5ada3,2454713,11512;vd305c269,2466225,2891;vd32a5c46,2469116,10571;vd51f5581,2479687,10728;vd5f75f5b,2490415,6026;vd6699e33,2496441,11198;vd6fcb1d6,2507639,5712;vd8884ef9,2513351,11041;vd8f6d9b1,2524392,11825;vdb0ba350,2536217,5399;vde054d1d,2541616,4929;vde5e0626,2546545,4615;vdefcbe6e,2551160,5869;vdf851d22,2557029,6183;ve00bfc28,2563212,6026;ve1373d37,2569238,8690;ve29850ae,2577928,8377;ve2f05afa,2586305,11512;ve38320ca,2597817,5242;ve4431ad4,2603059,4615;ve4bce258,2607674,6026;ve56cb2c8,2613700,14176;ve7231dae,2627876,6496;ve78ee812,2634372,8690;ve88ee9a5,2643062,9161;ve98eeb38,2652223,8534;vea0a81f4,2660757,4459;vea16571b,2665216,4459;vea8eeccb,2669675,8220;veb08bb33,2677895,9317;veb8eee5e,2687212,9788;vec8eeff1,2697000,8377;vecb3a1e5,2705377,6183;vecb8a58f,2711560,4459;veccd8636,2716019,4459;ved8ef184,2720478,7750;vedea5bba,2728228,4459;vee18cf19,2732687,10885;vee8ef317,2743572,7437;veeb7ebf2,2751009,4302;vefc4b978,2755311,4145;vf0062b7a,2759456,10728;vf08ef63d,2770184,7907;vf10584c9,2778091,9944;vf118d3d2,2788035,8847;vf1701e33,2796882,10101;vf17a0782,2806983,10258;vf1a3bad4,2817241,3832;vf2b31665,2821073,3361;vf2d7f2e0,2824434,9788;vf307c686,2834222,9004;vf318d6f8,2843226,10571;vf339d5ce,2853797,7280;vf344df9e,2861077,16684;vf499dc61,2877761,10571;vf4b8b227,2888332,4615;vf5052feb,2892947,9004;vf507c9ac,2901951,10885;vf53bb405,2912836,11355;vf607cb3f,2924191,9317;vf72aaff8,2933508,6810;vf8b2f805,2940318,4459;vf918e06a,2944777,10415;vf96e5cc9,2955192,3675;vfa8b2adb,2958867,10415;vfaa91d92,2969282,5242;vfbbb4f5d,2974524,10258;vfca48a14,2984782,5242;vfd04f3bb,2990024,13549;vfd16acdb,3003573,10101;vfd80d62b,3013674,10415;vfe38fb3e,3024089,4302;vfe94e6f9,3028391,6183;vfee5b4db,3034574,11355'.split(';').forEach((r) => { const [k, o, l] = r.split(','); if (l) VOICE_IDX[k] = [+o, +l]; });
 const VOICE_KEYS = new Set(Object.keys(VOICE_IDX));
 function vKey(t) {
   t = String(t).trim().replace(/[ʼ’‘]/g, "'");
@@ -813,45 +850,59 @@ function ttsSay(text, rate = 0.88) {
   } catch (e) { /* не вийшло — гра працює далі */ }
 }
 function vStop() {
-  try { if (VSRC) VSRC.stop(); } catch (e) { /* */ }
+  VSRCS.forEach((s) => { try { s.stop(); } catch (e) { /* */ } });
+  VSRCS = [];
   try { if (VAUD) VAUD.pause(); } catch (e) { /* */ }
-  VSRC = null; VAUD = null;
+  VAUD = null;
 }
-function vPlay(k, text, rate) {
-  const [o, l] = VOICE_IDX[k];
+let VSRCS = [];
+/** Розкодований шматок голосу (кешується). */
+function vDecode(k) {
+  if (VBUF[k]) return Promise.resolve(VBUF[k]);
+  const a = ac(), [o, l] = VOICE_IDX[k];
+  return new Promise((res, rej) => {
+    try { a.decodeAudioData(VPACK.slice(o, o + l), (b) => { VBUF[k] = b; res(b); }, rej); } catch (e) { rej(e); }
+  });
+}
+/* Фраза з кількох записаних шматків («дві» «кульки» «і» «три» «кульки» «Скільки разом?») -
+   ставимо їх упритул, зрізаючи тишу на стиках, щоб звучало як одне речення. */
+function vPlayAll(keys, text) {
   const a = ac();
-  const still = () => LAST_SAY === text;      // поки вантажилось, гра вже могла сказати інше
-  const viaAudio = () => {                    // запасний шлях - звичайний <audio> з куска файлу
-    try {
-      const u = URL.createObjectURL(new Blob([VPACK.slice(o, o + l)], { type: 'audio/mpeg' }));
-      vStop(); VAUD = new Audio(u);
-      VAUD.onended = () => URL.revokeObjectURL(u);
-      const p = VAUD.play(); if (p && p.catch) p.catch(() => ttsSay(text, rate));
-    } catch (e) { ttsSay(text, rate); }
-  };
-  const use = (buf) => {
+  const still = () => LAST_SAY === text;
+  const plain = Array.isArray(text) ? text.join(' ') : text;
+  if (!a || !a.decodeAudioData) { if (keys.length === 1) { vPlay(keys[0], text); } else ttsSay(plain); return; }
+  Promise.all(keys.map(vDecode)).then((bufs) => {
     if (!still()) return;
     vStop();
-    const s = a.createBufferSource(), g = a.createGain();
-    g.gain.value = 1.15;
-    s.buffer = buf; s.connect(g); g.connect(a.destination); s.start();
-    VSRC = s;
-  };
-  if (!a || !a.decodeAudioData) return viaAudio();
-  if (VBUF[k]) return use(VBUF[k]);
-  try {
-    a.decodeAudioData(VPACK.slice(o, o + l), (b) => { VBUF[k] = b; use(b); }, () => { if (still()) viaAudio(); });
-  } catch (e) { viaAudio(); }
+    let t = a.currentTime + 0.03;
+    bufs.forEach((buf, i) => {
+      const s = a.createBufferSource(), g = a.createGain();
+      g.gain.value = 1.15; s.buffer = buf; s.connect(g); g.connect(a.destination);
+      s.start(t); VSRCS.push(s);
+      t += Math.max(0.12, buf.duration - (i < bufs.length - 1 ? 0.09 : 0));   // 60 мс тиші з кожного боку - перекриваємо
+    });
+  }, () => { if (still()) ttsSay(plain); });
 }
+function vPlay(k, text) {
+  const [o, l] = VOICE_IDX[k];
+  try {
+    const u = URL.createObjectURL(new Blob([VPACK.slice(o, o + l)], { type: 'audio/mpeg' }));
+    vStop(); VAUD = new Audio(u);
+    VAUD.onended = () => URL.revokeObjectURL(u);
+    const p = VAUD.play(); if (p && p.catch) p.catch(() => ttsSay(Array.isArray(text) ? text.join(' ') : text));
+  } catch (e) { ttsSay(Array.isArray(text) ? text.join(' ') : text); }
+}
+/** text - рядок або масив шматків. */
 function say(text, rate = 0.88) {
-  if (!text) return;
+  if (!text || (Array.isArray(text) && !text.length)) return;
   LAST_SAY = text;
   if (!S.voice) return;
-  const k = vKey(text);
-  if (!VOICE_IDX[k]) { ttsSay(text, rate); return; }
+  const parts = Array.isArray(text) ? text : [text];
+  const keys = parts.map(vKey);
+  if (keys.some((k) => !VOICE_IDX[k])) { ttsSay(parts.join(' '), rate); return; }
   try { speechSynthesis.cancel(); } catch (e) { /* */ }
-  if (VPACK) { vPlay(k, text, rate); return; }
-  vpackLoad().then(() => { if (LAST_SAY === text) vPlay(k, text, rate); }, () => ttsSay(text, rate));
+  if (VPACK) { vPlayAll(keys, text); return; }
+  vpackLoad().then(() => { if (LAST_SAY === text) vPlayAll(keys, text); }, () => ttsSay(parts.join(' '), rate));
 }
 /* Дитина ще не читає - торкнулась завдання, і гра каже його ще раз. */
 document.addEventListener('click', (e) => {
@@ -871,6 +922,14 @@ function voiceLines() {
   MEM_SET.forEach(([, w]) => L.push(w));
   MP.forEach(([, w]) => L.push(w, 'Так! ' + w));
   HD_SET.forEach(([, n]) => L.push(`Де ${n}?`, `Тут ${n}`, `Так! Тут ${n}`));
+  // рахуємо: числа словами й шматки речень, з яких гра складає завдання
+  for (let n = 0; n <= 100; n++) numW(n).concat(numW(n, true)).forEach((w) => L.push(w));
+  MT_ITEMS.forEach((it) => L.push(it[1], it[2], it[3]));
+  MT_BASKET.forEach((w) => L.push(w));
+  Object.values(MT_FRIENDS).forEach((w) => L.push(w));
+  L.push('і', 'плюс', 'мінус', 'помножити на', 'поділити на', 'Було', 'забрали', 'у кожному по', 'поділили порівну',
+    'Скільки разом?', 'Скільки залишилось?', 'Скільки всього?', 'По скільки кожному?', 'Скільки буде?',
+    'Порахуй уважно', 'Молодець! Новий рівень!');
   return [...new Set(L)];
 }
 
@@ -928,7 +987,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси', bye: 'EnergyUA Junior' };
+                 rec: 'Свої голоси', math: 'Рахуємо', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -2933,6 +2992,147 @@ STOP.jump = () => { JP.run = false; cancelAnimationFrame(JP.raf); JP.keys.l = JP
   });
   window.addEventListener('resize', () => { if (SCR === 'jump' && JP.run) jpLayout(); });
 })();
+
+/* ================================================================
+   25. РАХУЄМО  (додавання, віднімання, множення, ділення - тест із
+   чотирма відповідями. 8 рівнів: спершу з картинками («2 🎈 і 3 🎈»),
+   далі цифрами. 5 правильних - відкривається наступний рівень.
+   Голос складає завдання з коротких записаних слів:
+   «Дві кульки і три кульки. Скільки разом?».)
+   ================================================================ */
+const NUM_U = ['нуль', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять",
+  'десять', 'одинадцять', 'дванадцять', 'тринадцять', 'чотирнадцять', "п'ятнадцять", 'шістнадцять',
+  'сімнадцять', 'вісімнадцять', "дев'ятнадцять"];
+const NUM_T = ['', '', 'двадцять', 'тридцять', 'сорок', "п'ятдесят", 'шістдесят', 'сімдесят', 'вісімдесят', "дев'яносто"];
+/** Число словами - масивом коротких записаних слів: 42 → ['сорок', 'два']. fem - «одна», «дві». */
+function numW(n, fem) {
+  if (n === 100) return ['сто'];
+  const u = (d) => (fem && d === 1 ? 'одна' : fem && d === 2 ? 'дві' : NUM_U[d]);
+  if (n < 20) return [u(n)];
+  const t = Math.floor(n / 10), d = n % 10;
+  return d ? [NUM_T[t], u(d)] : [NUM_T[t]];
+}
+const plf = (n) => (n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : 2);
+const MT_ITEMS = [['🎈', 'кулька', 'кульки', 'кульок'], ['🍬', 'цукерка', 'цукерки', 'цукерок'],
+  ['🍓', 'полуниця', 'полуниці', 'полуниць'], ['⭐', 'зірочка', 'зірочки', 'зірочок'], ['🚗', 'машинка', 'машинки', 'машинок']];
+const MT_BASKET = ['кошик', 'кошики', 'кошиків'];
+const MT_FRIENDS = { 2: 'між двома друзями', 3: 'між трьома друзями', 4: 'між чотирма друзями', 5: "між п'ятьма друзями" };
+const MT_LV = [
+  { nm: '➕ до 5', hint: 'додаємо з картинками' },
+  { nm: '➕ до 10', hint: 'додаємо з картинками' },
+  { nm: '➖ до 10', hint: 'віднімаємо з картинками' },
+  { nm: '➕➖ до 10', hint: 'цифрами' },
+  { nm: '➕➖ до 20', hint: 'цифрами' },
+  { nm: '✖️ групами', hint: 'множимо: скільки всього?' },
+  { nm: '➗ порівну', hint: 'ділимо: по скільки кожному?' },
+  { nm: '✖️➗ цифрами', hint: 'таблиця множення' },
+];
+const MT_NEED = 5;   // правильних поспіль на рівні, щоб відкрився наступний
+const MT = { lvl: LS.get('mathLvl', 1), top: LS.get('mathTop', 1), ok: 0, q: null, busy: false, miss: 0 };
+const mtNoun = (it, n) => it[1 + plf(n)];
+/** Завдання для рівня: {a, b, op, ans, it, txt, voice[], pic} */
+function mtMake(L) {
+  const it = pick(MT_ITEMS), r = (lo, hi) => lo + rnd(hi - lo + 1);
+  let a, b, op;
+  if (L === 1) { a = r(1, 4); b = r(1, 5 - a); op = '+'; }
+  else if (L === 2) { a = r(1, 9); b = r(1, 10 - a); op = '+'; }
+  else if (L === 3) { a = r(2, 10); b = r(1, a - 1); op = '−'; }
+  else if (L === 4) { op = Math.random() < 0.5 ? '+' : '−'; if (op === '+') { a = r(1, 9); b = r(1, 10 - a); } else { a = r(2, 10); b = r(1, a); } }
+  else if (L === 5) { op = Math.random() < 0.5 ? '+' : '−'; if (op === '+') { a = r(2, 18); b = r(1, 20 - a); } else { a = r(5, 20); b = r(1, a); } }
+  else if (L === 6) { a = r(2, 5); b = r(2, 5); op = '×'; }
+  else if (L === 7) { a = r(2, 5); b = r(2, 5); op = ':'; }          // a друзів, по b кожному
+  else { op = Math.random() < 0.5 ? '×' : ':'; a = r(2, 10); b = r(2, 10); }
+  let ans, txt, voice, pic = L <= 3 || L === 6 || L === 7;
+  if (op === '+') {
+    ans = a + b; txt = `${a} + ${b} = ?`;
+    voice = pic ? [...numW(a, true), mtNoun(it, a), 'і', ...numW(b, true), mtNoun(it, b), 'Скільки разом?']
+      : [...numW(a), 'плюс', ...numW(b), 'Скільки буде?'];
+  } else if (op === '−') {
+    ans = a - b; txt = `${a} − ${b} = ?`;
+    voice = pic ? ['Було', ...numW(a, true), mtNoun(it, a), 'забрали', ...numW(b, true), 'Скільки залишилось?']
+      : [...numW(a), 'мінус', ...numW(b), 'Скільки буде?'];
+  } else if (op === '×') {
+    ans = a * b; txt = `${a} × ${b} = ?`;
+    voice = pic ? [...numW(a), MT_BASKET[plf(a)], 'у кожному по', ...numW(b, true), mtNoun(it, b), 'Скільки всього?']
+      : [...numW(a), 'помножити на', ...numW(b), 'Скільки буде?'];
+  } else {
+    const tot = a * b; ans = b; txt = `${tot} : ${a} = ?`;
+    voice = pic ? [...numW(tot, true), mtNoun(it, tot), 'поділили порівну', MT_FRIENDS[a], 'По скільки кожному?']
+      : [...numW(tot), 'поділити на', ...numW(a), 'Скільки буде?'];
+  }
+  return { a, b, op, ans, it, txt, voice, pic, L };
+}
+/** Чотири різні відповіді поруч із правильною (не менше нуля). */
+function mtOpts(ans, L) {
+  const s = new Set([ans]), spread = L >= 8 ? 10 : L >= 5 ? 5 : 3;
+  let g = 0;
+  while (s.size < 4 && g++ < 200) { const v = ans + (rnd(2 * spread + 1) - spread); if (v >= 0 && v !== ans) s.add(v); }
+  for (let v = ans + 1; s.size < 4; v++) s.add(v);
+  return shuffle([...s]);
+}
+const mtEm = (em, n, cls = '') => Array.from({ length: n }, () => (cls === 'gone' ? `<i class="gone"><s>${em}</s></i>` : `<i>${em}</i>`)).join('');
+function mtPicture(q, force) {
+  const box = $('#mtPic');
+  if (!q.pic && !force) { box.innerHTML = '<button class="mini" id="mtHint">💡 Підказка — показати картинками</button>'; return; }
+  const em = q.it[0];
+  if (q.op === '+') box.innerHTML = `<div class="mtg">${mtEm(em, q.a)}</div><b class="mtop">+</b><div class="mtg">${mtEm(em, q.b)}</div>`;
+  else if (q.op === '−') box.innerHTML = `<div class="mtg">${mtEm(em, q.a - q.b)}${mtEm(em, q.b, 'gone')}</div>`;
+  else if (q.op === '×') box.innerHTML = Array.from({ length: q.a }, () => `<div class="mtg bsk">${mtEm(em, q.b)}</div>`).join('');
+  else box.innerHTML = `<div class="mtg">${mtEm(em, q.a * q.b)}</div><div class="mtfr">${mtEm('🧒', q.a)}</div>`;
+  box.classList.toggle('big', q.op !== '×' && (q.op === ':' ? q.a * q.b : q.a + (q.op === '+' ? q.b : 0)) > 12);
+}
+function mtLevels() {
+  $('#mtLv').innerHTML = MT_LV.map((l, i) => {
+    const n = i + 1, lock = n > MT.top;
+    return `<button class="mtl${n === MT.lvl ? ' on' : ''}${lock ? ' lock' : ''}" data-l="${n}">${lock ? '🔒' : n}</button>`;
+  }).join('');
+  $('#mtProg').innerHTML = `<b>${MT_LV[MT.lvl - 1].nm}</b> · ${MT_LV[MT.lvl - 1].hint}<br>` +
+    Array.from({ length: MT_NEED }, (_, i) => `<i class="${i < MT.ok ? 'on' : ''}"></i>`).join('');
+}
+function mtNew() {
+  const q = MT.q = mtMake(MT.lvl);
+  MT.busy = false; MT.miss = 0;
+  mtLevels();
+  $('#mtAsk').innerHTML = `${q.txt}<small>${q.voice[q.voice.length - 1]}</small>`;
+  mtPicture(q);
+  $('#mtAns').innerHTML = mtOpts(q.ans, q.L).map((v) => `<button class="big num" data-v="${v}">${v}</button>`).join('');
+  say(q.voice);
+}
+START.math = () => { MT.ok = 0; mtNew(); };
+$('#mtLv').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  const n = +b.dataset.l;
+  if (n > MT.top) { toast('🔒 Спершу пройди попередній рівень'); return; }
+  blip(); MT.lvl = n; LS.set('mathLvl', n); MT.ok = 0; mtNew();
+};
+$('#mtPic').onclick = (e) => { if (e.target.closest('#mtHint')) { blip(); mtPicture(MT.q, true); } };
+$('#mtAns').onclick = (e) => {
+  const b = e.target.closest('.num'); if (!b || MT.busy) return;
+  const q = MT.q;
+  if (+b.dataset.v === q.ans) {
+    MT.busy = true; b.classList.add('ok'); cheer(); vibe(40);
+    if (MT.miss === 0) { MT.ok++; if (MT.ok % 3 === 0) addStar(); }   // з першої спроби - іде в залік
+    else { MT.busy = true; setTimeout(mtNew, 1700); say(['Так!', ...numW(q.ans)]); return; }
+    say(['Так!', ...numW(q.ans)]);
+    if (MT.ok >= MT_NEED && MT.lvl < MT_LV.length) {
+      confetti();
+      MT.lvl++; MT.ok = 0; MT.top = Math.max(MT.top, MT.lvl);
+      LS.set('mathLvl', MT.lvl); LS.set('mathTop', MT.top);
+      setTimeout(() => { toast(`🎉 Новий рівень: ${MT_LV[MT.lvl - 1].nm}`); say('Молодець! Новий рівень!'); }, 1300);
+      setTimeout(mtNew, 3300);
+    } else {
+      if (MT.ok >= MT_NEED) { confetti(); MT.ok = 0; }
+      setTimeout(mtNew, 1700);
+    }
+  } else {
+    b.classList.add('no'); oops(); vibe(120);
+    MT.miss++;
+    if (MT.miss === 2 && !q.pic) mtPicture(q, true);          // друга помилка - показуємо картинками
+    if (MT.miss >= 3) $(`#mtAns .num[data-v="${q.ans}"]`).classList.add('glow');   // третя - підсвічуємо
+    say(MT.miss === 2 ? 'Порахуй уважно' : 'Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
 
 /* ================================================================
    10. ХРЕСТИКИ-НУЛИКИ  (дитина ✕ і ходить першою, Гралик ◯;
