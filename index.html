@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
-<meta name="theme-color" content="#2b1b52">
+<meta name="theme-color" content="#111217">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,16 +14,17 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
-  --bg:#2b1b52; --bg2:#3a2470; --card:#ffffff14; --line:#ffffff2e;
-  --txt:#ffffff; --dim:#ffffffb0;
-  --red:#ff5a5f; --org:#ff9f43; --yel:#ffd93d; --grn:#4ecb71; --blu:#4aa8ff; --vio:#b06bff; --pnk:#ff7ac6;
-  --ok:#4ecb71; --no:#ff5a5f;
+  /* кольори Grafana: темне тло, сірий текст, яскраві, але не кричущі акценти */
+  --bg:#111217; --bg2:#181b1f; --card:#ccccdc12; --line:#ccccdc2a;
+  --txt:#ffffff; --dim:#8e8e9e; --gf-txt:#ccccdc; --gf-blue:#6e9fff; --gf-pri:#3d71d9;
+  --red:#f2495c; --org:#ff9830; --yel:#fade2a; --grn:#73bf69; --blu:#5794f2; --vio:#b877d9; --pnk:#ff7383;
+  --ok:#73bf69; --no:#f2495c;
   --r:22px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overscroll-behavior:none}
 body{
-  background:radial-gradient(120% 90% at 50% 0%,#4b2d8f 0%,var(--bg) 60%,#1d1238 100%);
+  background:var(--bg);
   color:var(--txt); font-family:'Nunito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   font-weight:800; user-select:none; display:flex; flex-direction:column;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -71,7 +72,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 }
 .tile{
   border-radius:var(--r);padding:6px 8px;display:flex;flex-direction:column;min-height:0;
-  align-items:center;gap:4px;color:#1b1038;box-shadow:0 6px 0 #0003;justify-content:center;
+  align-items:center;gap:4px;color:#111217;box-shadow:0 6px 0 #0003;justify-content:center;
 }
 .tile:active{transform:translateY(4px);box-shadow:0 2px 0 #0003}
 .tile .em{font-size:clamp(26px,5.6vh,44px);line-height:1;filter:drop-shadow(0 3px 2px #0002)}
@@ -155,7 +156,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 }
 .house .door{
   width:48px;height:56px;border-radius:12px 12px 4px 4px;background:#8a4b2a;
-  display:grid;place-items:center;font-size:38px;transition:background .2s;color:#3a2470
+  display:grid;place-items:center;font-size:38px;transition:background .2s;color:#22252b
 }
 .house.open .door{background:#ffe6c2}
 .house.ok{outline:4px solid var(--ok);outline-offset:3px}
@@ -213,7 +214,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 /* ---------- меморі ---------- */
 .cards{display:grid;gap:10px;margin:0 auto;width:100%;max-width:420px}
 .card{
-  aspect-ratio:1;border-radius:18px;background:linear-gradient(165deg,#7b5cff,#5433d6);
+  aspect-ratio:1;border-radius:18px;background:linear-gradient(165deg,#4a7fe6,#2f5fc4);
   display:grid;place-items:center;font-size:34px;box-shadow:0 6px 0 #0004;
 }
 .card .face{opacity:0;transition:opacity .12s}
@@ -243,7 +244,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .anim{width:100px;height:100px;font-size:52px}
 .speaker{
   margin:0 auto;width:120px;height:120px;border-radius:50%;background:linear-gradient(165deg,#ffd93d,#ff9f43);
-  display:grid;place-items:center;font-size:56px;box-shadow:0 8px 0 #0004;color:#3a2470;
+  display:grid;place-items:center;font-size:56px;box-shadow:0 8px 0 #0004;color:#22252b;
 }
 .speaker:active{transform:translateY(4px);box-shadow:0 4px 0 #0004}
 .speaker.ring{animation:ring .9s ease-out}
@@ -256,7 +257,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 /* ---------- змійка ---------- */
 .snake-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
 #snakeC{
-  background:#1d1238;border:4px solid var(--line);border-radius:18px;touch-action:none;
+  background:#0b0c0e;border:4px solid var(--line);border-radius:18px;touch-action:none;
   width:min(92vw,360px);height:min(92vw,360px);
 }
 .dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:9px}
@@ -315,7 +316,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 /* ---------- сапер ---------- */
 .mines{display:grid;gap:5px;width:min(92vw,400px);margin:0 auto}
 .mc{
-  aspect-ratio:1;border-radius:10px;background:linear-gradient(165deg,#7b5cff,#5433d6);
+  aspect-ratio:1;border-radius:10px;background:linear-gradient(165deg,#4a7fe6,#2f5fc4);
   box-shadow:0 4px 0 #0004;font-size:clamp(15px,5vw,24px);display:grid;place-items:center;padding:0;
 }
 .mc:active{transform:translateY(2px)}
@@ -355,7 +356,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .ov{position:fixed;inset:0;background:#0b0620d9;display:grid;place-items:center;padding:20px;z-index:50}
 .ov.hid{display:none}
 .box{
-  background:linear-gradient(170deg,#4b2d8f,#33205f);border:3px solid var(--line);
+  background:#181b1f;border:3px solid var(--line);
   border-radius:26px;padding:22px 18px;max-width:380px;width:100%;text-align:center
 }
 .box .em{font-size:60px;line-height:1}
@@ -369,7 +370,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   border:3px solid var(--line);box-shadow:0 5px 0 #0003;margin:5px
 }
 .btn:active{transform:translateY(3px);box-shadow:0 2px 0 #0003}
-.btn.go{background:linear-gradient(170deg,#ffe066,#ffb703);color:#2b1b52;border-color:#0000}
+.btn.go{background:linear-gradient(170deg,#ffe066,#ffb703);color:#111217;border-color:#0000}
 .inp{
   width:120px;text-align:center;font-size:30px;padding:10px;border-radius:16px;
   background:#0003;border:3px solid var(--line);color:#fff;font-weight:900
@@ -381,7 +382,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 @keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:0}}
 .toast{
   position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;
-  background:#1d1238ee;border:3px solid var(--line);border-radius:18px;padding:12px 18px;font-size:16px;
+  background:#181b1fee;border:3px solid var(--line);border-radius:18px;padding:12px 18px;font-size:16px;
   transition:opacity .25s
 }
 .toast.hid{opacity:0;pointer-events:none}
@@ -389,13 +390,19 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .bye-em{font-size:84px;line-height:1}
 .bye h2{font-size:28px;margin:8px 0 2px}
 .bye p{color:var(--dim);font-size:15px;line-height:1.5;margin:0 0 18px}
+
+/* ---------- заголовок EnergyUA Junior ---------- */
+.brand{display:inline-flex;align-items:center;gap:0;font-family:Inter,Roboto,'Segoe UI',system-ui,sans-serif;font-weight:700;letter-spacing:-.4px;font-size:clamp(17px,5.4vw,23px)}
+.brand .bolt{width:.95em;height:1.45em;flex:none;margin-right:.3em}
+.brand .bw{color:var(--gf-txt)}
+.brand .bh{color:var(--gf-blue);margin-left:.12em}
 </style>
 </head>
 <body>
 
 <header class="top">
   <button class="icon" id="back" aria-label="Вихід">🚪</button>
-  <h1 id="title">EnergyUA Junior</h1>
+  <h1 id="title"><span class="brand"><svg class="bolt" viewBox="0 0 64 100" aria-hidden="true"> <defs> <linearGradient id="jbf" x1="0" y1="0" x2="0.35" y2="1"> <stop offset="0" stop-color="#ffa21a"/><stop offset=".45" stop-color="#ff8a10"/><stop offset="1" stop-color="#ff5a00"/> </linearGradient> <linearGradient id="jbs" x1="0" y1="0" x2="0" y2="1"> <stop offset="0" stop-color="#ffe23a"/><stop offset="1" stop-color="#ffb800"/> </linearGradient> </defs> <path d="M44 1 L52 5 L37 37 L62 37 L22 99 L15 95 L26 62 L3 62 Z" fill="url(#jbs)"/> <path d="M39 0 L0 58 L24 58 L13 97 L56 33 L30 33 Z" fill="url(#jbf)"/> <path d="M39 0 L30 33 L35 33 L42 3 Z" fill="#ffe680" opacity=".5"/> </svg><span class="bw">EnergyUA</span><span class="bh">Junior</span></span></h1>
   <button class="stars" id="starBtn"><span>⭐</span><span id="starN">0</span></button>
 </header>
 
@@ -675,7 +682,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.2.7';
+const APP_VERSION = '1.2.8';
+/* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
+const BRAND_HTML = '<span class="brand"><svg class="bolt" viewBox="0 0 64 100" aria-hidden="true"> <defs> <linearGradient id="jbf" x1="0" y1="0" x2="0.35" y2="1"> <stop offset="0" stop-color="#ffa21a"/><stop offset=".45" stop-color="#ff8a10"/><stop offset="1" stop-color="#ff5a00"/> </linearGradient> <linearGradient id="jbs" x1="0" y1="0" x2="0" y2="1"> <stop offset="0" stop-color="#ffe23a"/><stop offset="1" stop-color="#ffb800"/> </linearGradient> </defs> <path d="M44 1 L52 5 L37 37 L62 37 L22 99 L15 95 L26 62 L3 62 Z" fill="url(#jbs)"/> <path d="M39 0 L0 58 L24 58 L13 97 L56 33 L30 33 Z" fill="url(#jbf)"/> <path d="M39 0 L30 33 L35 33 L42 3 Z" fill="#ffe680" opacity=".5"/> </svg><span class="bw">EnergyUA</span><span class="bh">Junior</span></span>';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -994,7 +1003,8 @@ function go(name) {
   if (STOP[SCR]) STOP[SCR]();
   SCR = name;
   $$('.scr').forEach((s) => s.classList.toggle('on', s.id === 's-' + name));
-  $('#title').textContent = TITLES[name] || 'EnergyUA Junior';
+  if (TITLES[name]) $('#title').textContent = TITLES[name];
+  else $('#title').innerHTML = BRAND_HTML;              // у меню - логотип EnergyUA і назва
   // у меню ця кнопка - «Вихід», в іграх - «Назад»
   $('#back').textContent = name === 'menu' ? '🚪' : '⬅️';
   $('#back').setAttribute('aria-label', name === 'menu' ? 'Вихід' : 'Назад');
@@ -1637,7 +1647,7 @@ function snDraw() {
       g.fillRect(p[0] * s + pad, p[1] * s + pad, s - pad * 2, s - pad * 2);
     }
     if (i === 0) {   // очі дивляться туди, куди повзе
-      g.fillStyle = '#2b1b52';
+      g.fillStyle = '#111217';
       const ex = p[0] * s + s / 2 + SN.dir[0] * s * 0.17, ey = p[1] * s + s / 2 + SN.dir[1] * s * 0.17;
       const ox = s * 0.1 * (1 - Math.abs(SN.dir[0])), oy = s * 0.1 * (1 - Math.abs(SN.dir[1]));
       g.beginPath(); g.arc(ex - ox, ey - oy, s * 0.075, 0, 7); g.fill();
@@ -2446,10 +2456,10 @@ function boDraw() {
       [-0.2, 0.2].forEach((o) => {
         const x = q.x + q.w * (0.5 + o), y = q.y + q.h * 0.45;
         g.fillStyle = '#fff'; g.beginPath(); g.arc(x, y, q.h * 0.17, 0, 7); g.fill();
-        g.fillStyle = '#1b1038'; g.beginPath(); g.arc(x + ex * q.h * 0.07, y + q.h * 0.04, q.h * 0.08, 0, 7); g.fill();
+        g.fillStyle = '#111217'; g.beginPath(); g.arc(x + ex * q.h * 0.07, y + q.h * 0.04, q.h * 0.08, 0, 7); g.fill();
       });
       if (q.hp > 1) {
-        g.fillStyle = '#1b1038'; g.font = `900 ${Math.round(q.h * 0.34)}px Nunito,system-ui,sans-serif`;
+        g.fillStyle = '#111217'; g.font = `900 ${Math.round(q.h * 0.34)}px Nunito,system-ui,sans-serif`;
         g.fillText(q.hp, q.x + q.w / 2, q.y + q.h * 0.82);
       }
     }
