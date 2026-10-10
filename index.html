@@ -621,7 +621,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.2.1';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -747,23 +747,41 @@ if ('speechSynthesis' in window) {
 }
 function voiceInfo() {
   if (!('speechSynthesis' in window)) return 'пристрій не вміє озвучувати';
-  if (VOICE_KEYS.size) return `записаний голос (${VOICE_KEYS.size} фраз)` + (UA_VOICE ? ` + ${UA_VOICE.name}` : '');
+  if (VOICE_KEYS.size) {
+    const st = VPACK ? '✅ завантажено' : VPACK_P ? '⏳ вантажиться…' : `❌ файл voice.pack не знайдено${VPACK_ERR ? ' (' + VPACK_ERR + ')' : ''}`;
+    return `записаний (${VOICE_KEYS.size} фраз) — ${st}`;
+  }
   if (UA_VOICE) return `українська (${UA_VOICE.name})`;
   if (!VOICE_READY) return 'перевіряється…';
   return 'українського голосу немає — озвучка мовчить';
 }
-/* 1.2.0: ЗАПИСАНИЙ ГОЛОС. Усі завдання наперед озвучені українським
-   синтезатором (голос «Тетяна», ukrainian-tts) і лежать у voice/*.mp3.
-   Ім'я файлу - короткий відбиток тексту фрази. Голос телефона - лише
-   запасний варіант для фраз, яких немає в записах. */
-const VOICE_KEYS = new Set('v000eb3f1 v0020b6d4 v0118f1be v01237f1a v01da4f3a v029cb487 v02d74627 v044d55cb v045e586f v0469adf6 v05763e24 v06c54cba v073994e1 v07b02c17 v0b0e04f7 v0b18fcc0 v0b25a21d v0d18ffe6 v0d1ca269 v0d3f5c43 v0d67bc66 v0dbc4d2b v0e4182b4 v0fb542f9 v1232d7ba v12ca8d87 v135edbe8 v13f28094 v13fc98f7 v145e920e v15df46fb v163617c0 v169cf91d v16a06079 v172d376e v175d1c78 v1761fed4 v18a7ed45 v19261860 v1a817ede v1b4e6f81 v1c4d342a v1d4e319a v1df0d45b v1dfd4db2 v1e71fa35 v1ef2a92a v1f68bf4c v20191dcf v2216710e v225e84a2 v226cf46f v227e2c0f v22c8e473 v22d6f3a9 v23192288 v23823c1d v2419241b v25009dad v25af53b1 v28503973 v28a0f095 v29081b88 v29d2a29a v2a081d1b v2a2939e8 v2ceb2393 v2cf31187 v2d22cc3f v2d904411 v2e082367 v2f6b4342 v30cbb868 v3426e0e4 v348297f1 v356bb878 v35a04999 v35cb24d8 v3814eb90 v38275495 v3bbc3099 v3bd3ee2e v3bfed9e4 v3cba9fbd v3d1d1eb4 v3d74d4d5 v3eaa2466 v3f472d60 v3f52a34e v3fb7dea4 v4209b0b7 v434472de v437cf8ca v44043c7a v44894c4a v46f25eb4 v4801781c v48bcf5d0 v48cc788c v4949ab34 v4966ff51 v49a78f47 v4ace9cdf v4b78bc1c v4ba3bbde v4e934b93 v4ecee5b8 v4ee38bdc v4ef2374e v4fba652f v5089cb04 v5383b38f v545ebc94 v54a42236 v54bc8c72 v552a4986 v556d0141 v58980c6a v5927e932 v59d31bcf v5ac07578 v5c286709 v5f57bd47 v5fe4f13f v6076568a v609dc765 v65333b11 v654431d1 v65acf92f v66eee64f v68ab00c5 v6944809b v69e76585 v6b980e35 v6bca5530 v6d0ccfcf v6d1180f0 v6d40302a v6d76f91f v6f363df4 v6fba2283 v701e519c v707b2c42 v710f14b2 v7182548f v72d2f046 v73316683 v738b08e8 v74012383 v74804d7c v75c1d745 v780954ed v78928be1 v795274a8 v7ab7159d v7ca63afe v7e04ae68 v7e492507 v7e4fe79b v7ef40a57 v80315224 v80a3f14e v829599ee v853519a9 v866ba7dd v86ce1c3c v889827e8 v88d42960 v89628711 v896c6931 v8b3b7545 v8b4d304a v8e68fc37 v945adcdf v947ec1a3 v97ee622e v98b1fb14 v992380df v9a3ba894 v9cd6d1e9 v9cdaf6f8 v9d23b032 v9d6df793 v9e2256de v9f766c7b va166e452 va24c45d9 va3424b0d va7c9a24d va8a9e780 va8abed17 va9e8173f vaaef0b66 vab65699d vab7bdd45 vac87f60e vacc065b3 vaeac3669 vaf4b0ed9 vb1dbf46b vb2fb7f84 vb3b6a5f5 vb3c60ff8 vb46d8cea vb4c78db1 vb4ece4fd vb5f0ba36 vb64851ab vb68c51b8 vb74b4cdf vb7d286df vb8b7b07a vb92b533a vbb8d8b3f vbbc88d68 vbc60cd35 vbd0d54e4 vbd7f3fb8 vbe0d5677 vbe22f365 vbe2df22e vbf996876 vc00d599d vc02fb468 vc17b886b vc2a588a0 vc39f1b27 vc4a00304 vc659d7bc vc6719744 vc6f2d73e vc71b5578 vc76af380 vc99eafde vc9a35eab vca636ae4 vccf46917 vcdde0ca1 vceb3385b vcf624dab vcf98f31f vcfdeef14 vcfff7969 vd193ff09 vd2e08650 vd2f5ada3 vd32a5c46 vd51f5581 vd5f75f5b vd6699e33 vd6fcb1d6 vd8884ef9 vd8f6d9b1 vdb0ba350 vde054d1d vde5e0626 vdf851d22 ve00bfc28 ve1373d37 ve29850ae ve2f05afa ve38320ca ve4bce258 ve56cb2c8 ve7231dae ve78ee812 ve88ee9a5 ve98eeb38 vea0a81f4 vea16571b vea8eeccb veb08bb33 veb8eee5e vec8eeff1 vecb8a58f veccd8636 ved8ef184 vedea5bba vee18cf19 vee8ef317 vf0062b7a vf08ef63d vf10584c9 vf118d3d2 vf1701e33 vf17a0782 vf1a3bad4 vf2d7f2e0 vf307c686 vf318d6f8 vf344df9e vf499dc61 vf5052feb vf507c9ac vf53bb405 vf607cb3f vf8b2f805 vf918e06a vfa8b2adb vfbbb4f5d vfca48a14 vfd04f3bb vfd16acdb vfd80d62b vfe38fb3e vfe94e6f9 vfee5b4db'.split(' ').filter((k) => /^v[0-9a-f]{8}$/.test(k)));
+/* 1.2.1: ЗАПИСАНИЙ ГОЛОС - один файл voice.pack (усі фрази підряд, mp3).
+   Один файл легко залити навіть з телефона - на відміну від 300 окремих.
+   VOICE_IDX: ключ фрази → [зсув, довжина] у voice.pack. Ключ - відбиток тексту.
+   Грає через Web Audio (той самий AudioContext, що й ефекти гри):
+   після першого дотику браузер його вже не блокує. */
+const VOICE_IDX = {};
+'v000eb3f1,0,11041;v0020b6d4,11041,4459;v0118f1be,15500,9944;v01237f1a,25444,10101;v01da4f3a,35545,4929;v029cb487,40474,10571;v02d74627,51045,11982;v044d55cb,63027,8534;v045e586f,71561,4929;v0469adf6,76490,11198;v05763e24,87688,9788;v06c54cba,97476,13079;v073994e1,110555,11041;v07b02c17,121596,10258;v0b0e04f7,131854,9788;v0b18fcc0,141642,9944;v0b25a21d,151586,7123;v0d18ffe6,158709,10728;v0d1ca269,169437,11041;v0d3f5c43,180478,10415;v0d67bc66,190893,12295;v0dbc4d2b,203188,9788;v0e4182b4,212976,5086;v0fb542f9,218062,4772;v1232d7ba,222834,11198;v12ca8d87,234032,12766;v135edbe8,246798,5556;v13f28094,252354,6183;v13fc98f7,258537,3675;v145e920e,262212,11198;v15df46fb,273410,7280;v163617c0,280690,5242;v169cf91d,285932,10415;v16a06079,296347,8847;v172d376e,305194,10885;v175d1c78,316079,4615;v1761fed4,320694,11825;v18a7ed45,332519,6183;v19261860,338702,3832;v1a817ede,342534,6496;v1b4e6f81,349030,12295;v1c4d342a,361325,5242;v1d4e319a,366567,6183;v1df0d45b,372750,9944;v1dfd4db2,382694,4772;v1e71fa35,387466,11668;v1ef2a92a,399134,6183;v1f68bf4c,405317,7280;v20191dcf,412597,9944;v2216710e,422541,12766;v225e84a2,435307,10728;v226cf46f,446035,11355;v227e2c0f,457390,5869;v22c8e473,463259,12609;v22d6f3a9,475868,8534;v23192288,484402,9944;v23823c1d,494346,11198;v2419241b,505544,9788;v25009dad,515332,7280;v25af53b1,522612,6496;v28503973,529108,10415;v28a0f095,539523,9788;v29081b88,549311,11041;v29d2a29a,560352,8534;v2a081d1b,568886,10415;v2a2939e8,579301,11198;v2ceb2393,590499,11198;v2cf31187,601697,5242;v2d22cc3f,606939,12766;v2d904411,619705,10571;v2e082367,630276,9631;v2f6b4342,639907,8377;v30cbb868,648284,4302;v3426e0e4,652586,10101;v348297f1,662687,4615;v356bb878,667302,11668;v35a04999,678970,6653;v35cb24d8,685623,8690;v3814eb90,694313,7123;v38275495,701436,4615;v3bbc3099,706051,3518;v3bd3ee2e,709569,11198;v3bfed9e4,720767,11041;v3cba9fbd,731808,9944;v3d1d1eb4,741752,4772;v3d74d4d5,746524,8377;v3eaa2466,754901,9944;v3f472d60,764845,5399;v3f52a34e,770244,9631;v3fb7dea4,779875,4302;v4209b0b7,784177,9317;v434472de,793494,8847;v437cf8ca,802341,6653;v44043c7a,808994,11512;v44894c4a,820506,3361;v46f25eb4,823867,11668;v4801781c,835535,11825;v48bcf5d0,847360,11198;v48cc788c,858558,5556;v4949ab34,864114,11198;v4966ff51,875312,4615;v49a78f47,879927,10258;v4ace9cdf,890185,9944;v4b78bc1c,900129,4615;v4ba3bbde,904744,9788;v4e934b93,914532,5869;v4ecee5b8,920401,5242;v4ee38bdc,925643,19662;v4ef2374e,945305,4772;v4fba652f,950077,10728;v5089cb04,960805,9474;v5383b38f,970279,9474;v545ebc94,979753,6026;v54a42236,985779,9788;v54bc8c72,995567,7280;v552a4986,1002847,13706;v556d0141,1016553,9474;v58980c6a,1026027,4459;v5927e932,1030486,10728;v59d31bcf,1041214,5242;v5ac07578,1046456,10885;v5c286709,1057341,14803;v5f57bd47,1072144,8690;v5fe4f13f,1080834,10728;v6076568a,1091562,13549;v609dc765,1105111,4615;v65333b11,1109726,5086;v654431d1,1114812,6183;v65acf92f,1120995,5712;v66eee64f,1126707,4929;v68ab00c5,1131636,11041;v6944809b,1142677,4615;v69e76585,1147292,5399;v6b980e35,1152691,4615;v6bca5530,1157306,8534;v6d0ccfcf,1165840,10258;v6d1180f0,1176098,10258;v6d40302a,1186356,11668;v6d76f91f,1198024,9788;v6f363df4,1207812,10258;v6fba2283,1218070,10571;v701e519c,1228641,10258;v707b2c42,1238899,11668;v710f14b2,1250567,10728;v7182548f,1261295,11825;v72d2f046,1273120,4929;v73316683,1278049,4302;v738b08e8,1282351,5869;v74012383,1288220,3675;v74804d7c,1291895,7123;v75c1d745,1299018,9944;v780954ed,1308962,6183;v78928be1,1315145,10571;v795274a8,1325716,7593;v7ab7159d,1333309,9631;v7ca63afe,1342940,10258;v7e04ae68,1353198,12139;v7e492507,1365337,8847;v7e4fe79b,1374184,8534;v7ef40a57,1382718,6183;v80315224,1388901,4615;v80a3f14e,1393516,6810;v829599ee,1400326,5869;v853519a9,1406195,4145;v866ba7dd,1410340,5086;v86ce1c3c,1415426,13079;v889827e8,1428505,10728;v88d42960,1439233,12295;v89628711,1451528,10258;v896c6931,1461786,11982;v8b3b7545,1473768,11512;v8b4d304a,1485280,9004;v8e68fc37,1494284,9474;v945adcdf,1503758,6026;v947ec1a3,1509784,5242;v97ee622e,1515026,4459;v98b1fb14,1519485,10415;v992380df,1529900,5399;v9a3ba894,1535299,11041;v9cd6d1e9,1546340,8847;v9cdaf6f8,1555187,4772;v9d23b032,1559959,5242;v9d6df793,1565201,4615;v9e2256de,1569816,9161;v9f766c7b,1578977,11198;va166e452,1590175,5242;va24c45d9,1595417,11198;va3424b0d,1606615,6183;va7c9a24d,1612798,9944;va8a9e780,1622742,5712;va8abed17,1628454,4145;va9e8173f,1632599,5086;vaaef0b66,1637685,5712;vab65699d,1643397,3988;vab7bdd45,1647385,12452;vac87f60e,1659837,4929;vacc065b3,1664766,14176;vaeac3669,1678942,5086;vaf4b0ed9,1684028,13863;vb1dbf46b,1697891,9631;vb2fb7f84,1707522,11512;vb3b6a5f5,1719034,6653;vb3c60ff8,1725687,6653;vb46d8cea,1732340,6026;vb4c78db1,1738366,4615;vb4ece4fd,1742981,6026;vb5f0ba36,1749007,10571;vb64851ab,1759578,5399;vb68c51b8,1764977,10728;vb74b4cdf,1775705,11668;vb7d286df,1787373,17468;vb8b7b07a,1804841,5086;vb92b533a,1809927,9788;vbb8d8b3f,1819715,7437;vbbc88d68,1827152,6183;vbc60cd35,1833335,13236;vbd0d54e4,1846571,10415;vbd7f3fb8,1856986,9474;vbe0d5677,1866460,8847;vbe22f365,1875307,11198;vbe2df22e,1886505,9161;vbf996876,1895666,9317;vc00d599d,1904983,10258;vc02fb468,1915241,9788;vc17b886b,1925029,4145;vc2a588a0,1929174,11982;vc39f1b27,1941156,19035;vc4a00304,1960191,11668;vc659d7bc,1971859,5399;vc6719744,1977258,4615;vc6f2d73e,1981873,9788;vc71b5578,1991661,17311;vc76af380,2008972,7907;vc99eafde,2016879,4772;vc9a35eab,2021651,4772;vca636ae4,2026423,8847;vccf46917,2035270,11041;vcdde0ca1,2046311,9474;vceb3385b,2055785,4145;vcf624dab,2059930,11825;vcf98f31f,2071755,5712;vcfdeef14,2077467,3675;vcfff7969,2081142,12609;vd193ff09,2093751,8534;vd2e08650,2102285,10571;vd2f5ada3,2112856,11512;vd32a5c46,2124368,10571;vd51f5581,2134939,10728;vd5f75f5b,2145667,6026;vd6699e33,2151693,11198;vd6fcb1d6,2162891,5712;vd8884ef9,2168603,11041;vd8f6d9b1,2179644,11825;vdb0ba350,2191469,5399;vde054d1d,2196868,4929;vde5e0626,2201797,4615;vdf851d22,2206412,6183;ve00bfc28,2212595,6026;ve1373d37,2218621,8690;ve29850ae,2227311,8377;ve2f05afa,2235688,11512;ve38320ca,2247200,5242;ve4bce258,2252442,6026;ve56cb2c8,2258468,14176;ve7231dae,2272644,6496;ve78ee812,2279140,8690;ve88ee9a5,2287830,9161;ve98eeb38,2296991,8534;vea0a81f4,2305525,4459;vea16571b,2309984,4459;vea8eeccb,2314443,8220;veb08bb33,2322663,9317;veb8eee5e,2331980,9788;vec8eeff1,2341768,8377;vecb8a58f,2350145,4459;veccd8636,2354604,4459;ved8ef184,2359063,7750;vedea5bba,2366813,4459;vee18cf19,2371272,10885;vee8ef317,2382157,7437;vf0062b7a,2389594,10728;vf08ef63d,2400322,7907;vf10584c9,2408229,9944;vf118d3d2,2418173,8847;vf1701e33,2427020,10101;vf17a0782,2437121,10258;vf1a3bad4,2447379,3832;vf2d7f2e0,2451211,9788;vf307c686,2460999,9004;vf318d6f8,2470003,10571;vf344df9e,2480574,16684;vf499dc61,2497258,10571;vf5052feb,2507829,9004;vf507c9ac,2516833,10885;vf53bb405,2527718,11355;vf607cb3f,2539073,9317;vf8b2f805,2548390,4459;vf918e06a,2552849,10415;vfa8b2adb,2563264,10415;vfbbb4f5d,2573679,10258;vfca48a14,2583937,5242;vfd04f3bb,2589179,13549;vfd16acdb,2602728,10101;vfd80d62b,2612829,10415;vfe38fb3e,2623244,4302;vfe94e6f9,2627546,6183;vfee5b4db,2633729,11355'.split(';').forEach((r) => { const [k, o, l] = r.split(','); if (l) VOICE_IDX[k] = [+o, +l]; });
+const VOICE_KEYS = new Set(Object.keys(VOICE_IDX));
 function vKey(t) {
   t = String(t).trim().replace(/[ʼ’‘]/g, "'");
   let h = 0x811c9dc5;
   for (const ch of t) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; }
   return 'v' + h.toString(16).padStart(8, '0');
 }
-let VOICE_AUDIO = null, LAST_SAY = '';
+let VPACK = null, VPACK_P = null, VPACK_ERR = '', VSRC = null, VAUD = null, LAST_SAY = '';
+const VBUF = {};
+function vpackLoad() {
+  if (VPACK) return Promise.resolve(VPACK);
+  if (!VPACK_P) {
+    VPACK_P = fetch('voice.pack')
+      .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error('HTTP ' + r.status))))
+      .then((b) => { VPACK = b; VPACK_ERR = ''; return b; })
+      .catch((e) => { VPACK_P = null; VPACK_ERR = String(e && e.message || e); throw e; });
+  }
+  return VPACK_P;
+}
+if (VOICE_KEYS.size) vpackLoad().catch(() => {});
 function ttsSay(text, rate = 0.88) {
   if (!('speechSynthesis' in window)) return;
   if (!VOICE_READY) loadVoices();            // може, список уже під'їхав
@@ -777,27 +795,50 @@ function ttsSay(text, rate = 0.88) {
     speechSynthesis.speak(u);
   } catch (e) { /* не вийшло — гра працює далі */ }
 }
+function vStop() {
+  try { if (VSRC) VSRC.stop(); } catch (e) { /* */ }
+  try { if (VAUD) VAUD.pause(); } catch (e) { /* */ }
+  VSRC = null; VAUD = null;
+}
+function vPlay(k, text, rate) {
+  const [o, l] = VOICE_IDX[k];
+  const a = ac();
+  const still = () => LAST_SAY === text;      // поки вантажилось, гра вже могла сказати інше
+  const viaAudio = () => {                    // запасний шлях - звичайний <audio> з куска файлу
+    try {
+      const u = URL.createObjectURL(new Blob([VPACK.slice(o, o + l)], { type: 'audio/mpeg' }));
+      vStop(); VAUD = new Audio(u);
+      VAUD.onended = () => URL.revokeObjectURL(u);
+      const p = VAUD.play(); if (p && p.catch) p.catch(() => ttsSay(text, rate));
+    } catch (e) { ttsSay(text, rate); }
+  };
+  const use = (buf) => {
+    if (!still()) return;
+    vStop();
+    const s = a.createBufferSource(), g = a.createGain();
+    g.gain.value = 1.15;
+    s.buffer = buf; s.connect(g); g.connect(a.destination); s.start();
+    VSRC = s;
+  };
+  if (!a || !a.decodeAudioData) return viaAudio();
+  if (VBUF[k]) return use(VBUF[k]);
+  try {
+    a.decodeAudioData(VPACK.slice(o, o + l), (b) => { VBUF[k] = b; use(b); }, () => { if (still()) viaAudio(); });
+  } catch (e) { viaAudio(); }
+}
 function say(text, rate = 0.88) {
   if (!text) return;
   LAST_SAY = text;
   if (!S.voice) return;
   const k = vKey(text);
-  if (!VOICE_KEYS.has(k)) { ttsSay(text, rate); return; }
-  try {
-    if (VOICE_AUDIO) VOICE_AUDIO.pause();
-    try { speechSynthesis.cancel(); } catch (e) { /* */ }
-    const a = VOICE_AUDIO = new Audio(`voice/${k}.mp3`);
-    let ok = false;
-    const fb = () => { if (ok) return; ok = true; if (VOICE_AUDIO === a) ttsSay(text, rate); };
-    a.onplaying = () => { ok = true; };
-    a.onerror = fb;
-    const p = a.play();
-    if (p && p.catch) p.catch(fb);
-  } catch (e) { ttsSay(text, rate); }
+  if (!VOICE_IDX[k]) { ttsSay(text, rate); return; }
+  try { speechSynthesis.cancel(); } catch (e) { /* */ }
+  if (VPACK) { vPlay(k, text, rate); return; }
+  vpackLoad().then(() => { if (LAST_SAY === text) vPlay(k, text, rate); }, () => ttsSay(text, rate));
 }
 /* Дитина ще не читає - торкнулась завдання, і гра каже його ще раз. */
 document.addEventListener('click', (e) => {
-  if (e.target.closest('.ask') && LAST_SAY && SCR !== 'menu' && SCR !== 'rec' && SCR !== 'album') say(LAST_SAY);
+  if (e.target.closest('.ask') && LAST_SAY && SCR !== 'menu' && SCR !== 'rec' && SCR !== 'album') { ac(); say(LAST_SAY); }
 });
 /** Усі фрази, які гра може сказати зі змінними частинами - для запису голосу.
     Сталі фрази (say('…')) збирає скрипт прямо з тексту гри. */

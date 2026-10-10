@@ -1,16 +1,11 @@
 /* Гралик — офлайн-оболонка. Гра повністю в одному файлі, тому кеш маленький. */
-const VERSION = 'gralyk-v1.2.0';
+const VERSION = 'gralyk-v1.2.1';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest'];
-const OPTIONAL = ['icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
+const OPTIONAL = ['icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'voice.pack'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION)
-    .then((c) => c.addAll(SHELL).then(() => Promise.all(OPTIONAL.map((u) => c.add(u).catch(() => {}))))
-      // записаний голос (~3 МБ) - щоб завдання озвучувались і без інтернету
-      .then(() => fetch('voice/list.txt').then((r) => (r.ok ? r.text() : ''))
-        .then((t) => Promise.all(t.split(/\s+/).filter((k) => /^v[0-9a-f]{8}$/.test(k))
-          .map((k) => c.add(`voice/${k}.mp3`).catch(() => {}))))
-        .catch(() => {})))
+    .then((c) => c.addAll(SHELL).then(() => Promise.all(OPTIONAL.map((u) => c.add(u).catch(() => {})))))
     .then(() => self.skipWaiting()));
 });
 
@@ -27,6 +22,13 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+
+  // голос (~2,6 МБ) - спершу кеш і без обмеження в 3 с: на повільному інтернеті він вантажиться довше
+  if (url.pathname.endsWith('/voice.pack')) {
+    e.respondWith(caches.open(VERSION).then((c) => c.match(req, { ignoreSearch: true }).then((hit) => hit ||
+      fetch(req).then((res) => { if (res.ok) c.put(req, res.clone()); return res; }))));
+    return;
+  }
 
   // спершу мережа (щоб оновлення приходило одразу), але не довше 3 с — далі кеш
   e.respondWith((async () => {
