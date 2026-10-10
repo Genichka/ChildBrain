@@ -1,7 +1,7 @@
 {
-  "name": "Гралик — ігри для малят",
-  "short_name": "Гралик",
-  "description": "Шість простих ігор для дітей 4–6 років: мелодія, пари, лічба, букви, звуки тварин і змійка. Працює без інтернету.",
+  "name": "EnergyUA Junior — ігри для малят",
+  "short_name": "EUA Junior",
+  "description": "Двадцять простих ігор для дітей 4–6 років з озвученими завданнями: слух, увага, памʼять, лічба, логіка, швидкість. Працює без інтернету.",
   "lang": "uk",
   "dir": "ltr",
   "start_url": "./",
@@ -10,10 +10,27 @@
   "orientation": "portrait",
   "background_color": "#2b1b52",
   "theme_color": "#2b1b52",
-  "categories": ["games", "education", "kids"],
+  "categories": [
+    "games",
+    "education",
+    "kids"
+  ],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

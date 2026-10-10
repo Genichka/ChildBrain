@@ -1,18 +1,23 @@
-/* Гралик — офлайн-оболонка. Гра повністю в одному файлі, тому кеш маленький. */
-const VERSION = 'gralyk-v1.2.1';
+/* Energy UA Junior — офлайн-оболонка.
+   З 1.2.4 цей файл між версіями НЕ змінюється: інакше браузер сам ставив би
+   новий service worker і гра оновлювалась би без дозволу. Нову версію гра
+   ставить лише після «🔄 Оновити» в діалозі: тоді вона чистить цей кеш,
+   знімає service worker і перезавантажується - і він кешує вже нові файли. */
+const CACHE = 'eua-junior';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest'];
 const OPTIONAL = ['icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'voice.pack'];
+const fresh = (u) => new Request(u, { cache: 'reload' });   // повз HTTP-кеш браузера
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(VERSION)
-    .then((c) => c.addAll(SHELL).then(() => Promise.all(OPTIONAL.map((u) => c.add(u).catch(() => {})))))
+  e.waitUntil(caches.open(CACHE)
+    .then((c) => c.addAll(SHELL.map(fresh)).then(() => Promise.all(OPTIONAL.map((u) => c.add(fresh(u)).catch(() => {})))))
     .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -22,34 +27,19 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-
-  // голос (~2,6 МБ) - спершу кеш і без обмеження в 3 с: на повільному інтернеті він вантажиться довше
-  if (url.pathname.endsWith('/voice.pack')) {
-    e.respondWith(caches.open(VERSION).then((c) => c.match(req, { ignoreSearch: true }).then((hit) => hit ||
-      fetch(req).then((res) => { if (res.ok) c.put(req, res.clone()); return res; }))));
-    return;
-  }
-
-  // спершу мережа (щоб оновлення приходило одразу), але не довше 3 с — далі кеш
-  e.respondWith((async () => {
-    const cache = await caches.open(VERSION);
-    const cached = () => cache.match(req, { ignoreSearch: true })
-      .then((r) => r || (req.mode === 'navigate' ? cache.match('index.html') : null));
-    if (!navigator.onLine) {
-      const hit = await cached();
-      if (hit) return hit;
-    }
+  // перевірка оновлень - завжди з мережі, нічого не кешуємо
+  if (url.pathname.endsWith('/version.json') || url.searchParams.has('t')) return;
+  // решта - спершу збережене (так нова версія не підміняє стару сама), інакше мережа
+  e.respondWith(caches.open(CACHE).then(async (c) => {
+    const hit = await c.match(req, { ignoreSearch: true }) ||
+      (req.mode === 'navigate' ? await c.match('index.html') : null);
+    if (hit) return hit;
     try {
-      const ctl = new AbortController();
-      const timer = setTimeout(() => ctl.abort(), 3000);
-      const res = await fetch(new Request(req.url, { cache: 'reload' }), { signal: ctl.signal });
-      clearTimeout(timer);
-      if (res && res.ok) { cache.put(req, res.clone()); return res; }
-      throw new Error('bad status');
+      const res = await fetch(req);
+      if (res && res.ok) c.put(req, res.clone());
+      return res;
     } catch (err) {
-      const hit = await cached();
-      if (hit) return hit;
       return new Response('', { status: 504, statusText: 'offline' });
     }
-  })());
+  }));
 });

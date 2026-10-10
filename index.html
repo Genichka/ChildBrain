@@ -7,8 +7,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Гралик">
-<title>Гралик — ігри для малят</title>
+<meta name="apple-mobile-web-app-title" content="EnergyUA Junior">
+<title>EnergyUA Junior — ігри для малят</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -32,7 +32,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 /* ---------- шапка ---------- */
 .top{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:60px}
-.top h1{font-size:19px;margin:0;flex:1;text-align:center;letter-spacing:.3px}
+.top h1{font-size:clamp(13px,4.1vw,19px);margin:0;flex:1;min-width:0;text-align:center;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .icon{
   width:50px;height:50px;flex:0 0 auto;border-radius:16px;background:var(--card);
   border:2px solid var(--line);font-size:24px;display:grid;place-items:center;
@@ -336,6 +336,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .box .em{font-size:60px;line-height:1}
 .box h2{font-size:22px;margin:10px 0 6px}
 .box p{color:var(--dim);font-size:14px;font-weight:700;margin:0 0 14px;line-height:1.5}
+.box .chg{display:block;text-align:left;color:var(--txt);margin:6px 0 8px;line-height:1.45}
+.box .chg-note{display:block;font-size:12.5px}
+.mini.hot{background:#4ecb7133;border-color:#4ecb71;color:#fff}
 .btn{
   border-radius:18px;padding:14px 20px;font-size:17px;background:var(--card);
   border:3px solid var(--line);box-shadow:0 5px 0 #0003;margin:5px
@@ -357,13 +360,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   transition:opacity .25s
 }
 .toast.hid{opacity:0;pointer-events:none}
+.bye{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.bye-em{font-size:84px;line-height:1}
+.bye h2{font-size:28px;margin:8px 0 2px}
+.bye p{color:var(--dim);font-size:15px;line-height:1.5;margin:0 0 18px}
 </style>
 </head>
 <body>
 
 <header class="top">
-  <button class="icon" id="back" aria-label="Назад">⬅️</button>
-  <h1 id="title">Гралик</h1>
+  <button class="icon" id="back" aria-label="Вихід">🚪</button>
+  <h1 id="title">EnergyUA Junior</h1>
   <button class="stars" id="starBtn"><span>⭐</span><span id="starN">0</span></button>
 </header>
 
@@ -609,6 +616,16 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     надбанні. Повний перелік — у README.</p>
 </section>
 
+<!-- вихід -->
+<section class="scr" id="s-bye">
+  <div class="bye">
+    <div class="bye-em">👋</div>
+    <h2>До зустрічі!</h2>
+    <p>Гру зупинено, звуки вимкнено.<br>Щоб прибрати її з екрана — проведи вгору або закрий вкладку браузера.</p>
+    <button class="btn go" id="byeAgain">▶️ Грати ще</button>
+  </div>
+</section>
+
 <!-- наліпки -->
 <section class="scr" id="s-album">
   <div class="ask" id="albAsk">Мої наліпки</div>
@@ -621,7 +638,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.2.6';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -904,27 +921,47 @@ function dialog({ em, h, p, btn = 'Далі', btn2, btn3, onBtn, onBtn2, onBtn3 
 const closeDialog = () => $('#ov').classList.add('hid');
 
 /* ---------- перемикання екранів ---------- */
-const TITLES = { menu: 'Гралик', melody: 'Повтори мелодію', memory: 'Знайди пару', count: 'Скільки?',
+const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію', memory: 'Знайди пару', count: 'Скільки?',
                  letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка',
                  shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
                  arcade: 'Зореліт', ttt: 'Хрестики-нулики', mines: 'Сапер',
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси' };
+                 rec: 'Свої голоси', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
   if (STOP[SCR]) STOP[SCR]();
   SCR = name;
   $$('.scr').forEach((s) => s.classList.toggle('on', s.id === 's-' + name));
-  $('#title').textContent = TITLES[name] || 'Гралик';
-  $('#back').style.visibility = name === 'menu' ? 'hidden' : 'visible';
+  $('#title').textContent = TITLES[name] || 'EnergyUA Junior';
+  // у меню ця кнопка - «Вихід», в іграх - «Назад»
+  $('#back').textContent = name === 'menu' ? '🚪' : '⬅️';
+  $('#back').setAttribute('aria-label', name === 'menu' ? 'Вихід' : 'Назад');
   closeDialog();
   if (START[name]) START[name]();
+  if (name === 'menu' && UPD && updAsked !== UPD.version) setTimeout(askUpdate, 400);
 }
 const START = {};
-$('#back').onclick = () => { blip(); go('menu'); };
+$('#back').onclick = () => { blip(); if (SCR === 'menu') askExit(); else go('menu'); };
+/* Вихід. Браузер дозволяє закрити лише вікно, яке відкрила сама гра (або додаток
+   з головного екрана на деяких телефонах). Якщо не вийшло - вимикаємо всі звуки
+   й показуємо «До зустрічі!», щоб гра не грала у фоні. */
+function askExit() {
+  dialog({ em: '🚪', h: 'Вийти з гри?', p: 'Зірочки й наліпки збережуться.',
+    btn: 'Так, вийти', btn2: 'Ні, граємо', onBtn: exitApp });
+}
+function exitApp() {
+  try { vStop(); } catch (e) { /* */ }
+  try { speechSynthesis.cancel(); } catch (e) { /* */ }
+  try { if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; } } catch (e) { /* */ }
+  try { if (AC && AC.suspend) AC.suspend(); } catch (e) { /* */ }
+  go('bye');
+  try { window.close(); } catch (e) { /* */ }
+}
+START.bye = () => { $('#back').style.visibility = 'hidden'; };
+STOP.bye = () => { $('#back').style.visibility = 'visible'; ac(); };
 $('#starBtn').onclick = () => go('album');
 $$('[data-go]').forEach((b) => { b.onclick = () => { ac(); blip(); go(b.dataset.go); }; });
 
@@ -2926,7 +2963,7 @@ function tttBot() {
 function tttUI(win) {
   $('#ttt').innerHTML = TT.b.map((v, i) =>
     `<button class="big ttc${win && win.includes(i) ? ' win' : ''}" data-i="${i}">${v === 'x' ? '<span class="tx">✕</span>' : v === 'o' ? '<span class="to">◯</span>' : ''}</button>`).join('');
-  $('#tttScore').innerHTML = `Ти <span class="tx">${TT.me}</span> : <span class="to">${TT.bot}</span> Гралик`;
+  $('#tttScore').innerHTML = `Ти <span class="tx">${TT.me}</span> : <span class="to">${TT.bot}</span> Гра`;
 }
 function tttNew() {
   TT.b = Array(9).fill(''); TT.busy = false;
@@ -2944,7 +2981,7 @@ function tttCheck() {
       if (TT.wins >= 2 && TT.lvl < 2) { TT.lvl++; TT.wins = 0; LS.set('tttLvl', TT.lvl); }
     } else {
       TT.bot++; oops(); TT.wins = 0;
-      $('#tttAsk').innerHTML = 'Цього разу Гралик 🙂<small>граймо ще!</small>';
+      $('#tttAsk').innerHTML = 'Цього разу виграла гра 🙂<small>граймо ще!</small>';
       if (TT.lvl > 0) { TT.lvl--; LS.set('tttLvl', TT.lvl); }
     }
     tttUI(w);
@@ -2967,7 +3004,7 @@ $('#ttt').onclick = (e) => {
   TT.b[i] = 'x'; beep(660, 0.1, 'triangle', 0.18); tttUI();
   if (tttCheck()) return;
   TT.busy = true;
-  $('#tttAsk').innerHTML = 'Гралик думає… 🤔';
+  $('#tttAsk').innerHTML = 'Гра думає… 🤔';
   setTimeout(() => {
     if (SCR !== 'ttt') return;
     TT.b[tttBot()] = 'o'; beep(440, 0.1, 'triangle', 0.16); tttUI();
@@ -3396,10 +3433,11 @@ function parentGate() {
   setTimeout(() => $('#gate').focus(), 60);
 }
 /* ---------- оновлення програми ----------
-   Уся гра в одному index.html, тож перевірка проста: тягнемо ту саму
-   сторінку повз кеш і дивимось, який у ній APP_VERSION. Якщо новіший -
-   чистимо кеші й service worker і перезавантажуємось, інакше оновлення
-   могло б зависнути в офлайн-кеші надовго. */
+   1.2.4: оновлення - лише з дозволу. Гра (у меню, не посеред гри) тихо читає
+   version.json поруч із собою: {"version": "1.2.5", "changes": ["…", "…"]}.
+   Якщо там новіша версія - питає «Оновити / Пізніше» і показує, що змінилось.
+   Офлайн-кеш (sw.js) сам нову версію не підхоплює: він віддає збережену гру,
+   доки користувач не погодиться. «Пізніше» - спитаємо при наступному запуску. */
 async function wipeCaches() {
   try { const ks = await caches.keys(); await Promise.all(ks.map((k) => caches.delete(k))); } catch (e) { /* */ }
   try {
@@ -3407,37 +3445,81 @@ async function wipeCaches() {
     await Promise.all(rs.map((r) => r.unregister()));
   } catch (e) { /* */ }
 }
-let updBusy = false;
-async function checkUpdate() {
+const vNum = (v) => String(v || '').split('.').map((x) => +x || 0);
+const vNewer = (a, b) => { const x = vNum(a), y = vNum(b); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return false; };
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let UPD = null, updBusy = false, updAsked = '';
+/** Що лежить на сервері: {version, changes[]} або null. */
+async function fetchRemoteVersion() {
+  const base = location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '');
+  try {
+    const r = await fetch(base + 'version.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const j = await r.json();
+      if (j && j.version) return { version: String(j.version), changes: Array.isArray(j.changes) ? j.changes.slice(0, 8) : [] };
+    }
+  } catch (e) { /* немає version.json - дивимось у саму сторінку */ }
+  const r = await fetch(location.href.split('#')[0].split('?')[0] + '?t=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const m = (await r.text()).match(/APP_VERSION\s*=\s*'([^']+)'/);
+  if (!m) throw new Error('версію не знайдено');
+  return { version: m[1], changes: [] };
+}
+function updBadge() {
+  const btn = $('#updNow');
+  if (btn) btn.innerHTML = UPD ? `🆕 Є версія ${esc(UPD.version)}` : '🔄 Оновити';
+  if (btn) btn.classList.toggle('hot', !!UPD);
+}
+function askUpdate() {
+  if (!UPD) return;
+  updAsked = UPD.version;
+  const list = UPD.changes.length
+    ? '<span class="chg">' + UPD.changes.map((c) => `• ${esc(c)}`).join('<br>') + '</span>'
+    : ' опису змін немає.';
+  dialog({
+    em: '🆕', h: `Нова версія ${esc(UPD.version)}`,
+    p: `<b>Що змінилось:</b>${list}<span class="chg-note">Зараз у вас ${APP_VERSION}. Зірочки, наліпки й записи збережуться.</span>`,
+    btn: '🔄 Оновити', btn2: 'Пізніше',
+    onBtn: applyUpdate,
+    onBtn2: () => toast('Добре, спитаю наступного разу'),
+  });
+}
+async function applyUpdate() {
+  const msg = $('#updMsg');
+  if (msg) msg.textContent = `оновлюю до ${UPD ? UPD.version : 'нової версії'}…`;
+  LS.set('updFrom', APP_VERSION);
+  await wipeCaches();
+  setTimeout(() => location.replace(location.href.split('#')[0].split('?')[0] + '?v=' + Date.now()), 300);
+}
+/** silent - фонова перевірка: нічого не пише, якщо оновлень немає. */
+async function checkUpdate(silent) {
   const btn = $('#updNow'), msg = $('#updMsg');
-  const set = (t) => { if (msg) msg.textContent = t; };
+  const set = (t) => { if (msg && !silent) msg.textContent = t; };
   if (updBusy) return;
   if (!navigator.onLine) { set('немає інтернету — спробуйте пізніше'); return; }
-  updBusy = true; if (btn) btn.disabled = true;
+  updBusy = true; if (btn && !silent) btn.disabled = true;
   set('перевіряю…');
   try {
-    const url = location.href.split('#')[0].split('?')[0] + '?t=' + Date.now();
-    const r = await fetch(url, { cache: 'reload' });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const m = (await r.text()).match(/APP_VERSION\s*=\s*'([^']+)'/);
-    if (!m) throw new Error('версію не знайдено');
-    if (m[1] === APP_VERSION) {
-      set(`у вас найновіша версія (${APP_VERSION})`);
-      setTimeout(() => set(''), 4000);
-      updBusy = false; if (btn) btn.disabled = false;
-      return;
-    }
-    set(`є версія ${m[1]} — оновлюю…`);
-    await wipeCaches();
-    setTimeout(() => location.reload(), 400);
+    const rv = await fetchRemoteVersion();
+    UPD = vNewer(rv.version, APP_VERSION) ? rv : null;
+    updBadge();
+    if (!UPD) { set(`у вас найновіша версія (${APP_VERSION})`); setTimeout(() => set(''), 4000); }
+    else { set(''); if (!silent || SCR === 'menu') askUpdate(); }
   } catch (e) {
     set('не вдалося перевірити');
-    updBusy = false; if (btn) btn.disabled = false;
   }
+  updBusy = false; if (btn) btn.disabled = false;
 }
+/* Після оновлення - коротко сказати, що вийшло. */
+(() => {
+  const from = LS.get('updFrom', '');
+  if (!from) return;
+  LS.set('updFrom', '');
+  if (from !== APP_VERSION) setTimeout(() => toast(`✅ Оновлено: ${from} → ${APP_VERSION}`), 900);
+})();
 
 function parentPanel() {
-  const noVoice = VOICE_READY && !UA_VOICE;
+  const noVoice = VOICE_READY && !UA_VOICE && !VPACK;
   const hint = noVoice
     ? `<br><br>Щоб гра заговорила українською, треба додати український голос:<br>
        <b>Android:</b> Налаштування → Мови та введення → Синтез мови → Google → Мова → Українська (завантажити).<br>
@@ -3466,10 +3548,13 @@ function parentPanel() {
 }
 
 /* ---------- старт ---------- */
+$('#byeAgain').onclick = () => { blip(); go('menu'); };
 $('#starN').textContent = S.stars;
 $('#verLine').textContent = 'v' + APP_VERSION;
-$('#updNow').onclick = (e) => { e.stopPropagation(); checkUpdate(); };
-$('#back').style.visibility = 'hidden';
+$('#updNow').onclick = (e) => { e.stopPropagation(); if (UPD) askUpdate(); else checkUpdate(); };
+// тиха перевірка: за 3 с після запуску і далі раз на пів години
+setTimeout(() => checkUpdate(true), 3000);
+setInterval(() => checkUpdate(true), 30 * 60 * 1000);
 document.addEventListener('click', () => { ac(); loadVoices(); }, { once: true });
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
