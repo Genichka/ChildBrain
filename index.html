@@ -48,11 +48,13 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .scr.on{display:flex}
 
 /* ---------- меню ---------- */
-.pager{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 10px}
+.pager{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
 .pager button{
   border-radius:16px;background:var(--card);border:3px solid var(--line);
-  padding:8px 6px;font-size:15px;color:var(--dim)
+  padding:4px 1px 5px;font-size:12px;line-height:1.1;color:var(--dim);white-space:nowrap;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;gap:1px
 }
+.pager button i{font-style:normal;font-size:18px;line-height:1.1}
 .pager button.on{background:#ffd93d26;border-color:#ffd93d99;color:var(--yel)}
 .pages{
   flex:1;min-height:0;display:flex;gap:12px;position:relative;
@@ -60,10 +62,12 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain
 }
 .pages::-webkit-scrollbar{display:none}
-.page{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
+.page{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column}
+.gdesc{margin:0 0 8px;text-align:center;font-size:14px;color:var(--dim);font-weight:700}
+.gdesc b{color:var(--txt)}
 .menu{
-  height:100%;display:grid;grid-template-columns:1fr 1fr;
-  grid-template-rows:repeat(5,minmax(0,1fr));gap:10px;padding:2px 2px 9px
+  flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(3,minmax(0,1fr));gap:10px;padding:2px 2px 9px
 }
 .tile{
   border-radius:var(--r);padding:6px 8px;display:flex;flex-direction:column;min-height:0;
@@ -89,6 +93,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t15{background:linear-gradient(170deg,#c3d3ff,#6b85ff)}
 .t16{background:linear-gradient(170deg,#ffc2ec,#e45bc0)}
 .t17{background:linear-gradient(170deg,#d7c4ff,#8e64ff)}
+.t18{background:linear-gradient(170deg,#ffc9a8,#ff7a59)}
+.t19{background:linear-gradient(170deg,#e6f5a0,#9ccf2f)}
+.t20{background:linear-gradient(170deg,#a8f0c6,#2fbf71)}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -262,6 +269,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   border:3px solid var(--line);border-radius:18px;touch-action:none;
 }
 .arc-hint{color:var(--dim);font-size:12.5px;text-align:center;margin-top:6px;font-weight:700}
+.gcv{flex:1;min-height:0;width:100%;display:block;border:3px solid var(--line);border-radius:18px;touch-action:none}
+#brkC{background:#120a2e}
+#dnoC{background:#ffd08a}
+#jmpC{background:#9fdcff}
+.jpad{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:10px;margin-top:10px}
+.jpad button{
+  height:70px;border-radius:20px;font-size:32px;color:#fff;background:var(--card);border:3px solid var(--line);
+  touch-action:none;-webkit-user-select:none;user-select:none
+}
+.jpad button.on{background:#ffd93d44;border-color:#ffd93d;transform:translateY(2px)}
+#jJ{background:#4ecb7133;border-color:#4ecb71aa}
 
 /* ---------- хрестики-нулики ---------- */
 .ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(86vw,340px);margin:0 auto}
@@ -352,30 +370,48 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 <!-- меню -->
 <section class="scr on" id="s-menu">
   <div class="pager" id="pager">
-    <button data-pg="0" class="on">🎲 Ігри</button>
-    <button data-pg="1">🧠 Памʼять</button>
+    <button data-pg="0" class="on"><i>👂</i>Слух</button>
+    <button data-pg="1"><i>👀</i>Увага</button>
+    <button data-pg="2"><i>🧠</i>Памʼять</button>
+    <button data-pg="3"><i>🔢</i>Лічба</button>
+    <button data-pg="4"><i>🧩</i>Логіка</button>
+    <button data-pg="5"><i>⚡</i>Швидкість</button>
+    <button data-pg="6"><i>🎉</i>Розваги</button>
   </div>
   <div class="pages" id="pages">
-    <div class="page"><div class="menu">
-      <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
-      <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
+    <div class="page" data-grp="Слух"><p class="gdesc">👂 <b>Слух</b> — розрізняти звуки й запамʼятовувати почуте</p><div class="menu">
       <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
-      <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
+      <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
+      <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
+    </div></div>
+    <div class="page" data-grp="Увага"><p class="gdesc">👀 <b>Увага</b> — помічати колір, форму, зайве й відсутнє</p><div class="menu">
       <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
       <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
-      <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
-      <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
-      <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
-    </div></div>
-    <div class="page"><div class="menu">
-      <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
-      <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
       <button class="tile t12" data-go="gone"><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
+    </div></div>
+    <div class="page" data-grp="Памʼять"><p class="gdesc">🧠 <b>Памʼять</b> — запамʼятати, де що лежить і як стояло</p><div class="menu">
+      <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
       <button class="tile t13" data-go="hide"><span class="em">🏠</span><span class="nm">Хто<br>сховався?</span></button>
       <button class="tile t14" data-go="grid"><span class="em">🟩</span><span class="nm">Повтори<br>візерунок</span></button>
       <button class="tile t15" data-go="basket"><span class="em">🧺</span><span class="nm">Що<br>в кошику?</span></button>
-      <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
       <button class="tile t17" data-go="order"><span class="em">🚂</span><span class="nm">Як<br>стояли?</span></button>
+    </div></div>
+    <div class="page" data-grp="Лічба"><p class="gdesc">🔢 <b>Лічба</b> — рахувати й упізнавати перші букви</p><div class="menu">
+      <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
+      <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
+    </div></div>
+    <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
+      <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
+      <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
+    </div></div>
+    <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
+      <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
+      <button class="tile t18" data-go="brick"><span class="em">🧱</span><span class="nm">Відбивайка</span></button>
+      <button class="tile t19" data-go="dino"><span class="em">🦖</span><span class="nm">Динозаврик</span></button>
+    </div></div>
+    <div class="page" data-grp="Розваги"><p class="gdesc">🎉 <b>Розваги</b> — просто побігати й пострибати</p><div class="menu">
+      <button class="tile t20" data-go="jump"><span class="em">🐸</span><span class="nm">Стрибунець</span></button>
+      <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
     </div></div>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
@@ -470,6 +506,30 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   <div class="arc-hint">веди пальцем — кораблик стріляє сам</div>
 </section>
 
+<!-- відбивайка -->
+<section class="scr" id="s-brick">
+  <div class="arc-top"><span id="brkLvl">Рівень 1</span><span id="brkHp"></span></div>
+  <canvas id="brkC" class="gcv"></canvas>
+  <div class="arc-hint">веди пальцем — дошка відбиває кульку</div>
+</section>
+
+<!-- динозаврик -->
+<section class="scr" id="s-dino">
+  <div class="arc-top"><span id="dnoScore">🏃 0</span><span id="dnoBest"></span></div>
+  <canvas id="dnoC" class="gcv"></canvas>
+  <div class="arc-hint">торкнись будь-де — динозаврик стрибне</div>
+</section>
+
+<!-- стрибунець -->
+<section class="scr" id="s-jump">
+  <div class="arc-top"><span id="jmpLvl">Рівень 1</span><span id="jmpInfo"></span></div>
+  <canvas id="jmpC" class="gcv"></canvas>
+  <div class="jpad">
+    <button id="jL" aria-label="ліворуч">◀</button><button id="jR" aria-label="праворуч">▶</button>
+    <button id="jJ" aria-label="стрибок">⤴</button>
+  </div>
+</section>
+
 <!-- хрестики-нулики -->
 <section class="scr" id="s-ttt">
   <div class="ask" id="tttAsk">Ти ставиш <b class="tx">✕</b></div>
@@ -561,7 +621,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 const rnd = (n) => Math.floor(Math.random() * n);
@@ -687,12 +747,25 @@ if ('speechSynthesis' in window) {
 }
 function voiceInfo() {
   if (!('speechSynthesis' in window)) return 'пристрій не вміє озвучувати';
+  if (VOICE_KEYS.size) return `записаний голос (${VOICE_KEYS.size} фраз)` + (UA_VOICE ? ` + ${UA_VOICE.name}` : '');
   if (UA_VOICE) return `українська (${UA_VOICE.name})`;
   if (!VOICE_READY) return 'перевіряється…';
   return 'українського голосу немає — озвучка мовчить';
 }
-function say(text, rate = 0.88) {
-  if (!S.voice || !('speechSynthesis' in window)) return;
+/* 1.2.0: ЗАПИСАНИЙ ГОЛОС. Усі завдання наперед озвучені українським
+   синтезатором (голос «Тетяна», ukrainian-tts) і лежать у voice/*.mp3.
+   Ім'я файлу - короткий відбиток тексту фрази. Голос телефона - лише
+   запасний варіант для фраз, яких немає в записах. */
+const VOICE_KEYS = new Set('v000eb3f1 v0020b6d4 v0118f1be v01237f1a v01da4f3a v029cb487 v02d74627 v044d55cb v045e586f v0469adf6 v05763e24 v06c54cba v073994e1 v07b02c17 v0b0e04f7 v0b18fcc0 v0b25a21d v0d18ffe6 v0d1ca269 v0d3f5c43 v0d67bc66 v0dbc4d2b v0e4182b4 v0fb542f9 v1232d7ba v12ca8d87 v135edbe8 v13f28094 v13fc98f7 v145e920e v15df46fb v163617c0 v169cf91d v16a06079 v172d376e v175d1c78 v1761fed4 v18a7ed45 v19261860 v1a817ede v1b4e6f81 v1c4d342a v1d4e319a v1df0d45b v1dfd4db2 v1e71fa35 v1ef2a92a v1f68bf4c v20191dcf v2216710e v225e84a2 v226cf46f v227e2c0f v22c8e473 v22d6f3a9 v23192288 v23823c1d v2419241b v25009dad v25af53b1 v28503973 v28a0f095 v29081b88 v29d2a29a v2a081d1b v2a2939e8 v2ceb2393 v2cf31187 v2d22cc3f v2d904411 v2e082367 v2f6b4342 v30cbb868 v3426e0e4 v348297f1 v356bb878 v35a04999 v35cb24d8 v3814eb90 v38275495 v3bbc3099 v3bd3ee2e v3bfed9e4 v3cba9fbd v3d1d1eb4 v3d74d4d5 v3eaa2466 v3f472d60 v3f52a34e v3fb7dea4 v4209b0b7 v434472de v437cf8ca v44043c7a v44894c4a v46f25eb4 v4801781c v48bcf5d0 v48cc788c v4949ab34 v4966ff51 v49a78f47 v4ace9cdf v4b78bc1c v4ba3bbde v4e934b93 v4ecee5b8 v4ee38bdc v4ef2374e v4fba652f v5089cb04 v5383b38f v545ebc94 v54a42236 v54bc8c72 v552a4986 v556d0141 v58980c6a v5927e932 v59d31bcf v5ac07578 v5c286709 v5f57bd47 v5fe4f13f v6076568a v609dc765 v65333b11 v654431d1 v65acf92f v66eee64f v68ab00c5 v6944809b v69e76585 v6b980e35 v6bca5530 v6d0ccfcf v6d1180f0 v6d40302a v6d76f91f v6f363df4 v6fba2283 v701e519c v707b2c42 v710f14b2 v7182548f v72d2f046 v73316683 v738b08e8 v74012383 v74804d7c v75c1d745 v780954ed v78928be1 v795274a8 v7ab7159d v7ca63afe v7e04ae68 v7e492507 v7e4fe79b v7ef40a57 v80315224 v80a3f14e v829599ee v853519a9 v866ba7dd v86ce1c3c v889827e8 v88d42960 v89628711 v896c6931 v8b3b7545 v8b4d304a v8e68fc37 v945adcdf v947ec1a3 v97ee622e v98b1fb14 v992380df v9a3ba894 v9cd6d1e9 v9cdaf6f8 v9d23b032 v9d6df793 v9e2256de v9f766c7b va166e452 va24c45d9 va3424b0d va7c9a24d va8a9e780 va8abed17 va9e8173f vaaef0b66 vab65699d vab7bdd45 vac87f60e vacc065b3 vaeac3669 vaf4b0ed9 vb1dbf46b vb2fb7f84 vb3b6a5f5 vb3c60ff8 vb46d8cea vb4c78db1 vb4ece4fd vb5f0ba36 vb64851ab vb68c51b8 vb74b4cdf vb7d286df vb8b7b07a vb92b533a vbb8d8b3f vbbc88d68 vbc60cd35 vbd0d54e4 vbd7f3fb8 vbe0d5677 vbe22f365 vbe2df22e vbf996876 vc00d599d vc02fb468 vc17b886b vc2a588a0 vc39f1b27 vc4a00304 vc659d7bc vc6719744 vc6f2d73e vc71b5578 vc76af380 vc99eafde vc9a35eab vca636ae4 vccf46917 vcdde0ca1 vceb3385b vcf624dab vcf98f31f vcfdeef14 vcfff7969 vd193ff09 vd2e08650 vd2f5ada3 vd32a5c46 vd51f5581 vd5f75f5b vd6699e33 vd6fcb1d6 vd8884ef9 vd8f6d9b1 vdb0ba350 vde054d1d vde5e0626 vdf851d22 ve00bfc28 ve1373d37 ve29850ae ve2f05afa ve38320ca ve4bce258 ve56cb2c8 ve7231dae ve78ee812 ve88ee9a5 ve98eeb38 vea0a81f4 vea16571b vea8eeccb veb08bb33 veb8eee5e vec8eeff1 vecb8a58f veccd8636 ved8ef184 vedea5bba vee18cf19 vee8ef317 vf0062b7a vf08ef63d vf10584c9 vf118d3d2 vf1701e33 vf17a0782 vf1a3bad4 vf2d7f2e0 vf307c686 vf318d6f8 vf344df9e vf499dc61 vf5052feb vf507c9ac vf53bb405 vf607cb3f vf8b2f805 vf918e06a vfa8b2adb vfbbb4f5d vfca48a14 vfd04f3bb vfd16acdb vfd80d62b vfe38fb3e vfe94e6f9 vfee5b4db'.split(' ').filter((k) => /^v[0-9a-f]{8}$/.test(k)));
+function vKey(t) {
+  t = String(t).trim().replace(/[ʼ’‘]/g, "'");
+  let h = 0x811c9dc5;
+  for (const ch of t) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; }
+  return 'v' + h.toString(16).padStart(8, '0');
+}
+let VOICE_AUDIO = null, LAST_SAY = '';
+function ttsSay(text, rate = 0.88) {
+  if (!('speechSynthesis' in window)) return;
   if (!VOICE_READY) loadVoices();            // може, список уже під'їхав
   if (VOICE_READY && !UA_VOICE) return;      // чужим голосом не читаємо
   try {
@@ -703,6 +776,44 @@ function say(text, rate = 0.88) {
     u.rate = rate; u.pitch = 1.12;
     speechSynthesis.speak(u);
   } catch (e) { /* не вийшло — гра працює далі */ }
+}
+function say(text, rate = 0.88) {
+  if (!text) return;
+  LAST_SAY = text;
+  if (!S.voice) return;
+  const k = vKey(text);
+  if (!VOICE_KEYS.has(k)) { ttsSay(text, rate); return; }
+  try {
+    if (VOICE_AUDIO) VOICE_AUDIO.pause();
+    try { speechSynthesis.cancel(); } catch (e) { /* */ }
+    const a = VOICE_AUDIO = new Audio(`voice/${k}.mp3`);
+    let ok = false;
+    const fb = () => { if (ok) return; ok = true; if (VOICE_AUDIO === a) ttsSay(text, rate); };
+    a.onplaying = () => { ok = true; };
+    a.onerror = fb;
+    const p = a.play();
+    if (p && p.catch) p.catch(fb);
+  } catch (e) { ttsSay(text, rate); }
+}
+/* Дитина ще не читає - торкнулась завдання, і гра каже його ще раз. */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.ask') && LAST_SAY && SCR !== 'menu' && SCR !== 'rec' && SCR !== 'album') say(LAST_SAY);
+});
+/** Усі фрази, які гра може сказати зі змінними частинами - для запису голосу.
+    Сталі фрази (say('…')) збирає скрипт прямо з тексту гри. */
+function voiceLines() {
+  const L = [];
+  CNT_SET.forEach(([, w]) => L.push(`Скільки тут ${w}?`));
+  for (let n = 1; n <= 12; n++) L.push(`Так! ${n}`);
+  LET_SET.forEach(([, w]) => L.push(w.toLowerCase()));
+  ABC.forEach((c) => L.push(`Так! Буква ${LET_NAME[c]}`));
+  ANI_SET.forEach((a) => L.push(`Так! Це ${a[1]}`, a[1]));
+  SHP_COL.forEach((c) => SHP_FORM.forEach((f) => L.push('Знайди ' + shpAcc(c, f))));
+  ODD_SET.forEach((o) => L.push(`Так! Решта — ${o.nm}`));
+  MEM_SET.forEach(([, w]) => L.push(w));
+  MP.forEach(([, w]) => L.push(w, 'Так! ' + w));
+  HD_SET.forEach(([, n]) => L.push(`Де ${n}?`, `Тут ${n}`, `Так! Тут ${n}`));
+  return [...new Set(L)];
 }
 
 /* ---------- дрібниці ---------- */
@@ -756,6 +867,7 @@ const TITLES = { menu: 'Гралик', melody: 'Повтори мелодію', 
                  letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка',
                  shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
                  arcade: 'Зореліт', ttt: 'Хрестики-нулики', mines: 'Сапер',
+                 brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
                  rec: 'Свої голоси' };
@@ -911,6 +1023,9 @@ const LET_SET = [['🐈', 'КІТ'], ['🐕', 'ПЕС'], ['🏠', 'ДІМ'], ['�
                  ['🥕', 'МОРКВА'], ['🧀', 'СИР'], ['🚂', 'ПОТЯГ'], ['🦋', 'МЕТЕЛИК'], ['🌧️', 'ДОЩ']];
 // без Ь та Ї/Й — з таких букв слова не починаються
 const ABC = 'АБВГДЕЄЖЗИІКЛМНОПРСТУФХЦЧШЩЮЯ'.split('');
+const LET_NAME = { А: 'а', Б: 'бе', В: 'ве', Г: 'ге', Ґ: 'ґе', Д: 'де', Е: 'е', Є: 'є', Ж: 'же', З: 'зе', И: 'и',
+  І: 'і', Ї: 'ї', Й: 'йот', К: 'ка', Л: 'ел', М: 'ем', Н: 'ен', О: 'о', П: 'пе', Р: 'ер', С: 'ес', Т: 'те', У: 'у',
+  Ф: 'еф', Х: 'ха', Ц: 'це', Ч: 'че', Ш: 'ша', Щ: 'ща', Ю: 'ю', Я: 'я' };
 const LET = { ch: '', busy: false };
 function letNew() {
   const [em, word] = pick(LET_SET);
@@ -928,7 +1043,7 @@ $('#letters').onclick = (e) => {
   const b = e.target.closest('.let'); if (!b || LET.busy) return;
   if (b.dataset.c === LET.ch) {
     LET.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
-    say(`Так! Буква ${LET.ch}`);
+    say(`Так! Буква ${LET_NAME[LET.ch]}`);
     setTimeout(letNew, 1500);
   } else { b.classList.add('no'); oops(); vibe(120); say('Спробуй ще'); setTimeout(() => b.classList.remove('no'), 500); }
 };
@@ -1333,7 +1448,7 @@ function aniNew() {
   ANI.cur = pick(opts); ANI.busy = false;
   $('#aniAsk').innerHTML = 'Хто так говорить?<small>натисни 🔊, щоб почути ще раз</small>';
   $('#animals').innerHTML = opts.map((a) => `<button class="big anim" data-n="${a[1]}">${a[0]}</button>`).join('');
-  if (ANI.first) { ANI.first = false; say('Хто так говорить?'); setTimeout(aniSay, 1200); }
+  if (ANI.first) { ANI.first = false; say('Хто так говорить?'); setTimeout(aniSay, 1700); }
   else setTimeout(aniSay, 450);
 }
 START.animal = () => { ANI.first = true; probePack(); aniNew(); };
@@ -1507,6 +1622,7 @@ const SHP_FORM = [
 ];
 const SHP = { key: '', busy: false, lvl: 1, ok: 0 };
 const shpName = (c, f) => `${c[f.g]} ${f.nm}`;
+const shpAcc = (c, f) => (f.g === 'f' ? `${c.f.replace(/а$/, 'у').replace(/я$/, 'ю')} ${f.nm.replace(/а$/, 'у')}` : shpName(c, f));
 
 function shpNew() {
   const col = pick(SHP_COL), form = pick(SHP_FORM);
@@ -1530,7 +1646,7 @@ function shpNew() {
   $('#shapes').innerHTML = shuffle(opts).map((o) =>
     `<button class="big shp" data-k="${o.c.id}|${o.f.id}" aria-label="${shpName(o.c, o.f)}">` +
     `<i class="f-${o.f.id}" style="background:${o.c.css}"></i></button>`).join('');
-  const what = shpName(col, form);
+  const what = shpAcc(col, form);
   $('#shpAsk').innerHTML = `Знайди ${what}<small>натисни потрібну фігуру</small>`;
   say('Знайди ' + what);
 }
@@ -1684,16 +1800,25 @@ const AR_BONUS = {
 };
 const AR_ORDER = ['gun', 'rate', 'ship', 'gun', 'rate', 'gun', 'ship', 'rate', 'gun'];
 
-/** Будуємо трасу «змійкою» згори вниз: рядки з півколами на краях. */
-function arLayout() {
-  const c = $('#arcC'), r = c.getBoundingClientRect();
-  const dpr = AR.dpr = Math.min(2.5, window.devicePixelRatio || 1);
-  const w = AR.w = c.width = Math.max(240, Math.round(r.width * dpr));
-  const h = AR.h = c.height = Math.max(320, Math.round(r.height * dpr));
-  const R = AR.R = Math.min(w / 12.5, h / 19);
-  AR.sp = R * 2.05;
-  const gap = R * 2.5, tr = gap / 2, m = R * 1.15, y0 = R * 1.5, step = R / 5;
-  const rows = Math.max(2, Math.min(5, Math.floor((h * 0.6 - y0) / gap) + 1));
+/* 1.2.0: ланцюжки виїжджають з різних боків.
+   1-й рівень - зліва, 2-й - справа, 3-й - згори; з 4-го два ланцюжки одразу:
+   лівою половиною екрана і правою, кожен зі своєю чорною дірою внизу своєї
+   половини. Дитині треба встигати перегонити кораблик з боку на бік. */
+const AR_TWO = 0.8;   // підібрано ботами: «дитина» доходить до 4-5 рівня (у 1.1.0 - до 6-го)
+function arPlan(L, rows) {
+  if (L <= 1) return [{ rows, dir: 1, top: false }];
+  if (L === 2) return [{ rows, dir: -1, top: false }];
+  if (L === 3) return [{ rows, dir: 1, top: true }];
+  const topL = L % 3 === 0, topR = L % 3 === 1 && L > 4;
+  return [{ rows, dir: 1, top: topL, half: 0 }, { rows, dir: -1, top: topR, half: 1 }];
+}
+/** Одна траса «змійкою»: рядки з півколами на краях. dir 1 - перший рядок іде зліва направо. */
+function arSerp(rows, dir, top, half) {
+  const { w, R, sp } = AR;
+  const gap = R * 2.5, tr = gap / 2, step = R / 5;
+  // половина екрана: зовнішній край - звичайний відступ, внутрішній - щоб дуги двох трас не стикались
+  const x0 = half === 1 ? w / 2 : 0, x1 = half === 0 ? w / 2 : w;
+  const xL = x0 + (half === 1 ? R * 1.05 : R * 1.15) + tr, xR = x1 - (half === 0 ? R * 1.05 : R * 1.15) - tr;
   const pts = [];
   const line = (x1, y1, x2, y2) => {
     const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / step));
@@ -1703,55 +1828,77 @@ function arLayout() {
     const n = Math.max(2, Math.ceil(Math.abs(a1 - a0) * tr / step));
     for (let i = 1; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; pts.push([cx + Math.cos(a) * tr, cy + Math.sin(a) * tr]); }
   };
-  const xL = m + tr, xR = w - m - tr;
-  let y = y0;
-  line(-AR.sp * 1.5, y, rows === 1 ? xR + tr : xR, y);
+  const end = (d, last) => (d > 0 ? (last ? xR + tr * 0.4 : xR) : (last ? xL - tr * 0.4 : xL));
+  let y = R * 1.5, d = dir, entry;
+  if (top) {
+    const sx = d > 0 ? xL : xR;
+    line(sx, -sp * 1.5, sx, y); line(sx, y, end(d, rows === 1), y);
+    entry = [sx, R * 0.9, Math.PI / 2];
+  } else {
+    line(d > 0 ? -sp * 1.5 : w + sp * 1.5, y, end(d, rows === 1), y);
+    entry = [d > 0 ? R * 0.9 : w - R * 0.9, y, d > 0 ? 0 : Math.PI];
+  }
   for (let j = 1; j < rows; j++) {
-    const fromRight = (j - 1) % 2 === 0;
-    if (fromRight) arc(xR, y + tr, -Math.PI / 2, Math.PI / 2);
+    if (d > 0) arc(xR, y + tr, -Math.PI / 2, Math.PI / 2);
     else arc(xL, y + tr, -Math.PI / 2, -Math.PI * 1.5);
-    y += gap;
-    const right = j % 2 === 0, last = j === rows - 1;
-    const to = right ? (last ? xR + tr * 0.4 : xR) : (last ? xL - tr * 0.4 : xL);
-    line(fromRight ? xR : xL, y, to, y);
+    y += gap; d = -d;
+    line(d > 0 ? xL : xR, y, end(d, j === rows - 1), y);
   }
   const cum = [0];
   for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
-  AR.pts = pts; AR.cum = cum; AR.len = cum[cum.length - 1];
+  return { pts, cum, len: cum[cum.length - 1], entry };
+}
+function arLayout() {
+  const c = $('#arcC'), r = c.getBoundingClientRect();
+  const dpr = AR.dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  const w = AR.w = c.width = Math.max(240, Math.round(r.width * dpr));
+  const h = AR.h = c.height = Math.max(320, Math.round(r.height * dpr));
+  const R = AR.R = Math.min(w / 12.5, h / 19);
+  AR.sp = R * 2.05;
+  AR.rows = Math.max(2, Math.min(5, Math.floor((h * 0.6 - R * 1.5) / (R * 2.5)) + 1));
+  const old = AR.trs || [];
+  AR.trs = arPlan(AR.lvl, AR.rows).map((p, k) => Object.assign(arSerp(p.rows, p.dir, p.top, p.half), { cells: old[k] ? old[k].cells : [] }));
   AR.shipY = h - R * 1.9;
   if (!AR.x) AR.x = AR.tx = w / 2;
   AR.x = Math.min(AR.x, w); AR.tx = Math.min(AR.tx, w);
 }
-function arAt(s) {
-  const c = AR.cum, p = AR.pts;
+function arAt(t, s) {
+  const c = t.cum, p = t.pts;
   if (s <= 0) return p[0];
-  if (s >= AR.len) return p[p.length - 1];
+  if (s >= t.len) return p[p.length - 1];
   let lo = 0, hi = c.length - 1;
   while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (c[mid] <= s) lo = mid; else hi = mid; }
   const k = (s - c[lo]) / ((c[hi] - c[lo]) || 1);
   return [p[lo][0] + (p[hi][0] - p[lo][0]) * k, p[lo][1] + (p[hi][1] - p[lo][1]) * k];
 }
+const arLeft = () => AR.trs.reduce((a, t) => a + t.cells.length, 0);
 function arNewLevel() {
-  /* 1.0.9: складніше. Ланцюжок швидший і довшає з рівнем, бонусів із рівнями
-     меншає, а за рівень ланцюжок розганяється до +30 %. Без цього навіть
-     неточна гра проходила 12 рівнів, а ланцюжок до 6-го ледь рушав з місця. */
-  const L = AR.lvl, n = Math.min(64, 18 + Math.round(L * 3.5));
+  /* 1.0.9: ланцюжок швидший і довшає з рівнем, бонусів із рівнями меншає,
+     за рівень ланцюжок розганяється до +30 %. 1.2.0: з 4-го рівня кульки
+     діляться на два ланцюжки з різних боків. */
+  arLayout();
+  const L = AR.lvl, T = AR.trs.length, n = Math.min(64, 18 + Math.round(L * 3.5));
   const every = L <= 3 ? 6 : L <= 6 ? 7 : 8;
-  AR.cells = [];
   let b = 0;
-  for (let i = 0; i < n; i++) {
-    const bonus = i > 2 && i % every === 3;
-    const hp = bonus ? 3 + 2 * L : Math.min(99, 1 + L + Math.floor(i * (L + 1) / 5) + rnd(L > 3 ? 3 : 2));
-    AR.cells.push({ s: -i * AR.sp, hp, kind: bonus ? AR_ORDER[b++ % AR_ORDER.length] : null, hit: 0 });
-  }
-  AR.total = n; AR.shots = []; AR.fx = []; AR.txt = [];
+  AR.trs.forEach((t, k) => {
+    const cnt = T > 1 ? (k ? n - Math.round(n * 0.45) : Math.round(n * 0.45)) : n;
+    t.cells = [];
+    for (let i = 0; i < cnt; i++) {
+      // у кожному ланцюжку числа ростуть від голови до хвоста; бонуси по черзі в обох
+      const bonus = i > 2 && (i + k * 3) % every === 3;
+      const hp = bonus ? 3 + 2 * L : Math.min(99, 1 + L + Math.floor(i * (L + 1) / 5) + rnd(L > 3 ? 3 : 2));
+      t.cells.push({ s: -i * AR.sp, hp, kind: bonus ? AR_ORDER[b++ % AR_ORDER.length] : null, hit: 0 });
+    }
+  });
+  AR.total = arLeft(); AR.shots = []; AR.fx = []; AR.txt = [];
   AR.ships = 1; AR.guns = 1; AR.rate = 4; AR.cool = 0;
-  AR.spd0 = AR.R * Math.min(1.5, 0.66 + 0.06 * L);
+  // два ланцюжки одночасно - кожен повзе трохи повільніше, інакше з 4-го рівня стіна
+  AR.spd0 = AR.R * Math.min(1.5, 0.66 + 0.06 * L) * (T > 1 ? AR_TWO : 1);
   AR.spd = AR.spd0; AR.age = 0;
   $('#arcLvl').textContent = `Рівень ${L}`;
   arLeftUI();
 }
-const arLeftUI = () => { $('#arcLeft').textContent = `🎯 ${AR.total - AR.cells.length} з ${AR.total}`; };
+const arLeftUI = () => { $('#arcLeft').textContent = `🎯 ${AR.total - arLeft()} з ${AR.total}`; };
 function arShipXs() {
   const xs = [AR.x], d = AR.R * 2.3;
   if (AR.ships > 1) xs.push(AR.x - d);
@@ -1764,9 +1911,8 @@ function arBurst(x, y, col, n = 14) {
     AR.fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.5 + Math.random() * 0.4, col });
   }
 }
-function arPop(i, p) {
-  const c = AR.cells[i];
-  AR.cells.splice(i, 1);
+function arPop(t, c, p) {
+  t.cells.splice(t.cells.indexOf(c), 1);
   const col = c.kind ? AR_BONUS[c.kind].col : '#9dff6a';
   arBurst(p[0], p[1], col, c.kind ? 26 : 14);
   vibe(15);
@@ -1785,16 +1931,18 @@ function arStep(dt) {
   AR.t += dt;
   AR.age = (AR.age || 0) + dt;
   AR.spd = (AR.spd0 || AR.spd) * Math.min(1.3, 1 + AR.age * 0.006);   // +0,6 % за секунду, до +30 %
-  const cs = AR.cells, v = AR.spd;
-  // ланцюжок: перша кулька повзе рівно, решта підтягується, якщо між ними дірка
-  if (cs.length) {
+  const v = AR.spd;
+  // ланцюжки: перша кулька повзе рівно, решта підтягується, якщо між ними дірка
+  AR.trs.forEach((t) => {
+    const cs = t.cells;
+    if (!cs.length) return;
     cs[0].s += v * dt;
     for (let i = 1; i < cs.length; i++) {
       const tgt = cs[i - 1].s - AR.sp, c = cs[i];
       c.s += (tgt - c.s > 2 ? v * 5 : v) * dt;
       if (c.s > tgt) c.s = tgt;
     }
-  }
+  });
   // кораблик
   AR.x += (AR.tx - AR.x) * Math.min(1, dt * 14);
   // постріли
@@ -1806,27 +1954,27 @@ function arStep(dt) {
       for (let g = 0; g < AR.guns; g++) AR.shots.push({ x: sx + (g - (AR.guns - 1) / 2) * AR.R * 0.38, y });
     });
   }
-  const pos = cs.map((c) => (c.s > -AR.R ? arAt(c.s) : null));
+  const live = [];
+  AR.trs.forEach((t) => t.cells.forEach((c) => { if (c.s > -AR.R) live.push({ t, c, p: arAt(t, c.s) }); }));
   const vy = AR.h * 1.5 * dt, hr = AR.R * 0.95;
   for (let j = AR.shots.length - 1; j >= 0; j--) {
     const b = AR.shots[j];
     b.y -= vy;
     if (b.y < -20) { AR.shots.splice(j, 1); continue; }
-    for (let i = 0; i < cs.length; i++) {
-      const p = pos[i];
-      if (!p || Math.abs(b.x - p[0]) > hr || Math.abs(b.y - p[1]) > hr) continue;
+    for (const o of live) {
+      if (o.c.hp <= 0 || Math.abs(b.x - o.p[0]) > hr || Math.abs(b.y - o.p[1]) > hr) continue;
       AR.shots.splice(j, 1);
-      cs[i].hp--; cs[i].hit = 0.08;
-      if (cs[i].hp <= 0) { arPop(i, p); pos.splice(i, 1); }
+      o.c.hp--; o.c.hit = 0.08;
+      if (o.c.hp <= 0) arPop(o.t, o.c, o.p);
       break;
     }
   }
-  cs.forEach((c) => { if (c.hit > 0) c.hit -= dt; });
+  AR.trs.forEach((t) => t.cells.forEach((c) => { if (c.hit > 0) c.hit -= dt; }));
   AR.fx = AR.fx.filter((f) => { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 0.94; f.vy *= 0.94; return (f.life -= dt) > 0; });
   AR.txt = AR.txt.filter((t) => { t.y -= AR.R * 0.8 * dt; return (t.life -= dt) > 0; });
   // кінець рівня
-  if (!cs.length) arEnd(true);
-  else if (cs[0].s >= AR.len) arEnd(false);
+  if (!arLeft()) arEnd(true);
+  else if (AR.trs.some((t) => t.cells.length && t.cells[0].s >= t.len)) arEnd(false);
 }
 function arHex(g, x, y, r) {
   g.beginPath();
@@ -1858,40 +2006,53 @@ function arDraw() {
     g.globalAlpha = 0.25 + s[2] * 0.35; g.fillRect(s[0] * w, y, s[2] * AR.dpr, s[2] * AR.dpr);
   });
   g.globalAlpha = 1;
-  // траса — ледь помітна стежка, щоб було видно, куди повзе ланцюжок
-  g.strokeStyle = '#ffffff12'; g.lineWidth = R * 1.9; g.lineCap = 'round'; g.lineJoin = 'round';
-  g.beginPath(); AR.pts.forEach((p, i) => g[i ? 'lineTo' : 'moveTo'](p[0], p[1])); g.stroke();
-  // чорна діра в кінці траси
-  const e = AR.pts[AR.pts.length - 1], pulse = 1 + Math.sin(AR.t * 4) * 0.07;
-  for (let k = 3; k >= 1; k--) {
-    g.strokeStyle = `hsla(${280 + k * 20},100%,65%,${0.25 + 0.2 * (3 - k)})`;
-    g.lineWidth = R * 0.18;
-    g.beginPath(); g.arc(e[0], e[1], R * (0.45 + k * 0.32) * pulse, AR.t * k, AR.t * k + 5); g.stroke();
-  }
-  g.fillStyle = '#000'; g.beginPath(); g.arc(e[0], e[1], R * 0.55, 0, 7); g.fill();
+  AR.trs.forEach((t, k) => {
+    // траса - ледь помітна стежка, щоб було видно, куди повзе ланцюжок
+    g.strokeStyle = k ? '#ffb3ff14' : '#ffffff12'; g.lineWidth = R * 1.9; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); t.pts.forEach((p, i) => g[i ? 'lineTo' : 'moveTo'](p[0], p[1])); g.stroke();
+    // чорна діра в кінці траси
+    const e = t.pts[t.pts.length - 1], pulse = 1 + Math.sin(AR.t * 4) * 0.07;
+    for (let q = 3; q >= 1; q--) {
+      g.strokeStyle = `hsla(${280 + q * 20},100%,65%,${0.25 + 0.2 * (3 - q)})`;
+      g.lineWidth = R * 0.18;
+      g.beginPath(); g.arc(e[0], e[1], R * (0.45 + q * 0.32) * pulse, AR.t * q, AR.t * q + 5); g.stroke();
+    }
+    g.fillStyle = '#000'; g.beginPath(); g.arc(e[0], e[1], R * 0.55, 0, 7); g.fill();
+    // стрілка «звідси з'являться» - перші три секунди рівня
+    if (AR.age < 3) {
+      const [x, y, a] = t.entry;
+      g.save(); g.translate(x, y); g.rotate(a);
+      g.globalAlpha = 0.55 + 0.45 * Math.sin(AR.t * 9);
+      g.fillStyle = '#ffd93d';
+      g.beginPath(); g.moveTo(R * 0.7, 0); g.lineTo(-R * 0.4, -R * 0.6); g.lineTo(-R * 0.4, R * 0.6); g.closePath(); g.fill();
+      g.restore(); g.globalAlpha = 1;
+    }
+  });
   // кульки
   g.textAlign = 'center'; g.textBaseline = 'middle';
-  for (let i = AR.cells.length - 1; i >= 0; i--) {
-    const c = AR.cells[i];
-    if (c.s < -AR.R) continue;
-    const [x, y] = arAt(c.s);
-    const col = c.kind ? AR_BONUS[c.kind].col : `hsl(${(150 - Math.min(c.hp, 60) * 5 + 360) % 360},90%,62%)`;
-    const r = R * (c.hit > 0 ? 0.88 : 0.95);
-    arHex(g, x, y, r);
-    g.fillStyle = c.kind ? '#1a0f33' : '#0b0820'; g.fill();
-    g.strokeStyle = col; g.globalAlpha = 0.3; g.lineWidth = R * 0.32; g.stroke();
-    g.globalAlpha = 1; g.lineWidth = R * 0.1; g.strokeStyle = c.hit > 0 ? '#fff' : col; g.stroke();
-    if (c.kind) {
-      g.font = `${Math.round(R * 0.8)}px ${EMOJI_FONT}`;
-      g.fillText(AR_BONUS[c.kind].em, x, y - R * 0.12);
-      g.font = `900 ${Math.round(R * 0.42)}px Nunito,system-ui,sans-serif`; g.fillStyle = '#fff';
-      g.fillText(c.hp, x, y + R * 0.55);
-    } else {
-      g.fillStyle = '#fff';
-      g.font = `900 ${Math.round(R * (c.hp > 9 ? 0.72 : 0.85))}px Nunito,system-ui,sans-serif`;
-      g.fillText(c.hp, x, y + R * 0.05);
+  AR.trs.forEach((t) => {
+    for (let i = t.cells.length - 1; i >= 0; i--) {
+      const c = t.cells[i];
+      if (c.s < -AR.R) continue;
+      const [x, y] = arAt(t, c.s);
+      const col = c.kind ? AR_BONUS[c.kind].col : `hsl(${(150 - Math.min(c.hp, 60) * 5 + 360) % 360},90%,62%)`;
+      const r = R * (c.hit > 0 ? 0.88 : 0.95);
+      arHex(g, x, y, r);
+      g.fillStyle = c.kind ? '#1a0f33' : '#0b0820'; g.fill();
+      g.strokeStyle = col; g.globalAlpha = 0.3; g.lineWidth = R * 0.32; g.stroke();
+      g.globalAlpha = 1; g.lineWidth = R * 0.1; g.strokeStyle = c.hit > 0 ? '#fff' : col; g.stroke();
+      if (c.kind) {
+        g.font = `${Math.round(R * 0.8)}px ${EMOJI_FONT}`;
+        g.fillText(AR_BONUS[c.kind].em, x, y - R * 0.12);
+        g.font = `900 ${Math.round(R * 0.42)}px Nunito,system-ui,sans-serif`; g.fillStyle = '#fff';
+        g.fillText(c.hp, x, y + R * 0.55);
+      } else {
+        g.fillStyle = '#fff';
+        g.font = `900 ${Math.round(R * (c.hp > 9 ? 0.72 : 0.85))}px Nunito,system-ui,sans-serif`;
+        g.fillText(c.hp, x, y + R * 0.05);
+      }
     }
-  }
+  });
   // постріли
   g.strokeStyle = '#b8ff5c'; g.lineWidth = Math.max(2, R * 0.1); g.lineCap = 'round';
   g.beginPath(); AR.shots.forEach((b) => { g.moveTo(b.x, b.y); g.lineTo(b.x, b.y + R * 0.5); }); g.stroke();
@@ -1962,6 +2123,737 @@ STOP.arcade = () => { AR.run = false; cancelAnimationFrame(AR.raf); };
     if (d) { e.preventDefault(); AR.tx = Math.max(AR.R, Math.min(AR.w - AR.R, AR.tx + d * AR.R * 1.5)); }
   });
   window.addEventListener('resize', () => { if (SCR === 'arcade' && AR.run) arLayout(); });
+})();
+
+/* ================================================================
+   22. ВІДБИВАЙКА  (знизу дошка, її водять пальцем; кулька відскакує
+   від дошки й збиває стіну цеглинок-монстриків, що повільно
+   насувається згори. Стіна дійшла до червоної лінії - програш.
+   Кулька впала - мінус сердечко, їх три.)
+   ================================================================ */
+const BO = {
+  run: false, raf: 0, last: 0, w: 0, h: 0, dpr: 1, U: 20, r: 6, py: 0, px: 0, ptx: 0, pw: 0, pwBase: 0,
+  balls: [], blocks: [], fx: [], txt: [], hp: 3, lvl: LS.get('brkLvl', 1), t: 0, wide: 0, desc: 0, V: 0,
+  serveT: 0, total: 0,
+};
+const BO_BON = {
+  multi: { em: '⚾', col: '#ff9f43', nm: '+2 кульки' },
+  wide: { em: '↔️', col: '#2fd8d0', nm: 'ширша дошка' },
+};
+const BO_COL = ['#ff7ac6', '#b06bff', '#4aa8ff', '#ff5a5f'];
+function boLayout() {
+  const c = $('#brkC'), r = c.getBoundingClientRect();
+  const dpr = BO.dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  const ow = BO.w;
+  BO.w = c.width = Math.max(240, Math.round(r.width * dpr));
+  BO.h = c.height = Math.max(320, Math.round(r.height * dpr));
+  BO.U = Math.min(BO.w / 9, BO.h / 14);
+  BO.r = BO.U * 0.3;
+  BO.py = BO.h - BO.U * 1.3;
+  BO.pwBase = BO.U * 2.7;
+  if (ow && ow !== BO.w) {   // поворот екрана - переносимо все пропорційно
+    const k = BO.w / ow;
+    BO.blocks.forEach((b) => { b.x *= k; b.w *= k; });
+    BO.balls.forEach((b) => { b.x *= k; });
+    BO.px *= k; BO.ptx *= k;
+  }
+}
+function boNewLevel() {
+  const L = BO.lvl, cols = 7, rows = Math.min(8, 3 + Math.floor(L / 2));
+  const pad = BO.U * 0.25, gap = BO.U * 0.12;
+  const bw = (BO.w - pad * 2 - gap * (cols - 1)) / cols, bh = BO.U * 0.62;
+  BO.blocks = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const kind = Math.random() < (L <= 3 ? 0.1 : 0.07) ? pick(['multi', 'wide']) : null;
+      let hp = 1;
+      if (!kind) {
+        if (L >= 2 && Math.random() < Math.min(0.6, 0.12 * L)) hp++;
+        if (L >= 5 && Math.random() < Math.min(0.5, 0.06 * L)) hp++;
+        if (L >= 8 && Math.random() < 0.3) hp++;
+      }
+      BO.blocks.push({ x: pad + c * (bw + gap), y: BO.U * 0.5 + r * (bh + gap), w: bw, h: bh, hp, max: hp, kind, hit: 0 });
+    }
+  }
+  BO.total = BO.blocks.length;
+  // стіна насувається: на 1-му рівні до лінії йти ~хвилину, далі швидше
+  BO.desc = BO.h * Math.min(0.028, 0.0075 + 0.0018 * (L - 1));
+  BO.V = BO.h * Math.min(1.2, 0.7 + 0.045 * L);
+  BO.hp = 3; BO.wide = 0; BO.fx = []; BO.txt = []; BO.t = 0;
+  BO.px = BO.ptx = BO.w / 2;
+  boServe();
+  $('#brkLvl').textContent = `Рівень ${L}`;
+  boUI();
+}
+const boUI = () => {
+  $('#brkHp').textContent = '❤️'.repeat(Math.max(0, BO.hp)) + '🤍'.repeat(Math.max(0, 3 - BO.hp)) +
+    `  🧱 ${BO.total - BO.blocks.length}/${BO.total}`;
+};
+function boServe() {
+  BO.balls = [{ x: BO.px, y: BO.py - BO.r * 1.3, vx: 0, vy: 0, stuck: true }];
+  BO.serveT = 1.2;   // сама полетить за 1,2 с, або раніше - якщо торкнутись
+}
+function boLaunch() {
+  BO.balls.forEach((b) => {
+    if (!b.stuck) return;
+    b.stuck = false;
+    const a = (Math.random() - 0.5) * 0.7;
+    b.vx = BO.V * Math.sin(a); b.vy = -BO.V * Math.cos(a);
+  });
+  BO.serveT = 0;
+}
+function boBurst(x, y, col, n = 12) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 7, v = BO.U * (1.5 + Math.random() * 3.5);
+    BO.fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.45 + Math.random() * 0.35, col });
+  }
+}
+function boPop(i) {
+  const q = BO.blocks[i];
+  BO.blocks.splice(i, 1);
+  const cx = q.x + q.w / 2, cy = q.y + q.h / 2;
+  boBurst(cx, cy, q.kind ? BO_BON[q.kind].col : BO_COL[q.max - 1], q.kind ? 22 : 12);
+  beep(500 + rnd(400), 0.08, 'triangle', 0.13); vibe(12);
+  if (q.kind === 'multi') {
+    const src = BO.balls.find((b) => !b.stuck && !b.dead) || BO.balls[0];
+    if (src) {
+      [-0.45, 0.45].forEach((d) => {
+        const a = Math.atan2(src.vx, -src.vy) + d;
+        BO.balls.push({ x: src.x, y: src.y, vx: BO.V * Math.sin(a), vy: -BO.V * Math.abs(Math.cos(a)), stuck: false });
+      });
+    }
+  }
+  if (q.kind === 'wide') BO.wide = 12;
+  if (q.kind) {
+    BO.txt.push({ x: cx, y: cy, t: BO_BON[q.kind].em + ' ' + BO_BON[q.kind].nm, life: 1.4 });
+    [784, 988, 1175].forEach((f, j) => setTimeout(() => beep(f, 0.1, 'square', 0.09), j * 60));
+  }
+  boUI();
+}
+function boMove(b, dt) {
+  const r = BO.r;
+  b.x += b.vx * dt; b.y += b.vy * dt;
+  if (b.x < r) { b.x = r; b.vx = Math.abs(b.vx); }
+  if (b.x > BO.w - r) { b.x = BO.w - r; b.vx = -Math.abs(b.vx); }
+  if (b.y < r) { b.y = r; b.vy = Math.abs(b.vy); }
+  // дошка: кут відскоку залежить від того, куди влучила кулька - так нею можна цілитись
+  const ph = BO.U * 0.36;
+  if (b.vy > 0 && b.y + r >= BO.py && b.y - r <= BO.py + ph && Math.abs(b.x - BO.px) <= BO.pw / 2 + r * 0.7) {
+    const k = Math.max(-1, Math.min(1, (b.x - BO.px) / (BO.pw / 2)));
+    const a = k * 1.05;
+    b.vx = BO.V * Math.sin(a); b.vy = -BO.V * Math.cos(a); b.y = BO.py - r;
+    beep(330, 0.06, 'sine', 0.12);
+  }
+  if (b.y > BO.h + r * 2) { b.dead = true; return; }
+  for (let i = 0; i < BO.blocks.length; i++) {
+    const q = BO.blocks[i];
+    const cx = Math.max(q.x, Math.min(b.x, q.x + q.w)), cy = Math.max(q.y, Math.min(b.y, q.y + q.h));
+    const dx = b.x - cx, dy = b.y - cy;
+    if (dx * dx + dy * dy > r * r) continue;
+    const ox = Math.min(b.x + r - q.x, q.x + q.w - (b.x - r));
+    const oy = Math.min(b.y + r - q.y, q.y + q.h - (b.y - r));
+    if (ox < oy) b.vx = b.x < q.x + q.w / 2 ? -Math.abs(b.vx) : Math.abs(b.vx);
+    else b.vy = b.y < q.y + q.h / 2 ? -Math.abs(b.vy) : Math.abs(b.vy);
+    q.hp--; q.hit = 0.12;
+    if (q.hp <= 0) boPop(i); else beep(420, 0.05, 'square', 0.07);
+    break;
+  }
+}
+function boStep(dt) {
+  BO.t += dt;
+  if (BO.wide > 0) BO.wide -= dt;
+  BO.pw = BO.pwBase * (BO.wide > 0 ? 1.55 : 1);
+  BO.px += (BO.ptx - BO.px) * Math.min(1, dt * 18);
+  BO.px = Math.max(BO.pw / 2, Math.min(BO.w - BO.pw / 2, BO.px));
+  const dy = BO.desc * dt;
+  BO.blocks.forEach((q) => { q.y += dy; if (q.hit > 0) q.hit -= dt; });
+  if (BO.serveT > 0 && (BO.serveT -= dt) <= 0) boLaunch();
+  for (const b of BO.balls) {
+    if (b.stuck) { b.x = BO.px; b.y = BO.py - BO.r * 1.3; continue; }
+    const n = Math.max(1, Math.ceil(Math.hypot(b.vx, b.vy) * dt / (BO.r * 0.7)));
+    for (let k = 0; k < n && !b.dead; k++) boMove(b, dt / n);
+  }
+  BO.balls = BO.balls.filter((b) => !b.dead);
+  BO.fx = BO.fx.filter((f) => { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 0.93; f.vy *= 0.93; return (f.life -= dt) > 0; });
+  BO.txt = BO.txt.filter((t) => { t.y -= BO.U * 0.8 * dt; return (t.life -= dt) > 0; });
+  if (!BO.blocks.length) return boEnd(true);
+  if (BO.blocks.some((q) => q.y + q.h >= BO.py - BO.U * 0.25)) return boEnd(false, 'wall');
+  if (!BO.balls.length) {
+    BO.hp--; boUI(); oops(); vibe(120);
+    if (BO.hp <= 0) return boEnd(false, 'balls');
+    boServe();
+  }
+}
+function boRound(g, x, y, w, h, r) {
+  g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+}
+function boDraw() {
+  const g = $('#brkC').getContext('2d'), { w, h, U } = BO;
+  g.clearRect(0, 0, w, h);
+  // червона лінія небезпеки
+  const ly = BO.py - U * 0.25;
+  g.strokeStyle = '#ff5a5f88'; g.lineWidth = Math.max(2, U * 0.06); g.setLineDash([U * 0.3, U * 0.2]);
+  g.beginPath(); g.moveTo(0, ly); g.lineTo(w, ly); g.stroke(); g.setLineDash([]);
+  // цеглинки-монстрики
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  BO.blocks.forEach((q) => {
+    const col = q.kind ? BO_BON[q.kind].col : BO_COL[Math.min(3, q.hp - 1)];
+    boRound(g, q.x, q.y, q.w, q.h, U * 0.16);
+    g.fillStyle = q.hit > 0 ? '#ffffff' : col; g.fill();
+    if (q.kind) {
+      g.font = `${Math.round(q.h * 0.72)}px ${EMOJI_FONT}`; g.fillText(BO_BON[q.kind].em, q.x + q.w / 2, q.y + q.h / 2 + 1);
+    } else {
+      // очі - ними монстрик дивиться на кульку
+      const b = BO.balls[0], ex = b ? Math.max(-1, Math.min(1, (b.x - q.x - q.w / 2) / (U * 3))) : 0;
+      [-0.2, 0.2].forEach((o) => {
+        const x = q.x + q.w * (0.5 + o), y = q.y + q.h * 0.45;
+        g.fillStyle = '#fff'; g.beginPath(); g.arc(x, y, q.h * 0.17, 0, 7); g.fill();
+        g.fillStyle = '#1b1038'; g.beginPath(); g.arc(x + ex * q.h * 0.07, y + q.h * 0.04, q.h * 0.08, 0, 7); g.fill();
+      });
+      if (q.hp > 1) {
+        g.fillStyle = '#1b1038'; g.font = `900 ${Math.round(q.h * 0.34)}px Nunito,system-ui,sans-serif`;
+        g.fillText(q.hp, q.x + q.w / 2, q.y + q.h * 0.82);
+      }
+    }
+  });
+  // дошка
+  const ph = U * 0.36;
+  boRound(g, BO.px - BO.pw / 2, BO.py, BO.pw, ph, ph / 2);
+  const gr = g.createLinearGradient(0, BO.py, 0, BO.py + ph);
+  gr.addColorStop(0, BO.wide > 0 ? '#9ff7ef' : '#ffe680'); gr.addColorStop(1, BO.wide > 0 ? '#1fa7c9' : '#f5a623');
+  g.fillStyle = gr; g.fill();
+  // кульки
+  BO.balls.forEach((b) => {
+    g.fillStyle = '#ffffff'; g.beginPath(); g.arc(b.x, b.y, BO.r, 0, 7); g.fill();
+    g.fillStyle = '#ffffff33'; g.beginPath(); g.arc(b.x - b.vx * 0.02, b.y - b.vy * 0.02, BO.r * 0.9, 0, 7); g.fill();
+  });
+  BO.fx.forEach((f) => { g.globalAlpha = Math.min(1, f.life * 2); g.fillStyle = f.col; g.fillRect(f.x - U * 0.07, f.y - U * 0.07, U * 0.14, U * 0.14); });
+  g.globalAlpha = 1;
+  BO.txt.forEach((t) => {
+    g.globalAlpha = Math.min(1, t.life);
+    g.font = `900 ${Math.round(U * 0.45)}px Nunito,system-ui,${EMOJI_FONT}`;
+    g.lineWidth = U * 0.12; g.strokeStyle = '#000a'; g.strokeText(t.t, t.x, t.y); g.fillStyle = '#fff'; g.fillText(t.t, t.x, t.y);
+  });
+  g.globalAlpha = 1;
+  if (BO.balls.some((b) => b.stuck)) {
+    g.fillStyle = '#ffffffcc'; g.font = `800 ${Math.round(U * 0.4)}px Nunito,system-ui,sans-serif`;
+    g.fillText('торкнись — і кулька полетить', w / 2, BO.py - U * 1.1);
+  }
+}
+function boLoop(ts) {
+  if (!BO.run) return;
+  const dt = BO.last ? Math.min(0.05, (ts - BO.last) / 1000) : 0;
+  BO.last = ts;
+  boStep(dt);
+  if (!BO.run) return;
+  boDraw();
+  BO.raf = requestAnimationFrame(boLoop);
+}
+function boEnd(win, why) {
+  BO.run = false; cancelAnimationFrame(BO.raf); boDraw();
+  if (win) {
+    cheer(); confetti(); vibe(60); addStar(BO.lvl >= 3 ? 2 : 1);
+    const done = BO.lvl;
+    BO.lvl++; LS.set('brkLvl', BO.lvl);
+    say('Молодець! Усі монстрики збиті');
+    setTimeout(() => dialog({
+      em: '🏆', h: `Рівень ${done} пройдено!`, p: 'Стіна розбита',
+      btn: `🧱 Рівень ${BO.lvl}`, btn2: '🏠 Меню', onBtn: boStart, onBtn2: () => go('menu'),
+    }), 500);
+  } else {
+    oops(); vibe(150);
+    const p = why === 'wall' ? 'Стіна дійшла до червоної лінії' : 'Кульки впали';
+    say('Нічого страшного, спробуй ще');
+    setTimeout(() => dialog({
+      em: why === 'wall' ? '🧱' : '⚾', h: 'Ой!', p: p + ' — спробуй ще!',
+      btn: '🔁 Ще раз', btn2: '🏠 Меню', btn3: BO.lvl > 1 ? '⬇️ Легше' : '',
+      onBtn: boStart, onBtn2: () => go('menu'),
+      onBtn3: () => { BO.lvl = Math.max(1, BO.lvl - 1); LS.set('brkLvl', BO.lvl); boStart(); },
+    }), 400);
+  }
+}
+function boStart() {
+  cancelAnimationFrame(BO.raf);
+  BO.w = 0; boLayout(); boNewLevel();
+  BO.run = true; BO.last = 0;
+  BO.raf = requestAnimationFrame(boLoop);
+}
+START.brick = () => { boStart(); say('Відбивай кульку дошкою'); };
+STOP.brick = () => { BO.run = false; cancelAnimationFrame(BO.raf); };
+(() => {
+  const c = $('#brkC');
+  const aim = (e) => {
+    const r = c.getBoundingClientRect();
+    BO.ptx = Math.max(0, Math.min(BO.w, (e.clientX - r.left) * BO.dpr));
+  };
+  c.addEventListener('pointerdown', (e) => { ac(); aim(e); boLaunch(); try { c.setPointerCapture(e.pointerId); } catch (x) { /* */ } });
+  c.addEventListener('pointermove', (e) => { if (e.buttons || e.pointerType === 'touch') aim(e); });
+  document.addEventListener('keydown', (e) => {
+    if (SCR !== 'brick') return;
+    const d = { ArrowLeft: -1, ArrowRight: 1 }[e.key];
+    if (d) { e.preventDefault(); BO.ptx = Math.max(0, Math.min(BO.w, BO.ptx + d * BO.U * 1.2)); }
+    if (e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); boLaunch(); }
+  });
+  window.addEventListener('resize', () => { if (SCR === 'brick' && BO.run) boLayout(); });
+})();
+
+/* ================================================================
+   23. ДИНОЗАВРИК  (біжить сам, торкання - стрибок через кактуси;
+   далі бігти швидше, з'являються пташки. Рахунок і рекорд.)
+   ================================================================ */
+const DN = {
+  run: false, raf: 0, last: 0, w: 0, h: 0, dpr: 1, S: 30, gy: 0, y: 0, vy: 0, obs: [], clouds: [], t: 0,
+  dist: 0, spd: 0, gapLeft: 0, best: LS.get('dinoBest', 0), score: 0, wait: true, starNext: 300, legs: 0,
+};
+function dnLayout() {
+  const c = $('#dnoC'), r = c.getBoundingClientRect();
+  const dpr = DN.dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  DN.w = c.width = Math.max(240, Math.round(r.width * dpr));
+  DN.h = c.height = Math.max(200, Math.round(r.height * dpr));
+  DN.S = Math.min(DN.h * 0.16, DN.w * 0.13);
+  DN.gy = DN.h * 0.74;
+  DN.x = DN.S * 1.2;
+}
+/* Стрибок: висота ~2,1 динозаврика, у повітрі ~0,62 с. */
+const dnG = () => DN.S * 44, dnV0 = () => DN.S * 13.6;
+function dnReset() {
+  DN.y = 0; DN.vy = 0; DN.obs = []; DN.dist = 0; DN.score = 0; DN.t = 0; DN.wait = true;
+  DN.spd = DN.S * 6; DN.gapLeft = DN.w * 0.9; DN.starNext = 300;
+  if (!DN.clouds.length) for (let i = 0; i < 4; i++) DN.clouds.push([Math.random(), 0.1 + Math.random() * 0.35, 0.6 + Math.random() * 0.6]);
+  dnUI();
+}
+const dnUI = () => {
+  $('#dnoScore').textContent = `🏃 ${DN.score}`;
+  $('#dnoBest').textContent = DN.best ? `🏆 ${DN.best}` : '';
+};
+function dnJump() {
+  if (!DN.run) return;
+  if (DN.wait) { DN.wait = false; }
+  if (DN.y <= 0.001) { DN.vy = dnV0(); beep(660, 0.07, 'square', 0.1); }
+}
+function dnSpawn() {
+  const S = DN.S, sc = DN.score;
+  if (sc > 250 && Math.random() < 0.22) {
+    // пташка: низько (треба стрибнути) або високо (пробігти під нею)
+    const low = Math.random() < 0.6;
+    DN.obs.push({ kind: 'bird', x: DN.w + S, w: S * 0.8, h: S * 0.55, y: low ? S * 0.35 : S * 1.35 });
+  } else {
+    const n = 1 + (sc > 120 && Math.random() < 0.35 ? 1 : 0) + (sc > 400 && Math.random() < 0.25 ? 1 : 0);
+    const big = Math.random() < 0.4;
+    for (let i = 0; i < n; i++) DN.obs.push({ kind: 'cac', x: DN.w + S + i * S * 0.62, w: S * 0.6, h: S * (big ? 1 : 0.78), y: 0 });
+  }
+  // наступна перешкода - не ближче, ніж можна приземлитись і знову стрибнути
+  const air = 2 * dnV0() / dnG();
+  DN.gapLeft = DN.spd * (air + 0.35 + Math.random() * 0.9) + S * 1.5;
+}
+function dnStep(dt) {
+  DN.t += dt;
+  DN.clouds.forEach((c) => { c[0] -= dt * 0.02 * c[2]; if (c[0] < -0.2) c[0] = 1.1; });
+  if (DN.wait) return;
+  DN.spd = DN.S * Math.min(13, 6 + DN.dist / (DN.S * 90));
+  const dx = DN.spd * dt;
+  DN.dist += dx;
+  DN.score = Math.floor(DN.dist / (DN.S * 0.5));
+  DN.legs += dt * DN.spd / DN.S;
+  // стрибок
+  if (DN.y > 0 || DN.vy > 0) {
+    DN.y += DN.vy * dt; DN.vy -= dnG() * dt;
+    if (DN.y <= 0) { DN.y = 0; DN.vy = 0; }
+  }
+  DN.obs.forEach((o) => { o.x -= dx * (o.kind === 'bird' ? 1.12 : 1); });
+  DN.obs = DN.obs.filter((o) => o.x > -o.w * 2);
+  DN.gapLeft -= dx;
+  if (DN.gapLeft <= 0) dnSpawn();
+  // зіткнення - з поблажкою: рамки менші за малюнок
+  const S = DN.S, hx0 = DN.x - S * 0.3, hx1 = DN.x + S * 0.3, hy0 = DN.y + S * 0.08, hy1 = DN.y + S * 0.8;
+  for (const o of DN.obs) {
+    const m = o.w * 0.18;
+    if (o.x + m < hx1 && o.x + o.w - m > hx0 && o.y + o.h * 0.85 > hy0 && o.y + o.h * 0.1 < hy1) return dnEnd();
+  }
+  if (DN.score >= DN.starNext) { addStar(); toast('⭐ Ще зірочка!'); DN.starNext += 300; }
+  if ((DN.t * 10 | 0) % 2 === 0) dnUI();
+}
+function dnEmoji(g, em, x, y, size, flip) {
+  g.save(); g.translate(x, y); if (flip) g.scale(-1, 1);
+  g.font = `${Math.round(size)}px ${EMOJI_FONT}`; g.textAlign = 'center'; g.textBaseline = 'bottom';
+  g.fillText(em, 0, 0); g.restore();
+}
+function dnDraw() {
+  const g = $('#dnoC').getContext('2d'), { w, h, S, gy } = DN;
+  const sky = g.createLinearGradient(0, 0, 0, gy);
+  sky.addColorStop(0, '#ffe8b8'); sky.addColorStop(1, '#ffd08a');
+  g.fillStyle = sky; g.fillRect(0, 0, w, gy);
+  g.fillStyle = '#e7b16a'; g.fillRect(0, gy, w, h - gy);
+  // сонце й хмарки
+  g.fillStyle = '#fff3c4'; g.beginPath(); g.arc(w * 0.82, h * 0.16, S * 0.6, 0, 7); g.fill();
+  g.fillStyle = '#ffffffcc';
+  DN.clouds.forEach(([cx, cy, k]) => {
+    const x = cx * w, y = cy * h, r = S * 0.35 * k;
+    g.beginPath(); g.arc(x, y, r, 0, 7); g.arc(x + r, y - r * 0.4, r * 1.1, 0, 7); g.arc(x + r * 2.1, y, r * 0.9, 0, 7); g.fill();
+  });
+  // земля з камінчиками, що їдуть назад
+  g.strokeStyle = '#8a5a2b'; g.lineWidth = Math.max(2, S * 0.05);
+  g.beginPath(); g.moveTo(0, gy); g.lineTo(w, gy); g.stroke();
+  g.fillStyle = '#b77d3e';
+  for (let i = 0; i < 14; i++) {
+    const x = ((i * 137.5 - DN.dist * 0.999) % w + w) % w;
+    g.fillRect(x, gy + S * (0.15 + (i % 3) * 0.18), S * 0.12, S * 0.05);
+  }
+  // перешкоди
+  DN.obs.forEach((o) => {
+    if (o.kind === 'cac') dnEmoji(g, '🌵', o.x + o.w / 2, gy - o.y + o.h * 0.08, o.h * 1.15);
+    else dnEmoji(g, '🐦', o.x + o.w / 2, gy - o.y + o.h * 0.15, S * 0.75, false);
+  });
+  // динозаврик (емодзі дивиться ліворуч - віддзеркалюємо, щоб біг праворуч)
+  const bob = DN.y > 0 || DN.wait ? 0 : Math.abs(Math.sin(DN.legs * 3)) * S * 0.06;
+  dnEmoji(g, '🦖', DN.x, gy - DN.y - bob + S * 0.06, S * 1.05, true);
+  if (DN.wait) {
+    g.fillStyle = '#5b3a12'; g.font = `900 ${Math.round(S * 0.42)}px Nunito,system-ui,sans-serif`;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('Торкнись — і біжимо!', w / 2, h * 0.33);
+  }
+}
+function dnLoop(ts) {
+  if (!DN.run) return;
+  const dt = DN.last ? Math.min(0.05, (ts - DN.last) / 1000) : 0;
+  DN.last = ts;
+  dnStep(dt);
+  if (!DN.run) return;
+  dnDraw();
+  DN.raf = requestAnimationFrame(dnLoop);
+}
+function dnEnd() {
+  DN.run = false; cancelAnimationFrame(DN.raf); dnDraw();
+  oops(); vibe(150);
+  const rec = DN.score > DN.best;
+  if (rec) { DN.best = DN.score; LS.set('dinoBest', DN.best); }
+  dnUI();
+  say(rec ? 'Новий рекорд!' : 'Ой! Спробуй ще');
+  setTimeout(() => dialog({
+    em: rec ? '🏆' : '🌵', h: rec ? 'Новий рекорд!' : 'Ой, кактус!',
+    p: `Пробіг ${DN.score}` + (rec ? '' : ` · рекорд ${DN.best}`),
+    btn: '🔁 Ще раз', btn2: '🏠 Меню', onBtn: dnStart, onBtn2: () => go('menu'),
+  }), 450);
+}
+function dnStart() {
+  cancelAnimationFrame(DN.raf);
+  dnLayout(); dnReset();
+  DN.run = true; DN.last = 0;
+  DN.raf = requestAnimationFrame(dnLoop);
+}
+START.dino = () => { dnStart(); say('Торкайся, щоб стрибати через кактуси'); };
+STOP.dino = () => { DN.run = false; cancelAnimationFrame(DN.raf); };
+(() => {
+  $('#s-dino').addEventListener('pointerdown', (e) => { if (e.target.closest('button')) return; ac(); dnJump(); });
+  document.addEventListener('keydown', (e) => {
+    if (SCR !== 'dino') return;
+    if (e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); dnJump(); }
+  });
+  window.addEventListener('resize', () => { if (SCR === 'dino' && DN.run) dnLayout(); });
+})();
+
+/* ================================================================
+   24. СТРИБУНЕЦЬ  (платформер: жабка біжить праворуч до хатинки,
+   перестрибує ями, стрибає на равликів і жучків, збирає полуниці.
+   Кнопки ◀ ▶ і ⤴ внизу. Три сердечка; яма чи жучок - мінус одне,
+   і жабка повертається трохи назад.)
+   Світ - у клітинках: 10 рядів, земля - рядки 8 і 9.
+   ================================================================ */
+const JP_ROWS = 10, JP_GND = 8;
+const JP = {
+  run: false, raf: 0, last: 0, w: 0, h: 0, dpr: 1, T: 30, oy: 0, lvl: LS.get('jmpLvl', 1),
+  map: [], W: 0, en: [], items: [], goal: 0, cam: 0, t: 0, fx: [],
+  hero: null, keys: { l: 0, r: 0 }, jumpBuf: 0, hp: 3, got: 0, total: 0, safe: 2,
+};
+/* Фізика в клітинках: стрибок ~3,4 клітинки вгору й ~4 вперед - ями до 3 перестрибуються з запасом. */
+const JP_G = 38, JP_JUMP = 16, JP_RUN = 5;
+const JP_EN = [
+  { em: '🐌', sp: 1.0 },
+  { em: '🐞', sp: 1.7 },
+  { em: '🦔', sp: 2.3 },
+];
+function jpSolid(x, y) {
+  x = Math.floor(x); y = Math.floor(y);
+  if (x < 0 || x >= JP.W) return true;          // по краях світу - стіни
+  if (y < 0 || y >= JP_ROWS) return false;
+  return !!JP.map[x][y];
+}
+function jpGen(L) {
+  const W = 46 + 10 * Math.min(L, 10);
+  const map = Array.from({ length: W }, () => new Array(JP_ROWS).fill(0));
+  for (let x = 0; x < W; x++) { map[x][JP_GND] = 1; map[x][JP_GND + 1] = 1; }
+  const en = [], items = [];
+  const kinds = JP_EN.slice(0, L >= 5 ? 3 : L >= 3 ? 2 : 1);
+  let x = 8;
+  while (x < W - 12) {
+    const seg = 5 + rnd(5), a = x;
+    // дощечка або полуниці на землі
+    let p0 = -9, p1 = -9;
+    // дощечка кінчається щонайменше за 2 клітинки до ями: під низькою дощечкою стрибнути не можна,
+    // і жабка мусить мати де розбігтись перед ямою
+    const plen = Math.min(3 + rnd(2), seg - 3);
+    if (plen >= 2 && Math.random() < 0.55) {
+      const row = L >= 3 && Math.random() < 0.4 ? 5 : 6, len = plen, px = a + 1;
+      p0 = px; p1 = px + len;
+      for (let i = 0; i < len; i++) {
+        map[px + i][row] = 1;
+        items.push({ x: px + i + 0.5, y: row - 0.6, got: false });
+      }
+    } else {
+      for (let i = 1; i < seg - 1; i += 2) items.push({ x: a + i + 0.5, y: JP_GND - 0.6, got: false });
+    }
+    // ворог - не під дощечкою: там над жабкою мало місця, щоб його перестрибнути
+    if (Math.random() < Math.min(0.85, 0.35 + 0.1 * L)) {
+      const free = [];
+      for (let i = a + 1; i < a + seg - 1; i++) if (i < p0 - 1 || i > p1) free.push(i);
+      if (free.length) {
+        const k = pick(kinds);
+        en.push({ x: pick(free), y: JP_GND - 0.75, w: 0.85, h: 0.75, vx: (Math.random() < 0.5 ? -1 : 1) * k.sp, em: k.em, dead: 0, lo: a, hi: a + seg, p0, p1 });
+      }
+    }
+    x += seg;
+    // яма
+    if (x < W - 12) {
+      const gw = Math.min(3, 1 + rnd(L >= 4 ? 3 : 2));
+      for (let i = 0; i < gw; i++) { map[x + i][JP_GND] = 0; map[x + i][JP_GND + 1] = 0; }
+      items.push({ x: x + gw / 2, y: JP_GND - 2.6, got: false });   // полуниця над ямою - у стрибку
+      x += gw;
+    }
+  }
+  JP.map = map; JP.W = W; JP.en = en; JP.items = items; JP.goal = W - 4;
+  JP.total = items.length; JP.got = 0;
+}
+function jpLayout() {
+  const c = $('#jmpC'), r = c.getBoundingClientRect();
+  const dpr = JP.dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  JP.w = c.width = Math.max(240, Math.round(r.width * dpr));
+  JP.h = c.height = Math.max(240, Math.round(r.height * dpr));
+  JP.T = Math.min(JP.h / JP_ROWS, JP.w / 9);    // щонайменше 9 клітинок у ширину
+  JP.oy = JP.h - JP_ROWS * JP.T;               // земля - внизу полотна
+}
+function jpSpawn(x) {
+  JP.hero = { x, y: JP_GND - 0.86, w: 0.7, h: 0.85, vx: 0, vy: 0, ground: true, face: 1, coyote: 0, inv: 0, kb: 0 };
+}
+function jpNewLevel() {
+  jpGen(JP.lvl);
+  JP.hp = 3; JP.safe = 2; JP.t = 0; JP.fx = []; JP.jumpBuf = 0;
+  jpSpawn(2);
+  $('#jmpLvl').textContent = `Рівень ${JP.lvl}`;
+  jpUI();
+}
+const jpUI = () => {
+  $('#jmpInfo').textContent = '❤️'.repeat(Math.max(0, JP.hp)) + '🤍'.repeat(Math.max(0, 3 - JP.hp)) + `  🍓 ${JP.got}/${JP.total}`;
+};
+function jpHurt(fell) {
+  const H = JP.hero;
+  JP.hp--; jpUI(); oops(); vibe(140);
+  if (JP.hp <= 0) return jpEnd(false);
+  if (fell) jpSpawn(JP.safe);
+  else { H.vy = -9; H.kb = 0.35; }
+  JP.hero.inv = 1.6;
+}
+function jpMoveX(o, dx) {
+  o.x += dx;
+  const y0 = o.y + 0.02, y1 = o.y + o.h - 0.02;
+  if (dx > 0 && (jpSolid(o.x + o.w, y0) || jpSolid(o.x + o.w, y1))) { o.x = Math.floor(o.x + o.w) - o.w - 0.001; return true; }
+  if (dx < 0 && (jpSolid(o.x, y0) || jpSolid(o.x, y1))) { o.x = Math.floor(o.x) + 1.001; return true; }
+  return false;
+}
+function jpStep(dt) {
+  JP.t += dt;
+  const H = JP.hero;
+  if (!H) return;
+  // ходьба
+  const want = (JP.keys.r ? 1 : 0) - (JP.keys.l ? 1 : 0);
+  if (H.kb > 0) H.kb -= dt;
+  else H.vx += (want * JP_RUN - H.vx) * Math.min(1, dt * 14);
+  if (want) H.face = want;
+  // стрибок: «буфер» і «час койота» - прощаємо натискання трохи зарано чи трохи запізно
+  if (JP.jumpBuf > 0) JP.jumpBuf -= dt;
+  H.coyote = H.ground ? 0.1 : H.coyote - dt;
+  if (JP.jumpBuf > 0 && H.coyote > 0) { H.vy = -JP_JUMP; H.ground = false; H.coyote = 0; JP.jumpBuf = 0; beep(620, 0.08, 'square', 0.1); }
+  H.vy = Math.min(20, H.vy + JP_G * dt);
+  // рух по x, потім по y (кроками, щоб не проскакувати крізь клітинки)
+  const n = Math.max(1, Math.ceil(Math.max(Math.abs(H.vx), Math.abs(H.vy)) * dt / 0.3));
+  for (let k = 0; k < n; k++) {
+    if (jpMoveX(H, H.vx * dt / n)) H.vx = 0;
+    const dy = H.vy * dt / n;
+    H.y += dy; H.ground = false;
+    const x0 = H.x + 0.03, x1 = H.x + H.w - 0.03;
+    if (dy > 0 && (jpSolid(x0, H.y + H.h) || jpSolid(x1, H.y + H.h))) { H.y = Math.floor(H.y + H.h) - H.h; H.vy = 0; H.ground = true; }
+    else if (dy < 0 && (jpSolid(x0, H.y) || jpSolid(x1, H.y))) { H.y = Math.floor(H.y) + 1; H.vy = 0; }
+  }
+  if (!H.ground && H.vy === 0 && (jpSolid(H.x + 0.03, H.y + H.h + 0.01) || jpSolid(H.x + H.w - 0.03, H.y + H.h + 0.01))) H.ground = true;
+  // де жабку повернути після ями: остання тверда земля без ворога поруч
+  if (H.ground && H.y + H.h >= JP_GND - 0.01 && jpSolid(H.x - 0.5, JP_GND) && jpSolid(H.x + H.w + 0.5, JP_GND) &&
+      !JP.en.some((e) => !e.dead && Math.abs(e.x - H.x) < 2.5)) JP.safe = H.x;
+  if (H.inv > 0) H.inv -= dt;
+  if (H.y > JP_ROWS + 1) return jpHurt(true);
+  // вороги
+  for (const e of JP.en) {
+    if (e.dead) { e.dead += dt; continue; }
+    const nx = e.x + e.vx * dt, front = e.vx > 0 ? nx + e.w : nx;
+    const under = front > e.p0 - 0.6 && front < e.p1 + 0.6;
+    if (!jpSolid(front, JP_GND + 0.5) || jpSolid(front, e.y + e.h * 0.5) || under) e.vx = -e.vx;
+    else e.x = nx;
+    if (H.x < e.x + e.w && H.x + H.w > e.x && H.y < e.y + e.h && H.y + H.h > e.y) {
+      if (H.vy > 0 && H.y + H.h - e.y < 0.5) {
+        e.dead = 0.001; H.vy = -10.5;
+        beep(880, 0.07, 'triangle', 0.14); setTimeout(() => beep(1175, 0.08, 'triangle', 0.12), 70); vibe(25);
+        jpBurst(e.x + e.w / 2, e.y + e.h / 2, '#ffd93d');
+      } else if (H.inv <= 0) {
+        H.vx = (H.x < e.x ? -1 : 1) * 6;
+        jpHurt(false);
+        if (!JP.run) return;
+      }
+    }
+  }
+  JP.en = JP.en.filter((e) => !e.dead || e.dead < 0.5);
+  // полуниці
+  JP.items.forEach((it) => {
+    if (it.got) return;
+    if (Math.abs(H.x + H.w / 2 - it.x) < 0.65 && Math.abs(H.y + H.h / 2 - it.y) < 0.75) {
+      it.got = true; JP.got++; jpUI(); beep(1047 + rnd(200), 0.07, 'sine', 0.13); jpBurst(it.x, it.y, '#ff5a5f', 8);
+    }
+  });
+  JP.fx = JP.fx.filter((f) => { f.x += f.vx * dt; f.y += f.vy * dt; f.vy += 12 * dt; return (f.life -= dt) > 0; });
+  // камера
+  const vw = JP.w / JP.T;
+  JP.cam += (Math.max(0, Math.min(JP.W - vw, H.x - vw * 0.35)) - JP.cam) * Math.min(1, dt * 8);
+  if (H.x >= JP.goal - 0.3) jpEnd(true);
+}
+function jpBurst(x, y, col, n = 10) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 7, v = 2 + Math.random() * 4;
+    JP.fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 2, life: 0.4 + Math.random() * 0.3, col });
+  }
+}
+function jpDraw() {
+  const g = $('#jmpC').getContext('2d'), { w, h, T, oy } = JP;
+  const sky = g.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, '#6fc8ff'); sky.addColorStop(1, '#c9f0ff');
+  g.fillStyle = sky; g.fillRect(0, 0, w, h);
+  // далекі пагорби - їдуть повільніше за землю
+  g.fillStyle = '#9be3a6';
+  for (let i = -1; i < 8; i++) {
+    const x = i * T * 6 - (JP.cam * T * 0.3) % (T * 6);
+    g.beginPath(); g.ellipse(x, oy + JP_GND * T, T * 3.6, T * 2.4, 0, Math.PI, 0); g.fill();
+  }
+  const px = (x) => (x - JP.cam) * T, py = (y) => oy + y * T;
+  const x0 = Math.max(0, Math.floor(JP.cam) - 1), x1 = Math.min(JP.W, Math.ceil(JP.cam + w / T) + 1);
+  for (let x = x0; x < x1; x++) {
+    for (let y = 0; y < JP_ROWS; y++) {
+      if (!JP.map[x][y]) continue;
+      const X = px(x), Y = py(y);
+      if (y >= JP_GND) {
+        g.fillStyle = '#9a6332'; g.fillRect(X, Y, T + 1, T + 1);
+        if (!jpSolid(x, y - 1)) { g.fillStyle = '#4ecb71'; g.fillRect(X, Y, T + 1, T * 0.28); g.fillStyle = '#3aa85a'; g.fillRect(X, Y + T * 0.24, T + 1, T * 0.08); }
+        g.fillStyle = '#7d4f26'; g.fillRect(X + T * ((x * 7) % 5) / 6, Y + T * 0.55, T * 0.12, T * 0.12);
+      } else {
+        // дощечка
+        g.fillStyle = '#d9954f'; g.fillRect(X, Y + T * 0.08, T + 1, T * 0.5);
+        g.fillStyle = '#8a5527'; g.fillRect(X, Y + T * 0.5, T + 1, T * 0.1);
+        g.fillRect(X + T * 0.48, Y + T * 0.12, T * 0.05, T * 0.4);
+      }
+    }
+  }
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  // хатинка-фініш
+  g.font = `${Math.round(T * 2.2)}px ${EMOJI_FONT}`;
+  g.fillText('🏡', px(JP.goal + 0.8), py(JP_GND - 1.05));
+  // полуниці
+  g.font = `${Math.round(T * 0.7)}px ${EMOJI_FONT}`;
+  JP.items.forEach((it) => { if (!it.got) g.fillText('🍓', px(it.x), py(it.y + Math.sin(JP.t * 4 + it.x) * 0.08)); });
+  // вороги (емодзі дивляться ліворуч - віддзеркалюємо, коли йдуть праворуч)
+  JP.en.forEach((e) => {
+    g.save(); g.translate(px(e.x + e.w / 2), py(e.y + e.h));
+    if (e.vx > 0) g.scale(-1, 1);
+    if (e.dead) { g.scale(1, 0.35); g.globalAlpha = Math.max(0, 1 - e.dead * 2); }
+    g.textBaseline = 'bottom'; g.font = `${Math.round(T * 0.95)}px ${EMOJI_FONT}`; g.fillText(e.em, 0, T * 0.08);
+    g.restore();
+  });
+  // жабка
+  const H = JP.hero;
+  if (H && !(H.inv > 0 && Math.floor(JP.t * 12) % 2)) {
+    const sq = H.ground ? 1 : (H.vy < 0 ? 1.12 : 0.95);
+    g.save(); g.translate(px(H.x + H.w / 2), py(H.y + H.h));
+    g.scale(1 / sq, sq);
+    g.textBaseline = 'bottom'; g.font = `${Math.round(T * 1.05)}px ${EMOJI_FONT}`; g.fillText('🐸', 0, T * 0.1);
+    g.restore();
+  }
+  JP.fx.forEach((f) => { g.globalAlpha = Math.min(1, f.life * 2.5); g.fillStyle = f.col; g.fillRect(px(f.x) - T * 0.06, py(f.y) - T * 0.06, T * 0.12, T * 0.12); });
+  g.globalAlpha = 1;
+}
+function jpLoop(ts) {
+  if (!JP.run) return;
+  const dt = JP.last ? Math.min(0.04, (ts - JP.last) / 1000) : 0;
+  JP.last = ts;
+  jpStep(dt);
+  if (!JP.run) return;
+  jpDraw();
+  JP.raf = requestAnimationFrame(jpLoop);
+}
+function jpEnd(win) {
+  JP.run = false; cancelAnimationFrame(JP.raf); jpDraw();
+  JP.keys.l = JP.keys.r = 0;
+  if (win) {
+    cheer(); confetti(); vibe(60);
+    const all = JP.got === JP.total;
+    addStar(all ? 2 : 1);
+    const done = JP.lvl;
+    JP.lvl++; LS.set('jmpLvl', JP.lvl);
+    say('Ура! Жабка вдома');
+    setTimeout(() => dialog({
+      em: '🏡', h: `Рівень ${done} пройдено!`, p: `Полуниць: ${JP.got} з ${JP.total}` + (all ? ' — усі! ⭐⭐' : ''),
+      btn: `🐸 Рівень ${JP.lvl}`, btn2: '🏠 Меню', onBtn: jpStart, onBtn2: () => go('menu'),
+    }), 500);
+  } else {
+    oops();
+    say('Нічого страшного, спробуй ще');
+    setTimeout(() => dialog({
+      em: '🐸', h: 'Сердечка скінчились', p: 'Спробуй ще раз — у тебе вийде!',
+      btn: '🔁 Ще раз', btn2: '🏠 Меню', btn3: JP.lvl > 1 ? '⬇️ Легше' : '',
+      onBtn: jpStart, onBtn2: () => go('menu'),
+      onBtn3: () => { JP.lvl = Math.max(1, JP.lvl - 1); LS.set('jmpLvl', JP.lvl); jpStart(); },
+    }), 400);
+  }
+}
+function jpStart() {
+  cancelAnimationFrame(JP.raf);
+  jpLayout(); jpNewLevel();
+  JP.cam = 0; JP.run = true; JP.last = 0;
+  JP.raf = requestAnimationFrame(jpLoop);
+}
+START.jump = () => { jpStart(); say('Доведи жабку до хатинки'); };
+STOP.jump = () => { JP.run = false; cancelAnimationFrame(JP.raf); JP.keys.l = JP.keys.r = 0; };
+(() => {
+  const hold = (id, k) => {
+    const b = $(id);
+    const on = (e) => { e.preventDefault(); ac(); JP.keys[k] = 1; b.classList.add('on'); try { b.setPointerCapture(e.pointerId); } catch (x) { /* */ } };
+    const off = () => { JP.keys[k] = 0; b.classList.remove('on'); };
+    b.addEventListener('pointerdown', on);
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((ev) => b.addEventListener(ev, off));
+    b.addEventListener('contextmenu', (e) => e.preventDefault());
+  };
+  hold('#jL', 'l'); hold('#jR', 'r');
+  const jump = (e) => { if (e) e.preventDefault(); ac(); JP.jumpBuf = 0.15; };
+  $('#jJ').addEventListener('pointerdown', (e) => { jump(e); $('#jJ').classList.add('on'); });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => $('#jJ').addEventListener(ev, () => $('#jJ').classList.remove('on')));
+  $('#jmpC').addEventListener('pointerdown', jump);
+  document.addEventListener('keydown', (e) => {
+    if (SCR !== 'jump') return;
+    if (e.key === 'ArrowLeft') JP.keys.l = 1;
+    else if (e.key === 'ArrowRight') JP.keys.r = 1;
+    else if (e.key === ' ' || e.key === 'ArrowUp') jump(e);
+    else return;
+    e.preventDefault();
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft') JP.keys.l = 0;
+    if (e.key === 'ArrowRight') JP.keys.r = 0;
+  });
+  window.addEventListener('resize', () => { if (SCR === 'jump' && JP.run) jpLayout(); });
 })();
 
 /* ================================================================
@@ -2398,7 +3290,7 @@ $('#orPool').onclick = (e) => {
 };
 
 /* ================================================================
-   МЕНЮ НА ДВІ СТОРІНКИ  (гортається пальцем або кнопками вгорі)
+   МЕНЮ ЗА ГРУПАМИ  (гортається пальцем або кнопками вгорі)
    ================================================================ */
 (() => {
   const pg = $('#pages'), bs = $$('#pager button');
