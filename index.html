@@ -410,6 +410,11 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #back:active{color:#fff}
 .top #back{order:0}.top h1{order:1}.top #starBtn{order:2}
 .in-menu .top #starBtn{order:0}.in-menu .top #back{order:2}
+
+/* вибір мови в налаштуваннях для батьків */
+.langs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:0 0 12px}
+.lng{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 10px;font-size:14px;min-height:44px;color:var(--txt)}
+.lng.on{border-color:var(--gf-blue);background:#3d71d933;color:#fff}
 </style>
 </head>
 <body class="in-menu">
@@ -470,7 +475,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     </div></div>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
-  <p class="ver"><span id="verLine"></span> <button class="mini" id="updNow">🔄 Оновити</button>
+  <p class="ver"><span id="verLine"></span> <button class="mini" id="updNow">🔄 Оновити</button> <button class="mini" id="langBtn" translate="no" aria-label="Мова"></button>
     <span class="updmsg" id="updMsg"></span></p>
 </section>
 
@@ -697,7 +702,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.2.11';
+const APP_VERSION = '1.3.0';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -725,6 +730,534 @@ const S = {
   sound: LS.get('sound', true),
   voice: LS.get('voice', true),
 };
+
+/* ---------- мови: українська, румунська, англійська ----------
+   Увесь текст гри написаний українською. Для інших мов не переписуємо кожну гру:
+   кожен шматок тексту, що зʼявляється на екрані (і кожна фраза голосу), проходить
+   крізь T() - словник I18N (точний текст) і правила I18N_RE (текст із числами чи
+   назвами всередині). Екран перекладає спостерігач за сторінкою, тож нові написи
+   в іграх перекладаються самі. Українською все як і було - спостерігач не працює,
+   голос записаний. Румунською й англійською читає синтезатор телефона.
+   Мову обирають у налаштуваннях для батьків. */
+const LANGS = {
+  uk: { loc: 'uk-UA', flag: '🇺🇦', name: 'Українська' },
+  ro: { loc: 'ro-RO', flag: '🇷🇴', name: 'Română' },
+  en: { loc: 'en-US', flag: '🇬🇧', name: 'English' },
+};
+const LANG = LANGS[LS.get('lang', 'uk')] ? LS.get('lang', 'uk') : 'uk';
+const I18N = {}, I18N_RE = [];
+const I18N_MISS = new Set();              // для перевірки: що ще не перекладено
+const CYR = /[А-Яа-яІіЇїЄєҐґ]/;
+/** Переклад одного слова чи фрази (без правил) - для назв усередині шаблонів. */
+function tr0(s) {
+  const d = I18N[s];
+  if (d && d[LANG] != null) return d[LANG];
+  for (const [re, tr] of I18N_RE) {
+    const m = s.match(re);
+    if (m && tr[LANG] != null) return typeof tr[LANG] === 'function' ? tr[LANG](m, W) : tr[LANG].replace(/\{(\d)\}/g, (_, i) => W(m[i]));
+  }
+  return null;
+}
+function W(w) {
+  if (LANG === 'uk' || w == null) return w;
+  const r = tr0(String(w).trim());
+  return r == null ? w : r;
+}
+/** Переклад тексту: точний збіг, потім правила з підстановкою. */
+function T(s) {
+  if (LANG === 'uk' || s == null) return s;
+  s = String(s);
+  const r = tr0(s);
+  if (r != null) return r;
+  if (CYR.test(s)) I18N_MISS.add(s);
+  return s;
+}
+/** Текстовий вузол: перекладаємо серцевину, пробіли й розділювачі по краях лишаємо. */
+function trText(t) {
+  const m = t.match(/^([\s·—]*)([\s\S]*?)(\s*)$/);
+  if (!m || !CYR.test(m[2])) return t;
+  return m[1] + T(m[2]) + m[3];
+}
+const I18N_ATTR = ['aria-label', 'title', 'placeholder'];
+const skipI18n = (el) => !el || (el.closest && el.closest('script,style,[translate="no"]'));
+function trAttrs(el) {
+  for (const a of I18N_ATTR) { const v = el.getAttribute(a); if (v && CYR.test(v)) { const t = trText(v); if (t !== v) el.setAttribute(a, t); } }
+}
+function trNode(n) {
+  if (n.nodeType === 3) {
+    if (skipI18n(n.parentNode)) return;
+    const v = trText(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v;
+    return;
+  }
+  if (n.nodeType !== 1 || skipI18n(n)) return;
+  trAttrs(n);
+  const w = document.createTreeWalker(n, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  let x;
+  while ((x = w.nextNode())) {
+    if (x.nodeType === 1) { if (!skipI18n(x)) trAttrs(x); }
+    else if (!skipI18n(x.parentNode)) { const v = trText(x.nodeValue); if (v !== x.nodeValue) x.nodeValue = v; }
+  }
+}
+/* I18N-DATA-BEGIN */
+Object.assign(I18N, {
+  "EnergyUA Junior — ігри для малят": { ro: "EnergyUA Junior — jocuri pentru cei mici", en: "EnergyUA Junior — games for little ones" },
+  "Слух": { ro: "Auz", en: "Hearing" },
+  "Увага": { ro: "Atenție", en: "Attention" },
+  "Памʼять": { ro: "Memorie", en: "Memory" },
+  "Лічба": { ro: "Numărat", en: "Counting" },
+  "Логіка": { ro: "Logică", en: "Logic" },
+  "Швидкість": { ro: "Viteză", en: "Speed" },
+  "Розваги": { ro: "Distracție", en: "Fun" },
+  "розрізняти звуки й запамʼятовувати почуте": { ro: "să deosebești sunetele și să ții minte ce ai auzit", en: "telling sounds apart and remembering what you hear" },
+  "помічати колір, форму, зайве й відсутнє": { ro: "să observi culoarea, forma, ce e în plus și ce lipsește", en: "noticing colour, shape, the odd one and the missing one" },
+  "запамʼятати, де що лежить і як стояло": { ro: "să ții minte unde e fiecare lucru și cum a stat", en: "remembering where things are and how they stood" },
+  "рахувати й упізнавати перші букви": { ro: "să numeri și să recunoști primele litere", en: "counting and recognising first letters" },
+  "думати наперед і робити висновки": { ro: "să gândești dinainte și să tragi concluzii", en: "thinking ahead and drawing conclusions" },
+  "реакція й точність рухів": { ro: "reacție și mișcări precise", en: "reaction and precise moves" },
+  "просто побігати й пострибати": { ro: "doar să alergi și să sari", en: "just running and jumping" },
+  "Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐": { ro: "Alege un joc și joacă-te. Steluțele se adună în albumul de abțibilduri ⭐", en: "Pick a game and play. Stars go into the sticker album ⭐" },
+  "🔄 Оновити": { ro: "🔄 Actualizează", en: "🔄 Update" },
+  "Вихід": { ro: "Ieșire", en: "Exit" },
+  "Назад": { ro: "Înapoi", en: "Back" },
+  "Мова": { ro: "Limba", en: "Language" },
+  "Хто як<br>говорить": { ro: "Cine<br>face așa?", en: "Who<br>says that?" },
+  "Повтори<br>мелодію": { ro: "Repetă<br>melodia", en: "Repeat<br>the tune" },
+  "Звукові<br>пари": { ro: "Perechi<br>de sunete", en: "Sound<br>pairs" },
+  "Колір<br>і форма": { ro: "Culoare<br>și formă", en: "Colour<br>and shape" },
+  "Що<br>зайве?": { ro: "Ce nu se<br>potrivește?", en: "Odd one<br>out" },
+  "Що<br>зникло?": { ro: "Ce a<br>dispărut?", en: "What's<br>missing?" },
+  "Знайди<br>пару": { ro: "Găsește<br>perechea", en: "Find<br>the pair" },
+  "Хто<br>сховався?": { ro: "Cine s-a<br>ascuns?", en: "Who's<br>hiding?" },
+  "Повтори<br>візерунок": { ro: "Repetă<br>modelul", en: "Repeat<br>the pattern" },
+  "Що<br>в кошику?": { ro: "Ce e<br>în coș?", en: "What's in<br>the basket?" },
+  "Як<br>стояли?": { ro: "Cum<br>stăteau?", en: "What was<br>the order?" },
+  "Перша<br>буква": { ro: "Prima<br>literă", en: "First<br>letter" },
+  "Хрестики-<br>нулики": { ro: "X și 0", en: "Tic-tac-<br>toe" },
+  "Повтори мелодію": { ro: "Repetă melodia", en: "Repeat the tune" },
+  "Знайди пару": { ro: "Găsește perechea", en: "Find the pair" },
+  "Скільки?": { ro: "Câte sunt?", en: "How many?" },
+  "Перша буква": { ro: "Prima literă", en: "First letter" },
+  "Хто як говорить": { ro: "Cine face așa?", en: "Who says that?" },
+  "Змійка": { ro: "Șarpele", en: "Snake" },
+  "Колір і форма": { ro: "Culoare și formă", en: "Colour and shape" },
+  "Що зайве?": { ro: "Ce nu se potrivește?", en: "Odd one out" },
+  "Мої наліпки": { ro: "Abțibildurile mele", en: "My stickers" },
+  "Зореліт": { ro: "Nava stelară", en: "Starship" },
+  "Хрестики-нулики": { ro: "X și 0", en: "Tic-tac-toe" },
+  "Сапер": { ro: "Minele", en: "Minesweeper" },
+  "Відбивайка": { ro: "Cărămizi", en: "Bricks" },
+  "Динозаврик": { ro: "Dinozaurul", en: "Dino" },
+  "Стрибунець": { ro: "Săritorul", en: "Jumper" },
+  "Що зникло?": { ro: "Ce a dispărut?", en: "What's missing?" },
+  "Хто сховався?": { ro: "Cine s-a ascuns?", en: "Who's hiding?" },
+  "Повтори візерунок": { ro: "Repetă modelul", en: "Repeat the pattern" },
+  "Що в кошику?": { ro: "Ce e în coș?", en: "What's in the basket?" },
+  "Звукові пари": { ro: "Perechi de sunete", en: "Sound pairs" },
+  "Як стояли?": { ro: "Cum stăteau?", en: "What was the order?" },
+  "Свої голоси": { ro: "Vocile voastre", en: "Your own voices" },
+  "Рахуємо": { ro: "Socotim", en: "Math" },
+  "Нова наліпка!": { ro: "Abțibild nou!", en: "New sticker!" },
+  "Вона вже в твоєму альбомі": { ro: "E deja în albumul tău", en: "It's already in your album" },
+  "Ура!": { ro: "Ura!", en: "Hooray!" },
+  "Далі": { ro: "Mai departe", en: "Next" },
+  "Вийти з гри?": { ro: "Ieși din joc?", en: "Leave the game?" },
+  "Зірочки й наліпки збережуться.": { ro: "Steluțele și abțibildurile rămân salvate.", en: "Stars and stickers will be kept." },
+  "Так, вийти": { ro: "Da, ies", en: "Yes, leave" },
+  "Ні, граємо": { ro: "Nu, ne jucăm", en: "No, let's play" },
+  "До зустрічі!": { ro: "La revedere!", en: "See you soon!" },
+  "Гру зупинено, звуки вимкнено.": { ro: "Jocul s-a oprit, sunetele sunt oprite.", en: "The game is paused and the sounds are off." },
+  "Щоб прибрати її з екрана — проведи вгору або закрий вкладку браузера.": { ro: "Ca să o închizi, glisează în sus sau închide fila browserului.", en: "To close it, swipe up or close the browser tab." },
+  "▶️ Грати ще": { ro: "▶️ Mai joacă", en: "▶️ Play again" },
+  "Так!": { ro: "Da!", en: "Yes!" },
+  "Молодець!": { ro: "Bravo!", en: "Well done!" },
+  "Спробуй ще": { ro: "Mai încearcă", en: "Try again" },
+  "🔁 Ще раз": { ro: "🔁 Încă o dată", en: "🔁 Again" },
+  "🏠 Меню": { ro: "🏠 Meniu", en: "🏠 Menu" },
+  "▶️ Далі": { ro: "▶️ Mai departe", en: "▶️ Next" },
+  "⬇️ Легше": { ro: "⬇️ Mai ușor", en: "⬇️ Easier" },
+  "Ой!": { ro: "Ups!", en: "Oops!" },
+  "ліворуч": { ro: "stânga", en: "left" },
+  "праворуч": { ro: "dreapta", en: "right" },
+  "стрибок": { ro: "salt", en: "jump" },
+  "будиночок": { ro: "căsuță", en: "house" },
+  "Слухай…": { ro: "Ascultă…", en: "Listen…" },
+  "▶️ Слухати ще": { ro: "▶️ Ascultă din nou", en: "▶️ Listen again" },
+  "Тепер ти!": { ro: "Acum tu!", en: "Your turn!" },
+  "повтори мелодію": { ro: "repetă melodia", en: "repeat the tune" },
+  "Слухай мелодію і повтори": { ro: "Ascultă melodia și repet-o", en: "Listen to the tune and repeat it" },
+  "Майже!": { ro: "Aproape!", en: "Almost!" },
+  "послухай ще раз": { ro: "mai ascultă o dată", en: "listen once more" },
+  "Знайди однакові": { ro: "Găsește perechile", en: "Find the matching ones" },
+  "натискай картки": { ro: "apasă pe cartonașe", en: "tap the cards" },
+  "Знайди однакові картинки": { ro: "Găsește imaginile la fel", en: "Find the matching pictures" },
+  "Усі пари знайдено! 🎉": { ro: "Toate perechile găsite! 🎉", en: "All pairs found! 🎉" },
+  "Молодець! Усі пари знайдено": { ro: "Bravo! Toate perechile găsite", en: "Well done! All pairs found" },
+  "яблуко": { ro: "mărul", en: "apple" },
+  "песик": { ro: "cățelul", en: "puppy" },
+  "машинка": { ro: "mașinuța", en: "car" },
+  "зірка": { ro: "steaua", en: "star" },
+  "квітка": { ro: "floarea", en: "flower" },
+  "рибка": { ro: "peștișorul", en: "fish" },
+  "кулька": { ro: "balonul", en: "balloon" },
+  "банан": { ro: "banana", en: "banana" },
+  "котик": { ro: "pisicuța", en: "kitten" },
+  "потяг": { ro: "trenul", en: "train" },
+  "метелик": { ro: "fluturele", en: "butterfly" },
+  "полуниця": { ro: "căpșuna", en: "strawberry" },
+  "виноград": { ro: "strugurii", en: "grapes" },
+  "груша": { ro: "para", en: "pear" },
+  "вишні": { ro: "cireșele", en: "cherries" },
+  "кавун": { ro: "pepenele", en: "watermelon" },
+  "морква": { ro: "morcovul", en: "carrot" },
+  "кукурудза": { ro: "porumbul", en: "corn" },
+  "зайчик": { ro: "iepurașul", en: "bunny" },
+  "ведмедик": { ro: "ursulețul", en: "teddy bear" },
+  "лисичка": { ro: "vulpița", en: "little fox" },
+  "літак": { ro: "avionul", en: "plane" },
+  "човник": { ro: "bărcuța", en: "boat" },
+  "мʼяч": { ro: "mingea", en: "ball" },
+  "подарунок": { ro: "cadoul", en: "present" },
+  "сонце": { ro: "soarele", en: "sun" },
+  "місяць": { ro: "luna", en: "moon" },
+  "грибок": { ro: "ciuperca", en: "mushroom" },
+  "дзвіночок": { ro: "clopoțelul", en: "bell" },
+  "черепаха": { ro: "țestoasa", en: "turtle" },
+  "панда": { ro: "panda", en: "panda" },
+  "левеня": { ro: "puiul de leu", en: "lion cub" },
+  "корівка": { ro: "văcuța", en: "little cow" },
+  "Скільки тут яблук?": { ro: "Câte mere sunt aici?", en: "How many apples are here?" },
+  "Скільки тут бананів?": { ro: "Câte banane sunt aici?", en: "How many bananas are here?" },
+  "Скільки тут курчат?": { ro: "Câți pui sunt aici?", en: "How many chicks are here?" },
+  "Скільки тут кульок?": { ro: "Câte baloane sunt aici?", en: "How many balloons are here?" },
+  "Скільки тут полуниць?": { ro: "Câte căpșuni sunt aici?", en: "How many strawberries are here?" },
+  "Скільки тут зірочок?": { ro: "Câte steluțe sunt aici?", en: "How many stars are here?" },
+  "Скільки тут сонечок?": { ro: "Câte buburuze sunt aici?", en: "How many ladybirds are here?" },
+  "Скільки тут машинок?": { ro: "Câte mașinuțe sunt aici?", en: "How many cars are here?" },
+  "З якої букви починається?": { ro: "Cu ce literă începe?", en: "What letter does it start with?" },
+  "натисни потрібну букву": { ro: "apasă litera potrivită", en: "tap the right letter" },
+  "буква": { ro: "literă", en: "letter" },
+  "КІТ": { ro: "PISICĂ", en: "CAT" },
+  "корова": { ro: "vaca", en: "cow" },
+  "мууу": { ro: "muuu", en: "moo" },
+  "гав-гав": { ro: "ham-ham", en: "woof-woof" },
+  "няв-няв": { ro: "miau-miau", en: "meow" },
+  "вівця": { ro: "oaia", en: "sheep" },
+  "бее-бее": { ro: "behehe", en: "baa-baa" },
+  "свинка": { ro: "purcelușul", en: "piggy" },
+  "хрю-хрю": { ro: "guiț-guiț", en: "oink-oink" },
+  "жабка": { ro: "broscuța", en: "frog" },
+  "ква-ква": { ro: "oac-oac", en: "ribbit" },
+  "курочка": { ro: "găinușa", en: "hen" },
+  "ко-ко-ко": { ro: "cot-cot-cot", en: "cluck-cluck" },
+  "півник": { ro: "cocoșelul", en: "rooster" },
+  "кукуріку": { ro: "cucurigu", en: "cock-a-doodle-doo" },
+  "качка": { ro: "rața", en: "duck" },
+  "кря-кря": { ro: "mac-mac", en: "quack-quack" },
+  "конячка": { ro: "căluțul", en: "horse" },
+  "і-го-го": { ro: "i-ha-ha", en: "neigh" },
+  "мишка": { ro: "șoricelul", en: "mouse" },
+  "пі-пі-пі": { ro: "chiț-chiț", en: "squeak-squeak" },
+  "вовк": { ro: "lupul", en: "wolf" },
+  "уууу": { ro: "auuu", en: "awoo" },
+  "курча": { ro: "puișorul", en: "chick" },
+  "пі-пі": { ro: "piu-piu", en: "cheep-cheep" },
+  "коза": { ro: "capra", en: "goat" },
+  "ме-е-е": { ro: "meee", en: "maa" },
+  "ослик": { ro: "măgărușul", en: "donkey" },
+  "іа-іа": { ro: "i-a, i-a", en: "hee-haw" },
+  "бджілка": { ro: "albinuța", en: "bee" },
+  "дз-з-з": { ro: "bzzz", en: "buzz" },
+  "муха": { ro: "musca", en: "fly" },
+  "ж-ж-ж": { ro: "zzz", en: "bzzz" },
+  "ведмідь": { ro: "ursul", en: "bear" },
+  "р-р-р": { ro: "mrrr", en: "grrr" },
+  "лисиця": { ro: "vulpea", en: "fox" },
+  "тяв-тяв": { ro: "hau-hau", en: "yip-yip" },
+  "білка": { ro: "veverița", en: "squirrel" },
+  "цок-цок": { ro: "ciuc-ciuc", en: "chit-chit" },
+  "сова": { ro: "bufnița", en: "owl" },
+  "угу-угу": { ro: "hu-hu", en: "hoo-hoo" },
+  "ворона": { ro: "cioara", en: "crow" },
+  "кар-кар": { ro: "cra-cra", en: "caw-caw" },
+  "лев": { ro: "leul", en: "lion" },
+  "р-р-р-а-а": { ro: "raaa", en: "roar" },
+  "слон": { ro: "elefantul", en: "elephant" },
+  "ту-у-у": { ro: "tu-u-u", en: "toot" },
+  "мавпа": { ro: "maimuța", en: "monkey" },
+  "у-у-а-а": { ro: "u-u-a-a", en: "ooh-ooh-aah" },
+  "тигр": { ro: "tigrul", en: "tiger" },
+  "гр-р-р": { ro: "grrr", en: "grrr" },
+  "гусак": { ro: "gâscanul", en: "goose" },
+  "га-га-га": { ro: "ga-ga-ga", en: "honk-honk" },
+  "індик": { ro: "curcanul", en: "turkey" },
+  "бл-бл-бл": { ro: "glu-glu", en: "gobble-gobble" },
+  "голуб": { ro: "porumbelul", en: "pigeon" },
+  "гур-гур": { ro: "gru-gru", en: "coo-coo" },
+  "папуга": { ro: "papagalul", en: "parrot" },
+  "чірік": { ro: "cirip", en: "squawk" },
+  "соловей": { ro: "privighetoarea", en: "nightingale" },
+  "тьох-тьох": { ro: "tiu-tiu", en: "tweet-tweet" },
+  "цвіркун": { ro: "greierele", en: "cricket" },
+  "цвір-цвір": { ro: "cri-cri", en: "chirp-chirp" },
+  "комар": { ro: "țânțarul", en: "mosquito" },
+  "з-з-з": { ro: "zzz", en: "zzz" },
+  "олень": { ro: "cerbul", en: "deer" },
+  "у-у-у": { ro: "uuu", en: "ooo" },
+  "орел": { ro: "vulturul", en: "eagle" },
+  "кі-кі-кі": { ro: "chi-chi-chi", en: "screech" },
+  "лебідь": { ro: "lebăda", en: "swan" },
+  "ґа-ґу": { ro: "ga-gu", en: "honk" },
+  "кит": { ro: "balena", en: "whale" },
+  "у-у-у-ум": { ro: "uuum", en: "ooom" },
+  "тюлень": { ro: "foca", en: "seal" },
+  "арф-арф": { ro: "arf-arf", en: "arf-arf" },
+  "крокодил": { ro: "crocodilul", en: "crocodile" },
+  "гр-р-м": { ro: "grrm", en: "grrm" },
+  "змія": { ro: "șarpele", en: "snake" },
+  "тр-р-р": { ro: "sss", en: "hiss" },
+  "горила": { ro: "gorila", en: "gorilla" },
+  "зубр": { ro: "zimbrul", en: "bison" },
+  "му-у-у": { ro: "muuu", en: "mooo" },
+  "кажан": { ro: "liliacul", en: "bat" },
+  "павич": { ro: "păunul", en: "peacock" },
+  "а-а-у": { ro: "a-a-u", en: "ah-oh" },
+  "Хто так говорить?": { ro: "Cine face așa?", en: "Who makes this sound?" },
+  "натисни 🔊, щоб почути ще раз": { ro: "apasă 🔊 ca să auzi din nou", en: "tap 🔊 to hear it again" },
+  "натисни динамік, щоб почути ще": { ro: "apasă difuzorul ca să auzi din nou", en: "tap the speaker to hear it again" },
+  "Поволі": { ro: "Încet", en: "Slow" },
+  "Звичайно": { ro: "Normal", en: "Normal" },
+  "Швидко": { ro: "Repede", en: "Fast" },
+  "Збирай яблучка 🍎": { ro: "Adună merele 🍎", en: "Collect the apples 🍎" },
+  "Знайди фігуру": { ro: "Găsește forma", en: "Find the shape" },
+  "натисни потрібну фігуру": { ro: "apasă forma potrivită", en: "tap the right shape" },
+  "тварини": { ro: "animale", en: "animals" },
+  "фрукти": { ro: "fructe", en: "fruit" },
+  "овочі": { ro: "legume", en: "vegetables" },
+  "транспорт": { ro: "vehicule", en: "vehicles" },
+  "одяг": { ro: "haine", en: "clothes" },
+  "іграшки": { ro: "jucării", en: "toys" },
+  "Що тут зайве?": { ro: "Ce nu se potrivește aici?", en: "Which one doesn't belong?" },
+  "натисни те, що не підходить": { ro: "apasă pe ce nu se potrivește", en: "tap the odd one out" },
+  "Запишіть голоси самі": { ro: "Înregistrați voi vocile", en: "Record the voices yourself" },
+  "🎤 — записати (до 4 с) · ▶ — послухати": { ro: "🎤 — înregistrează (până la 4 s) · ▶ — ascultă", en: "🎤 — record (up to 4 s) · ▶ — listen" },
+  "свій запис ✓": { ro: "înregistrarea ta ✓", en: "your recording ✓" },
+  "справжній запис": { ro: "înregistrare reală", en: "real recording" },
+  "звук гри": { ro: "sunetul jocului", en: "game sound" },
+  "записую… говоріть": { ro: "înregistrez… vorbiți", en: "recording… speak now" },
+  "Записати": { ro: "Înregistrează", en: "Record" },
+  "Послухати": { ro: "Ascultă", en: "Listen" },
+  "Видалити": { ro: "Șterge", en: "Delete" },
+  "Мікрофон тут недоступний": { ro: "Microfonul nu e disponibil aici", en: "The microphone is not available here" },
+  "Нічого не записалось": { ro: "Nu s-a înregistrat nimic", en: "Nothing was recorded" },
+  "Записано ✓": { ro: "Înregistrat ✓", en: "Recorded ✓" },
+  "Не влізло в памʼять — видаліть зайві записи": { ro: "Nu încape în memorie — ștergeți înregistrările în plus", en: "It doesn't fit in memory — delete some recordings" },
+  "Не вдалося зберегти": { ro: "Nu s-a putut salva", en: "Couldn't save" },
+  "Немає доступу до мікрофона": { ro: "Nu există acces la microfon", en: "No access to the microphone" },
+  "Видалити запис?": { ro: "Ștergi înregistrarea?", en: "Delete the recording?" },
+  "Лишити": { ro: "Păstrează", en: "Keep" },
+  "Видалено": { ro: "Șters", en: "Deleted" },
+  "+ постріл": { ro: "+ tir", en: "+ shot" },
+  "швидше!": { ro: "mai repede!", en: "faster!" },
+  "+ кораблик": { ro: "+ navă", en: "+ ship" },
+  "Усі кульки лопнули": { ro: "Toate bilele s-au spart", en: "All the balls popped" },
+  "Кульки долетіли до діри": { ro: "Bilele au ajuns la gaura neagră", en: "The balls reached the hole" },
+  "Нічого страшного — спробуй ще!": { ro: "Nu-i nimic — mai încearcă!", en: "It's okay — try again!" },
+  "Веди кораблик пальцем": { ro: "Mișcă nava cu degetul", en: "Move the ship with your finger" },
+  "веди пальцем — кораблик стріляє сам": { ro: "mișcă degetul — nava trage singură", en: "move your finger — the ship shoots by itself" },
+  "+2 кульки": { ro: "+2 bile", en: "+2 balls" },
+  "ширша дошка": { ro: "paletă mai lată", en: "wider paddle" },
+  "торкнись — і кулька полетить": { ro: "atinge — și mingea zboară", en: "tap — and the ball flies" },
+  "Молодець! Усі монстрики збиті": { ro: "Bravo! Toți monștrii au căzut", en: "Well done! All the monsters are down" },
+  "Стіна розбита": { ro: "Zidul e spart", en: "The wall is broken" },
+  "Стіна дійшла до червоної лінії": { ro: "Zidul a ajuns la linia roșie", en: "The wall reached the red line" },
+  "Кульки впали": { ro: "Bilele au căzut", en: "The balls fell" },
+  "Нічого страшного, спробуй ще": { ro: "Nu-i nimic, mai încearcă", en: "It's okay, try again" },
+  "Відбивай кульку дошкою": { ro: "Respinge mingea cu paleta", en: "Bounce the ball with the paddle" },
+  "веди пальцем — дошка відбиває кульку": { ro: "mișcă degetul — paleta respinge mingea", en: "move your finger — the paddle bounces the ball" },
+  "⭐ Ще зірочка!": { ro: "⭐ Încă o steluță!", en: "⭐ One more star!" },
+  "Торкнись — і біжимо!": { ro: "Atinge — și alergăm!", en: "Tap — and let's run!" },
+  "Новий рекорд!": { ro: "Record nou!", en: "New record!" },
+  "Ой! Спробуй ще": { ro: "Ups! Mai încearcă", en: "Oops! Try again" },
+  "Ой, кактус!": { ro: "Ups, un cactus!", en: "Oops, a cactus!" },
+  "Торкайся, щоб стрибати через кактуси": { ro: "Atinge ca să sari peste cactuși", en: "Tap to jump over the cacti" },
+  "торкнись будь-де — динозаврик стрибне": { ro: "atinge oriunde — dinozaurul sare", en: "tap anywhere — the dino jumps" },
+  "Ура! Жабка вдома": { ro: "Ura! Broscuța e acasă", en: "Hooray! The frog is home" },
+  "Сердечка скінчились": { ro: "S-au terminat inimioarele", en: "Out of hearts" },
+  "Спробуй ще раз — у тебе вийде!": { ro: "Mai încearcă o dată — o să-ți iasă!", en: "Try once more — you can do it!" },
+  "Доведи жабку до хатинки": { ro: "Du broscuța până la căsuță", en: "Get the frog to its little house" },
+  "✖️ групами": { ro: "✖️ în grupe", en: "✖️ in groups" },
+  "➗ порівну": { ro: "➗ în mod egal", en: "➗ equal shares" },
+  "✖️➗ цифрами": { ro: "✖️➗ cu cifre", en: "✖️➗ with digits" },
+  "додаємо з картинками": { ro: "adunăm cu imagini", en: "adding with pictures" },
+  "віднімаємо з картинками": { ro: "scădem cu imagini", en: "subtracting with pictures" },
+  "цифрами": { ro: "cu cifre", en: "with digits" },
+  "множимо: скільки всього?": { ro: "înmulțim: câte în total?", en: "multiplying: how many in total?" },
+  "ділимо: по скільки кожному?": { ro: "împărțim: câte primește fiecare?", en: "dividing: how many each?" },
+  "таблиця множення": { ro: "tabla înmulțirii", en: "times tables" },
+  "💡 Підказка — показати картинками": { ro: "💡 Indiciu — arată cu imagini", en: "💡 Hint — show with pictures" },
+  "🔒 Спершу пройди попередній рівень": { ro: "🔒 Mai întâi termină nivelul anterior", en: "🔒 Finish the previous level first" },
+  "Молодець! Новий рівень!": { ro: "Bravo! Nivel nou!", en: "Well done! New level!" },
+  "Порахуй уважно": { ro: "Numără cu atenție", en: "Count carefully" },
+  "Ти": { ro: "Tu", en: "You" },
+  "Гра": { ro: "Jocul", en: "Game" },
+  "Твій хід! Ти ставиш": { ro: "Rândul tău! Tu pui", en: "Your turn! You place" },
+  "Ти ставиш": { ro: "Tu pui", en: "You place" },
+  "склади три в ряд": { ro: "pune trei în linie", en: "get three in a row" },
+  "Ти переміг! 🎉": { ro: "Ai câștigat! 🎉", en: "You won! 🎉" },
+  "Ти переміг!": { ro: "Ai câștigat!", en: "You won!" },
+  "Цього разу виграла гра 🙂": { ro: "De data asta a câștigat jocul 🙂", en: "The game won this time 🙂" },
+  "граймо ще!": { ro: "hai să mai jucăm!", en: "let's play again!" },
+  "Нічия! 🤝": { ro: "Egalitate! 🤝", en: "It's a draw! 🤝" },
+  "ніхто не переміг": { ro: "nimeni n-a câștigat", en: "nobody won" },
+  "Склади три хрестики в ряд": { ro: "Pune trei X-uri în linie", en: "Get three crosses in a row" },
+  "Гра думає… 🤔": { ro: "Jocul se gândește… 🤔", en: "The game is thinking… 🤔" },
+  "🔁 Нова гра": { ro: "🔁 Joc nou", en: "🔁 New game" },
+  "Відкривай клітинки": { ro: "Deschide căsuțele", en: "Open the squares" },
+  "🚩 Прапорець": { ro: "🚩 Steguleț", en: "🚩 Flag" },
+  "Бабах! 💥": { ro: "Bum! 💥", en: "Boom! 💥" },
+  "нічого — спробуй ще раз": { ro: "nu-i nimic — mai încearcă o dată", en: "that's okay — try again" },
+  "Ой, міна!": { ro: "Ups, o mină!", en: "Oops, a mine!" },
+  "Тепер ти знаєш, де її шукати": { ro: "Acum știi unde s-o cauți", en: "Now you know where to look for it" },
+  "Усі міни знайдено!": { ro: "Toate minele au fost găsite!", en: "All mines found!" },
+  "Поле розміновано!": { ro: "Câmpul e curățat de mine!", en: "The field is clear!" },
+  "Наступне поле буде більшим": { ro: "Următorul câmp va fi mai mare", en: "The next field will be bigger" },
+  "Ти справжній сапер!": { ro: "Ești un adevărat genist!", en: "You're a real minesweeper!" },
+  "Відкривай клітинки, обходь міни": { ro: "Deschide căsuțele, ocolește minele", en: "Open the squares, avoid the mines" },
+  "Запамʼятай усе": { ro: "Ține minte tot", en: "Remember everything" },
+  "зараз щось зникне": { ro: "acum ceva va dispărea", en: "something will disappear now" },
+  "натисни те, чого не стало": { ro: "apasă pe ce lipsește", en: "tap what is missing" },
+  "Запамʼятай, хто де живе": { ro: "Ține minte cine unde locuiește", en: "Remember who lives where" },
+  "зараз двері зачиняться": { ro: "acum ușile se închid", en: "the doors will close now" },
+  "натисни на будиночок": { ro: "apasă pe o căsuță", en: "tap a house" },
+  "Дивись уважно": { ro: "Privește atent", en: "Watch carefully" },
+  "Запамʼятай, які світяться": { ro: "Ține minte care se aprind", en: "Remember which ones light up" },
+  "натисни ті, що світились": { ro: "apasă-le pe cele care s-au aprins", en: "tap the ones that lit up" },
+  "Подивись ще раз": { ro: "Mai privește o dată", en: "Look once more" },
+  "Дивись, що кладемо в кошик": { ro: "Uite ce punem în coș", en: "Look what we put in the basket" },
+  "Цього не клали": { ro: "Asta nu am pus", en: "We didn't put that in" },
+  "Усе знайшов!": { ro: "Ai găsit tot!", en: "You found everything!" },
+  "Знайди однакові звуки": { ro: "Găsește sunetele la fel", en: "Find matching sounds" },
+  "Знайди картки, що звучать однаково": { ro: "Găsește cartonașele care sună la fel", en: "Find the cards that sound the same" },
+  "Запамʼятай, як стоять": { ro: "Ține minte cum stau", en: "Remember the order" },
+  "зліва направо": { ro: "de la stânga la dreapta", en: "from left to right" },
+  "Постав так, як було": { ro: "Pune-le cum au fost", en: "Put them back as they were" },
+  "натискай по черзі зліва направо": { ro: "apasă pe rând, de la stânga la dreapta", en: "tap them in order from left to right" },
+  "Усе на місці!": { ro: "Totul e la locul lui!", en: "Everything is in place!" },
+  "Для батьків": { ro: "Pentru părinți", en: "For parents" },
+  "Щоб відкрити налаштування, порахуй:": { ro: "Ca să deschizi setările, calculează:", en: "To open the settings, work out:" },
+  "Готово": { ro: "Gata", en: "Done" },
+  "Вийти": { ro: "Ieși", en: "Leave" },
+  "Не те число": { ro: "Nu e numărul bun", en: "That's not the number" },
+  "Що змінилось:": { ro: "Ce s-a schimbat:", en: "What's new:" },
+  "опису змін немає.": { ro: "nu există descrierea schimbărilor.", en: "no change notes." },
+  "Пізніше": { ro: "Mai târziu", en: "Later" },
+  "Добре, спитаю наступного разу": { ro: "Bine, întreb data viitoare", en: "OK, I'll ask next time" },
+  "немає інтернету — спробуйте пізніше": { ro: "nu e internet — încercați mai târziu", en: "no internet — try later" },
+  "перевіряю…": { ro: "verific…", en: "checking…" },
+  "не вдалося перевірити": { ro: "nu s-a putut verifica", en: "couldn't check" },
+  "нової версії": { ro: "versiunea nouă", en: "the new version" },
+  "Налаштування": { ro: "Setări", en: "Settings" },
+  "Звуки:": { ro: "Sunete:", en: "Sounds:" },
+  "увімкнено": { ro: "pornite", en: "on" },
+  "вимкнено": { ro: "oprite", en: "off" },
+  "Озвучка:": { ro: "Voce:", en: "Voice-over:" },
+  "Голос:": { ro: "Vocea:", en: "Voice:" },
+  "Звуки тварин:": { ro: "Sunetele animalelor:", en: "Animal sounds:" },
+  "справжні, з папки sounds": { ro: "reale, din dosarul sounds", en: "real, from the sounds folder" },
+  "справжні записи з інтернету": { ro: "înregistrări reale de pe internet", en: "real recordings from the internet" },
+  "Зірочок:": { ro: "Steluțe:", en: "Stars:" },
+  "Наліпок:": { ro: "Abțibilduri:", en: "Stickers:" },
+  "Версія": { ro: "Versiunea", en: "Version" },
+  "(оновлення — кнопкою під меню)": { ro: "(actualizare — butonul de sub meniu)", en: "(update — with the button under the menu)" },
+  "перевіряється…": { ro: "se verifică…", en: "checking…" },
+  "пристрій не вміє озвучувати": { ro: "dispozitivul nu poate vorbi", en: "this device cannot speak" },
+  "YouTube-канал автора ↗": { ro: "Canalul YouTube al autorului ↗", en: "Author's YouTube channel ↗" },
+  "Закрити": { ro: "Închide", en: "Close" },
+  "Змінити": { ro: "Schimbă", en: "Change" },
+  "🎤 Свої голоси": { ro: "🎤 Vocile voastre", en: "🎤 Your own voices" },
+  "Що змінити?": { ro: "Ce schimbăm?", en: "What to change?" },
+  "🔇 Вимкнути звуки": { ro: "🔇 Oprește sunetele", en: "🔇 Sounds off" },
+  "🔊 Увімкнути звуки": { ro: "🔊 Pornește sunetele", en: "🔊 Sounds on" },
+  "🤐 Вимкнути голос": { ro: "🤐 Oprește vocea", en: "🤐 Voice off" },
+  "🗣️ Увімкнути голос": { ro: "🗣️ Pornește vocea", en: "🗣️ Voice on" },
+  "💾 Зірочки й наліпки у файл": { ro: "💾 Steluțe și abțibilduri în fișier", en: "💾 Stars and stickers to a file" },
+  "Звуки увімкнено": { ro: "Sunete pornite", en: "Sounds on" },
+  "Звуки вимкнено": { ro: "Sunete oprite", en: "Sounds off" },
+  "Голос увімкнено": { ro: "Vocea pornită", en: "Voice on" },
+  "Голос вимкнено": { ro: "Vocea oprită", en: "Voice off" },
+  "Резервна копія": { ro: "Copie de rezervă", en: "Backup" },
+  "Збережи у файл — і на новому телефоні чи після очищення браузера все можна повернути.": { ro: "Salvează într-un fișier — pe un telefon nou sau după curățarea browserului poți recupera totul.", en: "Save to a file — on a new phone or after clearing the browser you can bring everything back." },
+  "💾 Зберегти у файл": { ro: "💾 Salvează în fișier", en: "💾 Save to file" },
+  "📂 Відновити з файлу": { ro: "📂 Restaurează din fișier", en: "📂 Restore from file" },
+  "Не вдалося прочитати дані": { ro: "Datele nu au putut fi citite", en: "Couldn't read the data" },
+  "💾 Збережено у файл": { ro: "💾 Salvat în fișier", en: "💾 Saved to file" },
+  "Це не файл EnergyUA Junior": { ro: "Acesta nu e un fișier EnergyUA Junior", en: "This isn't an EnergyUA Junior file" },
+  "Відновити?": { ro: "Restaurezi?", en: "Restore?" },
+  "У файлі: зірочок": { ro: "În fișier: steluțe", en: "In the file: stars" },
+  ". Поточні зірочки й наліпки на цьому телефоні замінить вміст файлу.": { ro: ". Steluțele și abțibildurile de pe acest telefon vor fi înlocuite cu conținutul fișierului.", en: ". The stars and stickers on this phone will be replaced by the file." },
+  "Відновити": { ro: "Restaurează", en: "Restore" },
+  "Скасувати": { ro: "Anulează", en: "Cancel" },
+  "Не вдалося відновити — мало місця": { ro: "Nu s-a putut restaura — spațiu insuficient", en: "Couldn't restore — not enough space" },
+  "✅ Відновлено": { ro: "✅ Restaurat", en: "✅ Restored" },
+});
+I18N_RE.push(
+  [new RegExp("^Так! (\\d+)$"), { ro: "Da! {1}", en: "Yes! {1}" }],
+  [new RegExp("^Так! Це (.+)$"), { ro: "Da! E {1}", en: "Yes! It's the {1}" }],
+  [new RegExp("^Так! Тут (.+)$"), { ro: "Da! Aici e {1}", en: "Yes! Here is the {1}" }],
+  [new RegExp("^Тут (.+)$"), { ro: "Aici e {1}", en: "Here is the {1}" }],
+  [new RegExp("^Де (.+)\\?$"), { ro: "Unde e {1}?", en: "Where is the {1}?" }],
+  [new RegExp("^Так! Решта — (.+)$"), { ro: "Da! Restul sunt {1}", en: "Yes! The rest are {1}" }],
+  [new RegExp("^Так! (.+)$"), { ro: "Da! {1}", en: "Yes! The {1}" }],
+  [new RegExp("^каже «(.+)»$"), { ro: "face „{1}”", en: "says “{1}”" }],
+  [new RegExp("^Новий звір: (\\S+) (.+)$"), { ro: "Animal nou: {1} {2}", en: "New animal: {1} {2}" }],
+  [new RegExp("^(\\S+) (мууу|гав-гав|няв-няв|бее-бее|хрю-хрю|ква-ква|ко-ко-ко|кукуріку|кря-кря|і-го-го|пі-пі-пі|уууу|пі-пі|ме-е-е|іа-іа|дз-з-з|ж-ж-ж|р-р-р|тяв-тяв|цок-цок|угу-угу|кар-кар|р-р-р-а-а|ту-у-у|у-у-а-а|гр-р-р|га-га-га|бл-бл-бл|гур-гур|чірік|тьох-тьох|цвір-цвір|з-з-з|у-у-у|кі-кі-кі|ґа-ґу|у-у-у-ум|арф-арф|гр-р-м|тр-р-р|му-у-у|а-а-у)$"), { ro: "{1} {2}", en: "{1} {2}" }],
+  [new RegExp("^мелодія з (\\d+) нот$"), { ro: "melodie din {1} note", en: "a tune of {1} notes" }],
+  [new RegExp("^(\\d+) (?:пари|пар) · натискай і слухай$"), { ro: "{1} perechi · apasă și ascultă", en: "{1} pairs · tap and listen" }],
+  [new RegExp("^(\\d+) (?:пари|пар)$"), { ro: "{1} perechi", en: "{1} pairs" }],
+  [new RegExp("^Зібрано: (\\d+)$"), { ro: "Adunate: {1}", en: "Collected: {1}" }],
+  [new RegExp("^Найкраще: (\\d+)$"), { ro: "Record: {1}", en: "Best: {1}" }],
+  [new RegExp("^Рівень (\\d+)$"), { ro: "Nivelul {1}", en: "Level {1}" }],
+  [new RegExp("^Рівень (\\d+) пройдено!$"), { ro: "Nivelul {1} terminat!", en: "Level {1} complete!" }],
+  [new RegExp("^(\\S+) Рівень (\\d+)$"), { ro: "{1} Nivelul {2}", en: "{1} Level {2}" }],
+  [new RegExp("^🎯 (\\d+) з (\\d+)$"), { ro: "🎯 {1} din {2}", en: "🎯 {1} of {2}" }],
+  [new RegExp("^(.+) — спробуй ще!$"), { ro: "{1} — mai încearcă!", en: "{1} — try again!" }],
+  [new RegExp("^Пробіг (\\d+)(?: · рекорд (\\d+))?$"), { ro: m => 'Ai alergat ' + m[1] + (m[2] ? ' · record ' + m[2] : ''), en: m => 'Distance ' + m[1] + (m[2] ? ' · best ' + m[2] : '') }],
+  [new RegExp("^Полуниць: (\\d+) з (\\d+)( — усі! ⭐⭐)?$"), { ro: m => 'Căpșuni: ' + m[1] + ' din ' + m[2] + (m[3] ? ' — toate! ⭐⭐' : ''), en: m => 'Strawberries: ' + m[1] + ' of ' + m[2] + (m[3] ? ' — all of them! ⭐⭐' : '') }],
+  [new RegExp("^(\\S+) до (\\d+)$"), { ro: "{1} până la {2}", en: "{1} up to {2}" }],
+  [new RegExp("^🎉 Новий рівень: (.+)$"), { ro: "🎉 Nivel nou: {1}", en: "🎉 New level: {1}" }],
+  [new RegExp("^Сховано мін: 💣 (\\d+)$"), { ro: "Mine ascunse: 💣 {1}", en: "Hidden mines: 💣 {1}" }],
+  [new RegExp("^🚩 зараз ставиш прапорці · 🚩 (\\d+)$"), { ro: "🚩 acum pui stegulețe · 🚩 {1}", en: "🚩 placing flags now · 🚩 {1}" }],
+  [new RegExp("^цифра — скільки мін поруч · 🚩 (\\d+)$"), { ro: "cifra — câte mine sunt în jur · 🚩 {1}", en: "the number — how many mines are nearby · 🚩 {1}" }],
+  [new RegExp("^світиться (\\d+)$"), { ro: "se aprind {1}", en: "{1} light up" }],
+  [new RegExp("^знайди все, що поклали: (\\d+)$"), { ro: "găsește tot ce am pus: {1}", en: "find everything we put in: {1}" }],
+  [new RegExp("^Зібрано (\\d+) з (\\d+)$"), { ro: "Adunate {1} din {2}", en: "Collected {1} of {2}" }],
+  [new RegExp("^ще (\\d+) ⭐ до наступної$"), { ro: "încă {1} ⭐ până la următorul", en: "{1} more ⭐ to the next one" }],
+  [new RegExp("^Для «(.+)» знову звучатиме звук гри\\.$"), { ro: "Pentru „{1}” se va auzi din nou sunetul jocului.", en: "The game sound will play again for “{1}”." }],
+  [new RegExp("^свої записи \\((\\d+) з (\\d+)\\)$"), { ro: "înregistrările voastre ({1} din {2})", en: "your recordings ({1} of {2})" }],
+  [new RegExp("^🆕 Є версія (.+)$"), { ro: "🆕 Versiunea {1} e gata", en: "🆕 Version {1} available" }],
+  [new RegExp("^Нова версія (.+)$"), { ro: "Versiune nouă {1}", en: "New version {1}" }],
+  [new RegExp("^Зараз у вас (.+)\\. Зірочки, наліпки й записи збережуться\\.$"), { ro: "Acum aveți {1}. Steluțele, abțibildurile și înregistrările rămân.", en: "You now have {1}. Stars, stickers and recordings are kept." }],
+  [new RegExp("^оновлюю до (.+)…$"), { ro: "actualizez la {1}…", en: "updating to {1}…" }],
+  [new RegExp("^у вас найновіша версія \\((.+)\\)$"), { ro: "aveți cea mai nouă versiune ({1})", en: "you have the latest version ({1})" }],
+  [new RegExp("^✅ Оновлено: (.+) → (.+)$"), { ro: "✅ Actualizat: {1} → {2}", en: "✅ Updated: {1} → {2}" }],
+  [new RegExp("^Звуки тварин: BigSoundBank"), { ro: "Sunetele animalelor: BigSoundBank (CC0); Serviciul Parcurilor Naționale din SUA și U.S. Fish & Wildlife Service (domeniu public); SoundBible.com — Mike Koenig, Caroline Ford (CC BY 3.0) și înregistrări din domeniul public. Lista completă — în README.", en: "Animal sounds: BigSoundBank (CC0); U.S. National Park Service and U.S. Fish & Wildlife Service (public domain); SoundBible.com — Mike Koenig, Caroline Ford (CC BY 3.0) and public-domain recordings. Full list in the README." }],
+);
+/* I18N-DATA-END */
+function i18nInit() {
+  document.documentElement.lang = LANG;
+  if (LANG === 'uk') return;
+  // назви ігор на плитках розбиті <br> - перекладаємо цілими
+  $$('.tile .nm').forEach((e) => { const d = I18N[e.innerHTML]; if (d && d[LANG]) e.innerHTML = d[LANG]; });
+  document.title = T(document.title);
+  trNode(document.body);
+  new MutationObserver((ms) => {
+    for (const m of ms) {
+      if (m.type === 'childList') m.addedNodes.forEach(trNode);
+      else if (m.type === 'characterData') trNode(m.target);
+      else if (m.type === 'attributes') trNode(m.target);
+    }
+  }).observe(document.body, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: I18N_ATTR });
+}
 
 /* ---------- звук ---------- */
 let AC = null;
@@ -786,11 +1319,14 @@ function envNoise({ dur, vol = 0.1, t0 = 0, fpts = [[0, 1500], [1, 700]], filt =
    краще промовчати: чужий голос читає кирилицю своїми правилами і виходить
    «іноземець». Усі завдання продубльовані текстом на екрані. */
 let VOICES = [], UA_VOICE = null, VOICE_READY = false;
-const isUA = (v) => /^uk\b|^uk[-_]/i.test(v && v.lang || '');
+/* голос обраної мови: uk → українська, ro → румунська, en → англійська */
+const isUA = (v) => new RegExp('^' + LANG + '\\b|^' + LANG + '[-_]', 'i').test(v && v.lang || '');
 function loadVoices() {
   try { VOICES = speechSynthesis.getVoices() || []; } catch (e) { VOICES = []; }
   const uk = VOICES.filter(isUA);
-  UA_VOICE = uk.find((v) => v.localService) || uk[0] || null;   // офлайн-голос кращий
+  const want = LANGS[LANG].loc.toLowerCase().replace('_', '-');
+  UA_VOICE = uk.find((v) => v.localService && v.lang.toLowerCase().replace('_', '-') === want)
+    || uk.find((v) => v.localService) || uk[0] || null;   // офлайн-голос кращий
   VOICE_READY = VOICES.length > 0;
 }
 if ('speechSynthesis' in window) {
@@ -800,6 +1336,11 @@ if ('speechSynthesis' in window) {
 }
 function voiceInfo() {
   if (!('speechSynthesis' in window)) return 'пристрій не вміє озвучувати';
+  if (LANG !== 'uk') {
+    if (UA_VOICE) return `${LANGS[LANG].flag} ${UA_VOICE.name}`;
+    if (!VOICE_READY) return 'перевіряється…';
+    return LANG === 'ro' ? 'nu există voce românească — vocea tace' : 'no English voice — speech is off';
+  }
   if (VOICE_KEYS.size) {
     const st = VPACK ? '✅ завантажено' : VPACK_P ? '⏳ вантажиться…' : `❌ файл voice.pack не знайдено${VPACK_ERR ? ' (' + VPACK_ERR + ')' : ''}`;
     return `записаний (${VOICE_KEYS.size} фраз) — ${st}`;
@@ -834,7 +1375,7 @@ function vpackLoad() {
   }
   return VPACK_P;
 }
-if (VOICE_KEYS.size) vpackLoad().catch(() => {});
+if (VOICE_KEYS.size && LANG === 'uk') vpackLoad().catch(() => {});
 function ttsSay(text, rate = 0.88) {
   if (!('speechSynthesis' in window)) return;
   if (!VOICE_READY) loadVoices();            // може, список уже під'їхав
@@ -843,7 +1384,7 @@ function ttsSay(text, rate = 0.88) {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     if (UA_VOICE) u.voice = UA_VOICE;
-    u.lang = 'uk-UA';
+    u.lang = LANGS[LANG].loc;
     u.rate = rate; u.pitch = 1.12;
     V_END = vNow() + 400 + text.length * 75;
     u.onend = () => { V_END = vNow(); };
@@ -915,6 +1456,10 @@ function say(text, rate = 0.88) {
   if (!S.voice) return;
   // поки голос розкодовується, вважаємо, що фраза триває за оцінкою довжини
   V_END = vNow() + 300 + (Array.isArray(text) ? text.join(' ') : String(text)).length * 70;
+  if (LANG !== 'uk') {                  // інші мови - синтезатор телефона, текст перекладаємо
+    ttsSay(Array.isArray(text) ? text.map(T).join(' ') : T(text), rate);
+    return;
+  }
   const parts = Array.isArray(text) ? text : [text];
   const keys = parts.map(vKey);
   if (keys.some((k) => !VOICE_IDX[k])) { ttsSay(parts.join(' '), rate); return; }
@@ -1163,14 +1708,28 @@ const ABC = 'АБВГДЕЄЖЗИІКЛМНОПРСТУФХЦЧШЩЮЯ'.split('
 const LET_NAME = { А: 'а', Б: 'бе', В: 'ве', Г: 'ге', Ґ: 'ґе', Д: 'де', Е: 'е', Є: 'є', Ж: 'же', З: 'зе', И: 'и',
   І: 'і', Ї: 'ї', Й: 'йот', К: 'ка', Л: 'ел', М: 'ем', Н: 'ен', О: 'о', П: 'пе', Р: 'ер', С: 'ес', Т: 'те', У: 'у',
   Ф: 'еф', Х: 'ха', Ц: 'це', Ч: 'че', Ш: 'ша', Щ: 'ща', Ю: 'ю', Я: 'я' };
+/* румунською й англійською - свої слова й абетка */
+const LET_L = {
+  ro: { set: [['🐈', 'PISICĂ'], ['🐕', 'CÂINE'], ['🏠', 'CASĂ'], ['🌳', 'COPAC'], ['🍎', 'MĂR'],
+              ['🌙', 'LUNĂ'], ['☀️', 'SOARE'], ['🐟', 'PEȘTE'], ['🚗', 'MAȘINĂ'], ['🌸', 'FLOARE'],
+              ['🐻', 'URS'], ['🦊', 'VULPE'], ['🍄', 'CIUPERCĂ'], ['❄️', 'ZĂPADĂ'], ['🐝', 'ALBINĂ'],
+              ['🥕', 'MORCOV'], ['🧀', 'BRÂNZĂ'], ['🚂', 'TREN'], ['🦋', 'FLUTURE'], ['🌧️', 'PLOAIE']],
+        abc: 'ABCDEFGHILMNOPRSTUVZ'.split(''), yes: (c) => `Da! Litera ${c}` },
+  en: { set: [['🐈', 'CAT'], ['🐕', 'DOG'], ['🏠', 'HOUSE'], ['🌳', 'TREE'], ['🍎', 'APPLE'],
+              ['🌙', 'MOON'], ['☀️', 'SUN'], ['🐟', 'FISH'], ['🚗', 'CAR'], ['🌸', 'FLOWER'],
+              ['🐻', 'BEAR'], ['🦊', 'FOX'], ['🍄', 'MUSHROOM'], ['❄️', 'SNOW'], ['🐝', 'BEE'],
+              ['🥕', 'CARROT'], ['🧀', 'CHEESE'], ['🚂', 'TRAIN'], ['🦋', 'BUTTERFLY'], ['🌧️', 'RAIN']],
+        abc: 'ABCDEFGHJKLMNOPRSTW'.split(''), yes: (c) => `Yes! The letter ${c}` },
+};
 const LET = { ch: '', busy: false };
 function letNew() {
-  const [em, word] = pick(LET_SET);
+  const L = LET_L[LANG];
+  const [em, word] = pick(L ? L.set : LET_SET);
   LET.ch = word[0]; LET.busy = false;
   $('#letPic').textContent = em;
   $('#letWord').textContent = word;
   const opts = new Set([LET.ch]);
-  while (opts.size < 3) opts.add(pick(ABC));
+  while (opts.size < 3) opts.add(pick(LET_L[LANG] ? LET_L[LANG].abc : ABC));
   $('#letters').innerHTML = shuffle([...opts]).map((c) => `<button class="big let" data-c="${c}">${c}</button>`).join('');
   $('#letAsk').innerHTML = 'З якої букви починається?<small>натисни потрібну букву</small>';
   say(word.toLowerCase());
@@ -1180,7 +1739,7 @@ $('#letters').onclick = (e) => {
   const b = e.target.closest('.let'); if (!b || LET.busy) return;
   if (b.dataset.c === LET.ch) {
     LET.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
-    say(`Так! Буква ${LET_NAME[LET.ch]}`);
+    say(LET_L[LANG] ? LET_L[LANG].yes(LET.ch) : `Так! Буква ${LET_NAME[LET.ch]}`);
     speechDone(1500).then(() => { if (SCR === 'letter') letNew(); });
   } else { b.classList.add('no'); oops(); vibe(120); say('Спробуй ще'); setTimeout(() => b.classList.remove('no'), 500); }
 };
@@ -1564,7 +2123,7 @@ function aniVoice(name) {
     const f = ANI_SOUND[name];
     if (f) { ac(); f(); return; }
     const a = ANI_SET.find((x) => x[1] === name);    // для нових тварин синтезу немає
-    if (a) { toast(`${a[0]} ${a[2]}`); say(a[2]); }
+    if (a) { toast(`${a[0]} ${T(a[2])}`); say(a[2]); }
   };
   if (REC[name]) { playUrl(REC[name], synth, 4.5); return; }
   const src = ANI_SRC[name];
@@ -1758,8 +2317,20 @@ const SHP_FORM = [
   { id: 'star', g: 'f', nm: 'зірка' },
 ];
 const SHP = { key: '', busy: false, lvl: 1, ok: 0 };
-const shpName = (c, f) => `${c[f.g]} ${f.nm}`;
-const shpAcc = (c, f) => (f.g === 'f' ? `${c.f.replace(/а$/, 'у').replace(/я$/, 'ю')} ${f.nm.replace(/а$/, 'у')}` : shpName(c, f));
+/* румунською прикметник іде після назви й узгоджується з нею: cercul roșu, steaua roșie;
+   англійською - просто «the red circle» */
+const SHP_L = {
+  ro: { col: { red: ['roșu', 'roșie'], blu: ['albastru', 'albastră'], yel: ['galben', 'galbenă'], grn: ['verde', 'verde'],
+               vio: ['violet', 'violetă'], org: ['portocaliu', 'portocalie'] },
+        form: { circle: ['cercul', 0], square: ['pătratul', 0], tri: ['triunghiul', 0], star: ['steaua', 1] },
+        name: (c, f) => { const [n, fem] = SHP_L.ro.form[f.id]; return `${n} ${SHP_L.ro.col[c.id][fem]}`; }, find: 'Găsește' },
+  en: { col: { red: 'red', blu: 'blue', yel: 'yellow', grn: 'green', vio: 'purple', org: 'orange' },
+        form: { circle: 'circle', square: 'square', tri: 'triangle', star: 'star' },
+        name: (c, f) => `the ${SHP_L.en.col[c.id]} ${SHP_L.en.form[f.id]}`, find: 'Find' },
+};
+const shpName = (c, f) => (SHP_L[LANG] ? SHP_L[LANG].name(c, f) : `${c[f.g]} ${f.nm}`);
+const shpAcc = (c, f) => (SHP_L[LANG] ? SHP_L[LANG].name(c, f)
+  : f.g === 'f' ? `${c.f.replace(/а$/, 'у').replace(/я$/, 'ю')} ${f.nm.replace(/а$/, 'у')}` : shpName(c, f));
 
 function shpNew() {
   const col = pick(SHP_COL), form = pick(SHP_FORM);
@@ -1784,8 +2355,9 @@ function shpNew() {
     `<button class="big shp" data-k="${o.c.id}|${o.f.id}" aria-label="${shpName(o.c, o.f)}">` +
     `<i class="f-${o.f.id}" style="background:${o.c.css}"></i></button>`).join('');
   const what = shpAcc(col, form);
-  $('#shpAsk').innerHTML = `Знайди ${what}<small>натисни потрібну фігуру</small>`;
-  say('Знайди ' + what);
+  const find = SHP_L[LANG] ? SHP_L[LANG].find : 'Знайди';
+  $('#shpAsk').innerHTML = `${find} ${what}<small>натисни потрібну фігуру</small>`;
+  say(find + ' ' + what);
 }
 START.shape = () => { SHP.lvl = 1; SHP.ok = 0; shpNew(); };
 $('#shapes').onclick = (e) => {
@@ -2475,7 +3047,7 @@ function boDraw() {
   g.globalAlpha = 1;
   if (BO.balls.some((b) => b.stuck)) {
     g.fillStyle = '#ffffffcc'; g.font = `800 ${Math.round(U * 0.4)}px Nunito,system-ui,sans-serif`;
-    g.fillText('торкнись — і кулька полетить', w / 2, BO.py - U * 1.1);
+    g.fillText(T('торкнись — і кулька полетить'), w / 2, BO.py - U * 1.1);
   }
 }
 function boLoop(ts) {
@@ -2648,7 +3220,7 @@ function dnDraw() {
   if (DN.wait) {
     g.fillStyle = '#5b3a12'; g.font = `900 ${Math.round(S * 0.42)}px Nunito,system-ui,sans-serif`;
     g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText('Торкнись — і біжимо!', w / 2, h * 0.33);
+    g.fillText(T('Торкнись — і біжимо!'), w / 2, h * 0.33);
   }
 }
 function dnLoop(ts) {
@@ -3060,8 +3632,57 @@ function mtMake(L) {
     voice = pic ? [...numW(tot, true), mtNoun(it, tot), 'поділили порівну', MT_FRIENDS[a], 'По скільки кожному?']
       : [...numW(tot), 'поділити на', ...numW(a), 'Скільки буде?'];
   }
-  return { a, b, op, ans, it, txt, voice, pic, L };
+  let ask = voice[voice.length - 1];
+  if (MT_L[LANG]) ({ voice, ask } = MT_L[LANG](op, a, b, it, pic));   // інші мови - цілим реченням
+  return { a, b, op, ans, it, txt, voice, ask, pic, L };
 }
+/* ---- завдання румунською й англійською: одним реченням для синтезатора ----
+   Румунською числівник узгоджується з родом (o bomboană, două bomboane; un balon, două baloane),
+   а від 20 додається «de» (douăzeci de bomboane). Англійською - 1 balloon, 2 balloons. */
+const MT_IT_L = {
+  'кулька': { en: ['balloon', 'balloons'], ro: ['balon', 'baloane', 'n'] },
+  'цукерка': { en: ['candy', 'candies'], ro: ['bomboană', 'bomboane', 'f'] },
+  'полуниця': { en: ['strawberry', 'strawberries'], ro: ['căpșună', 'căpșuni', 'f'] },
+  'зірочка': { en: ['star', 'stars'], ro: ['steluță', 'steluțe', 'f'] },
+  'машинка': { en: ['car', 'cars'], ro: ['mașinuță', 'mașinuțe', 'f'] },
+};
+const RO_U = ['zero', 'unu', 'doi', 'trei', 'patru', 'cinci', 'șase', 'șapte', 'opt', 'nouă', 'zece',
+  'unsprezece', 'doisprezece', 'treisprezece', 'paisprezece', 'cincisprezece', 'șaisprezece', 'șaptesprezece', 'optsprezece', 'nouăsprezece'];
+const RO_T = ['', '', 'douăzeci', 'treizeci', 'patruzeci', 'cincizeci', 'șaizeci', 'șaptezeci', 'optzeci', 'nouăzeci'];
+/** Румунське число словами; f - жіночий рід (una, două, douăsprezece). */
+function roNum(n, f) {
+  if (n === 100) return 'o sută';
+  const u = (d) => (f && d === 1 ? 'una' : f && d === 2 ? 'două' : RO_U[d]);
+  if (n < 20) return n === 12 && f ? 'douăsprezece' : u(n);
+  const t = Math.floor(n / 10), d = n % 10;
+  return d ? `${RO_T[t]} și ${u(d)}` : RO_T[t];
+}
+/** «o bomboană», «două bomboane», «douăzeci de baloane». g: 'f' | 'n' | 'm'. */
+function roCnt(n, sg, pl, g) {
+  if (n === 1) return (g === 'f' ? 'o ' : 'un ') + sg;
+  const w = roNum(n, g !== 'm' && !(g === 'n' && n % 10 === 1 && n > 20));
+  return w + (n % 100 >= 20 || n % 100 === 0 ? ' de ' : ' ') + pl;
+}
+const enCnt = (n, it) => `${n} ${n === 1 ? it[0] : it[1]}`;
+const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+const MT_L = {
+  en(op, a, b, it, pic) {
+    const w = MT_IT_L[it[1]].en, q = (v, ask) => ({ voice: `${v} ${ask}`, ask });
+    if (op === '+') return pic ? q(`${enCnt(a, w)} and ${enCnt(b, w)}.`, 'How many altogether?') : q(`${a} plus ${b}.`, 'How much is it?');
+    if (op === '−') return pic ? q(`There were ${enCnt(a, w)}. ${b} ${b === 1 ? 'was' : 'were'} taken away.`, 'How many are left?') : q(`${a} minus ${b}.`, 'How much is it?');
+    if (op === '×') return pic ? q(`${a} baskets with ${enCnt(b, w)} in each.`, 'How many in total?') : q(`${a} times ${b}.`, 'How much is it?');
+    return pic ? q(`${enCnt(a * b, w)} shared equally between ${a} friends.`, 'How many does each get?') : q(`${a * b} divided by ${a}.`, 'How much is it?');
+  },
+  ro(op, a, b, it, pic) {
+    const [sg, pl, g] = MT_IT_L[it[1]].ro, c = (n) => roCnt(n, sg, pl, g), q = (v, ask) => ({ voice: `${v} ${ask}`, ask });
+    if (op === '+') return pic ? q(`${cap(c(a))} și ${c(b)}.`, 'Câte sunt în total?') : q(`${a} plus ${b}.`, 'Cât fac?');
+    if (op === '−') return pic ? q(`Erau ${c(a)}. S-${b === 1 ? 'a' : 'au'} luat ${b === 1 ? (g === 'f' ? 'una' : 'unul') : roNum(b, true)}.`, 'Câte au rămas?') : q(`${a} minus ${b}.`, 'Cât fac?');
+    if (op === '×') return pic ? q(`${cap(roCnt(a, 'coș', 'coșuri', 'n'))}, în fiecare câte ${c(b)}.`, 'Câte sunt în total?') : q(`${a} ori ${b}.`, 'Cât fac?');
+    return pic ? q(`${cap(c(a * b))} împărțite în mod egal la ${roNum(a)} prieteni.`, 'Câte primește fiecare?') : q(`${a * b} împărțit la ${a}.`, 'Cât fac?');
+  },
+};
+/** «Так! 7» - українською записаними словами, іншими мовами цифрою. */
+const mtYes = (n) => (LANG === 'uk' ? ['Так!', ...numW(n)] : `${T('Так!')} ${n}`);
 /** Чотири різні відповіді поруч із правильною (не менше нуля). */
 function mtOpts(ans, L) {
   const s = new Set([ans]), spread = L >= 8 ? 10 : L >= 5 ? 5 : 3;
@@ -3093,7 +3714,7 @@ function mtNew() {
   const q = MT.q = mtMake(MT.lvl);
   MT.busy = false; MT.miss = 0;
   mtLevels();
-  $('#mtAsk').innerHTML = `${q.txt}<small>${q.voice[q.voice.length - 1]}</small>`;
+  $('#mtAsk').innerHTML = `${q.txt}<small>${q.ask}</small>`;
   mtPicture(q);
   $('#mtAns').innerHTML = mtOpts(q.ans, q.L).map((v) => `<button class="big num" data-v="${v}">${v}</button>`).join('');
   say(q.voice);
@@ -3112,8 +3733,8 @@ $('#mtAns').onclick = (e) => {
   if (+b.dataset.v === q.ans) {
     MT.busy = true; b.classList.add('ok'); cheer(); vibe(40);
     if (MT.miss === 0) { MT.ok++; if (MT.ok % 3 === 0) addStar(); }   // з першої спроби - іде в залік
-    else { MT.busy = true; setTimeout(mtNew, 1700); say(['Так!', ...numW(q.ans)]); return; }
-    say(['Так!', ...numW(q.ans)]);
+    else { MT.busy = true; setTimeout(mtNew, 1700); say(mtYes(q.ans)); return; }
+    say(mtYes(q.ans));
     if (MT.ok >= MT_NEED && MT.lvl < MT_LV.length) {
       confetti();
       MT.lvl++; MT.ok = 0; MT.top = Math.max(MT.top, MT.lvl);
@@ -3657,7 +4278,9 @@ async function fetchRemoteVersion() {
     const r = await fetch(base + 'version.json?t=' + Date.now(), { cache: 'no-store' });
     if (r.ok) {
       const j = await r.json();
-      if (j && j.version) return { version: String(j.version), changes: Array.isArray(j.changes) ? j.changes.slice(0, 8) : [] };
+      // опис змін - мовою гри, якщо він є («changes_ro», «changes_en»), інакше український
+      const ch = Array.isArray(j['changes_' + LANG]) ? j['changes_' + LANG] : j.changes;
+      if (j && j.version) return { version: String(j.version), changes: Array.isArray(ch) ? ch.slice(0, 8) : [] };
     }
   } catch (e) { /* немає version.json - дивимось у саму сторінку */ }
   const r = await fetch(location.href.split('#')[0].split('?')[0] + '?t=' + Date.now(), { cache: 'no-store' });
@@ -3720,16 +4343,28 @@ async function checkUpdate(silent) {
 })();
 
 function parentPanel() {
-  const noVoice = VOICE_READY && !UA_VOICE && !VPACK;
-  const hint = noVoice
-    ? `<br><br>Щоб гра заговорила українською, треба додати український голос:<br>
+  const noVoice = VOICE_READY && !UA_VOICE && (LANG !== 'uk' || !VPACK);
+  const HINT = {
+    uk: `<br><br>Щоб гра заговорила українською, треба додати український голос:<br>
        <b>Android:</b> Налаштування → Мови та введення → Синтез мови → Google → Мова → Українська (завантажити).<br>
        <b>iPhone:</b> Налаштування → Доступність → Вимовляння → Голоси → Українська.<br>
-       Без нього гра просто мовчить — усі завдання є на екрані.`
-    : '';
+       Без нього гра просто мовчить — усі завдання є на екрані.`,
+    ro: `<br><br>Ca jocul să vorbească românește, adăugați vocea română:<br>
+       <b>Android:</b> Setări → Limbă și introducere → Transformare text în vorbire → Google → Limbă → Română (descărcare).<br>
+       <b>iPhone:</b> Configurări → Accesibilitate → Conținut vorbit → Voci → Română.<br>
+       Fără ea jocul tace — toate sarcinile sunt pe ecran.`,
+    en: `<br><br>To make the game speak English, add an English voice:<br>
+       <b>Android:</b> Settings → Language and input → Text-to-speech → Google → Language → English (download).<br>
+       <b>iPhone:</b> Settings → Accessibility → Spoken Content → Voices → English.<br>
+       Without it the game stays silent — every task is shown on screen.`,
+  };
+  const hint = noVoice ? HINT[LANG] : '';
+  // вибір мови: назви мов - кожна своєю мовою, не перекладаємо
+  const langRow = `<span class="langs" translate="no">${Object.entries(LANGS).map(([k, l]) =>
+    `<button class="lng${k === LANG ? ' on' : ''}" data-lang="${k}">${l.flag} ${l.name}</button>`).join('')}</span>`;
   dialog({
     em: '⚙️', h: 'Налаштування',
-    p: `Звуки: <b>${S.sound ? 'увімкнено' : 'вимкнено'}</b> · Озвучка: <b>${S.voice ? 'увімкнено' : 'вимкнено'}</b><br>
+    p: `${langRow}Звуки: <b>${S.sound ? 'увімкнено' : 'вимкнено'}</b> · Озвучка: <b>${S.voice ? 'увімкнено' : 'вимкнено'}</b><br>
         Голос: <b>${voiceInfo()}</b><br>
         Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'справжні, з папки sounds' : 'справжні записи з інтернету')}</b><br>
         Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>
@@ -3750,6 +4385,14 @@ function parentPanel() {
     },
   });
 }
+
+/* зміна мови: запамʼятати й перезапустити гру - так усе, що вже на екрані, буде новою мовою */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.lng[data-lang]'); if (!b) return;
+  const k = b.dataset.lang; if (k === LANG) return;
+  LS.set('lang', k); blip();
+  closeDialog(); setTimeout(() => location.reload(), 150);
+});
 
 /* ---------- резервна копія ----------
    Зірочки, наліпки, рівні й свої записи живуть лише в цьому браузері. Новий телефон
@@ -3801,11 +4444,15 @@ $('#bkFile').onchange = async (e) => {
 $('#byeAgain').onclick = () => { blip(); go('menu'); };
 $('#starN').textContent = S.stars;
 $('#verLine').textContent = 'v' + APP_VERSION;
+// прапорець мови під меню: відкриває налаштування для батьків (через замок), де мову й міняють
+$('#langBtn').textContent = LANGS[LANG].flag + ' ' + ({ uk: 'UA', ro: 'RO', en: 'EN' })[LANG];
+$('#langBtn').onclick = (e) => { e.stopPropagation(); blip(); parentGate(); };
 $('#updNow').onclick = (e) => { e.stopPropagation(); if (UPD) askUpdate(); else checkUpdate(); };
 // тиха перевірка: за 3 с після запуску і далі раз на пів години
 setTimeout(() => checkUpdate(true), 3000);
 setInterval(() => checkUpdate(true), 30 * 60 * 1000);
 document.addEventListener('click', () => { ac(); loadVoices(); }, { once: true });
+i18nInit();
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
