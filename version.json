@@ -1,19 +1,22 @@
 {
-  "version": "1.3.5",
+  "version": "1.3.6",
   "date": "2026-10-12",
   "changes": [
-    "Нова гра «Пʼятнашки» (у «Логіці»): розсунь цифри на дошці по порядку, одне місце вільне",
-    "Три рівні: 3×2 (цифри 1–5), 3×3 (1–8) і 4×4 (1–15); цифра на своєму місці стає зеленою",
-    "Торкнись цифри поруч із порожнім місцем — вона зсунеться; за кожну перемогу — зірочка"
+    "Нова гра «Пазли» (в «Увазі»): 6 яскравих малюнків — робот, ракета, динозаврик, гоночна машина, акула й котик із веселкою",
+    "Можна обрати кількість шматочків: 4, 6, 9, 12 або 20, і малюнок угорі",
+    "Перетягуй шматочок на місце: на своєму місці він прилипає, на чужому відскакує. Можна й торкнутись шматочка, а потім місця",
+    "Після кожного пазла — зірочка (дві за великі), а наступного разу малюнок інший"
   ],
   "changes_ro": [
-    "Joc nou „Puzzle glisant” (în „Logică”): mută cifrele pe tablă în ordine, un loc e liber",
-    "Trei niveluri: 3×2 (cifrele 1–5), 3×3 (1–8) și 4×4 (1–15); cifra la locul ei devine verde",
-    "Atinge o cifră de lângă locul liber — se mută; pentru fiecare victorie — o steluță"
+    "Joc nou „Puzzle” (în „Atenție”): 6 imagini vesele — robot, rachetă, dinozaur, mașină de curse, rechin și pisică cu curcubeu",
+    "Alegi numărul de piese: 4, 6, 9, 12 sau 20, și imaginea de sus",
+    "Trage piesa la locul ei: la locul potrivit se lipește, la altul sare înapoi. Poți și să atingi piesa, apoi locul",
+    "După fiecare puzzle — o steluță (două pentru cele mari), iar data viitoare imaginea e alta"
   ],
   "changes_en": [
-    "New game “Sliding puzzle” (in “Logic”): slide the numbers on the board into order, one spot is free",
-    "Three levels: 3×2 (numbers 1–5), 3×3 (1–8) and 4×4 (1–15); a number in its place turns green",
-    "Tap a number next to the empty spot and it slides; every win earns a star"
+    "New game “Jigsaw” (in “Attention”): 6 bright pictures — robot, rocket, dinosaur, race car, shark and a cat with a rainbow",
+    "Choose the number of pieces: 4, 6, 9, 12 or 20, and the picture at the top",
+    "Drag a piece into place: in the right spot it snaps in, in the wrong one it jumps back. You can also tap a piece, then the spot",
+    "A star after every puzzle (two for big ones), and next time the picture is different"
   ]
 }

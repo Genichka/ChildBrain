@@ -105,6 +105,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t26{background:linear-gradient(170deg,#ffee52,#f2cc0c)}
 .t27{background:linear-gradient(170deg,#ca95e5,#a352cc)}
 .t28{background:linear-gradient(170deg,#8ab8ff,#3274d9)}
+.t29{background:linear-gradient(170deg,#ff9ec9,#e0458f)}
 /* ---------- рахуємо ---------- */
 .mtlv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
 .mtl{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:17px;padding:0;min-height:48px}
@@ -180,6 +181,22 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .pzt{border-radius:12px;border:0;background:linear-gradient(170deg,#8ab8ff,#3274d9);color:#fff;font-weight:900;box-shadow:0 4px 0 #0004;padding:0;animation:in .2s backwards}
 .pzt:active{transform:translateY(3px);box-shadow:0 1px 0 #0004}
 .pzt.ok{background:linear-gradient(170deg,#96d98d,#56a64b)}
+/* ---------- пазли ---------- */
+.jgth{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:0 0 6px}
+.jgth button{aspect-ratio:1;border-radius:10px;border:3px solid var(--line);background-size:cover;background-position:center;padding:0}
+.jgth button.on{border-color:var(--yel);box-shadow:0 0 0 2px var(--yel)}
+#jgN{grid-template-columns:repeat(5,1fr)}
+.jgb{position:relative;box-sizing:content-box;margin:0 auto;border:3px solid var(--line);border-radius:10px;overflow:hidden;background:#0b0c0e;touch-action:none}
+.jgb .ghost{position:absolute;inset:0;background-size:100% 100%;opacity:.22;pointer-events:none}
+.jgb .grid{position:absolute;inset:0;display:grid}
+.jgs{box-sizing:border-box;border:1px dashed #ffffff40;background-repeat:no-repeat}
+.jgs.on{border:0;animation:pop .3s}
+.jgs.bad{background:#ff5a5f66}
+.jgtray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:72px;padding-top:4px}
+.jgp{box-sizing:border-box;border-radius:10px;border:3px solid #fff;box-shadow:0 4px 0 #0005;touch-action:none;background-repeat:no-repeat;animation:in .25s backwards}
+.jgp.sel{border-color:var(--yel);transform:translateY(-5px)}
+.jgp.src{opacity:.3}
+.jgp.drag{position:fixed;z-index:50;pointer-events:none;box-shadow:0 12px 26px #000a;transform:scale(1.06);animation:none}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -505,6 +522,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
       <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
       <button class="tile t12" data-go="gone"><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
+      <button class="tile t29" data-go="jigsaw"><span class="em">🖼️</span><span class="nm">Пазли</span></button>
     </div></div>
     <div class="page" data-grp="Памʼять"><p class="gdesc">🧠 <b>Памʼять</b> — запамʼятати, де що лежить і як стояло</p><div class="menu">
       <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
@@ -689,6 +707,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   </div>
 </section>
 
+<!-- пазли -->
+<section class="scr" id="s-jigsaw">
+  <div class="jgth" id="jgPics"></div>
+  <div class="mtlv" id="jgN"></div>
+  <div class="mtprog" id="jgInfo"></div>
+  <div class="play">
+    <div class="jgb" id="jgBoard"></div>
+    <div class="jgtray" id="jgTray"></div>
+  </div>
+</section>
+
 <!-- колір і форма -->
 <section class="scr" id="s-shape">
   <div class="ask" id="shpAsk">Знайди фігуру</div>
@@ -844,7 +873,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.5';
+const APP_VERSION = '1.3.6';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1018,6 +1047,9 @@ Object.assign(I18N, {
   "торкайся цифр поруч із порожнім місцем": { ro: "atinge cifrele de lângă locul liber", en: "tap the numbers next to the empty spot" },
   "🔀 Перемішати": { ro: "🔀 Amestecă", en: "🔀 Shuffle" },
   "Ходів": { ro: "Mutări", en: "Moves" },
+  "Пазли": { ro: "Puzzle", en: "Jigsaw" },
+  "Зібрано": { ro: "Puse la loc", en: "Placed" },
+  "Перетягуй шматочки на місце": { ro: "Trage piesele la locul lor", en: "Drag the pieces into place" },
   "Тварини": { ro: "Animale", en: "Animals" },
   "Їжа": { ro: "Mâncare", en: "Food" },
   "Транспорт": { ro: "Transport", en: "Transport" },
@@ -1699,7 +1731,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', bye: 'EnergyUA Junior' };
+                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', jigsaw: 'Пазли', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -4412,6 +4444,225 @@ $('#pzBoard').onclick = (e) => {
     setTimeout(() => { if (SCR === 'puzzle') pzNew(); }, 2600);
   }
 };
+
+/* ================================================================
+   16. ПАЗЛИ  (малюнки для сучасних дітей - намальовані в коді, без файлів; 4–20 шматочків)
+   Шматочок перетягують із «руки» (до 6 штук) на дошку: на своєму місці він прилипає,
+   на чужому - відскакує. Можна й торкнутись шматочка, а потім місця.
+   ================================================================ */
+const JG_PICS = (() => {
+const H = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">';
+const star = (x, y, r, f = '#fff') => `<path d="M${x} ${y - r}L${x + r * .3} ${y - r * .3}L${x + r} ${y}L${x + r * .3} ${y + r * .3}L${x} ${y + r}L${x - r * .3} ${y + r * .3}L${x - r} ${y}L${x - r * .3} ${y - r * .3}Z" fill="${f}"/>`;
+return [
+{ nm: 'robot', svg: H +
+ '<defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4fc3f7"/><stop offset="1" stop-color="#b388ff"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#a)"/>' +
+ '<g fill="#ffffff55"><circle cx="50" cy="60" r="18"/><circle cx="350" cy="90" r="26"/><circle cx="60" cy="330" r="30"/><circle cx="345" cy="335" r="16"/></g>' +
+ star(70, 150, 12) + star(335, 200, 10) + star(330, 40, 9) +
+ '<g stroke="#37474f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">' +
+ '<line x1="200" y1="62" x2="200" y2="98" fill="none"/><circle cx="200" cy="52" r="13" fill="#ff5a5f"/>' +
+ '<rect x="100" y="130" width="24" height="54" rx="9" fill="#ffb300"/><rect x="276" y="130" width="24" height="54" rx="9" fill="#ffb300"/>' +
+ '<rect x="120" y="96" width="160" height="112" rx="26" fill="#cfd8dc"/>' +
+ '<circle cx="165" cy="146" r="24" fill="#fff"/><circle cx="235" cy="146" r="24" fill="#fff"/>' +
+ '<circle cx="168" cy="148" r="12" fill="#2979ff" stroke="none"/><circle cx="238" cy="148" r="12" fill="#2979ff" stroke="none"/>' +
+ '<circle cx="172" cy="143" r="4" fill="#fff" stroke="none"/><circle cx="242" cy="143" r="4" fill="#fff" stroke="none"/>' +
+ '<rect x="160" y="178" width="80" height="18" rx="9" fill="#37474f"/>' +
+ '<rect x="86" y="228" width="34" height="96" rx="17" fill="#cfd8dc"/><rect x="280" y="228" width="34" height="96" rx="17" fill="#cfd8dc"/>' +
+ '<circle cx="103" cy="332" r="19" fill="#ffb300"/><circle cx="297" cy="332" r="19" fill="#ffb300"/>' +
+ '<rect x="130" y="214" width="140" height="124" rx="22" fill="#ff7043"/>' +
+ '<rect x="158" y="238" width="84" height="56" rx="12" fill="#263238"/>' +
+ '<circle cx="180" cy="266" r="9" fill="#66bb6a" stroke="none"/><circle cx="202" cy="266" r="9" fill="#ffee58" stroke="none"/><circle cx="224" cy="266" r="9" fill="#ef5350" stroke="none"/>' +
+ '<rect x="148" y="338" width="34" height="42" rx="10" fill="#cfd8dc"/><rect x="218" y="338" width="34" height="42" rx="10" fill="#cfd8dc"/>' +
+ '<rect x="138" y="372" width="54" height="20" rx="10" fill="#37474f"/><rect x="208" y="372" width="54" height="20" rx="10" fill="#37474f"/>' +
+ '</g></svg>' },
+{ nm: 'rocket', svg: H +
+ '<defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1446"/><stop offset="1" stop-color="#4527a0"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#b)"/>' +
+ star(50, 50, 10) + star(120, 120, 7) + star(330, 60, 12) + star(360, 200, 8) + star(40, 220, 9) + star(280, 140, 6) + star(90, 300, 7) +
+ '<g><ellipse cx="310" cy="105" rx="68" ry="14" fill="none" stroke="#ffe082" stroke-width="8" transform="rotate(-18 310 105)"/><circle cx="310" cy="105" r="42" fill="#ffb74d"/><path d="M270 98Q310 80 350 100" stroke="#ff8f00" stroke-width="6" fill="none"/><path d="M272 118Q312 134 348 116" stroke="#ff8f00" stroke-width="5" fill="none"/>' +
+ '<ellipse cx="310" cy="105" rx="68" ry="14" fill="none" stroke="#ffe082" stroke-width="8" stroke-dasharray="80 400" stroke-dashoffset="-95" transform="rotate(-18 310 105)"/></g>' +
+ '<circle cx="70" cy="335" r="44" fill="#66bb6a"/><circle cx="55" cy="320" r="9" fill="#43a047"/><circle cx="88" cy="348" r="12" fill="#43a047"/><circle cx="80" cy="312" r="6" fill="#43a047"/>' +
+ '<g stroke="#37474f" stroke-width="6" stroke-linejoin="round">' +
+ '<path d="M180 300Q200 392 220 300Z" fill="#ffca28" stroke="#ff7043"/><path d="M190 300Q200 350 210 300Z" fill="#fff59d" stroke="none"/>' +
+ '<path d="M165 255L112 322L168 296Z" fill="#ef5350"/><path d="M235 255L288 322L232 296Z" fill="#ef5350"/>' +
+ '<path d="M200 70C252 122 252 220 238 300L162 300C148 220 148 122 200 70Z" fill="#f5f5f5"/>' +
+ '<path d="M200 70C222 92 234 114 240 140L160 140C166 114 178 92 200 70Z" fill="#ef5350"/>' +
+ '<circle cx="200" cy="190" r="30" fill="#4fc3f7"/><circle cx="200" cy="190" r="30" fill="none" stroke="#90a4ae" stroke-width="5"/><path d="M186 180Q196 170 208 174" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+ '<rect x="160" y="262" width="80" height="14" rx="7" fill="#ef5350" stroke="none"/>' +
+ '</g></svg>' },
+{ nm: 'dino', svg: H +
+ '<defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fc3f7"/><stop offset="1" stop-color="#e1f5fe"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#c)"/><circle cx="335" cy="70" r="40" fill="#ffee58"/><circle cx="335" cy="70" r="52" fill="#ffee5833"/>' +
+ '<g fill="#fff"><ellipse cx="90" cy="70" rx="42" ry="16"/><ellipse cx="120" cy="58" rx="28" ry="16"/><ellipse cx="230" cy="110" rx="34" ry="12"/></g>' +
+ '<path d="M0 250L90 150L130 190L170 120L240 250Z" fill="#8d6e63"/><path d="M158 140L170 120L184 146L172 156Z" fill="#ff7043"/><path d="M170 120L176 92Q190 80 182 60" stroke="#bdbdbd" stroke-width="10" fill="none" stroke-linecap="round"/>' +
+ '<ellipse cx="200" cy="420" rx="320" ry="150" fill="#81c784"/><ellipse cx="60" cy="330" rx="140" ry="50" fill="#66bb6a"/>' +
+ '<g stroke="#2e7d32" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">' +
+ '<path d="M110 292Q60 300 30 250Q80 262 120 262Z" fill="#66bb6a"/>' +
+ '<rect x="140" y="300" width="36" height="60" rx="16" fill="#66bb6a"/><rect x="230" y="300" width="36" height="60" rx="16" fill="#66bb6a"/>' +
+ '<ellipse cx="195" cy="270" rx="100" ry="66" fill="#66bb6a"/>' +
+ '<ellipse cx="200" cy="292" rx="62" ry="36" fill="#c5e1a5" stroke="none"/>' +
+ '<g fill="#ffa726" stroke="#ef6c00" stroke-width="5"><path d="M118 224L132 190L150 216Z"/><path d="M158 210L176 174L194 208Z"/><path d="M204 208L224 176L238 214Z"/></g>' +
+ '<circle cx="288" cy="190" r="58" fill="#66bb6a"/>' +
+ '<circle cx="306" cy="178" r="16" fill="#fff"/><circle cx="310" cy="180" r="8" fill="#263238" stroke="none"/><circle cx="313" cy="177" r="3" fill="#fff" stroke="none"/>' +
+ '<path d="M290 214Q314 232 338 212" fill="none"/><circle cx="262" cy="206" r="9" fill="#f48fb1" stroke="none"/>' +
+ '<circle cx="326" cy="150" r="5" fill="#2e7d32" stroke="none"/><circle cx="274" cy="146" r="4" fill="#2e7d32" stroke="none"/>' +
+ '</g></svg>' },
+{ nm: 'car', svg: H +
+ '<defs><linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7043"/><stop offset=".6" stop-color="#ffd54f"/><stop offset="1" stop-color="#fff59d"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#d)"/><circle cx="80" cy="190" r="56" fill="#fff59d"/>' +
+ '<g fill="#fff"><ellipse cx="300" cy="70" rx="48" ry="16"/><ellipse cx="330" cy="58" rx="30" ry="16"/><ellipse cx="90" cy="100" rx="40" ry="13"/></g>' +
+ '<path d="M0 250L70 200L130 240L210 190L290 245L360 205L400 230L400 300L0 300Z" fill="#8e5bb5" opacity=".55"/>' +
+ '<rect y="290" width="400" height="110" fill="#455a64"/><rect y="286" width="400" height="10" fill="#cfd8dc"/>' +
+ '<g fill="#fff"><rect x="20" y="345" width="60" height="10" rx="5"/><rect x="150" y="345" width="60" height="10" rx="5"/><rect x="280" y="345" width="60" height="10" rx="5"/></g>' +
+ '<g stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".9"><line x1="8" y1="236" x2="58" y2="236"/><line x1="20" y1="262" x2="76" y2="262"/><line x1="4" y1="288" x2="50" y2="288"/></g>' +
+ '<g stroke="#263238" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">' +
+ '<path d="M96 262Q86 224 124 218L150 186Q160 168 186 168L262 168Q290 168 304 196L322 222Q352 226 354 258L354 288L96 288Z" fill="#e53935"/>' +
+ '<path d="M158 214L174 184L216 184L216 214Z" fill="#b3e5fc"/><path d="M228 214L228 184L262 184Q276 184 284 214Z" fill="#b3e5fc"/>' +
+ '<rect x="104" y="196" width="46" height="12" rx="4" fill="#263238"/><rect x="92" y="190" width="14" height="30" rx="5" fill="#b71c1c"/>' +
+ '<circle cx="222" cy="252" r="22" fill="#fff" stroke="none"/><text x="222" y="264" font-family="Arial Black,Arial,sans-serif" font-size="34" font-weight="900" text-anchor="middle" fill="#e53935" stroke="none">7</text>' +
+ '<path d="M344 238L360 246L360 262L344 262Z" fill="#ffee58"/>' +
+ '<circle cx="146" cy="290" r="34" fill="#37474f"/><circle cx="146" cy="290" r="14" fill="#cfd8dc"/><circle cx="300" cy="290" r="34" fill="#37474f"/><circle cx="300" cy="290" r="14" fill="#cfd8dc"/>' +
+ '</g></svg>' },
+{ nm: 'sea', svg: H +
+ '<defs><linearGradient id="e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4dd0e1"/><stop offset="1" stop-color="#01579b"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#e)"/>' +
+ '<g fill="#ffffff22"><path d="M90 0L150 0L230 400L120 400Z"/><path d="M250 0L290 0L380 400L310 400Z"/></g>' +
+ '<ellipse cx="200" cy="410" rx="260" ry="70" fill="#ffe082"/>' +
+ '<g stroke="#2e7d32" stroke-width="12" stroke-linecap="round" fill="none"><path d="M40 392Q20 340 44 300Q64 262 40 220"/><path d="M70 394Q92 350 74 316"/><path d="M350 394Q374 346 352 304Q336 270 358 236"/></g>' +
+ '<g fill="none" stroke="#fff" stroke-width="4" opacity=".85"><circle cx="86" cy="120" r="11"/><circle cx="104" cy="86" r="7"/><circle cx="70" cy="64" r="5"/><circle cx="326" cy="140" r="9"/><circle cx="342" cy="104" r="6"/></g>' +
+ '<g stroke="#263238" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">' +
+ '<path d="M305 205L362 158L352 205L362 252Z" fill="#78909c"/>' +
+ '<ellipse cx="200" cy="206" rx="118" ry="58" fill="#78909c"/>' +
+ '<path d="M90 214Q200 270 310 214Q200 296 90 214Z" fill="#eceff1" stroke="none"/>' +
+ '<path d="M180 154L214 96L250 160Z" fill="#78909c"/>' +
+ '<path d="M96 214Q124 236 156 226" fill="none"/>' +
+ '<path d="M104 222L112 238L124 226L134 242L144 228L154 236" fill="#fff" stroke="#263238" stroke-width="3"/>' +
+ '<circle cx="138" cy="190" r="14" fill="#fff"/><circle cx="141" cy="192" r="7" fill="#263238" stroke="none"/>' +
+ '<path d="M224 244L252 286L238 250Z" fill="#78909c"/>' +
+ '<circle cx="168" cy="214" r="6" fill="#f48fb1" stroke="none"/>' +
+ '</g>' +
+ '<g stroke="#e65100" stroke-width="4" stroke-linejoin="round"><ellipse cx="92" cy="316" rx="26" ry="16" fill="#ff9800"/><path d="M118 316L140 300L140 332Z" fill="#ff9800"/><circle cx="82" cy="311" r="4" fill="#263238" stroke="none"/></g>' +
+ '<path d="M300 346L308 326L316 346L336 340L322 354L330 374L308 362L286 374L294 354L280 340Z" fill="#ff7043"/>' +
+ '</svg>' },
+{ nm: 'cat', svg: H +
+ '<defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe0f0"/><stop offset="1" stop-color="#d1c4e9"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#f)"/>' +
+ '<g fill="none" stroke-width="20"><path d="M30 330A170 170 0 0 1 370 330" stroke="#ef5350"/><path d="M50 330A150 150 0 0 1 350 330" stroke="#ff9800"/><path d="M70 330A130 130 0 0 1 330 330" stroke="#ffee58"/><path d="M90 330A110 110 0 0 1 310 330" stroke="#66bb6a"/><path d="M110 330A90 90 0 0 1 290 330" stroke="#42a5f5"/><path d="M130 330A70 70 0 0 1 270 330" stroke="#ab47bc"/></g>' +
+ '<g fill="#fff"><ellipse cx="62" cy="350" rx="60" ry="30"/><ellipse cx="100" cy="338" rx="40" ry="28"/><ellipse cx="338" cy="350" rx="60" ry="30"/><ellipse cx="300" cy="338" rx="40" ry="28"/></g>' +
+ star(60, 70, 14, '#ffd54f') + star(340, 90, 18, '#ffd54f') + star(46, 190, 9, '#f48fb1') + star(360, 200, 10, '#f48fb1') +
+ '<g stroke="#5d4037" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">' +
+ '<path d="M132 190L124 122L180 160Z" fill="#ffcc80"/><path d="M268 190L276 122L220 160Z" fill="#ffcc80"/>' +
+ '<path d="M138 172L134 142L162 162Z" fill="#f8bbd0" stroke="none"/><path d="M262 172L266 142L238 162Z" fill="#f8bbd0" stroke="none"/>' +
+ '<ellipse cx="200" cy="228" rx="86" ry="76" fill="#ffcc80"/>' +
+ '<ellipse cx="200" cy="262" rx="40" ry="28" fill="#fff3e0" stroke="none"/>' +
+ '<circle cx="164" cy="218" r="17" fill="#fff"/><circle cx="236" cy="218" r="17" fill="#fff"/>' +
+ '<circle cx="167" cy="220" r="10" fill="#263238" stroke="none"/><circle cx="239" cy="220" r="10" fill="#263238" stroke="none"/>' +
+ '<circle cx="171" cy="215" r="4" fill="#fff" stroke="none"/><circle cx="243" cy="215" r="4" fill="#fff" stroke="none"/>' +
+ '<path d="M188 244L212 244L200 258Z" fill="#f06292"/><path d="M200 258Q200 274 182 272M200 258Q200 274 218 272" fill="none"/>' +
+ '<circle cx="140" cy="250" r="12" fill="#f48fb1" stroke="none" opacity=".7"/><circle cx="260" cy="250" r="12" fill="#f48fb1" stroke="none" opacity=".7"/>' +
+ '<g stroke-width="4" fill="none"><path d="M112 246L146 252M110 266L146 264"/><path d="M288 246L254 252M290 266L254 264"/></g>' +
+ '<path d="M180 150L186 134L200 148L214 134L220 150" fill="#ffd54f" stroke-width="5"/>' +
+ '</g></svg>' },
+];
+})();
+const JG_N = [[2, 2], [3, 2], [3, 3], [4, 3], [5, 4]];        // [стовпців, рядків]
+const JG = { n: Math.min(4, LS.get('jgN', 1)), pic: LS.get('jgPic', 0) % JG_PICS.length, cols: 3, rows: 2, cell: 80, filled: new Set(), q: [], sel: null, busy: false };
+const jgUrl = (i) => `url("data:image/svg+xml,${encodeURIComponent(JG_PICS[i].svg)}")`;
+const jgPos = (k) => `${JG.cols > 1 ? (k % JG.cols) / (JG.cols - 1) * 100 : 0}% ${JG.rows > 1 ? Math.floor(k / JG.cols) / (JG.rows - 1) * 100 : 0}%`;
+/** Шматочок k картини: фон розтягнуто на всю дошку й зсунуто так, щоб було видно лише свою клітинку. */
+function jgPaint(el, k) {
+  el.style.backgroundImage = jgUrl(JG.pic);
+  el.style.backgroundSize = `${JG.cols * 100}% ${JG.rows * 100}%`;
+  el.style.backgroundPosition = jgPos(k);
+}
+function jgInfo() {
+  $('#jgInfo').innerHTML = `${T('Перетягуй шматочки на місце')}<br>${T('Зібрано')}: <b>${JG.filled.size} / ${JG.cols * JG.rows}</b>`;
+}
+function jgTray() {
+  const tr = $('#jgTray'), ts = Math.min(66, JG.cell);
+  tr.innerHTML = '';
+  JG.q.slice(0, 6).forEach((k) => {
+    const d = document.createElement('div');
+    d.className = 'jgp' + (JG.sel === k ? ' sel' : ''); d.dataset.i = k;
+    d.style.width = d.style.height = ts + 'px';
+    jgPaint(d, k); tr.appendChild(d);
+  });
+}
+function jgNew() {
+  const [cols, rows] = JG_N[JG.n];
+  JG.cols = cols; JG.rows = rows;
+  JG.cell = Math.floor(Math.min(Math.min(window.innerWidth * 0.9, 340) / cols, window.innerHeight * 0.33 / rows));
+  JG.filled = new Set(); JG.sel = null; JG.busy = false;
+  JG.q = shuffle(Array.from({ length: cols * rows }, (_, k) => k));
+  $('#jgPics').innerHTML = '';
+  JG_PICS.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = i === JG.pic ? 'on' : ''; b.dataset.p = i; b.style.backgroundImage = jgUrl(i);
+    b.setAttribute('aria-label', JG_PICS[i].nm); $('#jgPics').appendChild(b);
+  });
+  $('#jgN').innerHTML = JG_N.map(([c, r], i) => `<button class="mtl${i === JG.n ? ' on' : ''}" data-n="${i}">${c * r}</button>`).join('');
+  const bd = $('#jgBoard');
+  bd.style.width = JG.cell * cols + 'px'; bd.style.height = JG.cell * rows + 'px';
+  bd.innerHTML = '<div class="ghost"></div><div class="grid"></div>';
+  bd.firstChild.style.backgroundImage = jgUrl(JG.pic);
+  const g = bd.lastChild;
+  g.style.gridTemplateColumns = `repeat(${cols}, ${JG.cell}px)`; g.style.gridTemplateRows = `repeat(${rows}, ${JG.cell}px)`;
+  for (let k = 0; k < cols * rows; k++) { const sl = document.createElement('div'); sl.className = 'jgs'; sl.dataset.i = k; g.appendChild(sl); }
+  jgTray(); jgInfo();
+}
+function jgSlotAt(x, y) {
+  const bd = $('#jgBoard'), r = bd.getBoundingClientRect();
+  const c = Math.floor((x - r.left - bd.clientLeft) / JG.cell), w = Math.floor((y - r.top - bd.clientTop) / JG.cell);
+  return c >= 0 && w >= 0 && c < JG.cols && w < JG.rows ? w * JG.cols + c : -1;
+}
+function jgPlace(k, i) {
+  const sl = $(`#jgBoard .jgs[data-i="${i}"]`);
+  if (!sl || sl.classList.contains('on')) return false;
+  if (k !== i) { sl.classList.add('bad'); oops(); vibe(80); setTimeout(() => sl.classList.remove('bad'), 350); return false; }
+  sl.classList.add('on'); jgPaint(sl, k);
+  JG.filled.add(k); JG.q = JG.q.filter((v) => v !== k); JG.sel = null;
+  blip(); vibe(20); jgTray(); jgInfo();
+  if (JG.filled.size === JG.cols * JG.rows) {
+    JG.busy = true; confetti(); cheer(); vibe(60); addStar(JG.cols * JG.rows >= 12 ? 2 : 1); say('Молодець!');
+    JG.pic = (JG.pic + 1) % JG_PICS.length; LS.set('jgPic', JG.pic);        // наступного разу - інша картинка
+    setTimeout(() => { if (SCR === 'jigsaw') jgNew(); }, 3400);
+  }
+  return true;
+}
+START.jigsaw = () => { jgNew(); say('Збери картинку'); };
+$('#jgPics').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  blip(); JG.pic = +b.dataset.p; LS.set('jgPic', JG.pic); jgNew();
+};
+$('#jgN').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); JG.n = +b.dataset.n; LS.set('jgN', JG.n); jgNew();
+};
+$('#jgBoard').onclick = (e) => {
+  const sl = e.target.closest('.jgs');
+  if (sl && JG.sel != null && !JG.busy) jgPlace(JG.sel, +sl.dataset.i);
+};
+$('#jgTray').addEventListener('pointerdown', (e) => {
+  const pc = e.target.closest('.jgp'); if (!pc || JG.busy) return;
+  e.preventDefault();
+  const k = +pc.dataset.i, sx = e.clientX, sy = e.clientY, cl = pc.cloneNode();
+  let moved = false;
+  cl.className = 'jgp drag'; cl.style.width = cl.style.height = JG.cell + 'px';
+  const at = (ev) => { cl.style.left = ev.clientX - JG.cell / 2 + 'px'; cl.style.top = ev.clientY - JG.cell / 2 - 24 + 'px'; };
+  const mv = (ev) => {
+    if (!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) { moved = true; document.body.appendChild(cl); pc.classList.add('src'); }
+    if (moved) at(ev);
+  };
+  const up = (ev) => {
+    window.removeEventListener('pointermove', mv); window.removeEventListener('pointercancel', up);
+    cl.remove(); pc.classList.remove('src');
+    if (!moved) { JG.sel = JG.sel === k ? null : k; $$('#jgTray .jgp').forEach((d) => d.classList.toggle('sel', +d.dataset.i === JG.sel)); return; }
+    const i = jgSlotAt(ev.clientX, ev.clientY - 24);
+    if (i >= 0 && ev.type === 'pointerup') jgPlace(k, i);
+  };
+  window.addEventListener('pointermove', mv);
+  window.addEventListener('pointerup', up, { once: true }); window.addEventListener('pointercancel', up, { once: true });
+});
 
 /* ================================================================
    10. ХРЕСТИКИ-НУЛИКИ  (дитина ✕ і ходить першою, Гралик ◯;
