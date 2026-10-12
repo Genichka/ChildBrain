@@ -99,6 +99,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t20{background:linear-gradient(170deg,#c8f2c2,#73bf69)}
 .t21{background:linear-gradient(170deg,#ffcb7d,#ff9830)}
 .t22{background:linear-gradient(170deg,#ffb3d1,#e8539a)}
+.t23{background:linear-gradient(170deg,#8fe3d0,#2ba88c)}
 /* ---------- рахуємо ---------- */
 .mtlv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
 .mtl{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:17px;padding:0;min-height:48px}
@@ -128,6 +129,23 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #tmAns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 #tmAns .num{min-width:0;width:auto;font-size:30px}
 #tmAns .num.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
+/* ---------- абетка ---------- */
+[hidden]{display:none!important}
+#alTabs{grid-template-columns:repeat(3,1fr)}
+#alTabs .mtl{font-size:14px;padding:4px}
+.alcard{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 16px;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:10px 12px;margin:0 0 10px;min-height:96px}
+.alL{font-size:64px;font-weight:900;line-height:1;color:var(--yel)}
+.alP{font-size:64px;line-height:1}
+.alW{font-size:22px;font-weight:800;letter-spacing:2px}
+.alW b{color:var(--yel)}
+.alN{width:100%;text-align:center;font-size:13px;color:var(--dim);font-weight:700}
+.alg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.alg button{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:22px;font-weight:800;min-height:46px;padding:0}
+.alg button.on{background:#ffd93d33;border-color:var(--yel);color:var(--yel)}
+#alAns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+#alAns .big{min-width:0;width:auto;font-size:34px}
+#alAns .big.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
+.alseq{letter-spacing:6px}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -466,6 +484,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
       <button class="tile t21" data-go="math"><span class="em">🧮</span><span class="nm">Рахуємо</span></button>
       <button class="tile t22" data-go="times"><span class="em">✖️</span><span class="nm">Таблиця<br>множення</span></button>
+      <button class="tile t23" data-go="alpha"><span class="em">🔠</span><span class="nm">Абетка</span></button>
     </div></div>
     <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
       <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
@@ -563,6 +582,16 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     <div class="mtpic" id="tmPic"></div>
     <div class="row" id="tmAns"></div>
   </div>
+</section>
+
+<!-- абетка -->
+<section class="scr" id="s-alpha">
+  <div class="mtlv" id="alTabs"></div>
+  <div class="alcard" id="alCard"></div>
+  <div class="alg" id="alGrid"></div>
+  <div class="mtprog" id="alProg" hidden></div>
+  <div class="ask mtask" id="alAsk" hidden></div>
+  <div class="play" id="alPlay" hidden><div class="row" id="alAns"></div></div>
 </section>
 
 <!-- колір і форма -->
@@ -720,7 +749,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.1';
+const APP_VERSION = '1.3.2';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -878,6 +907,11 @@ Object.assign(I18N, {
   "Таблиця множення": { ro: "Tabla înmulțirii", en: "Times table" },
   "Таблиця на": { ro: "Tabla înmulțirii cu", en: "Times table of" },
   "Усі таблиці": { ro: "Toate tabelele", en: "All tables" },
+  "Абетка": { ro: "Alfabetul", en: "Alphabet" },
+  "👀 Вчимо": { ro: "👀 Învățăm", en: "👀 Learn" },
+  "🎯 Знайди": { ro: "🎯 Găsește", en: "🎯 Find" },
+  "➡️ Далі": { ro: "➡️ Urmează", en: "➡️ Next" },
+  "Буква": { ro: "Litera", en: "Letter" },
   "Нова наліпка!": { ro: "Abțibild nou!", en: "New sticker!" },
   "Вона вже в твоєму альбомі": { ro: "E deja în albumul tău", en: "It's already in your album" },
   "Ура!": { ro: "Ura!", en: "Hooray!" },
@@ -1550,7 +1584,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', bye: 'EnergyUA Junior' };
+                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -3837,6 +3871,117 @@ $('#tmAns').onclick = (e) => {
     if (TM.miss === 2) tmPicture(q, true);            // друга помилка - картинки
     if (TM.miss >= 3) $(`#tmAns .num[data-v="${q.ans}"]`).classList.add('glow');   // третя - підсвічуємо
     say(TM.miss === 2 ? 'Порахуй уважно' : 'Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   12. АБЕТКА  (вчимо букви, шукаємо за назвою, «яка буква пропущена?»)
+   Українська - усі 33 літери зі словами; румунська й англійська - латиниця.
+   ================================================================ */
+const AL_UK = [['А', 'а', '🍉', 'АРБУЗ'], ['Б', 'бе', '🐝', 'БДЖОЛА'], ['В', 'ве', '🐺', 'ВОВК'], ['Г', 'ге', '🍄', 'ГРИБ'],
+  ['Ґ', 'ґе', '🔘', 'ҐУДЗИК'], ['Д', 'де', '🏠', 'ДІМ'], ['Е', 'е', '🧝', 'ЕЛЬФ'], ['Є', 'є', '🦝', 'ЄНОТ'],
+  ['Ж', 'же', '🦒', 'ЖИРАФ'], ['З', 'зе', '🐇', 'ЗАЄЦЬ'], ['И', 'и', '🍒', 'ВИШНЯ'], ['І', 'і', '🧸', 'ІГРАШКА'],
+  ['Ї', 'ї', '🦔', 'ЇЖАК'], ['Й', 'йот', '🥛', 'ЙОГУРТ'], ['К', 'ка', '🐈', 'КІТ'], ['Л', 'ел', '🦊', 'ЛИСИЦЯ'],
+  ['М', 'ем', '🐭', 'МИША'], ['Н', 'ен', '👃', 'НІС'], ['О', 'о', '✏️', 'ОЛІВЕЦЬ'], ['П', 'пе', '🐕', 'ПЕС'],
+  ['Р', 'ер', '🐟', 'РИБА'], ['С', 'ес', '☀️', 'СОНЦЕ'], ['Т', 'те', '🐯', 'ТИГР'], ['У', 'у', '🐍', 'УДАВ'],
+  ['Ф', 'еф', '🌺', 'ФІАЛКА'], ['Х', 'ха', '🍞', 'ХЛІБ'], ['Ц', 'це', '🎪', 'ЦИРК'], ['Ч', 'че', '🍵', 'ЧАЙ'],
+  ['Ш', 'ша', '🧣', 'ШАРФ'], ['Щ', 'ща', '🐀', 'ЩУР'], ['Ь', "м'який знак", '📅', 'ДЕНЬ'], ['Ю', 'ю', '👗', 'ЮБКА'],
+  ['Я', 'я', '🍎', 'ЯБЛУКО']];
+const AL_LAT = (rows) => rows.map(([c, em, w]) => [c, c, em, w]);
+const AL = {
+  uk: AL_UK,
+  en: AL_LAT([['A', '🍎', 'APPLE'], ['B', '🐻', 'BEAR'], ['C', '🐈', 'CAT'], ['D', '🐕', 'DOG'], ['E', '🐘', 'ELEPHANT'],
+    ['F', '🐟', 'FISH'], ['G', '🦒', 'GIRAFFE'], ['H', '🏠', 'HOUSE'], ['I', '🍦', 'ICE CREAM'], ['J', '🧃', 'JUICE'],
+    ['K', '🪁', 'KITE'], ['L', '🦁', 'LION'], ['M', '🌙', 'MOON'], ['N', '👃', 'NOSE'], ['O', '🍊', 'ORANGE'],
+    ['P', '🐷', 'PIG'], ['Q', '👑', 'QUEEN'], ['R', '🌧️', 'RAIN'], ['S', '☀️', 'SUN'], ['T', '🌳', 'TREE'],
+    ['U', '☂️', 'UMBRELLA'], ['V', '🎻', 'VIOLIN'], ['W', '🐋', 'WHALE'], ['X', '🎼', 'XYLOPHONE'], ['Y', '🪀', 'YO-YO'],
+    ['Z', '🦓', 'ZEBRA']]),
+  ro: AL_LAT([['A', '🐝', 'ALBINĂ'], ['B', '🎈', 'BALON'], ['C', '🏠', 'CASĂ'], ['D', '🐬', 'DELFIN'], ['E', '🐘', 'ELEFANT'],
+    ['F', '🌸', 'FLOARE'], ['G', '🦒', 'GIRAFĂ'], ['H', '🐹', 'HAMSTER'], ['I', '🐇', 'IEPURE'], ['J', '🧸', 'JUCĂRIE'],
+    ['L', '🌙', 'LUNĂ'], ['M', '🚗', 'MAȘINĂ'], ['N', '🥜', 'NUCĂ'], ['O', '🐑', 'OAIE'], ['P', '🐈', 'PISICĂ'],
+    ['R', '🦆', 'RAȚĂ'], ['S', '☀️', 'SOARE'], ['T', '🚂', 'TREN'], ['U', '🐻', 'URS'], ['V', '🦊', 'VULPE'],
+    ['Z', '🦓', 'ZEBRĂ']]),
+};
+const AL_TABS = [['learn', '👀 Вчимо'], ['find', '🎯 Знайди'], ['next', '➡️ Далі']];
+const AL_ASK = { find: { uk: 'Знайди букву', ro: 'Găsește litera', en: 'Find the letter' },
+  next: { uk: 'Яка буква пропущена?', ro: 'Ce literă lipsește?', en: 'Which letter is missing?' } };
+const AL_NEED = 5;
+const AL_S = { mode: LS.get('alMode', 'learn'), cur: 0, ok: 0, miss: 0, busy: false, q: null };
+const alSet = () => AL[LANG] || AL.uk;
+/** Нове завдання: {mode, ans, say, txt, small, opts}. Чотири різні варіанти, серед них правильний. */
+function alMake(mode, set) {
+  const n = set.length, opt = (ans) => {
+    const o = new Set([ans]);
+    while (o.size < 4) o.add(set[rnd(n)][0]);
+    return shuffle([...o]);
+  };
+  if (mode === 'find') {
+    const [ch, name] = pick(set), ask = AL_ASK.find[LANG] || AL_ASK.find.uk;
+    return { mode, ans: ch, say: `${ask} ${name}`, txt: ask, small: `«${name}» 🔊`, opts: opt(ch) };
+  }
+  const i = rnd(n - 3), hole = rnd(4), seq = set.slice(i, i + 4).map((r) => r[0]), ans = seq[hole], ask = AL_ASK.next[LANG] || AL_ASK.next.uk;
+  seq[hole] = '❓';
+  return { mode, ans, say: ask, txt: `<span class="alseq">${seq.join(' ')}</span>`, small: ask, opts: opt(ans) };
+}
+function alTabs() {
+  $('#alTabs').innerHTML = AL_TABS.map(([m, t]) => `<button class="mtl${m === AL_S.mode ? ' on' : ''}" data-m="${m}">${T(t)}</button>`).join('');
+}
+function alCard() {
+  const [ch, name, em, word] = alSet()[AL_S.cur], k = word.indexOf(ch);
+  const w = k < 0 ? word : `${word.slice(0, k)}<b>${ch}</b>${word.slice(k + 1)}`;
+  $('#alCard').innerHTML = `<span class="alL">${ch}${LANG === 'uk' ? ch.toLowerCase() : ch.toLowerCase()}</span><span class="alP">${em}</span><span class="alW">${w}</span>` +
+    (LANG === 'uk' ? `<span class="alN">${T('Буква')} «${name}»</span>` : '');
+  $$('#alGrid button').forEach((b, i) => b.classList.toggle('on', i === AL_S.cur));
+}
+function alSay() { const [, name, , word] = alSet()[AL_S.cur]; say(`${LANG === 'uk' ? name : name}. ${word.toLowerCase()}`); }
+function alProg() {
+  $('#alProg').innerHTML = Array.from({ length: AL_NEED }, (_, i) => `<i class="${i < AL_S.ok ? 'on' : ''}"></i>`).join('');
+}
+function alNew() {
+  const q = AL_S.q = alMake(AL_S.mode, alSet());
+  AL_S.busy = false; AL_S.miss = 0;
+  alProg();
+  $('#alAsk').innerHTML = `${q.txt}<small>${q.small}</small>`;
+  $('#alAns').innerHTML = q.opts.map((c) => `<button class="big let" data-c="${c}">${c}</button>`).join('');
+  say(q.say);
+}
+function alRender() {
+  const learn = AL_S.mode === 'learn';
+  alTabs();
+  $('#alCard').hidden = $('#alGrid').hidden = !learn;
+  $('#alProg').hidden = $('#alAsk').hidden = $('#alPlay').hidden = learn;
+  if (learn) {
+    if (AL_S.cur >= alSet().length) AL_S.cur = 0;
+    $('#alGrid').innerHTML = alSet().map(([c], i) => `<button data-i="${i}">${c}</button>`).join('');
+    alCard();
+  } else { AL_S.ok = 0; alNew(); }
+}
+START.alpha = () => alRender();
+$('#alTabs').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); AL_S.mode = b.dataset.m; LS.set('alMode', AL_S.mode); alRender();
+};
+$('#alGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  AL_S.cur = +b.dataset.i; alCard(); alSay();
+};
+$('#alCard').onclick = () => alSay();
+$('#alAns').onclick = (e) => {
+  const b = e.target.closest('.let'); if (!b || AL_S.busy) return;
+  const q = AL_S.q;
+  if (b.dataset.c === q.ans) {
+    AL_S.busy = true; b.classList.add('ok'); cheer(); vibe(40);
+    if (AL_S.miss === 0) AL_S.ok++;
+    const nm = (alSet().find((r) => r[0] === q.ans) || [])[1] || q.ans;
+    say(LANG === 'uk' ? `Так! Буква ${nm}` : (LET_L[LANG] ? LET_L[LANG].yes(q.ans) : `${T('Так!')} ${q.ans}`));
+    if (AL_S.ok >= AL_NEED) { confetti(); addStar(); AL_S.ok = 0; }
+    setTimeout(() => { if (SCR === 'alpha') alNew(); }, 1700);
+  } else {
+    b.classList.add('no'); oops(); vibe(120);
+    AL_S.miss++;
+    if (AL_S.miss >= 2) $(`#alAns .let[data-c="${q.ans}"]`).classList.add('glow');
+    say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
   }
 };
