@@ -1,19 +1,22 @@
 {
-  "version": "1.3.3",
+  "version": "1.3.4",
   "date": "2026-10-12",
   "changes": [
-    "Нова гра «Цифри й числа» (у «Лічбі»): числа 0–10, 0–20 і 0–100",
-    "Три режими: 👀 Вчимо (торкайся чисел — бачиш цифру, яблучка й назву), 🎯 Знайди (число за назвою), ➡️ Далі (яке число пропущене)",
-    "Числа озвучені записаним голосом; 5 правильних поспіль — зірочка"
+    "Три нові логічні гри в «Логіці»: «Що далі?», «Лабіринт» і «Розсортуй»",
+    "«Що далі?» — знайди наступну фігурку в ряду, закономірності ускладнюються",
+    "«Лабіринт» — мишка шукає сир, кожен лабіринт новий і з кожною перемогою більший",
+    "«Розсортуй» — тварини, їжа, транспорт, одяг чи іграшки: у який кошик покласти?"
   ],
   "changes_ro": [
-    "Joc nou „Cifre și numere” (în „Numărat”): numerele 0–10, 0–20 și 0–100",
-    "Trei moduri: 👀 Învățăm, 🎯 Găsește numărul după nume, ➡️ Ce număr lipsește",
-    "5 corecte la rând — o steluță"
+    "Trei jocuri noi de logică: „Ce urmează?”, „Labirintul” și „Sortează”",
+    "„Ce urmează?” — găsește următoarea figurină din șir, tiparele devin tot mai grele",
+    "„Labirintul” — șoricelul caută brânza, fiecare labirint e nou și tot mai mare",
+    "„Sortează” — animale, mâncare, transport, haine sau jucării: în ce coș punem?"
   ],
   "changes_en": [
-    "New game “Digits & numbers” (in “Counting”): numbers 0–10, 0–20 and 0–100",
-    "Three modes: 👀 Learn (tap numbers), 🎯 Find the number by its name, ➡️ Which number is missing",
-    "5 correct in a row — a star"
+    "Three new logic games: “What next?”, “Maze” and “Sort it”",
+    "“What next?” — find the next shape in the row, the patterns get harder",
+    "“Maze” — the mouse looks for the cheese, every maze is new and bigger after each win",
+    "“Sort it” — animals, food, transport, clothes or toys: which basket does it go in?"
   ]
 }

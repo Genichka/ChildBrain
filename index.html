@@ -101,6 +101,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t22{background:linear-gradient(170deg,#ffb3d1,#e8539a)}
 .t23{background:linear-gradient(170deg,#8fe3d0,#2ba88c)}
 .t24{background:linear-gradient(170deg,#ffb08a,#e8643c)}
+.t25{background:linear-gradient(170deg,#c8f2c2,#73bf69)}
+.t26{background:linear-gradient(170deg,#ffee52,#f2cc0c)}
+.t27{background:linear-gradient(170deg,#ca95e5,#a352cc)}
 /* ---------- рахуємо ---------- */
 .mtlv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
 .mtl{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:17px;padding:0;min-height:48px}
@@ -158,6 +161,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #nmAns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 #nmAns .big{min-width:0;width:auto;font-size:30px}
 #nmAns .big.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
+/* ---------- логіка: що далі, лабіринт, розсортуй ---------- */
+.sqrow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:var(--card);border:3px solid var(--line);border-radius:var(--r);padding:14px 10px}
+.sqrow span{font-size:38px;line-height:1.2;animation:in .3s backwards}
+.sqrow span.q{border:3px dashed var(--yel);border-radius:14px;padding:0 8px;color:var(--yel)}
+#sqAns .big{width:92px;height:92px;font-size:46px}
+#sqAns .big.glow,.srt.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
+.mz{display:grid;margin:0 auto;width:min(84vw,40vh,320px);aspect-ratio:1;background:#0b0c0e;border:4px solid var(--line);border-radius:14px;touch-action:none}
+.mz div{box-sizing:border-box;display:grid;place-items:center;line-height:1;border:0 solid #5794f2}
+.mz .wt{border-top-width:3px}.mz .wr{border-right-width:3px}.mz .wb{border-bottom-width:3px}.mz .wl{border-left-width:3px}
+.srt{width:auto;min-width:96px;height:auto;padding:10px 14px;font-size:40px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.srt small{font-size:14px;font-weight:800}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -502,6 +516,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
     <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
       <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
       <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
+      <button class="tile t25" data-go="seq"><span class="em">🔷</span><span class="nm">Що<br>далі?</span></button>
+      <button class="tile t26" data-go="maze"><span class="em">🐭</span><span class="nm">Лабіринт</span></button>
+      <button class="tile t27" data-go="sort"><span class="em">🧺</span><span class="nm">Розсортуй</span></button>
     </div></div>
     <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
       <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
@@ -616,6 +633,40 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   <div class="mtprog" id="nmProg" hidden></div>
   <div class="ask mtask" id="nmAsk" hidden></div>
   <div class="play" id="nmPlay" hidden><div class="row" id="nmAns"></div></div>
+</section>
+
+<!-- що далі -->
+<section class="scr" id="s-seq">
+  <div class="mtprog" id="sqProg"></div>
+  <div class="ask mtask" id="sqAsk">Що далі?</div>
+  <div class="play">
+    <div class="sqrow" id="sqRow"></div>
+    <div class="row" id="sqAns"></div>
+  </div>
+</section>
+
+<!-- лабіринт -->
+<section class="scr" id="s-maze">
+  <div class="ask" id="mzAsk">Допоможи мишці знайти сир 🧀</div>
+  <div class="play">
+    <div class="mz" id="mzBoard"></div>
+    <div class="dpad" id="mzPad" style="margin:0 auto">
+      <button class="d-up" data-d="u">⬆️</button>
+      <button class="d-left" data-d="l">⬅️</button>
+      <button class="d-down" data-d="d">⬇️</button>
+      <button class="d-right" data-d="r">➡️</button>
+    </div>
+  </div>
+</section>
+
+<!-- розсортуй -->
+<section class="scr" id="s-sort">
+  <div class="mtprog" id="stProg"></div>
+  <div class="ask" id="stAsk">Куди це покласти?</div>
+  <div class="play">
+    <div class="pic" id="stItem"></div>
+    <div class="row" id="stBaskets"></div>
+  </div>
 </section>
 
 <!-- колір і форма -->
@@ -773,7 +824,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.3';
+const APP_VERSION = '1.3.4';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -934,6 +985,19 @@ Object.assign(I18N, {
   "Абетка": { ro: "Alfabetul", en: "Alphabet" },
   "Цифри<br>й числа": { ro: "Cifre<br>și numere", en: "Digits<br>& numbers" },
   "Цифри й числа": { ro: "Cifre și numere", en: "Digits & numbers" },
+  "Що<br>далі?": { ro: "Ce<br>urmează?", en: "What<br>next?" },
+  "Що далі?": { ro: "Ce urmează?", en: "What comes next?" },
+  "Лабіринт": { ro: "Labirintul", en: "Maze" },
+  "Розсортуй": { ro: "Sortează", en: "Sort it" },
+  "Куди це покласти?": { ro: "Unde punem asta?", en: "Where does this go?" },
+  "Допоможи мишці знайти сир": { ro: "Ajută șoricelul să găsească brânza", en: "Help the mouse find the cheese" },
+  "Допоможи мишці знайти сир 🧀": { ro: "Ajută șoricelul să găsească brânza 🧀", en: "Help the mouse find the cheese 🧀" },
+  "Складніше!": { ro: "Mai greu!", en: "Harder!" },
+  "Тварини": { ro: "Animale", en: "Animals" },
+  "Їжа": { ro: "Mâncare", en: "Food" },
+  "Транспорт": { ro: "Transport", en: "Transport" },
+  "Одяг": { ro: "Haine", en: "Clothes" },
+  "Іграшки": { ro: "Jucării", en: "Toys" },
   "👀 Вчимо": { ro: "👀 Învățăm", en: "👀 Learn" },
   "🎯 Знайди": { ro: "🎯 Găsește", en: "🎯 Find" },
   "➡️ Далі": { ro: "➡️ Urmează", en: "➡️ Next" },
@@ -1610,7 +1674,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', bye: 'EnergyUA Junior' };
+                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -4107,6 +4171,149 @@ $('#nmAns').onclick = (e) => {
     b.classList.add('no'); oops(); vibe(120);
     NM_S.miss++;
     if (NM_S.miss >= 2) $(`#nmAns .let[data-c="${q.ans}"]`).classList.add('glow');
+    say('Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   14. ЛОГІКА: ЩО ДАЛІ? · ЛАБІРИНТ · РОЗСОРТУЙ
+   ================================================================ */
+/* ---- Що далі? - закономірність із фігурок, треба знайти наступну ---- */
+const SQ_EM = ['🔴', '🔵', '🟢', '🟡', '🟣', '🟠', '⭐', '❤️', '🍎', '🍌', '🐱', '🐶', '🚗', '🌸'];
+const SQ_PAT = [[[0, 1]], [[0, 1], [0, 0, 1], [0, 1, 1]], [[0, 1, 2], [0, 0, 1, 1], [0, 1, 1, 2]]];
+const SQ = { lvl: Math.min(2, LS.get('seqLvl', 0)), ok: 0, miss: 0, busy: false, q: null };
+function sqMake(lvl) {
+  const ems = shuffle(SQ_EM).slice(0, 3), unit = pick(SQ_PAT[lvl]).map((i) => ems[i]), u = unit.length;
+  const total = 2 * u + 1 + rnd(u), ans = unit[(total - 1) % u];
+  const shown = Array.from({ length: total - 1 }, (_, i) => unit[i % u]);
+  const o = new Set([ans]);
+  shuffle(unit).forEach((e) => { if (o.size < 3) o.add(e); });
+  while (o.size < 3) o.add(pick(SQ_EM));
+  return { shown, ans, opts: shuffle([...o]) };
+}
+function sqNew() {
+  const q = SQ.q = sqMake(SQ.lvl);
+  SQ.busy = false; SQ.miss = 0;
+  $('#sqProg').innerHTML = Array.from({ length: 5 }, (_, i) => `<i class="${i < SQ.ok ? 'on' : ''}"></i>`).join('');
+  $('#sqRow').innerHTML = q.shown.map((e) => `<span>${e}</span>`).join('') + '<span class="q">❓</span>';
+  $('#sqAns').innerHTML = q.opts.map((e) => `<button class="big" data-e="${e}">${e}</button>`).join('');
+  say('Що далі?');
+}
+START.seq = () => { SQ.ok = 0; sqNew(); };
+$('#sqAns').onclick = (e) => {
+  const b = e.target.closest('.big'); if (!b || SQ.busy) return;
+  const q = SQ.q;
+  if (b.dataset.e === q.ans) {
+    SQ.busy = true; b.classList.add('ok'); cheer(); vibe(40);
+    $('#sqRow .q').textContent = q.ans;
+    if (SQ.miss === 0) SQ.ok++;
+    say('Так!');
+    if (SQ.ok >= 5) {
+      confetti(); addStar(); SQ.ok = 0;
+      if (SQ.lvl < 2) { SQ.lvl++; LS.set('seqLvl', SQ.lvl); setTimeout(() => toast('🎉 ' + T('Складніше!')), 900); }
+    }
+    setTimeout(() => { if (SCR === 'seq') sqNew(); }, 1700);
+  } else {
+    b.classList.add('no'); oops(); vibe(120);
+    if (++SQ.miss >= 2) $(`#sqAns .big[data-e="${q.ans}"]`).classList.add('glow');
+    say('Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ---- Лабіринт - мишка шукає сир; лабіринт щоразу новий, з кожною перемогою більший ---- */
+const MZ = { lvl: Math.min(3, LS.get('mazeLvl', 0)), n: 4, w: null, x: 0, y: 0, busy: false };
+/** Ідеальний лабіринт (обхід у глибину): між будь-якими двома клітинками рівно один шлях. */
+function mzGen(N) {
+  const w = Array.from({ length: N }, () => Array.from({ length: N }, () => ({ t: 1, r: 1, b: 1, l: 1 })));
+  const seen = Array.from({ length: N }, () => Array(N).fill(false)), st = [[0, 0]];
+  seen[0][0] = true;
+  while (st.length) {
+    const [x, y] = st[st.length - 1];
+    const nb = shuffle([[0, -1, 't', 'b'], [1, 0, 'r', 'l'], [0, 1, 'b', 't'], [-1, 0, 'l', 'r']])
+      .filter(([dx, dy]) => { const nx = x + dx, ny = y + dy; return nx >= 0 && ny >= 0 && nx < N && ny < N && !seen[ny][nx]; });
+    if (!nb.length) { st.pop(); continue; }
+    const [dx, dy, a, b] = nb[0];
+    w[y][x][a] = 0; w[y + dy][x + dx][b] = 0; seen[y + dy][x + dx] = true; st.push([x + dx, y + dy]);
+  }
+  return w;
+}
+function mzDraw() {
+  const N = MZ.n, bd = $('#mzBoard');
+  bd.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+  bd.style.fontSize = `calc(min(84vw, 40vh, 320px) / ${N} * .6)`;
+  let h = '';
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const c = MZ.w[y][x], cls = ['t', 'r', 'b', 'l'].filter((k) => c[k]).map((k) => 'w' + k).join(' ');
+    h += `<div class="${cls}">${x === MZ.x && y === MZ.y ? '🐭' : x === N - 1 && y === N - 1 ? '🧀' : ''}</div>`;
+  }
+  bd.innerHTML = h;
+}
+function mzNew() {
+  MZ.n = 4 + MZ.lvl; MZ.w = mzGen(MZ.n); MZ.x = MZ.y = 0; MZ.busy = false;
+  mzDraw();
+}
+START.maze = () => { mzNew(); say('Допоможи мишці знайти сир'); };
+function mzMove(d) {
+  if (MZ.busy || SCR !== 'maze') return;
+  const [dx, dy, k] = { u: [0, -1, 't'], d: [0, 1, 'b'], l: [-1, 0, 'l'], r: [1, 0, 'r'] }[d];
+  if (MZ.w[MZ.y][MZ.x][k]) { beep(170, 0.07, 'square', 0.08); return; }   // стіна
+  MZ.x += dx; MZ.y += dy; mzDraw(); blip();
+  if (MZ.x === MZ.n - 1 && MZ.y === MZ.n - 1) {
+    MZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
+    MZ.lvl = Math.min(3, MZ.lvl + 1); LS.set('mazeLvl', MZ.lvl);
+    setTimeout(() => { if (SCR === 'maze') mzNew(); }, 2000);
+  }
+}
+$('#mzPad').onclick = (e) => { const b = e.target.closest('button'); if (b) mzMove(b.dataset.d); };
+document.addEventListener('keydown', (e) => {
+  const d = { ArrowUp: 'u', ArrowDown: 'd', ArrowLeft: 'l', ArrowRight: 'r' }[e.key];
+  if (d && SCR === 'maze') { e.preventDefault(); mzMove(d); }
+});
+{
+  let sx = 0, sy = 0; const bd = $('#mzBoard');
+  bd.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  bd.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    mzMove(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'r' : 'l') : (dy > 0 ? 'd' : 'u'));
+  }, { passive: true });
+}
+
+/* ---- Розсортуй - до якого кошика належить річ (тварини, їжа, транспорт, одяг, іграшки) ---- */
+const ST_CATS = [
+  { k: 'animal', em: '🐾', nm: 'Тварини', it: ['🐈', '🐕', '🐘', '🦁', '🐸', '🐰', '🐻', '🐧'] },
+  { k: 'food', em: '🍽️', nm: 'Їжа', it: ['🍎', '🍌', '🥕', '🍞', '🧀', '🍓', '🍪', '🍉'] },
+  { k: 'transport', em: '🚦', nm: 'Транспорт', it: ['🚗', '🚌', '🚲', '✈️', '🚂', '🚢', '🚜', '🚁'] },
+  { k: 'clothes', em: '👚', nm: 'Одяг', it: ['👕', '🧦', '👟', '🧢', '👗', '🧥', '🧤', '🧣'] },
+  { k: 'toys', em: '🎁', nm: 'Іграшки', it: ['🧸', '⚽', '🪁', '🎈', '🎲', '🪀', '🧩', '🥁'] },
+];
+const ST = { lvl: Math.min(1, LS.get('sortLvl', 0)), ok: 0, miss: 0, busy: false, q: null };
+function stNew() {
+  const cats = shuffle(ST_CATS).slice(0, ST.lvl === 0 ? 2 : 3), cat = pick(cats);
+  ST.q = { k: cat.k, item: pick(cat.it) };
+  ST.busy = false; ST.miss = 0;
+  $('#stProg').innerHTML = Array.from({ length: 5 }, (_, i) => `<i class="${i < ST.ok ? 'on' : ''}"></i>`).join('');
+  $('#stItem').textContent = ST.q.item;
+  $('#stBaskets').innerHTML = cats.map((c) => `<button class="big srt" data-k="${c.k}"><span>${c.em}</span><small>${T(c.nm)}</small></button>`).join('');
+  say('Куди це покласти?');
+}
+START.sort = () => { ST.ok = 0; stNew(); };
+$('#stBaskets').onclick = (e) => {
+  const b = e.target.closest('.srt'); if (!b || ST.busy) return;
+  if (b.dataset.k === ST.q.k) {
+    ST.busy = true; b.classList.add('ok'); cheer(); vibe(40);
+    if (ST.miss === 0) ST.ok++;
+    say('Так!');
+    if (ST.ok >= 5) {
+      confetti(); addStar(); ST.ok = 0;
+      if (ST.lvl < 1) { ST.lvl++; LS.set('sortLvl', ST.lvl); setTimeout(() => toast('🎉 ' + T('Складніше!')), 900); }
+    }
+    setTimeout(() => { if (SCR === 'sort') stNew(); }, 1500);
+  } else {
+    b.classList.add('no'); oops(); vibe(120);
+    if (++ST.miss >= 2) $(`#stBaskets .srt[data-k="${ST.q.k}"]`).classList.add('glow');
     say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
   }
