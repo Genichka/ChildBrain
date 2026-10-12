@@ -104,6 +104,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t25{background:linear-gradient(170deg,#c8f2c2,#73bf69)}
 .t26{background:linear-gradient(170deg,#ffee52,#f2cc0c)}
 .t27{background:linear-gradient(170deg,#ca95e5,#a352cc)}
+.t28{background:linear-gradient(170deg,#8ab8ff,#3274d9)}
 /* ---------- рахуємо ---------- */
 .mtlv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
 .mtl{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:17px;padding:0;min-height:48px}
@@ -172,6 +173,13 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .mz .wt{border-top-width:3px}.mz .wr{border-right-width:3px}.mz .wb{border-bottom-width:3px}.mz .wl{border-left-width:3px}
 .srt{width:auto;min-width:96px;height:auto;padding:10px 14px;font-size:40px;display:flex;flex-direction:column;align-items:center;gap:2px}
 .srt small{font-size:14px;font-weight:800}
+/* ---------- пʼятнашки ---------- */
+#pzLv{grid-template-columns:repeat(3,1fr)}
+.pz{display:grid;gap:6px;margin:0 auto;width:min(88vw,42vh,360px);touch-action:manipulation}
+.pz>div{border-radius:12px;background:#ffffff0d}
+.pzt{border-radius:12px;border:0;background:linear-gradient(170deg,#8ab8ff,#3274d9);color:#fff;font-weight:900;box-shadow:0 4px 0 #0004;padding:0;animation:in .2s backwards}
+.pzt:active{transform:translateY(3px);box-shadow:0 1px 0 #0004}
+.pzt.ok{background:linear-gradient(170deg,#96d98d,#56a64b)}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -519,6 +527,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       <button class="tile t25" data-go="seq"><span class="em">🔷</span><span class="nm">Що<br>далі?</span></button>
       <button class="tile t26" data-go="maze"><span class="em">🐭</span><span class="nm">Лабіринт</span></button>
       <button class="tile t27" data-go="sort"><span class="em">🧺</span><span class="nm">Розсортуй</span></button>
+      <button class="tile t28" data-go="puzzle"><span class="em">🔲</span><span class="nm">Пʼятнашки</span></button>
     </div></div>
     <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
       <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
@@ -666,6 +675,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   <div class="play">
     <div class="pic" id="stItem"></div>
     <div class="row" id="stBaskets"></div>
+  </div>
+</section>
+
+<!-- пʼятнашки -->
+<section class="scr" id="s-puzzle">
+  <div class="mtlv" id="pzLv"></div>
+  <div class="ask" id="pzAsk">Постав цифри по порядку<small>торкайся цифр поруч із порожнім місцем</small></div>
+  <div class="play">
+    <div class="pz" id="pzBoard"></div>
+    <div class="mtprog" id="pzInfo"></div>
+    <div class="row"><button class="btn go" id="pzShuf">🔀 Перемішати</button></div>
   </div>
 </section>
 
@@ -824,7 +844,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.4';
+const APP_VERSION = '1.3.5';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -993,6 +1013,11 @@ Object.assign(I18N, {
   "Допоможи мишці знайти сир": { ro: "Ajută șoricelul să găsească brânza", en: "Help the mouse find the cheese" },
   "Допоможи мишці знайти сир 🧀": { ro: "Ajută șoricelul să găsească brânza 🧀", en: "Help the mouse find the cheese 🧀" },
   "Складніше!": { ro: "Mai greu!", en: "Harder!" },
+  "Пʼятнашки": { ro: "Puzzle glisant", en: "Sliding puzzle" },
+  "Постав цифри по порядку": { ro: "Pune cifrele în ordine", en: "Put the numbers in order" },
+  "торкайся цифр поруч із порожнім місцем": { ro: "atinge cifrele de lângă locul liber", en: "tap the numbers next to the empty spot" },
+  "🔀 Перемішати": { ro: "🔀 Amestecă", en: "🔀 Shuffle" },
+  "Ходів": { ro: "Mutări", en: "Moves" },
   "Тварини": { ro: "Animale", en: "Animals" },
   "Їжа": { ro: "Mâncare", en: "Food" },
   "Транспорт": { ro: "Transport", en: "Transport" },
@@ -1674,7 +1699,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', bye: 'EnergyUA Junior' };
+                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -4316,6 +4341,75 @@ $('#stBaskets').onclick = (e) => {
     if (++ST.miss >= 2) $(`#stBaskets .srt[data-k="${ST.q.k}"]`).classList.add('glow');
     say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   15. ПʼЯТНАШКИ  (цифри на дошці, одне місце вільне - розсунь їх по порядку)
+   Рівні: 3×2 (1–5), 3×3 (1–8), 4×4 (1–15). Перемішуємо випадковими ходами з
+   розв'язаного стану - тому розвʼязок завжди є.
+   ================================================================ */
+const PZ_LV = [[3, 2], [3, 3], [4, 4]];            // [стовпців, рядків]
+const PZ_MIX = { 6: 30, 9: 90, 16: 220 };         // скільки випадкових ходів
+const PZ = { lvl: Math.min(2, LS.get('pzLvl', 1)), cols: 3, rows: 3, t: [], moves: 0, busy: false };
+const pzSolved = (t) => t.every((v, k) => (k === t.length - 1 ? v === 0 : v === k + 1));
+/** Розв'язаний стан + k випадкових ходів порожнього місця (без негайного повернення). */
+function pzMix(cols, rows) {
+  const n = cols * rows;
+  let t, tries = 0;
+  do {
+    t = Array.from({ length: n }, (_, k) => (k === n - 1 ? 0 : k + 1));
+    let e = n - 1, prev = -1;
+    for (let m = 0; m < PZ_MIX[n]; m++) {
+      const x = e % cols, y = Math.floor(e / cols), nb = [];
+      if (x > 0) nb.push(e - 1);
+      if (x < cols - 1) nb.push(e + 1);
+      if (y > 0) nb.push(e - cols);
+      if (y < rows - 1) nb.push(e + cols);
+      const c = nb.filter((v) => v !== prev), to = pick(c.length ? c : nb);
+      [t[e], t[to]] = [t[to], t[e]]; prev = e; e = to;
+    }
+  } while (pzSolved(t) && ++tries < 20);
+  return t;
+}
+/** Торкнулась цифра: зсувається вона й усі між нею та порожнім місцем (в одному рядку чи стовпці). */
+function pzSlide(t, cols, i) {
+  let e = t.indexOf(0);
+  if (i === e) return false;
+  const sameRow = Math.floor(i / cols) === Math.floor(e / cols), sameCol = i % cols === e % cols;
+  if (!sameRow && !sameCol) return false;
+  const step = sameRow ? Math.sign(i - e) : Math.sign(i - e) * cols;
+  while (e !== i) { t[e] = t[e + step]; t[e + step] = 0; e += step; }
+  return true;
+}
+function pzDraw() {
+  const { cols, rows, t } = PZ, bd = $('#pzBoard');
+  bd.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  bd.style.aspectRatio = `${cols} / ${rows}`;
+  bd.style.fontSize = `calc(min(88vw, 42vh, 360px) / ${cols} * .46)`;
+  bd.innerHTML = t.map((v, k) => (v ? `<button class="pzt${v === k + 1 ? ' ok' : ''}" data-i="${k}">${v}</button>` : '<div></div>')).join('');
+  $('#pzInfo').innerHTML = `${T('Ходів')}: <b>${PZ.moves}</b>`;
+  $('#pzLv').innerHTML = PZ_LV.map(([c, r], i) => `<button class="mtl${i === PZ.lvl ? ' on' : ''}" data-l="${i}">${c}×${r}</button>`).join('');
+}
+function pzNew() {
+  [PZ.cols, PZ.rows] = PZ_LV[PZ.lvl];
+  PZ.t = pzMix(PZ.cols, PZ.rows); PZ.moves = 0; PZ.busy = false;
+  pzDraw();
+}
+START.puzzle = () => { pzNew(); say('Постав цифри по порядку'); };
+$('#pzLv').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); PZ.lvl = +b.dataset.l; LS.set('pzLvl', PZ.lvl); pzNew();
+};
+$('#pzShuf').onclick = () => { blip(); pzNew(); };
+$('#pzBoard').onclick = (e) => {
+  const b = e.target.closest('.pzt'); if (!b || PZ.busy) return;
+  if (!pzSlide(PZ.t, PZ.cols, +b.dataset.i)) { beep(170, 0.07, 'square', 0.08); return; }   // цифра не поруч із порожнім місцем
+  PZ.moves++; blip(); vibe(15); pzDraw();
+  if (pzSolved(PZ.t)) {
+    PZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
+    toast(`🎉 ${T('Ходів')}: ${PZ.moves}`);
+    setTimeout(() => { if (SCR === 'puzzle') pzNew(); }, 2600);
   }
 };
 
