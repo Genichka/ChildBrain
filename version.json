@@ -1,22 +1,16 @@
 {
-  "version": "1.3.6",
-  "date": "2026-10-12",
+  "version": "1.3.8",
+  "date": "2026-10-13",
   "changes": [
-    "Нова гра «Пазли» (в «Увазі»): 6 яскравих малюнків — робот, ракета, динозаврик, гоночна машина, акула й котик із веселкою",
-    "Можна обрати кількість шматочків: 4, 6, 9, 12 або 20, і малюнок угорі",
-    "Перетягуй шматочок на місце: на своєму місці він прилипає, на чужому відскакує. Можна й торкнутись шматочка, а потім місця",
-    "Після кожного пазла — зірочка (дві за великі), а наступного разу малюнок інший"
+    "У «Пʼятнашках» цифри тепер можна пересувати пальцем: потягни цифру поруч із порожнім місцем, і вона поїде за пальцем. Звичайне торкання теж працює",
+    "Якщо відпустити цифру зарано, вона сама повернеться назад"
   ],
   "changes_ro": [
-    "Joc nou „Puzzle” (în „Atenție”): 6 imagini vesele — robot, rachetă, dinozaur, mașină de curse, rechin și pisică cu curcubeu",
-    "Alegi numărul de piese: 4, 6, 9, 12 sau 20, și imaginea de sus",
-    "Trage piesa la locul ei: la locul potrivit se lipește, la altul sare înapoi. Poți și să atingi piesa, apoi locul",
-    "După fiecare puzzle — o steluță (două pentru cele mari), iar data viitoare imaginea e alta"
+    "În „Puzzle glisant” cifrele se pot muta acum cu degetul: trage o cifră de lângă locul liber și ea te urmează. Atingerea simplă funcționează în continuare",
+    "Dacă eliberezi cifra prea devreme, ea se întoarce singură la locul ei"
   ],
   "changes_en": [
-    "New game “Jigsaw” (in “Attention”): 6 bright pictures — robot, rocket, dinosaur, race car, shark and a cat with a rainbow",
-    "Choose the number of pieces: 4, 6, 9, 12 or 20, and the picture at the top",
-    "Drag a piece into place: in the right spot it snaps in, in the wrong one it jumps back. You can also tap a piece, then the spot",
-    "A star after every puzzle (two for big ones), and next time the picture is different"
+    "In the sliding puzzle you can now move the numbers with your finger: drag a number next to the empty spot and it follows your finger. Tapping still works",
+    "If you let go too early, the number slides back by itself"
   ]
 }

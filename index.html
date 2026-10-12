@@ -176,13 +176,15 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .srt small{font-size:14px;font-weight:800}
 /* ---------- пʼятнашки ---------- */
 #pzLv{grid-template-columns:repeat(3,1fr)}
-.pz{display:grid;gap:6px;margin:0 auto;width:min(88vw,42vh,360px);touch-action:manipulation}
+.pz{display:grid;gap:6px;margin:0 auto;width:min(88vw,42vh,360px);touch-action:none;user-select:none;-webkit-user-select:none}
 .pz>div{border-radius:12px;background:#ffffff0d}
 .pzt{border-radius:12px;border:0;background:linear-gradient(170deg,#8ab8ff,#3274d9);color:#fff;font-weight:900;box-shadow:0 4px 0 #0004;padding:0;animation:in .2s backwards}
 .pzt:active{transform:translateY(3px);box-shadow:0 1px 0 #0004}
 .pzt.ok{background:linear-gradient(170deg,#96d98d,#56a64b)}
+.pzt{transition:transform .14s ease-out}
+.pzt.drag{transition:none;position:relative;z-index:5;box-shadow:0 8px 16px #0006}
 /* ---------- пазли ---------- */
-.jgth{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:0 0 6px}
+.jgth{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:0 0 6px}
 .jgth button{aspect-ratio:1;border-radius:10px;border:3px solid var(--line);background-size:cover;background-position:center;padding:0}
 .jgth button.on{border-color:var(--yel);box-shadow:0 0 0 2px var(--yel)}
 #jgN{grid-template-columns:repeat(5,1fr)}
@@ -699,7 +701,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 <!-- пʼятнашки -->
 <section class="scr" id="s-puzzle">
   <div class="mtlv" id="pzLv"></div>
-  <div class="ask" id="pzAsk">Постав цифри по порядку<small>торкайся цифр поруч із порожнім місцем</small></div>
+  <div class="ask" id="pzAsk">Постав цифри по порядку<small>тягни пальцем цифри поруч із порожнім місцем</small></div>
   <div class="play">
     <div class="pz" id="pzBoard"></div>
     <div class="mtprog" id="pzInfo"></div>
@@ -873,7 +875,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.6';
+const APP_VERSION = '1.3.8';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1044,7 +1046,7 @@ Object.assign(I18N, {
   "Складніше!": { ro: "Mai greu!", en: "Harder!" },
   "Пʼятнашки": { ro: "Puzzle glisant", en: "Sliding puzzle" },
   "Постав цифри по порядку": { ro: "Pune cifrele în ordine", en: "Put the numbers in order" },
-  "торкайся цифр поруч із порожнім місцем": { ro: "atinge cifrele de lângă locul liber", en: "tap the numbers next to the empty spot" },
+  "тягни пальцем цифри поруч із порожнім місцем": { ro: "trage cu degetul cifrele de lângă locul liber", en: "drag the numbers next to the empty spot with your finger" },
   "🔀 Перемішати": { ro: "🔀 Amestecă", en: "🔀 Shuffle" },
   "Ходів": { ro: "Mutări", en: "Moves" },
   "Пазли": { ro: "Puzzle", en: "Jigsaw" },
@@ -4434,16 +4436,66 @@ $('#pzLv').onclick = (e) => {
   blip(); PZ.lvl = +b.dataset.l; LS.set('pzLvl', PZ.lvl); pzNew();
 };
 $('#pzShuf').onclick = () => { blip(); pzNew(); };
-$('#pzBoard').onclick = (e) => {
-  const b = e.target.closest('.pzt'); if (!b || PZ.busy) return;
-  if (!pzSlide(PZ.t, PZ.cols, +b.dataset.i)) { beep(170, 0.07, 'square', 0.08); return; }   // цифра не поруч із порожнім місцем
+/** Один хід: зсунути цифру i (разом з тими, що між нею й порожнім місцем). */
+function pzMove(i) {
+  if (PZ.busy) return;
+  if (!pzSlide(PZ.t, PZ.cols, i)) { beep(170, 0.07, 'square', 0.08); return; }   // цифра не поруч із порожнім місцем
   PZ.moves++; blip(); vibe(15); pzDraw();
   if (pzSolved(PZ.t)) {
     PZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
     toast(`🎉 ${T('Ходів')}: ${PZ.moves}`);
     setTimeout(() => { if (SCR === 'puzzle') pzNew(); }, 2600);
   }
+}
+/** Торкання (без руху пальця) - як і раніше. Після перетягування «клік» ігнорується. */
+$('#pzBoard').onclick = (e) => {
+  if (performance.now() < PZ.noClickUntil) return;
+  const b = e.target.closest('.pzt'); if (!b) return;
+  pzMove(+b.dataset.i);
 };
+/** Перетягування пальцем: цифра (і ті, що між нею та порожнім місцем) їде за пальцем на одну клітинку.
+    Відпустили далі ніж за третину клітинки - хід зараховано, ближче - повертається назад. */
+PZ.noClickUntil = 0;
+let pzDrag = null;
+function pzDragClear(snap) {
+  if (!pzDrag) return;
+  pzDrag.els.forEach((el) => { el.classList.remove('drag'); if (snap) el.style.transform = ''; });
+  pzDrag = null;
+}
+$('#pzBoard').addEventListener('pointerdown', (e) => {
+  if (PZ.busy || pzDrag || (e.pointerType === 'mouse' && e.button !== 0)) return;
+  const b = e.target.closest('.pzt'); if (!b) return;
+  const { cols } = PZ, i = +b.dataset.i, em = PZ.t.indexOf(0);
+  const sameRow = Math.floor(i / cols) === Math.floor(em / cols), sameCol = i % cols === em % cols;
+  if (!sameRow && !sameCol) return;                                  // не поруч із порожнім місцем - лишається звичайне торкання
+  const step = sameRow ? Math.sign(em - i) : Math.sign(em - i) * cols;   // у який бік їде цифра
+  const dx = sameRow ? Math.sign(em - i) : 0, dy = sameRow ? 0 : Math.sign(em - i);
+  const bd = $('#pzBoard'), gap = parseFloat(getComputedStyle(bd).columnGap) || 0;
+  const pitch = (sameRow ? b.offsetWidth : b.offsetHeight) + gap;
+  const els = [];
+  for (let k = i; k !== em; k += step) { const el = bd.querySelector(`.pzt[data-i="${k}"]`); if (el) els.push(el); }
+  pzDrag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx, dy, pitch, i, els, proj: 0, moved: false };
+});
+$('#pzBoard').addEventListener('pointermove', (e) => {
+  const d = pzDrag; if (!d || e.pointerId !== d.id) return;
+  const proj = Math.max(0, Math.min(d.pitch, (e.clientX - d.x0) * d.dx + (e.clientY - d.y0) * d.dy));
+  const raw = Math.hypot(e.clientX - d.x0, e.clientY - d.y0);
+  if (!d.moved && raw < 8) return;                                   // ще просто торкання
+  if (!d.moved) { d.moved = true; try { $('#pzBoard').setPointerCapture(e.pointerId); } catch (_) {} d.els.forEach((el) => el.classList.add('drag')); }
+  d.proj = proj;
+  d.els.forEach((el) => { el.style.transform = `translate(${d.dx * proj}px, ${d.dy * proj}px)`; });
+  e.preventDefault();
+});
+function pzDragEnd(e, cancel) {
+  const d = pzDrag; if (!d || e.pointerId !== d.id) return;
+  if (!d.moved) { pzDragClear(false); return; }                      // звичайне торкання - далі спрацює click
+  PZ.noClickUntil = performance.now() + 350;
+  const go = !cancel && d.proj > d.pitch * 0.33, i = d.i;
+  pzDragClear(!go);                                                  // не дотягнули - повертаємо на місце
+  if (go) pzMove(i);
+}
+$('#pzBoard').addEventListener('pointerup', (e) => pzDragEnd(e, false));
+$('#pzBoard').addEventListener('pointercancel', (e) => pzDragEnd(e, true));
 
 /* ================================================================
    16. ПАЗЛИ  (малюнки для сучасних дітей - намальовані в коді, без файлів; 4–20 шматочків)
@@ -4562,6 +4614,45 @@ return [
  '<circle cx="140" cy="250" r="12" fill="#f48fb1" stroke="none" opacity=".7"/><circle cx="260" cy="250" r="12" fill="#f48fb1" stroke="none" opacity=".7"/>' +
  '<g stroke-width="4" fill="none"><path d="M112 246L146 252M110 266L146 264"/><path d="M288 246L254 252M290 266L254 264"/></g>' +
  '<path d="M180 150L186 134L200 148L214 134L220 150" fill="#ffd54f" stroke-width="5"/>' +
+ '</g></svg>' },
+{ nm: 'balloon', svg: H +
+ '<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fc3f7"/><stop offset="1" stop-color="#e1f5fe"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#g)"/><circle cx="64" cy="64" r="34" fill="#ffee58"/><circle cx="64" cy="64" r="46" fill="#ffee5833"/>' +
+ '<g fill="#fff"><ellipse cx="320" cy="90" rx="46" ry="16"/><ellipse cx="346" cy="78" rx="28" ry="15"/><ellipse cx="110" cy="206" rx="38" ry="12"/><ellipse cx="300" cy="250" rx="34" ry="11"/></g>' +
+ '<g fill="none" stroke="#37474f" stroke-width="4" stroke-linecap="round"><path d="M276 40q8-10 16 0q8-10 16 0"/><path d="M326 150q6-8 12 0q6-8 12 0"/></g>' +
+ '<ellipse cx="90" cy="430" rx="240" ry="110" fill="#81c784"/><ellipse cx="330" cy="440" rx="210" ry="100" fill="#66bb6a"/>' +
+ '<g fill="#fff"><circle cx="50" cy="352" r="5"/><circle cx="300" cy="362" r="5"/></g><g fill="#ff5a5f"><circle cx="76" cy="372" r="5"/><circle cx="340" cy="348" r="5"/></g><g fill="#ffee58"><circle cx="30" cy="378" r="5"/><circle cx="260" cy="372" r="5"/></g>' +
+ '<g stroke="#37474f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">' +
+ '<line x1="70" y1="132" x2="64" y2="160" fill="none"/><line x1="70" y1="132" x2="76" y2="160" fill="none"/>' +
+ '<ellipse cx="70" cy="106" rx="26" ry="32" fill="#66bb6a"/><path d="M70 74C82 90 82 122 70 138C58 122 58 90 70 74Z" fill="#fff59d" stroke="none"/><ellipse cx="70" cy="106" rx="26" ry="32" fill="none"/>' +
+ '<rect x="60" y="158" width="20" height="14" rx="3" fill="#ffb74d"/></g>' +
+ '<g stroke="#37474f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">' +
+ '<line x1="182" y1="262" x2="176" y2="314" fill="none" stroke-width="4"/><line x1="218" y1="262" x2="224" y2="314" fill="none" stroke-width="4"/>' +
+ '<path d="M200 40C290 40 320 120 280 190C265 215 235 240 220 262L180 262C165 240 135 215 120 190C80 120 110 40 200 40Z" fill="#ef5350"/>' +
+ '<path d="M200 40C236 62 244 136 214 262L186 262C156 136 164 62 200 40Z" fill="#ffee58" stroke="none"/>' +
+ '<path d="M200 40C230 56 224 112 214 144L186 144C176 112 170 56 200 40Z" fill="#fff" stroke="none" opacity=".35"/>' +
+ '<path d="M200 40C290 40 320 120 280 190C265 215 235 240 220 262L180 262C165 240 135 215 120 190C80 120 110 40 200 40Z" fill="none"/>' +
+ '<rect x="170" y="312" width="60" height="46" rx="9" fill="#ffb74d"/>' +
+ '<g stroke-width="3"><line x1="170" y1="330" x2="230" y2="330"/><line x1="170" y1="344" x2="230" y2="344"/><line x1="190" y1="312" x2="190" y2="358"/><line x1="210" y1="312" x2="210" y2="358"/></g>' +
+ '</g></svg>' },
+{ nm: 'castle', svg: H +
+ '<defs><linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7e57c2"/><stop offset=".55" stop-color="#f48fb1"/><stop offset="1" stop-color="#ffe0b2"/></linearGradient></defs>' +
+ '<rect width="400" height="400" fill="url(#h)"/><circle cx="330" cy="86" r="38" fill="#fff59d"/><circle cx="330" cy="86" r="52" fill="#fff59d44"/>' +
+ star(50, 50, 10) + star(130, 90, 7) + star(250, 40, 9) + star(30, 150, 6) +
+ '<g fill="#ffffffcc"><ellipse cx="80" cy="220" rx="44" ry="14"/><ellipse cx="108" cy="208" rx="28" ry="13"/><ellipse cx="320" cy="200" rx="40" ry="13"/></g>' +
+ '<ellipse cx="200" cy="420" rx="320" ry="110" fill="#81c784"/><ellipse cx="60" cy="380" rx="140" ry="40" fill="#66bb6a"/><ellipse cx="350" cy="384" rx="130" ry="38" fill="#66bb6a"/>' +
+ '<path d="M172 340L228 340L270 400L130 400Z" fill="#ffe0b2"/>' +
+ '<g stroke="#37474f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">' +
+ '<rect x="114" y="206" width="22" height="16" fill="#b0bec5"/><rect x="142" y="206" width="22" height="16" fill="#b0bec5"/><rect x="236" y="206" width="22" height="16" fill="#b0bec5"/><rect x="264" y="206" width="22" height="16" fill="#b0bec5"/>' +
+ '<rect x="110" y="218" width="180" height="124" fill="#cfd8dc"/>' +
+ '<rect x="70" y="164" width="62" height="178" fill="#b0bec5"/><rect x="268" y="164" width="62" height="178" fill="#b0bec5"/>' +
+ '<rect x="168" y="124" width="64" height="110" fill="#b0bec5"/>' +
+ '<path d="M60 164L101 100L142 164Z" fill="#ef5350"/><path d="M258 164L299 100L340 164Z" fill="#ef5350"/><path d="M158 124L200 56L242 124Z" fill="#7e57c2"/>' +
+ '<line x1="200" y1="56" x2="200" y2="22" fill="none"/><path d="M200 22L236 34L200 46Z" fill="#ffee58"/><line x1="101" y1="100" x2="101" y2="74" fill="none"/><path d="M101 74L128 82L101 90Z" fill="#66bb6a"/><line x1="299" y1="100" x2="299" y2="74" fill="none"/><path d="M299 74L326 82L299 90Z" fill="#42a5f5"/>' +
+ '<path d="M172 342L172 290Q200 248 228 290L228 342Z" fill="#8d6e63"/><path d="M200 262L200 342" stroke-width="3" fill="none"/><circle cx="188" cy="316" r="4" fill="#ffee58" stroke="none"/><circle cx="212" cy="316" r="4" fill="#ffee58" stroke="none"/>' +
+ '<path d="M90 224L90 200Q101 186 112 200L112 224Z" fill="#263238"/><path d="M288 224L288 200Q299 186 310 200L310 224Z" fill="#263238"/>' +
+ '<path d="M190 176L190 156Q200 144 210 156L210 176Z" fill="#ffee58"/>' +
+ '<path d="M122 290L122 272Q132 262 142 272L142 290Z" fill="#263238"/><path d="M258 290L258 272Q268 262 278 272L278 290Z" fill="#263238"/>' +
  '</g></svg>' },
 ];
 })();
