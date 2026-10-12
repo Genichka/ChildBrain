@@ -1,19 +1,19 @@
 {
-  "version": "1.3.2",
+  "version": "1.3.3",
   "date": "2026-10-12",
   "changes": [
-    "Нова гра «Абетка» (у «Лічбі»): усі 33 літери зі словами й картинками",
-    "Три режими: 👀 Вчимо (торкайся літер), 🎯 Знайди (букву за назвою), ➡️ Далі (яка буква пропущена)",
-    "5 правильних поспіль — зірочка"
+    "Нова гра «Цифри й числа» (у «Лічбі»): числа 0–10, 0–20 і 0–100",
+    "Три режими: 👀 Вчимо (торкайся чисел — бачиш цифру, яблучка й назву), 🎯 Знайди (число за назвою), ➡️ Далі (яке число пропущене)",
+    "Числа озвучені записаним голосом; 5 правильних поспіль — зірочка"
   ],
   "changes_ro": [
-    "Joc nou „Alfabetul” (în „Numărat”): literele cu cuvinte și imagini",
-    "Trei moduri: 👀 Învățăm, 🎯 Găsește litera după nume, ➡️ Ce literă lipsește",
+    "Joc nou „Cifre și numere” (în „Numărat”): numerele 0–10, 0–20 și 0–100",
+    "Trei moduri: 👀 Învățăm, 🎯 Găsește numărul după nume, ➡️ Ce număr lipsește",
     "5 corecte la rând — o steluță"
   ],
   "changes_en": [
-    "New game “Alphabet” (in “Counting”): letters with words and pictures",
-    "Three modes: 👀 Learn (tap the letters), 🎯 Find the letter by its name, ➡️ Which letter is missing",
+    "New game “Digits & numbers” (in “Counting”): numbers 0–10, 0–20 and 0–100",
+    "Three modes: 👀 Learn (tap numbers), 🎯 Find the number by its name, ➡️ Which number is missing",
     "5 correct in a row — a star"
   ]
 }

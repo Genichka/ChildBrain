@@ -100,6 +100,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .t21{background:linear-gradient(170deg,#ffcb7d,#ff9830)}
 .t22{background:linear-gradient(170deg,#ffb3d1,#e8539a)}
 .t23{background:linear-gradient(170deg,#8fe3d0,#2ba88c)}
+.t24{background:linear-gradient(170deg,#ffb08a,#e8643c)}
 /* ---------- рахуємо ---------- */
 .mtlv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
 .mtl{border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--txt);font-size:17px;padding:0;min-height:48px}
@@ -146,6 +147,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #alAns .big{min-width:0;width:auto;font-size:34px}
 #alAns .big.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
 .alseq{letter-spacing:6px}
+/* ---------- цифри й числа ---------- */
+#nmTabs,#nmRange{grid-template-columns:repeat(3,1fr)}
+#nmTabs .mtl{font-size:14px;padding:4px}
+#nmRange .mtl{font-size:15px;min-height:40px}
+.nmg{grid-template-columns:repeat(var(--c,5),1fr)}
+.nmg.sm button{font-size:13px;min-height:32px}
+.nmg.sm{gap:4px}
+.alP.dots{font-size:22px;line-height:1.1;max-width:210px;text-align:center}
+#nmAns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+#nmAns .big{min-width:0;width:auto;font-size:30px}
+#nmAns .big.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -485,6 +497,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       <button class="tile t21" data-go="math"><span class="em">🧮</span><span class="nm">Рахуємо</span></button>
       <button class="tile t22" data-go="times"><span class="em">✖️</span><span class="nm">Таблиця<br>множення</span></button>
       <button class="tile t23" data-go="alpha"><span class="em">🔠</span><span class="nm">Абетка</span></button>
+      <button class="tile t24" data-go="nums"><span class="em">🔟</span><span class="nm">Цифри<br>й числа</span></button>
     </div></div>
     <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
       <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
@@ -592,6 +605,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   <div class="mtprog" id="alProg" hidden></div>
   <div class="ask mtask" id="alAsk" hidden></div>
   <div class="play" id="alPlay" hidden><div class="row" id="alAns"></div></div>
+</section>
+
+<!-- цифри й числа -->
+<section class="scr" id="s-nums">
+  <div class="mtlv" id="nmTabs"></div>
+  <div class="mtlv" id="nmRange"></div>
+  <div class="alcard" id="nmCard"></div>
+  <div class="alg nmg" id="nmGrid"></div>
+  <div class="mtprog" id="nmProg" hidden></div>
+  <div class="ask mtask" id="nmAsk" hidden></div>
+  <div class="play" id="nmPlay" hidden><div class="row" id="nmAns"></div></div>
 </section>
 
 <!-- колір і форма -->
@@ -749,7 +773,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.2';
+const APP_VERSION = '1.3.3';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -908,6 +932,8 @@ Object.assign(I18N, {
   "Таблиця на": { ro: "Tabla înmulțirii cu", en: "Times table of" },
   "Усі таблиці": { ro: "Toate tabelele", en: "All tables" },
   "Абетка": { ro: "Alfabetul", en: "Alphabet" },
+  "Цифри<br>й числа": { ro: "Cifre<br>și numere", en: "Digits<br>& numbers" },
+  "Цифри й числа": { ro: "Cifre și numere", en: "Digits & numbers" },
   "👀 Вчимо": { ro: "👀 Învățăm", en: "👀 Learn" },
   "🎯 Знайди": { ro: "🎯 Găsește", en: "🎯 Find" },
   "➡️ Далі": { ro: "➡️ Urmează", en: "➡️ Next" },
@@ -1584,7 +1610,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', bye: 'EnergyUA Junior' };
+                 rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
@@ -3981,6 +4007,106 @@ $('#alAns').onclick = (e) => {
     b.classList.add('no'); oops(); vibe(120);
     AL_S.miss++;
     if (AL_S.miss >= 2) $(`#alAns .let[data-c="${q.ans}"]`).classList.add('glow');
+    say('Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   13. ЦИФРИ Й ЧИСЛА  (вчимо цифри й числа, шукаємо за назвою, «яке число пропущене?»)
+   Діапазони 0–10, 0–20, 0–100. Українською числа озвучені записаним голосом.
+   ================================================================ */
+const EN_U = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+  'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const EN_T = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+const enNum = (n) => (n === 100 ? 'one hundred' : n < 20 ? EN_U[n] : EN_T[Math.floor(n / 10)] + (n % 10 ? '-' + EN_U[n % 10] : ''));
+const nmName = (n) => (LANG === 'en' ? enNum(n) : LANG === 'ro' ? roNum(n) : numW(n).join(' '));
+const NM_RANGES = [[0, 10], [0, 20], [0, 100]];
+const NM_ASK = { find: { uk: 'Знайди число', ro: 'Găsește numărul', en: 'Find the number' },
+  next: { uk: 'Яке число пропущене?', ro: 'Ce număr lipsește?', en: 'Which number is missing?' } };
+const NM_NEED = 5;
+const NM_S = { mode: LS.get('nmMode', 'learn'), r: LS.get('nmRange', 0), cur: 1, ok: 0, miss: 0, busy: false, q: null };
+const nmLim = () => NM_RANGES[NM_S.r] || NM_RANGES[0];
+/** Завдання: чотири різні числа в діапазоні, серед них правильне; хибні - сусідні. */
+function nmMake(mode, lo, hi) {
+  const opt = (ans) => {
+    const o = new Set([ans]);
+    shuffle([ans + 1, ans - 1, ans + 2, ans - 2, ans + 10, ans - 10]).forEach((v) => { if (v >= lo && v <= hi && o.size < 4) o.add(v); });
+    while (o.size < 4) o.add(lo + rnd(hi - lo + 1));
+    return shuffle([...o]);
+  };
+  if (mode === 'find') {
+    const n = lo + rnd(hi - lo + 1), ask = NM_ASK.find[LANG] || NM_ASK.find.uk;
+    return { mode, ans: n, say: LANG === 'uk' ? numW(n) : nmName(n), txt: ask, small: `«${nmName(n)}» 🔊`, opts: opt(n) };
+  }
+  const i = lo + rnd(hi - lo - 2), hole = rnd(4), seq = [i, i + 1, i + 2, i + 3], ans = seq[hole], ask = NM_ASK.next[LANG] || NM_ASK.next.uk;
+  const shown = seq.map((v, k) => (k === hole ? '❓' : v));
+  return { mode, ans, say: ask, txt: `<span class="alseq">${shown.join(' ')}</span>`, small: ask, opts: opt(ans) };
+}
+function nmTabs() {
+  $('#nmTabs').innerHTML = AL_TABS.map(([m, t]) => `<button class="mtl${m === NM_S.mode ? ' on' : ''}" data-m="${m}">${T(t)}</button>`).join('');
+  $('#nmRange').innerHTML = NM_RANGES.map(([a, b], i) => `<button class="mtl${i === NM_S.r ? ' on' : ''}" data-r="${i}">${a}–${b}</button>`).join('');
+}
+function nmCard() {
+  const n = NM_S.cur, name = nmName(n), nm = LANG === 'uk' ? name.charAt(0).toUpperCase() + name.slice(1) : name;
+  $('#nmCard').innerHTML = `<span class="alL">${n}</span>` +
+    (n >= 1 && n <= 20 ? `<span class="alP dots">${mtEm('🍎', n)}</span>` : '') +
+    `<span class="alW">${nm}</span>`;
+  $$('#nmGrid button').forEach((b, i) => b.classList.toggle('on', i + nmLim()[0] === n));
+}
+function nmSay() { const n = NM_S.cur; say(LANG === 'uk' ? numW(n) : nmName(n)); }
+function nmProg() {
+  $('#nmProg').innerHTML = Array.from({ length: NM_NEED }, (_, i) => `<i class="${i < NM_S.ok ? 'on' : ''}"></i>`).join('');
+}
+function nmNew() {
+  const [lo, hi] = nmLim(), q = NM_S.q = nmMake(NM_S.mode, lo, hi);
+  NM_S.busy = false; NM_S.miss = 0;
+  nmProg();
+  $('#nmAsk').innerHTML = `${q.txt}<small>${q.small}</small>`;
+  $('#nmAns').innerHTML = q.opts.map((c) => `<button class="big let" data-c="${c}">${c}</button>`).join('');
+  say(q.say);
+}
+function nmRender() {
+  const learn = NM_S.mode === 'learn', [lo, hi] = nmLim();
+  nmTabs();
+  $('#nmCard').hidden = $('#nmGrid').hidden = !learn;
+  $('#nmProg').hidden = $('#nmAsk').hidden = $('#nmPlay').hidden = learn;
+  if (learn) {
+    if (NM_S.cur < lo || NM_S.cur > hi) NM_S.cur = Math.max(lo, 1);
+    const g = $('#nmGrid');
+    g.style.setProperty('--c', hi > 20 ? 10 : 6);
+    g.classList.toggle('sm', hi > 20);
+    g.innerHTML = Array.from({ length: hi - lo + 1 }, (_, i) => `<button data-n="${lo + i}">${lo + i}</button>`).join('');
+    nmCard();
+  } else { NM_S.ok = 0; nmNew(); }
+}
+START.nums = () => nmRender();
+$('#nmTabs').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); NM_S.mode = b.dataset.m; LS.set('nmMode', NM_S.mode); nmRender();
+};
+$('#nmRange').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); NM_S.r = +b.dataset.r; LS.set('nmRange', NM_S.r); nmRender();
+};
+$('#nmGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  NM_S.cur = +b.dataset.n; nmCard(); nmSay();
+};
+$('#nmCard').onclick = () => nmSay();
+$('#nmAns').onclick = (e) => {
+  const b = e.target.closest('.let'); if (!b || NM_S.busy) return;
+  const q = NM_S.q;
+  if (+b.dataset.c === q.ans) {
+    NM_S.busy = true; b.classList.add('ok'); cheer(); vibe(40);
+    if (NM_S.miss === 0) NM_S.ok++;
+    say(mtYes(q.ans));
+    if (NM_S.ok >= NM_NEED) { confetti(); addStar(); NM_S.ok = 0; }
+    setTimeout(() => { if (SCR === 'nums') nmNew(); }, 1700);
+  } else {
+    b.classList.add('no'); oops(); vibe(120);
+    NM_S.miss++;
+    if (NM_S.miss >= 2) $(`#nmAns .let[data-c="${q.ans}"]`).classList.add('glow');
     say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
   }
