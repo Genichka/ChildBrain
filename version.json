@@ -1,16 +1,13 @@
 {
-  "version": "1.3.8",
+  "version": "1.3.9",
   "date": "2026-10-13",
   "changes": [
-    "У «Пʼятнашках» цифри тепер можна пересувати пальцем: потягни цифру поруч із порожнім місцем, і вона поїде за пальцем. Звичайне торкання теж працює",
-    "Якщо відпустити цифру зарано, вона сама повернеться назад"
+    "У «Пʼятнашках» більше не блимає під час ходів: цифри спокійно стоять на місці, з'являються лише на новій грі"
   ],
   "changes_ro": [
-    "În „Puzzle glisant” cifrele se pot muta acum cu degetul: trage o cifră de lângă locul liber și ea te urmează. Atingerea simplă funcționează în continuare",
-    "Dacă eliberezi cifra prea devreme, ea se întoarce singură la locul ei"
+    "În „Puzzle glisant” nu mai clipește la mutări: cifrele stau liniștite, apar animat doar la joc nou"
   ],
   "changes_en": [
-    "In the sliding puzzle you can now move the numbers with your finger: drag a number next to the empty spot and it follows your finger. Tapping still works",
-    "If you let go too early, the number slides back by itself"
+    "The sliding puzzle no longer flickers when you move: the numbers stay calmly in place and only pop in on a new game"
   ]
 }

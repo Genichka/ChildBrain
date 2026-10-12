@@ -182,6 +182,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .pzt:active{transform:translateY(3px);box-shadow:0 1px 0 #0004}
 .pzt.ok{background:linear-gradient(170deg,#96d98d,#56a64b)}
 .pzt{transition:transform .14s ease-out}
+.pz.still .pzt{animation:none}
 .pzt.drag{transition:none;position:relative;z-index:5;box-shadow:0 8px 16px #0006}
 /* ---------- пазли ---------- */
 .jgth{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:0 0 6px}
@@ -875,7 +876,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.8';
+const APP_VERSION = '1.3.9';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -4416,8 +4417,9 @@ function pzSlide(t, cols, i) {
   while (e !== i) { t[e] = t[e + step]; t[e + step] = 0; e += step; }
   return true;
 }
-function pzDraw() {
+function pzDraw(anim) {   // anim=true - цифри «виростають» лише на новій грі; під час ходів нічого не блимає
   const { cols, rows, t } = PZ, bd = $('#pzBoard');
+  bd.classList.toggle('still', !anim);
   bd.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   bd.style.aspectRatio = `${cols} / ${rows}`;
   bd.style.fontSize = `calc(min(88vw, 42vh, 360px) / ${cols} * .46)`;
@@ -4428,7 +4430,7 @@ function pzDraw() {
 function pzNew() {
   [PZ.cols, PZ.rows] = PZ_LV[PZ.lvl];
   PZ.t = pzMix(PZ.cols, PZ.rows); PZ.moves = 0; PZ.busy = false;
-  pzDraw();
+  pzDraw(true);
 }
 START.puzzle = () => { pzNew(); say('Постав цифри по порядку'); };
 $('#pzLv').onclick = (e) => {
