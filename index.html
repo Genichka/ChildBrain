@@ -39,6 +39,8 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   border:2px solid var(--line);font-size:24px;display:grid;place-items:center;
 }
 .icon:active{transform:scale(.93)}
+.icon.sm{width:44px;height:44px;font-size:20px;border-radius:14px}
+#clkBtn.off{opacity:.65;border-style:dashed}
 .stars{
   display:flex;align-items:center;gap:5px;background:#ffd93d22;border:2px solid #ffd93d66;
   border-radius:16px;padding:8px 13px;font-size:17px;color:var(--yel);min-height:48px
@@ -486,7 +488,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #back{color:var(--gf-txt)}
 #back svg{width:24px;height:24px;display:block}
 #back:active{color:#fff}
-.top #back{order:0}.top h1{order:1}.top #starBtn{order:2}
+.top #back{order:0}.top h1{order:1}.top #starBtn{order:2}.top #clkBtn{order:3}
 .in-menu .top #starBtn{order:0}.in-menu .top #back{order:2}
 
 /* вибір мови в налаштуваннях для батьків */
@@ -501,6 +503,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   <button class="icon" id="back" aria-label="Вихід"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg></button>
   <h1 id="title"><span class="brand"><svg class="bolt" viewBox="0 0 64 100" aria-hidden="true"> <defs> <linearGradient id="jbf" x1="0" y1="0" x2="0.35" y2="1"> <stop offset="0" stop-color="#ffa21a"/><stop offset=".45" stop-color="#ff8a10"/><stop offset="1" stop-color="#ff5a00"/> </linearGradient> <linearGradient id="jbs" x1="0" y1="0" x2="0" y2="1"> <stop offset="0" stop-color="#ffe23a"/><stop offset="1" stop-color="#ffb800"/> </linearGradient> </defs> <path d="M44 1 L52 5 L37 37 L62 37 L22 99 L15 95 L26 62 L3 62 Z" fill="url(#jbs)"/> <path d="M39 0 L0 58 L24 58 L13 97 L56 33 L30 33 Z" fill="url(#jbf)"/> <path d="M39 0 L30 33 L35 33 L42 3 Z" fill="#ffe680" opacity=".5"/> </svg><span class="bw">EnergyUA</span><span class="bh">Junior</span></span></h1>
   <button class="stars" id="starBtn"><span>⭐</span><span id="starN">0</span></button>
+  <button class="icon sm" id="clkBtn" aria-label="Звук натискань" aria-pressed="false">🔔</button>
 </header>
 
 <input type="file" id="bkFile" accept="application/json,.json" hidden>
@@ -876,7 +879,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.3.9';
+const APP_VERSION = '1.4.0';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -902,6 +905,7 @@ const S = {
   best: LS.get('best', 0),       // рекорд у змійці
   speed: LS.get('speed', 'mid'), // швидкість змійки
   sound: LS.get('sound', true),
+  click: LS.get('click', true),  // звук торкання кнопок (окремо від звуків гри й голосу)
   voice: LS.get('voice', true),
 };
 
@@ -1390,6 +1394,11 @@ Object.assign(I18N, {
   "Звуки увімкнено": { ro: "Sunete pornite", en: "Sounds on" },
   "Звуки вимкнено": { ro: "Sunete oprite", en: "Sounds off" },
   "Голос увімкнено": { ro: "Vocea pornită", en: "Voice on" },
+  "Звук натискань": { ro: "Sunet la atingere", en: "Tap sound" },
+  "Звук натискань:": { ro: "Sunet la atingere:", en: "Tap sound:" },
+  "Звук натискань увімкнено": { ro: "Sunetul la atingere e pornit", en: "Tap sound on" },
+  "Звук натискань вимкнено": { ro: "Sunetul la atingere e oprit", en: "Tap sound off" },
+  "(кнопка 🔔 угорі)": { ro: "(butonul 🔔 de sus)", en: "(🔔 button at the top)" },
   "Голос вимкнено": { ro: "Vocea oprită", en: "Voice off" },
   "Резервна копія": { ro: "Copie de rezervă", en: "Backup" },
   "Збережи у файл — і на новому телефоні чи після очищення браузера все можна повернути.": { ro: "Salvează într-un fișier — pe un telefon nou sau după curățarea browserului poți recupera totul.", en: "Save to a file — on a new phone or after clearing the browser you can bring everything back." },
@@ -1486,7 +1495,8 @@ function beep(freq, dur = 0.18, type = 'sine', vol = 0.22) {
 }
 const cheer = () => { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => beep(f, 0.16, 'triangle', 0.2), i * 90)); };
 const oops = () => { beep(300, 0.16, 'sine', 0.16); setTimeout(() => beep(220, 0.22, 'sine', 0.16), 130); };
-const blip = () => beep(880, 0.08, 'square', 0.12);
+const blip = () => { if (S.click) beep(880, 0.08, 'square', 0.12); };   // звук торкання; вимикається кнопкою 🔔
+const tapBeep = (...a) => { if (S.click) beep(...a); };                // інші звуки, що лунають саме від торкання (хід, стіна, «не туди») - теж за кнопкою 🔔
 
 /* ---------- маленький синтезатор голосів тварин ----------
    Синтезатор мови читає «мууу» як набір букв, тому звуки тварин
@@ -1773,6 +1783,19 @@ function exitApp() {
 START.bye = () => { $('#back').style.visibility = 'hidden'; };
 STOP.bye = () => { $('#back').style.visibility = 'visible'; ac(); };
 $('#starBtn').onclick = () => go('album');
+/* 🔔 / 🔕 - увімк./вимк. звук торкання кнопок. Голос і звуки самих ігор не чіпає. */
+function clkSync() {
+  const b = $('#clkBtn'); if (!b) return;
+  b.textContent = S.click ? '🔔' : '🔕';
+  b.classList.toggle('off', !S.click);
+  b.setAttribute('aria-pressed', String(!S.click));
+}
+$('#clkBtn').onclick = () => {
+  S.click = !S.click; LS.set('click', S.click); clkSync();
+  toast(S.click ? 'Звук натискань увімкнено' : 'Звук натискань вимкнено');
+  if (S.click) blip();
+};
+clkSync();
 $$('[data-go]').forEach((b) => { b.onclick = () => { ac(); blip(); go(b.dataset.go); }; });
 
 /* ================================================================
@@ -4318,7 +4341,7 @@ START.maze = () => { mzNew(); say('Допоможи мишці знайти си
 function mzMove(d) {
   if (MZ.busy || SCR !== 'maze') return;
   const [dx, dy, k] = { u: [0, -1, 't'], d: [0, 1, 'b'], l: [-1, 0, 'l'], r: [1, 0, 'r'] }[d];
-  if (MZ.w[MZ.y][MZ.x][k]) { beep(170, 0.07, 'square', 0.08); return; }   // стіна
+  if (MZ.w[MZ.y][MZ.x][k]) { tapBeep(170, 0.07, 'square', 0.08); return; }   // стіна
   MZ.x += dx; MZ.y += dy; mzDraw(); blip();
   if (MZ.x === MZ.n - 1 && MZ.y === MZ.n - 1) {
     MZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
@@ -4441,7 +4464,7 @@ $('#pzShuf').onclick = () => { blip(); pzNew(); };
 /** Один хід: зсунути цифру i (разом з тими, що між нею й порожнім місцем). */
 function pzMove(i) {
   if (PZ.busy) return;
-  if (!pzSlide(PZ.t, PZ.cols, i)) { beep(170, 0.07, 'square', 0.08); return; }   // цифра не поруч із порожнім місцем
+  if (!pzSlide(PZ.t, PZ.cols, i)) { tapBeep(170, 0.07, 'square', 0.08); return; }   // цифра не поруч із порожнім місцем
   PZ.moves++; blip(); vibe(15); pzDraw();
   if (pzSolved(PZ.t)) {
     PZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
@@ -4824,13 +4847,13 @@ STOP.ttt = () => { TT.busy = true; };
 $('#ttt').onclick = (e) => {
   const c = e.target.closest('[data-i]'); if (!c || TT.busy) return;
   const i = +c.dataset.i; if (TT.b[i]) return;
-  TT.b[i] = 'x'; beep(660, 0.1, 'triangle', 0.18); tttUI();
+  TT.b[i] = 'x'; tapBeep(660, 0.1, 'triangle', 0.18); tttUI();
   if (tttCheck()) return;
   TT.busy = true;
   $('#tttAsk').innerHTML = 'Гра думає… 🤔';
   setTimeout(() => {
     if (SCR !== 'ttt') return;
-    TT.b[tttBot()] = 'o'; beep(440, 0.1, 'triangle', 0.16); tttUI();
+    TT.b[tttBot()] = 'o'; tapBeep(440, 0.1, 'triangle', 0.16); tttUI();
     if (!tttCheck()) { TT.busy = false; $('#tttAsk').innerHTML = 'Твій хід! Ти ставиш <b class="tx">✕</b><small>склади три в ряд</small>'; }
   }, 650);
 };
@@ -4903,7 +4926,7 @@ function mnTap(i, asFlag) {
       btn: '🔁 Ще раз', btn2: '🏠 Меню', onBtn: mnNew, onBtn2: () => go('menu') }), 900);
     return;
   }
-  mnOpen(i); beep(620 + rnd(200), 0.08, 'triangle', 0.15);
+  mnOpen(i); tapBeep(620 + rnd(200), 0.08, 'triangle', 0.15);
   mnUI(); mnAsk();
   if (MN.left === 0) {
     MN.over = true; mnUI(); cheer(); confetti(); vibe(60); addStar(MN.lvl >= 2 ? 2 : 1);
@@ -5367,6 +5390,7 @@ function parentPanel() {
   dialog({
     em: '⚙️', h: 'Налаштування',
     p: `${langRow}Звуки: <b>${S.sound ? 'увімкнено' : 'вимкнено'}</b> · Озвучка: <b>${S.voice ? 'увімкнено' : 'вимкнено'}</b><br>
+        Звук натискань: <b>${S.click ? 'увімкнено' : 'вимкнено'}</b> (кнопка 🔔 угорі)<br>
         Голос: <b>${voiceInfo()}</b><br>
         Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'справжні, з папки sounds' : 'справжні записи з інтернету')}</b><br>
         Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>
