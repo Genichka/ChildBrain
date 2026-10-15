@@ -1,15 +1,15 @@
 {
   "name": "EnergyUA Junior — ігри для малят",
   "short_name": "EUA Junior",
-  "description": "Двадцять одна проста гра для дітей 4–6 років з озвученими завданнями: слух, увага, памʼять, лічба, логіка, швидкість. Працює без інтернету.",
+  "description": "Двадцять простих ігор для дітей 4–6 років з озвученими завданнями: слух, увага, памʼять, лічба, логіка, швидкість. Працює без інтернету.",
   "lang": "uk",
   "dir": "ltr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#111217",
-  "theme_color": "#111217",
+  "background_color": "#2b1b52",
+  "theme_color": "#2b1b52",
   "categories": [
     "games",
     "education",

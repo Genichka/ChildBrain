@@ -187,21 +187,26 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .pz.still .pzt{animation:none}
 .pzt.drag{transition:none;position:relative;z-index:5;box-shadow:0 8px 16px #0006}
 /* ---------- пазли ---------- */
-.jgth{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:0 0 6px}
-.jgth button{aspect-ratio:1;border-radius:10px;border:3px solid var(--line);background-size:cover;background-position:center;padding:0}
+.jgth{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 6px;margin:0 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.jgth button{flex:0 0 54px;height:54px;border-radius:10px;border:3px solid var(--line);background-size:cover;background-position:center;padding:0;position:relative}
 .jgth button.on{border-color:var(--yel);box-shadow:0 0 0 2px var(--yel)}
+.jgth button.done::after{content:"✓";position:absolute;right:-2px;bottom:-2px;width:18px;height:18px;border-radius:50%;background:var(--grn);color:#111217;font-size:12px;font-weight:900;display:grid;place-items:center}
 #jgN{grid-template-columns:repeat(5,1fr)}
-.jgb{position:relative;box-sizing:content-box;margin:0 auto;border:3px solid var(--line);border-radius:10px;overflow:hidden;background:#0b0c0e;touch-action:none}
-.jgb .ghost{position:absolute;inset:0;background-size:100% 100%;opacity:.22;pointer-events:none}
+.jgb{position:relative;box-sizing:content-box;margin:0 auto;border:3px solid var(--line);border-radius:6px;background:#0b0c0e;touch-action:none}
+.jgb .ghost{position:absolute;inset:0;background-size:100% 100%;opacity:.2;pointer-events:none}
 .jgb .grid{position:absolute;inset:0;display:grid}
-.jgs{box-sizing:border-box;border:1px dashed #ffffff40;background-repeat:no-repeat}
-.jgs.on{border:0;animation:pop .3s}
-.jgs.bad{background:#ff5a5f66}
-.jgtray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:72px;padding-top:4px}
-.jgp{box-sizing:border-box;border-radius:10px;border:3px solid #fff;box-shadow:0 4px 0 #0005;touch-action:none;background-repeat:no-repeat;animation:in .25s backwards}
-.jgp.sel{border-color:var(--yel);transform:translateY(-5px)}
+.jgs{position:relative;z-index:0}
+.jgs svg{position:absolute;left:var(--m);top:var(--m);overflow:visible;pointer-events:none}
+.jgs.on{z-index:2;animation:pop .3s}
+.jgs.bad .jo path{stroke:var(--no);stroke-opacity:1;stroke-width:3}
+.jgtray{display:flex;gap:2px;justify-content:center;flex-wrap:nowrap;min-height:84px;padding-top:4px}
+.jgp{touch-action:none;animation:in .25s backwards;flex:0 0 auto}
+.jgp svg{display:block;overflow:visible;filter:drop-shadow(0 3px 2px #0007)}
+.jgp.sel{transform:translateY(-6px)}
+.jgp.sel svg{filter:drop-shadow(0 0 5px var(--yel)) drop-shadow(0 3px 2px #0007)}
 .jgp.src{opacity:.3}
-.jgp.drag{position:fixed;z-index:50;pointer-events:none;box-shadow:0 12px 26px #000a;transform:scale(1.06);animation:none}
+.jgp.drag{position:fixed;z-index:50;pointer-events:none;transform:scale(1.04);animation:none}
+.jgp.drag svg{filter:drop-shadow(0 10px 10px #000a)}
 
 /* ---------- ігри на памʼять ---------- */
 .credits{color:var(--dim);font-size:11px;line-height:1.45;text-align:center;margin:10px 4px 0;font-weight:700}
@@ -495,6 +500,58 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .langs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:0 0 12px}
 .lng{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 10px;font-size:14px;min-height:44px;color:var(--txt)}
 .lng.on{border-color:var(--gf-blue);background:#3d71d933;color:#fff}
+/* ---------- 1.5: нові ігри ---------- */
+.t30{background:linear-gradient(170deg,#ffb357,#fa6400)}
+.t31{background:linear-gradient(170deg,#8ab8ff,#3274d9)}
+.t32{background:linear-gradient(170deg,#ffee52,#f2cc0c)}
+.t33{background:linear-gradient(170deg,#c8f2c2,#73bf69)}
+.t34{background:linear-gradient(170deg,#deb6f2,#b877d9)}
+.t35{background:linear-gradient(170deg,#8fe3d0,#2ba88c)}
+.t36{background:linear-gradient(170deg,#ffa6b0,#f2495c)}
+.t37{background:linear-gradient(170deg,#c0d8ff,#5794f2)}
+.t38{background:linear-gradient(170deg,#ffcb7d,#ff9830)}
+.knbox{text-align:center;font-size:64px;min-height:84px;line-height:1.3;letter-spacing:6px}
+.knbox i{font-style:normal;font-size:34px;animation:in .25s backwards}
+.shbig{text-align:center;font-size:92px;line-height:1.1;min-height:104px}
+.shrow{gap:10px}
+.shb{width:96px;height:96px;font-size:56px;background:#e8eaf2;border-color:#ffffff66}
+.shb .sil{filter:brightness(0) opacity(.85);transition:filter .3s}
+.shb.ok .sil{filter:none}
+.fagrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:340px;margin:0 auto;width:100%}
+.fagrid button{aspect-ratio:1;border-radius:16px;background:var(--card);border:3px solid var(--line);font-size:36px;padding:0;position:relative}
+.fagrid button.found{background:#73bf6940;border-color:var(--ok)}
+.fagrid button.found::after{content:"✓";position:absolute;right:4px;top:0;font-size:18px;font-weight:900;color:var(--grn)}
+.fagrid button.no{animation:shake .4s;border-color:var(--no)}
+.dgbig{text-align:center;font-size:84px;font-weight:900;color:var(--yel);min-height:100px;line-height:1.2}
+.dgbig.pop{animation:pop .4s}
+.dgin{display:flex;gap:8px;justify-content:center;min-height:48px}
+.dgin span{width:40px;height:48px;border-radius:12px;border:3px dashed var(--line);display:grid;place-items:center;font-size:26px;font-weight:900}
+.dgin span.f{border-style:solid;border-color:var(--ok);background:#73bf6926}
+.dgpad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:340px;margin:0 auto;width:100%}
+.dgpad button{border-radius:14px;background:var(--card);border:3px solid var(--line);color:var(--txt);font-size:26px;font-weight:900;min-height:54px}
+.dgpad button.no{animation:shake .4s;border-color:var(--no)}
+.dgpad button:active{transform:translateY(2px)}
+.hud{display:flex;justify-content:space-between;font-weight:800;font-size:18px;padding:0 8px 6px;max-width:420px;margin:0 auto;width:100%}
+.stage{position:relative;flex:1;min-height:280px;border-radius:var(--r);background:linear-gradient(180deg,#283593,#5c6bc0);overflow:hidden;touch-action:none;border:3px solid var(--line);user-select:none;-webkit-user-select:none;max-width:420px;margin:0 auto;width:100%}
+.stage.sea{background:linear-gradient(180deg,#0288d1,#01579b)}
+.stage.meadow{background:linear-gradient(180deg,#81d4fa,#aed581 55%,#7cb342)}
+.ctbasket{position:absolute;bottom:6px;left:0;font-size:56px;line-height:1;transform:translateX(-50%);will-change:transform}
+.cti{position:absolute;left:0;top:0;font-size:36px;line-height:1;will-change:transform;pointer-events:none}
+.bub{position:absolute;bottom:-100px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 28%,#ffffffcc 0 12%,#ffffff33 13% 55%,#ffffff1f 100%);border:2px solid #ffffff88;animation:rise linear forwards;touch-action:none}
+.bub span{animation:sway 1.6s ease-in-out infinite alternate;pointer-events:none}
+@keyframes rise{to{transform:translateY(calc(-1 * var(--h) - 120px))}}
+@keyframes sway{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+.bub.pp{animation:bpop .25s forwards!important}
+@keyframes bpop{to{transform:scale(1.6);opacity:0}}
+.holes{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:6px;padding:10px 12px}
+.hole{position:relative;overflow:hidden;border-radius:50% 50% 14px 14px/38% 38% 14px 14px;background:radial-gradient(ellipse at 50% 70%,#3e2723 0 55%,#5d4037 56% 100%);border:0;padding:0}
+.hole .mo{position:absolute;left:0;right:0;bottom:6%;text-align:center;font-size:48px;line-height:1;transform:translateY(120%);transition:transform .16s ease-out;pointer-events:none}
+.hole.up .mo{transform:translateY(0)}
+.hole.hit .mo{transform:translateY(0) scale(.85);filter:grayscale(.4)}
+.endbox{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#111217e6;z-index:5;text-align:center;padding:14px;animation:in .3s backwards}
+.endbox .em{font-size:64px;line-height:1}
+.endbox b{font-size:24px}
+.endbox span{color:var(--dim);font-weight:700}
 </style>
 </head>
 <body class="in-menu">
@@ -510,25 +567,29 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 <!-- меню -->
 <section class="scr on" id="s-menu">
   <div class="pager" id="pager">
-    <button data-pg="0" class="on"><i>👂</i>Слух</button>
-    <button data-pg="1"><i>👀</i>Увага</button>
+    <button data-pg="0" class="on"><i>👀</i>Увага</button>
+    <button data-pg="1"><i>👂</i>Слух</button>
     <button data-pg="2"><i>🧠</i>Памʼять</button>
-    <button data-pg="3"><i>🔢</i>Лічба</button>
-    <button data-pg="4"><i>🧩</i>Логіка</button>
-    <button data-pg="5"><i>⚡</i>Швидкість</button>
-    <button data-pg="6"><i>🎉</i>Розваги</button>
+    <button data-pg="3"><i>🔢</i>Числа</button>
+    <button data-pg="4"><i>🔤</i>Букви</button>
+    <button data-pg="5"><i>🧩</i>Логіка</button>
+    <button data-pg="6"><i>⚡</i>Швидкість</button>
   </div>
   <div class="pages" id="pages">
-    <div class="page" data-grp="Слух"><p class="gdesc">👂 <b>Слух</b> — розрізняти звуки й запамʼятовувати почуте</p><div class="menu">
-      <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
-      <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
-      <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
-    </div></div>
     <div class="page" data-grp="Увага"><p class="gdesc">👀 <b>Увага</b> — помічати колір, форму, зайве й відсутнє</p><div class="menu">
       <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
       <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
       <button class="tile t12" data-go="gone"><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
-      <button class="tile t29" data-go="jigsaw"><span class="em">🖼️</span><span class="nm">Пазли</span></button>
+      <button class="tile t33" data-go="shadow"><span class="em">👤</span><span class="nm">Чия<br>тінь?</span></button>
+      <button class="tile t34" data-go="findall"><span class="em">🔎</span><span class="nm">Знайди<br>всіх</span></button>
+    </div></div>
+    <div class="page" data-grp="Слух"><p class="gdesc">👂 <b>Слух</b> — розрізняти звуки й запамʼятовувати почуте</p><div class="menu">
+      <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
+      <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
+      <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
+      <button class="tile t30" data-go="inst"><span class="em">🎺</span><span class="nm">Хто<br>грає?</span></button>
+      <button class="tile t31" data-go="pitch"><span class="em">🎼</span><span class="nm">Високо<br>чи низько?</span></button>
+      <button class="tile t32" data-go="knock"><span class="em">🚪</span><span class="nm">Скільки<br>разів?</span></button>
     </div></div>
     <div class="page" data-grp="Памʼять"><p class="gdesc">🧠 <b>Памʼять</b> — запамʼятати, де що лежить і як стояло</p><div class="menu">
       <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
@@ -536,14 +597,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       <button class="tile t14" data-go="grid"><span class="em">🟩</span><span class="nm">Повтори<br>візерунок</span></button>
       <button class="tile t15" data-go="basket"><span class="em">🧺</span><span class="nm">Що<br>в кошику?</span></button>
       <button class="tile t17" data-go="order"><span class="em">🚂</span><span class="nm">Як<br>стояли?</span></button>
+      <button class="tile t35" data-go="digits"><span class="em">📞</span><span class="nm">Запамʼятай<br>числа</span></button>
     </div></div>
-    <div class="page" data-grp="Лічба"><p class="gdesc">🔢 <b>Лічба</b> — рахувати й упізнавати перші букви</p><div class="menu">
+    <div class="page" data-grp="Числа"><p class="gdesc">🔢 <b>Числа</b> — рахувати, додавати й множити</p><div class="menu">
       <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
-      <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
       <button class="tile t21" data-go="math"><span class="em">🧮</span><span class="nm">Рахуємо</span></button>
       <button class="tile t22" data-go="times"><span class="em">✖️</span><span class="nm">Таблиця<br>множення</span></button>
-      <button class="tile t23" data-go="alpha"><span class="em">🔠</span><span class="nm">Абетка</span></button>
       <button class="tile t24" data-go="nums"><span class="em">🔟</span><span class="nm">Цифри<br>й числа</span></button>
+    </div></div>
+    <div class="page" data-grp="Букви"><p class="gdesc">🔤 <b>Букви</b> — упізнавати букви й першу букву слова</p><div class="menu">
+      <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
+      <button class="tile t23" data-go="alpha"><span class="em">🔠</span><span class="nm">Абетка</span></button>
     </div></div>
     <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
       <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
@@ -552,15 +616,17 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
       <button class="tile t26" data-go="maze"><span class="em">🐭</span><span class="nm">Лабіринт</span></button>
       <button class="tile t27" data-go="sort"><span class="em">🧺</span><span class="nm">Розсортуй</span></button>
       <button class="tile t28" data-go="puzzle"><span class="em">🔲</span><span class="nm">Пʼятнашки</span></button>
+      <button class="tile t29" data-go="jigsaw"><span class="em">🖼️</span><span class="nm">Пазли</span></button>
     </div></div>
     <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
       <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
       <button class="tile t18" data-go="brick"><span class="em">🧱</span><span class="nm">Відбивайка</span></button>
       <button class="tile t19" data-go="dino"><span class="em">🦖</span><span class="nm">Динозаврик</span></button>
-    </div></div>
-    <div class="page" data-grp="Розваги"><p class="gdesc">🎉 <b>Розваги</b> — просто побігати й пострибати</p><div class="menu">
-      <button class="tile t20" data-go="jump"><span class="em">🐸</span><span class="nm">Стрибунець</span></button>
       <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
+      <button class="tile t20" data-go="jump"><span class="em">🐸</span><span class="nm">Стрибунець</span></button>
+      <button class="tile t36" data-go="catch"><span class="em">⭐</span><span class="nm">Лови<br>зірочки</span></button>
+      <button class="tile t37" data-go="bubbles"><span class="em">🫧</span><span class="nm">Бульбашки</span></button>
+      <button class="tile t38" data-go="mole"><span class="em">🐹</span><span class="nm">Хто<br>виглянув?</span></button>
     </div></div>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
@@ -724,6 +790,79 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
   </div>
 </section>
 
+<!-- 1.5: хто грає? -->
+<section class="scr" id="s-inst">
+  <div class="ask" id="inAsk">Хто грає?</div>
+  <div class="play">
+    <div class="row"><button class="btn go" id="inAgain">🔊 Ще раз</button></div>
+    <div class="row" id="inOpts"></div>
+  </div>
+</section>
+
+<!-- високо чи низько -->
+<section class="scr" id="s-pitch">
+  <div class="ask" id="ptAsk">Високо чи низько?</div>
+  <div class="mtprog" id="ptProg"></div>
+  <div class="play">
+    <div class="row"><button class="btn go" id="ptAgain">🔊 Ще раз</button></div>
+    <div class="row" id="ptOpts"></div>
+  </div>
+</section>
+
+<!-- скільки разів стукає -->
+<section class="scr" id="s-knock">
+  <div class="ask" id="knAsk">Скільки разів стукає?</div>
+  <div class="play">
+    <div class="knbox" id="knBox">🙈</div>
+    <div class="row"><button class="btn go" id="knAgain">🔊 Ще раз</button></div>
+    <div class="row" id="knOpts"></div>
+  </div>
+</section>
+
+<!-- чия тінь -->
+<section class="scr" id="s-shadow">
+  <div class="ask" id="shAsk">Чия це тінь?</div>
+  <div class="play">
+    <div class="shbig" id="shBig"></div>
+    <div class="row shrow" id="shOpts"></div>
+  </div>
+</section>
+
+<!-- знайди всіх -->
+<section class="scr" id="s-findall">
+  <div class="ask" id="faAsk">Знайди всіх</div>
+  <div class="play"><div class="fagrid" id="faGrid"></div></div>
+</section>
+
+<!-- запамʼятай числа -->
+<section class="scr" id="s-digits">
+  <div class="ask" id="dgAsk">Запамʼятай числа</div>
+  <div class="play">
+    <div class="dgbig" id="dgBig"></div>
+    <div class="dgin" id="dgIn"></div>
+    <div class="dgpad" id="dgPad"></div>
+    <div class="row"><button class="mini" id="dgAgain">👁️ Показати ще раз</button></div>
+  </div>
+</section>
+
+<!-- лови зірочки -->
+<section class="scr" id="s-catch">
+  <div class="hud" id="ctHud"></div>
+  <div class="stage" id="ctStage"><div class="ctbasket" id="ctBasket">🧺</div></div>
+</section>
+
+<!-- бульбашки -->
+<section class="scr" id="s-bubbles">
+  <div class="hud" id="buHud"></div>
+  <div class="stage sea" id="buStage"></div>
+</section>
+
+<!-- хто виглянув -->
+<section class="scr" id="s-mole">
+  <div class="hud" id="moHud"></div>
+  <div class="stage meadow" id="moStage"><div class="holes" id="moHoles"></div></div>
+</section>
+
 <!-- колір і форма -->
 <section class="scr" id="s-shape">
   <div class="ask" id="shpAsk">Знайди фігуру</div>
@@ -879,7 +1018,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 <script>
 'use strict';
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -982,6 +1121,61 @@ Object.assign(I18N, {
   "Слух": { ro: "Auz", en: "Hearing" },
   "Увага": { ro: "Atenție", en: "Attention" },
   "Памʼять": { ro: "Memorie", en: "Memory" },
+  "Слова на «и» майже не починаються — вона живе всередині слова: в-И-шня": { ro: "Aproape niciun cuvânt nu începe cu „и” — ea trăiește în mijlocul cuvântului: в-И-шня", en: "Almost no words start with “и” — it lives inside the word: в-И-шня" },
+  "Мʼякий знак не звучить сам і стоїть після букви в кінці слова: кін-Ь": { ro: "Semnul moale nu se aude singur și stă după o literă, la sfârșitul cuvântului: кін-Ь", en: "The soft sign makes no sound of its own and comes after a letter at the end of a word: кін-Ь" },
+  "Хто<br>грає?": { ro: "Cine<br>cântă?", en: "Who's<br>playing?" },
+  "Високо<br>чи низько?": { ro: "Sus<br>sau jos?", en: "High<br>or low?" },
+  "Скільки<br>разів?": { ro: "De câte<br>ori?", en: "How<br>many times?" },
+  "Чия<br>тінь?": { ro: "A cui<br>e umbra?", en: "Whose<br>shadow?" },
+  "Знайди<br>всіх": { ro: "Găsește<br>-i pe toți", en: "Find<br>them all" },
+  "Запамʼятай<br>числа": { ro: "Ține minte<br>numerele", en: "Remember<br>the numbers" },
+  "Лови<br>зірочки": { ro: "Prinde<br>stelele", en: "Catch<br>the stars" },
+  "Бульбашки": { ro: "Baloane de săpun", en: "Bubbles" },
+  "Хто<br>виглянув?": { ro: "Cine<br>a ieșit?", en: "Who<br>peeked out?" },
+  "Хто грає?": { ro: "Cine cântă?", en: "Who's playing?" },
+  "Високо чи низько?": { ro: "Sus sau jos?", en: "High or low?" },
+  "Скільки разів?": { ro: "De câte ori?", en: "How many times?" },
+  "Чия тінь?": { ro: "A cui e umbra?", en: "Whose shadow?" },
+  "Знайди всіх": { ro: "Găsește-i pe toți", en: "Find them all" },
+  "Запамʼятай числа": { ro: "Ține minte numerele", en: "Remember the numbers" },
+  "Лови зірочки": { ro: "Prinde stelele", en: "Catch the stars" },
+  "Хто виглянув?": { ro: "Cine a ieșit?", en: "Who peeked out?" },
+  "слухай і вгадай": { ro: "ascultă și ghicește", en: "listen and guess" },
+  "🔊 Ще раз": { ro: "🔊 Încă o dată", en: "🔊 Again" },
+  "▶️ Ще раз": { ro: "▶️ Încă o dată", en: "▶️ Play again" },
+  "мишка тоненька, ведмідь грубий": { ro: "șoricelul are glas subțire, ursul gros", en: "the mouse is squeaky, the bear is deep" },
+  "Яка нота вища?": { ro: "Care notă e mai înaltă?", en: "Which note is higher?" },
+  "слухай уважно": { ro: "ascultă cu atenție", en: "listen carefully" },
+  "Високо": { ro: "Sus", en: "High" },
+  "Низько": { ro: "Jos", en: "Low" },
+  "Перша": { ro: "Prima", en: "First" },
+  "Друга": { ro: "A doua", en: "Second" },
+  "Скільки разів стукає?": { ro: "De câte ori bate?", en: "How many times does it knock?" },
+  "порахуй на слух": { ro: "numără după sunet", en: "count by ear" },
+  "Чия це тінь?": { ro: "A cui e umbra asta?", en: "Whose shadow is this?" },
+  "знайди, хто так стоїть": { ro: "găsește cine stă așa", en: "find who it belongs to" },
+  "дивись і слухай": { ro: "privește și ascultă", en: "watch and listen" },
+  "натискай числа по порядку": { ro: "apasă numerele în ordine", en: "press the numbers in order" },
+  "👁️ Показати ще раз": { ro: "👁️ Arată încă o dată", en: "👁️ Show again" },
+  "Спробуй зловити ще більше": { ro: "Încearcă să prinzi și mai multe", en: "Try to catch even more" },
+  "Спробуй лопнути ще більше": { ro: "Încearcă să spargi și mai multe", en: "Try to pop even more" },
+  "Спробуй упіймати ще більше": { ro: "Încearcă să prinzi și mai multe", en: "Try to catch even more" },
+  "Лопай бульбашки": { ro: "Sparge baloanele", en: "Pop the bubbles" },
+  "нірка": { ro: "vizuină", en: "burrow" },
+  "барабан": { ro: "tobă", en: "drum" },
+  "дзвіночок": { ro: "clopoțel", en: "bell" },
+  "труба": { ro: "trompetă", en: "trumpet" },
+  "піаніно": { ro: "pian", en: "piano" },
+  "гітара": { ro: "chitară", en: "guitar" },
+  "скрипка": { ro: "vioară", en: "violin" },
+  "високо": { ro: "sus", en: "high" },
+  "низько": { ro: "jos", en: "low" },
+  "перша": { ro: "prima", en: "first" },
+  "друга": { ro: "a doua", en: "second" },
+  "Числа": { ro: "Numere", en: "Numbers" },
+  "Букви": { ro: "Litere", en: "Letters" },
+  "рахувати, додавати й множити": { ro: "să numeri, să aduni și să înmulțești", en: "counting, adding and multiplying" },
+  "упізнавати букви й першу букву слова": { ro: "să recunoști literele și prima literă din cuvânt", en: "recognising letters and the first letter of a word" },
   "Лічба": { ro: "Numărat", en: "Counting" },
   "Логіка": { ro: "Logică", en: "Logic" },
   "Швидкість": { ro: "Viteză", en: "Speed" },
@@ -1416,6 +1610,12 @@ Object.assign(I18N, {
   "✅ Відновлено": { ro: "✅ Restaurat", en: "✅ Restored" },
 });
 I18N_RE.push(
+  [new RegExp("^Знайди всіх (\\S+)$"), { ro: "Găsește-i pe toți {1}", en: "Find them all {1}" }],
+  [new RegExp("^ще (\\d+)$"), { ro: "încă {1}", en: "{1} to go" }],
+  [new RegExp("^Зібрано: (\\d+)$"), { ro: "Strâns: {1}", en: "Caught: {1}" }],
+  [new RegExp("^Лопнуто: (\\d+)$"), { ro: "Sparte: {1}", en: "Popped: {1}" }],
+  [new RegExp("^Упіймано: (\\d+)$"), { ro: "Prinse: {1}", en: "Caught: {1}" }],
+  [new RegExp("^Зірочок у альбом: (\\d+)$"), { ro: "Steluțe în album: {1}", en: "Stars for the album: {1}" }],
   [new RegExp("^Так! (\\d+)$"), { ro: "Da! {1}", en: "Yes! {1}" }],
   [new RegExp("^Так! Це (.+)$"), { ro: "Da! E {1}", en: "Yes! It's the {1}" }],
   [new RegExp("^Так! Тут (.+)$"), { ro: "Da! Aici e {1}", en: "Yes! Here is the {1}" }],
@@ -1571,7 +1771,7 @@ function voiceInfo() {
    Грає через Web Audio (той самий AudioContext, що й ефекти гри):
    після першого дотику браузер його вже не блокує. */
 const VOICE_IDX = {};
-'v000eb3f1,0,11041;v0020b6d4,11041,4459;v0118f1be,15500,9944;v01237f1a,25444,10101;v0167f1fc,35545,6810;v01da4f3a,42355,4929;v029cb487,47284,10571;v02ca10d3,57855,5556;v02d74627,63411,11982;v044d55cb,75393,8534;v045e586f,83927,4929;v0469adf6,88856,11198;v05763e24,100054,9788;v06c54cba,109842,13079;v073994e1,122921,11041;v07b02c17,133962,10258;v0aca1d6b,144220,5712;v0b0e04f7,149932,9788;v0b18fcc0,159720,9944;v0b25a21d,169664,7123;v0d18ffe6,176787,10728;v0d1ca269,187515,11041;v0d3f5c43,198556,10415;v0d67bc66,208971,12295;v0dbc4d2b,221266,9788;v0e4182b4,231054,5086;v0eeb850a,236140,5086;v0fb542f9,241226,4772;v1232d7ba,245998,11198;v12ca8d87,257196,12766;v12e9e3eb,269962,5242;v135edbe8,275204,5556;v13f28094,280760,6183;v13fc98f7,286943,3675;v145e920e,290618,11198;v15df46fb,301816,7280;v163617c0,309096,5242;v165a3e48,314338,9004;v169cf91d,323342,10415;v16a06079,333757,8847;v16a69aec,342604,6810;v172d376e,349414,10885;v175d1c78,360299,4615;v1761fed4,364914,11825;v1806c191,376739,9788;v1852f2cb,386527,7123;v18a7ed45,393650,6183;v19261860,399833,3832;v1a817ede,403665,6496;v1b4e6f81,410161,12295;v1b6e924f,422456,3988;v1c4d342a,426444,5242;v1d4e319a,431686,6183;v1df0d45b,437869,9944;v1dfd4db2,447813,4772;v1e5b6f71,452585,4615;v1e71fa35,457200,11668;v1ef2a92a,468868,6183;v1f68bf4c,475051,7280;v20191dcf,482331,9944;v21d6d5b4,492275,9161;v2216710e,501436,12766;v225e84a2,514202,10728;v226cf46f,524930,11355;v227e2c0f,536285,5869;v22c8e473,542154,12609;v22d6f3a9,554763,8534;v23192288,563297,9944;v23823c1d,573241,11198;v2419241b,584439,9788;v25009dad,594227,7280;v25af53b1,601507,6496;v28503973,608003,10415;v28a0f095,618418,9788;v29081b88,628206,11041;v29d2a29a,639247,8534;v2a081d1b,647781,10415;v2a2939e8,658196,11198;v2ceb2393,669394,11198;v2cf31187,680592,5242;v2d22cc3f,685834,12766;v2d904411,698600,10571;v2e082367,709171,9631;v2f6b4342,718802,8377;v30cbb868,727179,4302;v3180e36f,731481,6496;v3426e0e4,737977,10101;v342bbd4a,748078,4615;v348297f1,752693,4615;v356bb878,757308,11668;v35a04999,768976,6653;v35cb24d8,775629,8690;v3814eb90,784319,7123;v38275495,791442,4615;v38b78916,796057,3988;v3bbc3099,800045,3518;v3bd3ee2e,803563,11198;v3bfed9e4,814761,11041;v3cba9fbd,825802,9944;v3d1d1eb4,835746,4772;v3d74d4d5,840518,8377;v3eaa2466,848895,9944;v3f472d60,858839,5399;v3f52a34e,864238,9631;v3fb7dea4,873869,4302;v41245963,878171,13706;v4209b0b7,891877,9317;v434472de,901194,8847;v437cf8ca,910041,6653;v44043c7a,916694,11512;v44894c4a,928206,3361;v4637540e,931567,4929;v46f25eb4,936496,11668;v4801781c,948164,11825;v48bcf5d0,959989,11198;v48cc788c,971187,5556;v4949ab34,976743,11198;v4966ff51,987941,4615;v49a78f47,992556,10258;v4ace9cdf,1002814,9944;v4b78bc1c,1012758,4615;v4ba3bbde,1017373,9788;v4e6941b6,1027161,4459;v4e934b93,1031620,5869;v4ecee5b8,1037489,5242;v4ee38bdc,1042731,19662;v4ef2374e,1062393,4772;v4f295739,1067165,6496;v4fba652f,1073661,10728;v5089cb04,1084389,9474;v5383b38f,1093863,9474;v545ebc94,1103337,6026;v54a42236,1109363,9788;v54bc8c72,1119151,7280;v552a4986,1126431,13706;v556d0141,1140137,9474;v58980c6a,1149611,4459;v5927e932,1154070,10728;v59d31bcf,1164798,5242;v5ac07578,1170040,10885;v5c286709,1180925,14803;v5c8ae4b3,1195728,5869;v5f57bd47,1201597,8690;v5fe4f13f,1210287,10728;v6076568a,1221015,13549;v609dc765,1234564,4615;v64f30404,1239179,5712;v65333b11,1244891,5086;v654431d1,1249977,6183;v65acf92f,1256160,5712;v66eee64f,1261872,4929;v66fecb78,1266801,5399;v68ab00c5,1272200,11041;v6944809b,1283241,4615;v69e76585,1287856,5399;v6b980e35,1293255,4615;v6bca5530,1297870,8534;v6bd37ce4,1306404,6966;v6d0ccfcf,1313370,10258;v6d1180f0,1323628,10258;v6d40302a,1333886,11668;v6d76f91f,1345554,9788;v6eaee4d9,1355342,4302;v6f363df4,1359644,10258;v6f94d181,1369902,6966;v6fba2283,1376868,10571;v701e519c,1387439,10258;v707b2c42,1397697,11668;v710f14b2,1409365,10728;v7182548f,1420093,11825;v72d2f046,1431918,4929;v73316683,1436847,4302;v738b08e8,1441149,5869;v73db53d2,1447018,5399;v74012383,1452417,3675;v743bd475,1456092,5869;v74804d7c,1461961,7123;v75c1d745,1469084,9944;v768b0da1,1479028,5399;v780954ed,1484427,6183;v78928be1,1490610,10571;v795274a8,1501181,7593;v7ab7159d,1508774,9631;v7b883047,1518405,8847;v7ca63afe,1527252,10258;v7db77a9a,1537510,7123;v7dfee0b7,1544633,6966;v7e04ae68,1551599,12139;v7e492507,1563738,8847;v7e4fe79b,1572585,8534;v7ef40a57,1581119,6183;v80315224,1587302,4615;v80a3f14e,1591917,6810;v829599ee,1598727,5869;v836219f2,1604596,4459;v853519a9,1609055,4145;v866ba7dd,1613200,5086;v86ce1c3c,1618286,13079;v87f2bc44,1631365,4929;v881651d2,1636294,5086;v889827e8,1641380,10728;v88d42960,1652108,12295;v89628711,1664403,10258;v896c6931,1674661,11982;v8b3b7545,1686643,11512;v8b4d304a,1698155,9004;v8d04e900,1707159,7437;v8e68fc37,1714596,9474;v93670bf5,1724070,9944;v945adcdf,1734014,6026;v947ec1a3,1740040,5242;v94d3f105,1745282,5242;v94dfcd15,1750524,6496;v96d726f5,1757020,5242;v97c98418,1762262,6339;v97ee622e,1768601,4459;v98b1fb14,1773060,10415;v992380df,1783475,5399;v9a3ba894,1788874,11041;v9cd6d1e9,1799915,8847;v9cdaf6f8,1808762,4772;v9d23b032,1813534,5242;v9d6df793,1818776,4615;v9e2256de,1823391,9161;v9f766c7b,1832552,11198;va0968e62,1843750,7593;va166e452,1851343,5242;va24c45d9,1856585,11198;va3424b0d,1867783,6183;va4ce5076,1873966,3675;va7c9a24d,1877641,9944;va8a9e780,1887585,5712;va8abed17,1893297,4145;va9e8173f,1897442,5086;va9f52872,1902528,8847;vaae97013,1911375,5556;vaaef0b66,1916931,5712;vab261159,1922643,6653;vab65699d,1929296,3988;vab7bdd45,1933284,12452;vac87f60e,1945736,4929;vacc065b3,1950665,14176;vacf40095,1964841,5556;vadf78faa,1970397,5556;vaeac3669,1975953,5086;vaf4b0ed9,1981039,13863;vb0807f44,1994902,6496;vb1dbf46b,2001398,9631;vb2fb7f84,2011029,11512;vb3b6a5f5,2022541,6653;vb3c60ff8,2029194,6653;vb46d8cea,2035847,6026;vb4c78db1,2041873,4615;vb4ece4fd,2046488,6026;vb4f40d2d,2052514,5712;vb5f0ba36,2058226,10571;vb64851ab,2068797,5399;vb68c51b8,2074196,10728;vb6a6d25c,2084924,3832;vb74b4cdf,2088756,11668;vb7d286df,2100424,17468;vb8b7b07a,2117892,5086;vb92b533a,2122978,9788;vbb8d8b3f,2132766,7437;vbbc88d68,2140203,6183;vbc60cd35,2146386,13236;vbd0d54e4,2159622,10415;vbd7f3fb8,2170037,9474;vbe0d5677,2179511,8847;vbe22f365,2188358,11198;vbe2df22e,2199556,9161;vbf5927e9,2208717,6810;vbf996876,2215527,9317;vc00d599d,2224844,10258;vc02fb468,2235102,9788;vc17b886b,2244890,4145;vc2a588a0,2249035,11982;vc3696af0,2261017,4772;vc39f1b27,2265789,19035;vc4a00304,2284824,11668;vc659d7bc,2296492,5399;vc6719744,2301891,4615;vc6f2d73e,2306506,9788;vc71b5578,2316294,17311;vc76af380,2333605,7907;vc99eafde,2341512,4772;vc9a35eab,2346284,4772;vca636ae4,2351056,8847;vcc96c3f1,2359903,8690;vccf46917,2368593,11041;vcd5b8509,2379634,8534;vcdde0ca1,2388168,9474;vceb3385b,2397642,4145;vcf624dab,2401787,11825;vcf98f31f,2413612,5712;vcfdeef14,2419324,3675;vcfff7969,2422999,12609;vd193ff09,2435608,8534;vd2e08650,2444142,10571;vd2f5ada3,2454713,11512;vd305c269,2466225,2891;vd32a5c46,2469116,10571;vd51f5581,2479687,10728;vd5f75f5b,2490415,6026;vd6699e33,2496441,11198;vd6fcb1d6,2507639,5712;vd8884ef9,2513351,11041;vd8f6d9b1,2524392,11825;vdb0ba350,2536217,5399;vde054d1d,2541616,4929;vde5e0626,2546545,4615;vdefcbe6e,2551160,5869;vdf851d22,2557029,6183;ve00bfc28,2563212,6026;ve1373d37,2569238,8690;ve29850ae,2577928,8377;ve2f05afa,2586305,11512;ve38320ca,2597817,5242;ve4431ad4,2603059,4615;ve4bce258,2607674,6026;ve56cb2c8,2613700,14176;ve7231dae,2627876,6496;ve78ee812,2634372,8690;ve88ee9a5,2643062,9161;ve98eeb38,2652223,8534;vea0a81f4,2660757,4459;vea16571b,2665216,4459;vea8eeccb,2669675,8220;veb08bb33,2677895,9317;veb8eee5e,2687212,9788;vec8eeff1,2697000,8377;vecb3a1e5,2705377,6183;vecb8a58f,2711560,4459;veccd8636,2716019,4459;ved8ef184,2720478,7750;vedea5bba,2728228,4459;vee18cf19,2732687,10885;vee8ef317,2743572,7437;veeb7ebf2,2751009,4302;vefc4b978,2755311,4145;vf0062b7a,2759456,10728;vf08ef63d,2770184,7907;vf10584c9,2778091,9944;vf118d3d2,2788035,8847;vf1701e33,2796882,10101;vf17a0782,2806983,10258;vf1a3bad4,2817241,3832;vf2b31665,2821073,3361;vf2d7f2e0,2824434,9788;vf307c686,2834222,9004;vf318d6f8,2843226,10571;vf339d5ce,2853797,7280;vf344df9e,2861077,16684;vf499dc61,2877761,10571;vf4b8b227,2888332,4615;vf5052feb,2892947,9004;vf507c9ac,2901951,10885;vf53bb405,2912836,11355;vf607cb3f,2924191,9317;vf72aaff8,2933508,6810;vf8b2f805,2940318,4459;vf918e06a,2944777,10415;vf96e5cc9,2955192,3675;vfa8b2adb,2958867,10415;vfaa91d92,2969282,5242;vfbbb4f5d,2974524,10258;vfca48a14,2984782,5242;vfd04f3bb,2990024,13549;vfd16acdb,3003573,10101;vfd80d62b,3013674,10415;vfe38fb3e,3024089,4302;vfe94e6f9,3028391,6183;vfee5b4db,3034574,11355'.split(';').forEach((r) => { const [k, o, l] = r.split(','); if (l) VOICE_IDX[k] = [+o, +l]; });
+'v000eb3f1,0,11041;v0020b6d4,11041,4459;v0118f1be,15500,9944;v01237f1a,25444,10101;v0167f1fc,35545,6810;v01da4f3a,42355,4929;v029cb487,47284,10571;v02ca10d3,57855,5556;v02d74627,63411,11982;v044d55cb,75393,8534;v045e586f,83927,4929;v0469adf6,88856,11198;v055cbb84,100054,4929;v05763e24,104983,9788;v064fc3f5,114771,7750;v0680ad50,122521,8534;v06c54cba,131055,13079;v073994e1,144134,11041;v07b02c17,155175,10258;v080be5e3,165433,11198;v0923865d,176631,5556;v0aca1d6b,182187,5712;v0b0e04f7,187899,9788;v0b18fcc0,197687,9944;v0b25a21d,207631,7123;v0b856650,214754,8534;v0c18fe53,223288,9944;v0d18ffe6,233232,10728;v0d1ca269,243960,11041;v0d3bc722,255001,6339;v0d3f5c43,261340,10415;v0d67bc66,271755,12295;v0d8b30ee,284050,6183;v0dbc4d2b,290233,9788;v0e4182b4,300021,5086;v0eeb850a,305107,5086;v0f78a0a9,310193,8690;v0fb542f9,318883,4772;v111ab6a6,323655,7750;v1232d7ba,331405,11198;v12ca8d87,342603,12766;v12e9e3eb,355369,5242;v13574d50,360611,7123;v135edbe8,367734,5556;v13f28094,373290,6183;v13fc98f7,379473,3675;v145e920e,383148,11198;v15df46fb,394346,7280;v163617c0,401626,5242;v165a3e48,406868,9004;v169cf91d,415872,10415;v16a06079,426287,8847;v16a69aec,435134,6810;v172d376e,441944,10885;v175d1c78,452829,4615;v1761fed4,457444,11825;v1806c191,469269,9788;v1852f2cb,479057,7123;v186913d6,486180,7437;v18a7ed45,493617,6183;v18e17c7f,499800,9317;v19261860,509117,3832;v19c93aeb,512949,8534;v1a817ede,521483,6496;v1b4e6f81,527979,12295;v1b53e2b4,540274,8534;v1b62b94b,548808,8534;v1b6e924f,557342,3988;v1b7af224,561330,8847;v1c4d342a,570177,5242;v1d4e319a,575419,6183;v1df0d45b,581602,9944;v1df85461,591546,5399;v1dfd4db2,596945,4772;v1e5b6f71,601717,4615;v1e71fa35,606332,11668;v1ef2a92a,618000,6183;v1f68bf4c,624183,7280;v1f71ca21,631463,8534;v20191dcf,639997,9944;v212f35a8,649941,6183;v21697ca7,656124,4929;v21d6d5b4,661053,9161;v2216710e,670214,12766;v225e84a2,682980,10728;v226cf46f,693708,11355;v227e2c0f,705063,5869;v22a95c05,710932,13706;v22c8e473,724638,12609;v22d6f3a9,737247,8534;v23192288,745781,9944;v23823c1d,755725,11198;v2419241b,766923,9788;v25009dad,776711,7280;v25af53b1,783991,6496;v28503973,790487,10415;v28a0f095,800902,9788;v29081b88,810690,11041;v29d2a29a,821731,8534;v2a081d1b,830265,10415;v2a2939e8,840680,11198;v2b2ee579,851878,8690;v2ceb2393,860568,11198;v2cf31187,871766,5242;v2d22cc3f,877008,12766;v2d6759cf,889774,6339;v2d904411,896113,10571;v2e082367,906684,9631;v2f09765b,916315,9944;v2f6b4342,926259,8377;v30cbb868,934636,4302;v3180e36f,938938,6496;v3426e0e4,945434,10101;v342bbd4a,955535,4615;v348297f1,960150,4615;v356bb878,964765,11668;v35a04999,976433,6653;v35cb24d8,983086,8690;v36e90a77,991776,5712;v3814eb90,997488,7123;v38275495,1004611,4615;v38b78916,1009226,3988;v3a8b3c42,1013214,7123;v3ab21210,1020337,9004;v3bbc3099,1029341,3518;v3bd3ee2e,1032859,11198;v3bfed9e4,1044057,11041;v3cba9fbd,1055098,9944;v3d1d1eb4,1065042,4772;v3d74d4d5,1069814,8377;v3eaa2466,1078191,9944;v3f472d60,1088135,5399;v3f52a34e,1093534,9631;v3fb219ef,1103165,11355;v3fb7dea4,1114520,4302;v41245963,1118822,13706;v4209b0b7,1132528,9317;v434472de,1141845,8847;v437cf8ca,1150692,6653;v44043c7a,1157345,11512;v444a0645,1168857,6026;v44894c4a,1174883,3361;v45b22361,1178244,9004;v4637540e,1187248,4929;v46f25eb4,1192177,11668;v47b22687,1203845,8847;v47c63a7f,1212692,5086;v4801781c,1217778,11825;v48899f46,1229603,8220;v48bcf5d0,1237823,11198;v48cc788c,1249021,5556;v4949ab34,1254577,11198;v4966ff51,1265775,4615;v49a78f47,1270390,10258;v4ace9cdf,1280648,9944;v4b78bc1c,1290592,4615;v4ba3bbde,1295207,9788;v4e6941b6,1304995,4459;v4e934b93,1309454,5869;v4ebf552c,1315323,7593;v4ec34aca,1322916,6810;v4ecee5b8,1329726,5242;v4ee38bdc,1334968,19662;v4ef2374e,1354630,4772;v4f295739,1359402,6496;v4f86b83b,1365898,6026;v4fba652f,1371924,10728;v5089cb04,1382652,9474;v50b234b2,1392126,8847;v5383b38f,1400973,9474;v545ebc94,1410447,6026;v54a42236,1416473,9788;v54b23afe,1426261,8534;v54bc8c72,1434795,7280;v552a4986,1442075,13706;v55697d8c,1455781,9004;v556d0141,1464785,9474;v55b23c91,1474259,8220;v58980c6a,1482479,4459;v5927e932,1486938,10728;v59c07dd2,1497666,5086;v59d31bcf,1502752,5242;v5ac07578,1507994,10885;v5bb24603,1518879,8377;v5c19c000,1527256,5242;v5c286709,1532498,14803;v5c8ae4b3,1547301,5869;v5cb24796,1553170,8377;v5db24929,1561547,9161;v5f4884fc,1570708,14333;v5f57bd47,1585041,8690;v5f696748,1593731,11512;v5fe4f13f,1605243,10728;v6076568a,1615971,13549;v609dc765,1629520,4615;v621f2852,1634135,6496;v64f30404,1640631,5712;v65333b11,1646343,5086;v654431d1,1651429,6183;v65acf92f,1657612,5712;v66eee64f,1663324,4929;v66efde25,1668253,4615;v66fecb78,1672868,5399;v68ab00c5,1678267,11041;v6944809b,1689308,4615;v69e76585,1693923,5399;v6b980e35,1699322,4615;v6bca5530,1703937,8534;v6bd37ce4,1712471,6966;v6d0ccfcf,1719437,10258;v6d1180f0,1729695,10258;v6d40302a,1739953,11668;v6d76f91f,1751621,9788;v6eaee4d9,1761409,4302;v6f363df4,1765711,10258;v6f94d181,1775969,6966;v6fba2283,1782935,10571;v701e519c,1793506,10258;v707b2c42,1803764,11668;v710f14b2,1815432,10728;v7182548f,1826160,11825;v72d2f046,1837985,4929;v73316683,1842914,4302;v733bcad5,1847216,4772;v738b08e8,1851988,5869;v73db53d2,1857857,5399;v74012383,1863256,3675;v743bd475,1866931,5869;v74804d7c,1872800,7123;v74ba9d5d,1879923,4145;v75c1d745,1884068,9944;v76048c02,1894012,6810;v768b0da1,1900822,5399;v780954ed,1906221,6183;v78928be1,1912404,10571;v795274a8,1922975,7593;v7ab7159d,1930568,9631;v7b883047,1940199,8847;v7ca63afe,1949046,10258;v7db77a9a,1959304,7123;v7dfee0b7,1966427,6966;v7e04ae68,1973393,12139;v7e492507,1985532,8847;v7e4fe79b,1994379,8534;v7ef40a57,2002913,6183;v80315224,2009096,4615;v80a3f14e,2013711,6810;v829599ee,2020521,5869;v836219f2,2026390,4459;v853519a9,2030849,4145;v866ba7dd,2034994,5086;v86ce1c3c,2040080,13079;v87f2bc44,2053159,4929;v881651d2,2058088,5086;v889827e8,2063174,10728;v88d42960,2073902,12295;v89628711,2086197,10258;v896c6931,2096455,11982;v8b3b7545,2108437,11512;v8b4d304a,2119949,9004;v8b5d8d60,2128953,8534;v8d04e900,2137487,7437;v8e68fc37,2144924,9474;v8e916d7c,2154398,9004;v8f50c7b9,2163402,8690;v8f5b2122,2172092,8534;v8f67ed15,2180626,8534;v9158e5b1,2189160,9631;v9258e744,2198791,9474;v9358e8d7,2208265,9474;v93670bf5,2217739,9944;v945adcdf,2227683,6026;v947ec1a3,2233709,5242;v9493b585,2238951,8534;v94d3f105,2247485,5242;v94dfcd15,2252727,6496;v956ded63,2259223,5242;v95ba4028,2264465,8063;v95f6e372,2272528,8377;v96d726f5,2280905,5242;v97c98418,2286147,6339;v97ee622e,2292486,4459;v98b1fb14,2296945,10415;v992380df,2307360,5399;v9a3ba894,2312759,11041;v9cd6d1e9,2323800,8847;v9cdaf6f8,2332647,4772;v9d23b032,2337419,5242;v9d6df793,2342661,4615;v9e2256de,2347276,9161;v9f766c7b,2356437,11198;va03da8fe,2367635,5712;va07dce27,2373347,8690;va0968e62,2382037,7593;va166e452,2389630,5242;va24c45d9,2394872,11198;va3424b0d,2406070,6183;va343fd97,2412253,6339;va4ce5076,2418592,3675;va7c9a24d,2422267,9944;va8a9e780,2432211,5712;va8abed17,2437923,4145;va9e8173f,2442068,5086;va9f52872,2447154,8847;vaae97013,2456001,5556;vaaef0b66,2461557,5712;vab261159,2467269,6653;vab65699d,2473922,3988;vab7bdd45,2477910,12452;vac87f60e,2490362,4929;vacc065b3,2495291,14176;vacf40095,2509467,5556;vadf78faa,2515023,5556;vaeac3669,2520579,5086;vaf4b0ed9,2525665,13863;vb0807f44,2539528,6496;vb1dbf46b,2546024,9631;vb2df4b5c,2555655,5869;vb2fb7f84,2561524,11512;vb3b6a5f5,2573036,6653;vb3c60ff8,2579689,6653;vb402459a,2586342,6339;vb46d8cea,2592681,6026;vb4c78db1,2598707,4615;vb4ece4fd,2603322,6026;vb4f40d2d,2609348,5712;vb5f0ba36,2615060,10571;vb6444d4a,2625631,5712;vb64851ab,2631343,5399;vb6591ff0,2636742,9161;vb68c51b8,2645903,10728;vb6a6d25c,2656631,3832;vb74b4cdf,2660463,11668;vb756e67e,2672131,5399;vb7592183,2677530,9631;vb7d286df,2687161,17468;vb8b7b07a,2704629,5086;vb92b533a,2709715,9788;vba59263c,2719503,11355;vbb8d8b3f,2730858,7437;vbbc88d68,2738295,6183;vbbd4f8e2,2744478,5399;vbc60cd35,2749877,13236;vbd0d54e4,2763113,10415;vbd7f3fb8,2773528,9474;vbe0d5677,2783002,8847;vbe22f365,2791849,11198;vbe2df22e,2803047,9161;vbf5927e9,2812208,6810;vbf6e28df,2819018,8534;vbf996876,2827552,9317;vc00d599d,2836869,10258;vc02fb468,2847127,9788;vc17b886b,2856915,4145;vc2a588a0,2861060,11982;vc3696af0,2873042,4772;vc39f1b27,2877814,19035;vc4a00304,2896849,11668;vc659d7bc,2908517,5399;vc6719744,2913916,4615;vc6f2d73e,2918531,9788;vc71b5578,2928319,17311;vc76af380,2945630,7907;vc7ff2a0b,2953537,6339;vc99eafde,2959876,4772;vc9a35eab,2964648,4772;vca636ae4,2969420,8847;vcc96c3f1,2978267,8690;vccf46917,2986957,11041;vcd5b8509,2997998,8534;vcdde0ca1,3006532,9474;vceb3385b,3016006,4145;vcf624dab,3020151,11825;vcf98f31f,3031976,5712;vcfdeef14,3037688,3675;vcfff7969,3041363,12609;vd0e7d9e7,3053972,10571;vd1869f30,3064543,6183;vd193ff09,3070726,8534;vd2e08650,3079260,10571;vd2f5ada3,3089831,11512;vd305c269,3101343,2891;vd32a5c46,3104234,10571;vd47c6372,3114805,6810;vd51f5581,3121615,10728;vd5f75f5b,3132343,6026;vd6699e33,3138369,11198;vd6fcb1d6,3149567,5712;vd7c428ba,3155279,7437;vd8884ef9,3162716,11041;vd8f6d9b1,3173757,11825;vdb0ba350,3185582,5399;vdd2a6bfc,3190981,5869;vde054d1d,3196850,4929;vde3d02f4,3201779,9004;vde5e0626,3210783,4615;vde6a02d0,3215398,5556;vde76f7b9,3220954,5399;vdefcbe6e,3226353,5869;vdf590d52,3232222,5242;vdf851d22,3237464,6183;ve00bfc28,3243647,6026;ve1373d37,3249673,8690;ve29850ae,3258363,8377;ve2f05afa,3266740,11512;ve38320ca,3278252,5242;ve4431ad4,3283494,4615;ve4bce258,3288109,6026;ve56cb2c8,3294135,14176;ve7231dae,3308311,6496;ve78ee812,3314807,8690;ve88ee9a5,3323497,9161;ve98eeb38,3332658,8534;vea0a81f4,3341192,4459;vea16571b,3345651,4459;vea8eeccb,3350110,8220;veb08bb33,3358330,9317;veb8eee5e,3367647,9788;vebe68f16,3377435,7123;vec8eeff1,3384558,8377;vecb3a1e5,3392935,6183;vecb8a58f,3399118,4459;veccd8636,3403577,4459;ved8ef184,3408036,7750;vedea5bba,3415786,4459;vedffcd10,3420245,9944;vee18cf19,3430189,10885;vee8ef317,3441074,7437;veeb7ebf2,3448511,4302;vefc4b978,3452813,4145;vf0062b7a,3456958,10728;vf08ef63d,3467686,7907;vf10584c9,3475593,9944;vf118d3d2,3485537,8847;vf1411561,3494384,10258;vf1701e33,3504642,10101;vf17a0782,3514743,10258;vf1a3bad4,3525001,3832;vf2b31665,3528833,3361;vf2c37823,3532194,4459;vf2d7f2e0,3536653,9788;vf307c686,3546441,9004;vf318d6f8,3555445,10571;vf339d5ce,3566016,7280;vf344df9e,3573296,16684;vf499dc61,3589980,10571;vf4b8b227,3600551,4615;vf5052feb,3605166,9004;vf507c9ac,3614170,10885;vf53bb405,3625055,11355;vf607cb3f,3636410,9317;vf72aaff8,3645727,6810;vf8b2f805,3652537,4459;vf918e06a,3656996,10415;vf96e5cc9,3667411,3675;vfa8b2adb,3671086,10415;vfaa91d92,3681501,5242;vfae1900b,3686743,5399;vfbbb4f5d,3692142,10258;vfca48a14,3702400,5242;vfcd685c6,3707642,6183;vfd04f3bb,3713825,13549;vfd16acdb,3727374,10101;vfd80d62b,3737475,10415;vfe38fb3e,3747890,4302;vfe4a9259,3752192,6026;vfe94e6f9,3758218,6183;vfee5b4db,3764401,11355'.split(';').forEach((r) => { const [k, o, l] = r.split(','); if (l) VOICE_IDX[k] = [+o, +l]; });
 const VOICE_KEYS = new Set(Object.keys(VOICE_IDX));
 function vKey(t) {
   t = String(t).trim().replace(/[ʼ’‘]/g, "'");
@@ -1744,6 +1944,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
+                 inst: 'Хто грає?', pitch: 'Високо чи низько?', knock: 'Скільки разів?', shadow: 'Чия тінь?', findall: 'Знайди всіх', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
                  rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', jigsaw: 'Пазли', bye: 'EnergyUA Junior' };
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
@@ -4052,15 +4253,20 @@ $('#tmAns').onclick = (e) => {
    12. АБЕТКА  (вчимо букви, шукаємо за назвою, «яка буква пропущена?»)
    Українська - усі 33 літери зі словами; румунська й англійська - латиниця.
    ================================================================ */
-const AL_UK = [['А', 'а', '🍉', 'АРБУЗ'], ['Б', 'бе', '🐝', 'БДЖОЛА'], ['В', 'ве', '🐺', 'ВОВК'], ['Г', 'ге', '🍄', 'ГРИБ'],
+const AL_UK = [['А', 'а', '🍍', 'АНАНАС'], ['Б', 'бе', '🐝', 'БДЖОЛА'], ['В', 'ве', '🐺', 'ВОВК'], ['Г', 'ге', '🍄', 'ГРИБ'],
   ['Ґ', 'ґе', '🔘', 'ҐУДЗИК'], ['Д', 'де', '🏠', 'ДІМ'], ['Е', 'е', '🧝', 'ЕЛЬФ'], ['Є', 'є', '🦝', 'ЄНОТ'],
   ['Ж', 'же', '🦒', 'ЖИРАФ'], ['З', 'зе', '🐇', 'ЗАЄЦЬ'], ['И', 'и', '🍒', 'ВИШНЯ'], ['І', 'і', '🧸', 'ІГРАШКА'],
-  ['Ї', 'ї', '🦔', 'ЇЖАК'], ['Й', 'йот', '🥛', 'ЙОГУРТ'], ['К', 'ка', '🐈', 'КІТ'], ['Л', 'ел', '🦊', 'ЛИСИЦЯ'],
+  ['Ї', 'ї', '🦔', 'ЇЖАК'], ['Й', 'йот', '🧘', 'ЙОГА'], ['К', 'ка', '🐈', 'КІТ'], ['Л', 'ел', '🦊', 'ЛИСИЦЯ'],
   ['М', 'ем', '🐭', 'МИША'], ['Н', 'ен', '👃', 'НІС'], ['О', 'о', '✏️', 'ОЛІВЕЦЬ'], ['П', 'пе', '🐕', 'ПЕС'],
   ['Р', 'ер', '🐟', 'РИБА'], ['С', 'ес', '☀️', 'СОНЦЕ'], ['Т', 'те', '🐯', 'ТИГР'], ['У', 'у', '🐍', 'УДАВ'],
-  ['Ф', 'еф', '🌺', 'ФІАЛКА'], ['Х', 'ха', '🍞', 'ХЛІБ'], ['Ц', 'це', '🎪', 'ЦИРК'], ['Ч', 'че', '🍵', 'ЧАЙ'],
-  ['Ш', 'ша', '🧣', 'ШАРФ'], ['Щ', 'ща', '🐀', 'ЩУР'], ['Ь', "м'який знак", '📅', 'ДЕНЬ'], ['Ю', 'ю', '👗', 'ЮБКА'],
+  ['Ф', 'еф', '🧚', 'ФЕЯ'], ['Х', 'ха', '🍞', 'ХЛІБ'], ['Ц', 'це', '🎪', 'ЦИРК'], ['Ч', 'че', '🍵', 'ЧАЙ'],
+  ['Ш', 'ша', '🧣', 'ШАРФ'], ['Щ', 'ща', '🐀', 'ЩУР'], ['Ь', "м'який знак", '🐴', 'КІНЬ'], ['Ю', 'ю', '🪀', 'ЮЛА'],
   ['Я', 'я', '🍎', 'ЯБЛУКО']];
+const AL_NOTE = { 'И': 'Слова на «и» майже не починаються — вона живе всередині слова: в-И-шня', 'Ь': 'Мʼякий знак не звучить сам і стоїть після букви в кінці слова: кін-Ь' };
+const AL_PIC = {
+  'Ґ': '<svg viewBox="0 0 64 64" width="1em" height="1em"><circle cx="32" cy="32" r="28" fill="#5794f2" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="#1f60c4" stroke-width="3"/><g fill="#0b2a5b"><circle cx="25" cy="26" r="3.4"/><circle cx="39" cy="26" r="3.4"/><circle cx="25" cy="38" r="3.4"/><circle cx="39" cy="38" r="3.4"/></g></svg>',
+  'Ю': '<svg viewBox="0 0 64 64" width="1em" height="1em"><rect x="29" y="3" width="6" height="13" rx="3" fill="#b0865c"/><ellipse cx="32" cy="20" rx="23" ry="8" fill="#f2495c"/><path d="M9 20Q12 44 32 60Q52 44 55 20Z" fill="#fade2a"/><path d="M13 29Q32 38 51 29" stroke="#f2495c" stroke-width="4" fill="none"/><path d="M19 41Q32 48 45 41" stroke="#5794f2" stroke-width="4" fill="none"/></svg>',
+};
 const AL_LAT = (rows) => rows.map(([c, em, w]) => [c, c, em, w]);
 const AL = {
   uk: AL_UK,
@@ -4103,8 +4309,8 @@ function alTabs() {
 function alCard() {
   const [ch, name, em, word] = alSet()[AL_S.cur], k = word.indexOf(ch);
   const w = k < 0 ? word : `${word.slice(0, k)}<b>${ch}</b>${word.slice(k + 1)}`;
-  $('#alCard').innerHTML = `<span class="alL">${ch}${LANG === 'uk' ? ch.toLowerCase() : ch.toLowerCase()}</span><span class="alP">${em}</span><span class="alW">${w}</span>` +
-    (LANG === 'uk' ? `<span class="alN">${T('Буква')} «${name}»</span>` : '');
+  $('#alCard').innerHTML = `<span class="alL">${ch}${LANG === 'uk' ? ch.toLowerCase() : ch.toLowerCase()}</span><span class="alP">${(LANG === 'uk' && AL_PIC[ch]) || em}</span><span class="alW">${w}</span>` +
+    (LANG === 'uk' ? `<span class="alN">${T('Буква')} «${name}»${AL_NOTE[ch] ? '<br>' + T(AL_NOTE[ch]) : ''}</span>` : '');
   $$('#alGrid button').forEach((b, i) => b.classList.toggle('on', i === AL_S.cur));
 }
 function alSay() { const [, name, , word] = alSet()[AL_S.cur]; say(`${LANG === 'uk' ? name : name}. ${word.toLowerCase()}`); }
@@ -4530,6 +4736,66 @@ $('#pzBoard').addEventListener('pointercancel', (e) => pzDragEnd(e, true));
 const JG_PICS = (() => {
 const H = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">';
 const star = (x, y, r, f = '#fff') => `<path d="M${x} ${y - r}L${x + r * .3} ${y - r * .3}L${x + r} ${y}L${x + r * .3} ${y + r * .3}L${x} ${y + r}L${x - r * .3} ${y + r * .3}L${x - r} ${y}L${x - r * .3} ${y - r * .3}Z" fill="${f}"/>`;
+/* ---- ще 32 малюнки-сцени: небо, пагорби, море, сонце - малюємо; героїв беремо з емодзі ---- */
+const rs = (n) => { let x = n * 9301 + 49297; return () => ((x = (x * 9301 + 49297) % 233280) / 233280); };
+const tx = (e, x, y, s) => `<text x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central">${e}</text>`;
+const cloud = (x, y, s) => `<g fill="#fff" fill-opacity=".92"><ellipse cx="${x}" cy="${y}" rx="${44 * s}" ry="${20 * s}"/><ellipse cx="${x - 26 * s}" cy="${y + 6 * s}" rx="${26 * s}" ry="${15 * s}"/><ellipse cx="${x + 28 * s}" cy="${y + 6 * s}" rx="${28 * s}" ry="${16 * s}"/><ellipse cx="${x + 4 * s}" cy="${y - 14 * s}" rx="${26 * s}" ry="${18 * s}"/></g>`;
+const hill = (c, y, a) => `<path d="M0 ${y} Q100 ${y - a} 200 ${y} T400 ${y} L400 400 L0 400Z" fill="${c}"/>`;
+const rainbow = (cx, cy, r) => '<g fill="none" stroke-width="10" stroke-opacity=".85">' + ['#ef5350', '#ff9800', '#fdd835', '#66bb6a', '#42a5f5', '#ab47bc'].map((c, i) => `<path d="M${cx - r + i * 10} ${cy} A${r - i * 10} ${r - i * 10} 0 0 1 ${cx + r - i * 10} ${cy}" stroke="${c}"/>`).join('') + '</g>';
+const waves = (y0) => [0, 1, 2, 3].map((i) => { const y = y0 + 22 + i * 26; return `<path d="M0 ${y} Q25 ${y - 9} 50 ${y} T100 ${y} T150 ${y} T200 ${y} T250 ${y} T300 ${y} T350 ${y} T400 ${y}" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="3"/>`; }).join('');
+const road = '<rect y="288" width="400" height="112" fill="#546e7a"/><path d="M0 345H400" stroke="#fff" stroke-width="5" stroke-dasharray="26 18" stroke-opacity=".8"/>';
+const rails = '<rect y="318" width="400" height="8" fill="#6d4c41"/><path d="M0 334H400" stroke="#90a4ae" stroke-width="5"/><path d="M0 312H400" stroke="#90a4ae" stroke-width="5"/>';
+const scene = (o) => {
+  const r = rs(o.seed || 7);
+  let s = H + `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.sky[0]}"/><stop offset="1" stop-color="${o.sky[1]}"/></linearGradient></defs><rect width="400" height="400" fill="url(#g)"/>`;
+  for (let i = 0; i < (o.stars || 0); i++) s += `<circle cx="${r() * 400 | 0}" cy="${r() * 250 | 0}" r="${(1 + r() * 2.2).toFixed(1)}" fill="#fff" fill-opacity="${(.5 + r() * .5).toFixed(2)}"/>`;
+  for (let i = 0; i < (o.bub || 0); i++) s += `<circle cx="${r() * 400 | 0}" cy="${r() * 380 | 0}" r="${(4 + r() * 11).toFixed(0)}" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-opacity=".45" stroke-width="2"/>`;
+  if (o.sun) s += `<circle cx="${o.sun[0]}" cy="${o.sun[1]}" r="${o.sun[2] * 1.5}" fill="${o.sun[3]}" fill-opacity=".28"/><circle cx="${o.sun[0]}" cy="${o.sun[1]}" r="${o.sun[2]}" fill="${o.sun[3]}"/>`;
+  (o.clouds || []).forEach((c) => { s += cloud(...c); });
+  if (o.sea) s += `<rect y="${o.sea}" width="400" height="${400 - o.sea}" fill="#0288d1"/>` + waves(o.sea);
+  if (o.raw) s += o.raw;
+  (o.hills || []).forEach((h) => { s += hill(...h); });
+  if (o.road) s += road;
+  if (o.rails) s += rails;
+  for (let i = 0; i < (o.flakes || 0); i++) s += `<circle cx="${r() * 400 | 0}" cy="${r() * 400 | 0}" r="${(2 + r() * 3).toFixed(1)}" fill="#fff" fill-opacity=".85"/>`;
+  (o.items || []).forEach((i) => { s += tx(...i); });
+  return s + '</svg>';
+};
+const SUN = [330, 72, 32, '#ffd54f'], CL = [[90, 80, 1], [240, 52, .7]];
+const SC = [
+  { nm: 'farm', sky: ['#81d4fa', '#e1f5fe'], sun: SUN, clouds: CL, hills: [['#8bc34a', 250, 22], ['#66bb6a', 305, 26]], items: [['🏡', 95, 235, 96], ['🌳', 345, 215, 84], ['🌻', 40, 318, 60], ['🐄', 262, 285, 84], ['🐖', 170, 335, 70], ['🐓', 340, 335, 56]] },
+  { nm: 'jungle', sky: ['#2e7d32', '#a5d6a7'], sun: [320, 70, 30, '#fff59d'], hills: [['#1b5e20', 290, 26]], items: [['🌴', 62, 225, 112], ['🌴', 345, 215, 96], ['🦜', 295, 150, 62], ['🦁', 195, 300, 100], ['🐒', 335, 305, 72], ['🌿', 112, 340, 56]] },
+  { nm: 'undersea', sky: ['#0288d1', '#01579b'], bub: 14, items: [['🐠', 110, 120, 72], ['🐟', 285, 110, 58], ['🐡', 185, 205, 62], ['🐙', 290, 265, 104], ['🐚', 68, 335, 56], ['🦀', 190, 340, 62]] },
+  { nm: 'space', sky: ['#1a1040', '#4a148c'], stars: 60, items: [['🪐', 90, 110, 92], ['🛸', 312, 112, 72], ['⭐', 205, 70, 36], ['🚀', 222, 195, 92], ['👽', 95, 295, 62], ['🌍', 305, 300, 84]] },
+  { nm: 'snow', sky: ['#90caf9', '#e3f2fd'], flakes: 30, hills: [['#ffffff', 272, 20], ['#e8f1fa', 322, 18]], items: [['⛄', 120, 255, 112], ['🎄', 305, 232, 112], ['🐧', 215, 330, 62], ['🛷', 335, 335, 50]] },
+  { nm: 'desert', sky: ['#ffcc80', '#fff3e0'], sun: [88, 92, 40, '#ff9800'], hills: [['#ffb74d', 282, 22], ['#ffa726', 332, 16]], items: [['🐪', 238, 262, 112], ['🌵', 72, 292, 92], ['🌵', 345, 322, 62], ['🦂', 160, 345, 40]] },
+  { nm: 'candy', sky: ['#f8bbd0', '#fce4ec'], hills: [['#f48fb1', 305, 20]], items: [['🍭', 108, 130, 104], ['🍬', 292, 112, 72], ['🧁', 210, 252, 112], ['🍩', 80, 300, 82], ['🍪', 322, 298, 72], ['🍫', 200, 350, 52]] },
+  { nm: 'garden', sky: ['#b3e5fc', '#f1f8e9'], sun: SUN, clouds: [[100, 75, .9]], hills: [['#9ccc65', 270, 22], ['#7cb342', 320, 22]], items: [['🌷', 70, 305, 72], ['🌻', 150, 290, 92], ['🦋', 222, 120, 72], ['🐝', 318, 175, 50], ['🌼', 262, 328, 60], ['🐞', 342, 335, 40]] },
+  { nm: 'zoo', sky: ['#b2ebf2', '#e0f7fa'], sun: SUN, hills: [['#aed581', 300, 18]], items: [['🐘', 112, 255, 122], ['🦒', 250, 225, 132], ['🦓', 335, 320, 74], ['🌳', 60, 330, 60]] },
+  { nm: 'night', sky: ['#0d1b4c', '#283593'], stars: 42, sun: [322, 72, 30, '#fff9c4'], items: [['🏙️', 200, 295, 230], ['🦉', 82, 150, 62], ['⭐', 190, 90, 34]] },
+  { nm: 'pirates', sky: ['#4fc3f7', '#e1f5fe'], sun: SUN, clouds: CL, sea: 245, items: [['⛵', 205, 200, 134], ['🏝️', 66, 262, 84], ['🦜', 335, 140, 60], ['🦈', 305, 330, 66], ['💎', 120, 345, 42]] },
+  { nm: 'fruit', sky: ['#fff9c4', '#ffe0b2'], items: [['🍎', 100, 120, 92], ['🍌', 300, 120, 92], ['🍉', 200, 205, 104], ['🍇', 110, 290, 92], ['🍓', 292, 290, 82]] },
+  { nm: 'birthday', sky: ['#e1bee7', '#f3e5f5'], items: [['🎈', 78, 140, 82], ['🎊', 200, 95, 62], ['🎈', 330, 118, 82], ['🎂', 200, 270, 134], ['🎁', 88, 322, 72], ['🎉', 322, 300, 74]] },
+  { nm: 'train', sky: ['#bbdefb', '#e8f5e9'], hills: [['#81c784', 262, 18]], rails: 1, items: [['🌳', 62, 235, 74], ['🚂', 130, 282, 104], ['🚃', 238, 288, 84], ['🚃', 328, 288, 84], ['☁️', 300, 80, 70]] },
+  { nm: 'skyfly', sky: ['#4fc3f7', '#b3e5fc'], sun: [76, 76, 32, '#fff176'], clouds: [[230, 90, 1], [110, 250, .8], [320, 280, .9]], items: [['✈️', 150, 150, 92], ['🪁', 322, 95, 60], ['🚁', 295, 215, 90], ['🎈', 70, 320, 78], ['🕊️', 205, 335, 60]] },
+  { nm: 'firetruck', sky: ['#ffccbc', '#fff3e0'], hills: [['#bcaaa4', 305, 12]], items: [['🚨', 90, 150, 60], ['💧', 305, 138, 50], ['🏠', 82, 255, 96], ['🔥', 318, 255, 90], ['🚒', 195, 322, 142]] },
+  { nm: 'dinos', sky: ['#ffe082', '#ffcc80'], sun: [68, 76, 32, '#ff7043'], hills: [['#689f38', 292, 20]], items: [['🌋', 330, 150, 88], ['🦕', 130, 250, 124], ['🦖', 290, 275, 112], ['🌴', 58, 325, 70], ['🥚', 205, 345, 42]] },
+  { nm: 'unicorn', sky: ['#ce93d8', '#f8bbd0'], clouds: [[70, 280, .8], [330, 300, .8]], raw: rainbow(200, 290, 150), items: [['⭐', 68, 96, 40], ['✨', 335, 88, 40], ['🦄', 215, 262, 136], ['🌸', 90, 340, 50], ['🌸', 330, 345, 46]] },
+  { nm: 'fairy', sky: ['#1b5e20', '#a5d6a7'], hills: [['#2e7d32', 292, 22]], items: [['🌲', 58, 225, 108], ['🌲', 345, 230, 108], ['🧚', 215, 165, 92], ['✨', 300, 108, 40], ['🍄', 112, 305, 92], ['🍄', 300, 335, 62]] },
+  { nm: 'bees', sky: ['#fff59d', '#ffe082'], hills: [['#9ccc65', 302, 20]], items: [['🐝', 205, 135, 72], ['🐝', 305, 205, 50], ['🌻', 88, 268, 104], ['🌻', 330, 285, 72], ['🍯', 215, 318, 88]] },
+  { nm: 'playground', sky: ['#b3e5fc', '#e1f5fe'], sun: SUN, hills: [['#a5d6a7', 305, 18]], items: [['🎈', 205, 100, 62], ['🎠', 110, 258, 122], ['🎡', 300, 228, 134], ['🛝', 62, 345, 60], ['🧸', 205, 345, 62]] },
+  { nm: 'penguins', sky: ['#b3e5fc', '#e0f7fa'], flakes: 14, hills: [['#ffffff', 282, 18], ['#d7ecf7', 332, 16]], items: [['❄️', 82, 120, 50], ['❄️', 332, 100, 42], ['🐧', 130, 275, 104], ['🐧', 240, 312, 72], ['🐟', 305, 175, 52], ['🧊', 330, 322, 72]] },
+  { nm: 'beach', sky: ['#4fc3f7', '#e1f5fe'], sun: SUN, sea: 205, hills: [['#ffe082', 305, 16]], items: [['🐬', 82, 240, 54], ['⛵', 245, 190, 50], ['⛱️', 110, 295, 104], ['🏄', 305, 255, 72], ['🦀', 250, 345, 52], ['🐚', 335, 345, 46]] },
+  { nm: 'autumn', sky: ['#ffe0b2', '#fff3e0'], hills: [['#ffb74d', 292, 20], ['#ff8a65', 335, 16]], items: [['🍂', 80, 150, 62], ['🍁', 322, 128, 72], ['🌳', 330, 235, 104], ['🐿️', 225, 285, 92], ['🍄', 108, 315, 72], ['🌰', 326, 345, 44]] },
+  { nm: 'winterfox', sky: ['#283593', '#7986cb'], stars: 30, flakes: 20, hills: [['#ffffff', 290, 22]], items: [['🌲', 88, 238, 112], ['🌲', 322, 232, 112], ['🦊', 205, 308, 110], ['❄️', 200, 118, 50]] },
+  { nm: 'music', sky: ['#ffcdd2', '#f8bbd0'], items: [['🎺', 110, 118, 84], ['🎵', 205, 125, 54], ['🎻', 300, 118, 84], ['🎹', 110, 285, 104], ['🎸', 300, 275, 104], ['🥁', 205, 335, 72]] },
+  { nm: 'sports', sky: ['#a5d6a7', '#c8e6c9'], hills: [['#66bb6a', 312, 14]], items: [['⚽', 108, 118, 84], ['🏀', 300, 118, 84], ['🥅', 200, 270, 118], ['🏆', 332, 315, 74], ['🎾', 80, 330, 52]] },
+  { nm: 'food', sky: ['#ffecb3', '#fff8e1'], items: [['🍕', 108, 125, 104], ['🍔', 292, 125, 104], ['🍟', 108, 290, 94], ['🥤', 205, 305, 84], ['🍦', 300, 290, 90]] },
+  { nm: 'pets', sky: ['#ffe0b2', '#ffccbc'], items: [['🐶', 110, 140, 104], ['🐱', 292, 140, 104], ['🐾', 200, 228, 50], ['🐹', 110, 300, 84], ['🐰', 292, 300, 84]] },
+  { nm: 'bugs', sky: ['#c5e1a5', '#dcedc8'], hills: [['#7cb342', 305, 20]], items: [['🐞', 108, 128, 82], ['🦋', 292, 140, 92], ['🍃', 205, 230, 82], ['🐛', 118, 322, 72], ['🐌', 285, 322, 72], ['🐜', 205, 350, 40]] },
+  { nm: 'cars', sky: ['#b3e5fc', '#e1f5fe'], sun: SUN, hills: [['#a5d6a7', 262, 14]], road: 1, items: [['🏠', 78, 232, 72], ['🏢', 200, 222, 94], ['🌳', 322, 236, 72], ['🚗', 100, 322, 82], ['🚌', 238, 312, 92], ['🚕', 340, 336, 62]] },
+  { nm: 'tractor', sky: ['#81d4fa', '#e1f5fe'], sun: SUN, clouds: [[100, 70, .9]], hills: [['#ffd54f', 272, 20], ['#ffca28', 322, 16]], items: [['🐄', 335, 245, 70], ['🚜', 180, 288, 132], ['🌾', 70, 335, 70], ['🐓', 335, 335, 58]] },
+];
 return [
 { nm: 'robot', svg: H +
  '<defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4fc3f7"/><stop offset="1" stop-color="#b388ff"/></linearGradient></defs>' +
@@ -4679,51 +4945,96 @@ return [
  '<path d="M190 176L190 156Q200 144 210 156L210 176Z" fill="#ffee58"/>' +
  '<path d="M122 290L122 272Q132 262 142 272L142 290Z" fill="#263238"/><path d="M258 290L258 272Q268 262 278 272L278 290Z" fill="#263238"/>' +
  '</g></svg>' },
-];
+].concat(SC.map((o) => ({ nm: o.nm, svg: scene(o) })));
 })();
 const JG_N = [[2, 2], [3, 2], [3, 3], [4, 3], [5, 4]];        // [стовпців, рядків]
-const JG = { n: Math.min(4, LS.get('jgN', 1)), pic: LS.get('jgPic', 0) % JG_PICS.length, cols: 3, rows: 2, cell: 80, filled: new Set(), q: [], sel: null, busy: false };
-const jgUrl = (i) => `url("data:image/svg+xml,${encodeURIComponent(JG_PICS[i].svg)}")`;
-const jgPos = (k) => `${JG.cols > 1 ? (k % JG.cols) / (JG.cols - 1) * 100 : 0}% ${JG.rows > 1 ? Math.floor(k / JG.cols) / (JG.rows - 1) * 100 : 0}%`;
-/** Шматочок k картини: фон розтягнуто на всю дошку й зсунуто так, щоб було видно лише свою клітинку. */
-function jgPaint(el, k) {
-  el.style.backgroundImage = jgUrl(JG.pic);
-  el.style.backgroundSize = `${JG.cols * 100}% ${JG.rows * 100}%`;
-  el.style.backgroundPosition = jgPos(k);
+const JG = { data: '', n: Math.min(4, LS.get('jgN', 1)), pic: LS.get('jgPic', 0) % JG_PICS.length, cols: 3, rows: 2, cell: 80, filled: new Set(), q: [], sel: null, busy: false };
+const jgData = (i) => `data:image/svg+xml,${encodeURIComponent(JG_PICS[i].svg)}`;
+const jgUrl = (i) => `url("${jgData(i)}")`;
+/* ---- форма шматочків: як у справжніх пазлах - зверху/знизу/збоку «язички» й «западини» ----
+   Клітинка 100×100, навколо ще 30 - для язичків. Сусідні шматочки мають протилежні знаки, тож стикуються. */
+const JG_M = 30;
+let jgEdges = { h: [], v: [] }, jgUid = 0;
+function jgMakeEdges() {
+  const h = [], v = [];
+  for (let r = 0; r < JG.rows; r++) {
+    h[r] = []; v[r] = [];
+    for (let c = 0; c < JG.cols; c++) {
+      h[r][c] = r < JG.rows - 1 ? (Math.random() < 0.5 ? 1 : -1) : 0;
+      v[r][c] = c < JG.cols - 1 ? (Math.random() < 0.5 ? 1 : -1) : 0;
+    }
+  }
+  jgEdges = { h, v };
+}
+const JG_TAB = [[.40, 0], [.46, 0, .44, .07, .42, .10], [.38, .18, .43, .25, .50, .25], [.57, .25, .62, .18, .58, .10], [.56, .07, .54, 0, .60, 0], [1, 0]];
+function jgEdge(x0, y0, x1, y1, sg) {
+  if (!sg) return `L${x1} ${y1}`;
+  const ux = (x1 - x0) / 100, uy = (y1 - y0) / 100, nx = uy * sg, ny = -ux * sg;
+  const P = (t, q) => `${(x0 + (x1 - x0) * t + nx * q * 100).toFixed(1)} ${(y0 + (y1 - y0) * t + ny * q * 100).toFixed(1)}`;
+  return JG_TAB.map((a) => (a.length === 2 ? `L${P(a[0], a[1])}` : `C${P(a[0], a[1])} ${P(a[2], a[3])} ${P(a[4], a[5])}`)).join('');
+}
+function jgPath(c, r) {
+  const { h, v } = jgEdges;
+  const top = r > 0 ? -h[r - 1][c] : 0, right = c < JG.cols - 1 ? v[r][c] : 0;
+  const bottom = r < JG.rows - 1 ? h[r][c] : 0, left = c > 0 ? -v[r][c - 1] : 0;
+  return `M0 0${jgEdge(0, 0, 100, 0, top)}${jgEdge(100, 0, 100, 100, right)}${jgEdge(100, 100, 0, 100, bottom)}${jgEdge(0, 100, 0, 0, left)}Z`;
+}
+const jgBox = (cell) => cell * (100 + 2 * JG_M) / 100;
+/** SVG шматочка k: картина, обрізана його контуром; box - розмір у пікселях разом із полями. */
+function jgPiece(k, cell) {
+  const c = k % JG.cols, r = Math.floor(k / JG.cols), d = jgPath(c, r), id = 'jc' + (++jgUid), px = jgBox(cell), W = 100 + 2 * JG_M;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-JG_M} ${-JG_M} ${W} ${W}" width="${px}" height="${px}">` +
+    `<defs><clipPath id="${id}"><path d="${d}"/></clipPath></defs>` +
+    `<g clip-path="url(#${id})"><image href="${JG.data}" x="${-c * 100}" y="${-r * 100}" width="${JG.cols * 100}" height="${JG.rows * 100}" preserveAspectRatio="xMidYMid slice"/></g>` +
+    `<path d="${d}" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="3"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.4"/></svg>`;
+}
+/** Порожнє місце - лише контур шматочка. */
+function jgHole(k) {
+  const c = k % JG.cols, r = Math.floor(k / JG.cols), px = jgBox(JG.cell), W = 100 + 2 * JG_M;
+  return `<svg class="jo" xmlns="http://www.w3.org/2000/svg" viewBox="${-JG_M} ${-JG_M} ${W} ${W}" width="${px}" height="${px}"><path d="${jgPath(c, r)}" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="2" stroke-dasharray="6 5"/></svg>`;
 }
 function jgInfo() {
   $('#jgInfo').innerHTML = `${T('Перетягуй шматочки на місце')}<br>${T('Зібрано')}: <b>${JG.filled.size} / ${JG.cols * JG.rows}</b>`;
 }
 function jgTray() {
-  const tr = $('#jgTray'), ts = Math.min(66, JG.cell);
+  const tr = $('#jgTray'), ts = Math.min(JG.cell * 0.85, 52);
   tr.innerHTML = '';
-  JG.q.slice(0, 6).forEach((k) => {
+  JG.q.slice(0, 4).forEach((k) => {
     const d = document.createElement('div');
     d.className = 'jgp' + (JG.sel === k ? ' sel' : ''); d.dataset.i = k;
-    d.style.width = d.style.height = ts + 'px';
-    jgPaint(d, k); tr.appendChild(d);
+    d.innerHTML = jgPiece(k, ts); tr.appendChild(d);
   });
+}
+function jgThumbs() {
+  const st = $('#jgPics'), done = LS.get('jgDone', []);
+  if (st.children.length !== JG_PICS.length) {
+    st.innerHTML = '';
+    JG_PICS.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.dataset.p = i; b.style.backgroundImage = jgUrl(i); b.setAttribute('aria-label', JG_PICS[i].nm); st.appendChild(b);
+    });
+  }
+  [...st.children].forEach((b, i) => { b.classList.toggle('on', i === JG.pic); b.classList.toggle('done', done.includes(i)); });
+  const on = st.children[JG.pic];
+  if (on) st.scrollLeft = on.offsetLeft - st.clientWidth / 2 + on.offsetWidth / 2;
 }
 function jgNew() {
   const [cols, rows] = JG_N[JG.n];
-  JG.cols = cols; JG.rows = rows;
-  JG.cell = Math.floor(Math.min(Math.min(window.innerWidth * 0.9, 340) / cols, window.innerHeight * 0.33 / rows));
+  JG.cols = cols; JG.rows = rows; JG.data = jgData(JG.pic);
+  JG.cell = Math.floor(Math.min(Math.min(window.innerWidth * 0.86, 330) / cols, window.innerHeight * 0.3 / rows));
   JG.filled = new Set(); JG.sel = null; JG.busy = false;
   JG.q = shuffle(Array.from({ length: cols * rows }, (_, k) => k));
-  $('#jgPics').innerHTML = '';
-  JG_PICS.forEach((_, i) => {
-    const b = document.createElement('button');
-    b.className = i === JG.pic ? 'on' : ''; b.dataset.p = i; b.style.backgroundImage = jgUrl(i);
-    b.setAttribute('aria-label', JG_PICS[i].nm); $('#jgPics').appendChild(b);
-  });
+  jgMakeEdges();
+  jgThumbs();
   $('#jgN').innerHTML = JG_N.map(([c, r], i) => `<button class="mtl${i === JG.n ? ' on' : ''}" data-n="${i}">${c * r}</button>`).join('');
   const bd = $('#jgBoard');
   bd.style.width = JG.cell * cols + 'px'; bd.style.height = JG.cell * rows + 'px';
+  bd.style.setProperty('--m', -JG.cell * JG_M / 100 + 'px');
   bd.innerHTML = '<div class="ghost"></div><div class="grid"></div>';
   bd.firstChild.style.backgroundImage = jgUrl(JG.pic);
   const g = bd.lastChild;
   g.style.gridTemplateColumns = `repeat(${cols}, ${JG.cell}px)`; g.style.gridTemplateRows = `repeat(${rows}, ${JG.cell}px)`;
-  for (let k = 0; k < cols * rows; k++) { const sl = document.createElement('div'); sl.className = 'jgs'; sl.dataset.i = k; g.appendChild(sl); }
+  for (let k = 0; k < cols * rows; k++) { const sl = document.createElement('div'); sl.className = 'jgs'; sl.dataset.i = k; sl.innerHTML = jgHole(k); g.appendChild(sl); }
   jgTray(); jgInfo();
 }
 function jgSlotAt(x, y) {
@@ -4735,11 +5046,12 @@ function jgPlace(k, i) {
   const sl = $(`#jgBoard .jgs[data-i="${i}"]`);
   if (!sl || sl.classList.contains('on')) return false;
   if (k !== i) { sl.classList.add('bad'); oops(); vibe(80); setTimeout(() => sl.classList.remove('bad'), 350); return false; }
-  sl.classList.add('on'); jgPaint(sl, k);
+  sl.classList.add('on'); sl.innerHTML = jgPiece(k, JG.cell);
   JG.filled.add(k); JG.q = JG.q.filter((v) => v !== k); JG.sel = null;
   blip(); vibe(20); jgTray(); jgInfo();
   if (JG.filled.size === JG.cols * JG.rows) {
     JG.busy = true; confetti(); cheer(); vibe(60); addStar(JG.cols * JG.rows >= 12 ? 2 : 1); say('Молодець!');
+    { const dn = LS.get('jgDone', []); if (!dn.includes(JG.pic)) { dn.push(JG.pic); LS.set('jgDone', dn); } }
     JG.pic = (JG.pic + 1) % JG_PICS.length; LS.set('jgPic', JG.pic);        // наступного разу - інша картинка
     setTimeout(() => { if (SCR === 'jigsaw') jgNew(); }, 3400);
   }
@@ -4761,10 +5073,10 @@ $('#jgBoard').onclick = (e) => {
 $('#jgTray').addEventListener('pointerdown', (e) => {
   const pc = e.target.closest('.jgp'); if (!pc || JG.busy) return;
   e.preventDefault();
-  const k = +pc.dataset.i, sx = e.clientX, sy = e.clientY, cl = pc.cloneNode();
+  const k = +pc.dataset.i, sx = e.clientX, sy = e.clientY, cl = document.createElement('div'), bx = jgBox(JG.cell);
   let moved = false;
-  cl.className = 'jgp drag'; cl.style.width = cl.style.height = JG.cell + 'px';
-  const at = (ev) => { cl.style.left = ev.clientX - JG.cell / 2 + 'px'; cl.style.top = ev.clientY - JG.cell / 2 - 24 + 'px'; };
+  cl.className = 'jgp drag'; cl.innerHTML = jgPiece(k, JG.cell);
+  const at = (ev) => { cl.style.left = ev.clientX - bx / 2 + 'px'; cl.style.top = ev.clientY - bx / 2 - 24 + 'px'; };
   const mv = (ev) => {
     if (!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) { moved = true; document.body.appendChild(cl); pc.classList.add('src'); }
     if (moved) at(ev);
@@ -5212,6 +5524,363 @@ $('#orPool').onclick = (e) => {
   if (++OR.ok >= 2) { OR.ok = 0; OR.n = Math.min(6, OR.n + 1); }
   setTimeout(orNew, 1800);
 };
+
+/* ================================================================
+   27. НОВІ ІГРИ 1.5
+   Слух: «Хто грає?», «Високо чи низько?», «Скільки разів?»; увага: «Чия тінь?», «Знайди всіх»;
+   памʼять: «Запамʼятай числа»; швидкість: «Лови зірочки», «Бульбашки», «Хто виглянув?»
+   Усі звуки синтезуються тут же, файлів немає.
+   ================================================================ */
+/** Нота: частота, тривалість, {type, vol, att, vib, lp, to, t0}. */
+function nt(f, dur, o = {}) {
+  if (!S.sound) return;
+  const a = ac(); if (!a) return;
+  const t = a.currentTime + (o.t0 || 0), osc = a.createOscillator(), g = a.createGain(), fl = a.createBiquadFilter();
+  osc.type = o.type || 'sine'; osc.frequency.setValueAtTime(f, t);
+  if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + dur);
+  fl.type = 'lowpass'; fl.frequency.value = o.lp || 6000;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(o.vol || 0.2, t + (o.att || 0.01));
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  if (o.vib) {
+    const l = a.createOscillator(), lg = a.createGain();
+    l.frequency.value = o.vib; lg.gain.value = f * 0.012; l.connect(lg); lg.connect(osc.frequency); l.start(t); l.stop(t + dur + 0.05);
+  }
+  osc.connect(fl); fl.connect(g); g.connect(a.destination); osc.start(t); osc.stop(t + dur + 0.05);
+}
+/** Коротка заставка перед раундом на час. */
+function roundBox(stage, em, title, sub, again) {
+  const d = document.createElement('div'); d.className = 'endbox';
+  d.innerHTML = `<div class="em">${em}</div><b>${title}</b><span>${sub}</span><button class="btn go">▶️ Ще раз</button>`;
+  stage.appendChild(d);
+  d.querySelector('button').onclick = () => { blip(); d.remove(); again(); };
+}
+/** Зірочки за раунд на швидкість: за кожні step очок. */
+function roundStars(score, step) { const n = Math.min(3, Math.floor(score / step)); if (n > 0) addStar(n); return n; }
+
+/* ---------- 1. ХТО ГРАЄ? ---------- */
+const INST = [
+  { e: '🥁', n: 'барабан', play: () => [0, .28, .56].forEach((t0) => { nt(170, .2, { to: 55, vol: .5, t0 }); envNoise({ dur: .1, vol: .15, t0, fpts: [[0, 3500], [1, 900]] }); }) },
+  { e: '🔔', n: 'дзвіночок', play: () => [0, .35, .7].forEach((t0) => { nt(1568, .9, { vol: .15, t0 }); nt(1568 * 2.76, .5, { vol: .06, t0 }); nt(1568 * 5.4, .25, { vol: .03, t0 }); }) },
+  { e: '🎺', n: 'труба', play: () => [[392, 0], [392, .32], [523, .64]].forEach(([f, t0]) => nt(f, .3, { type: 'sawtooth', lp: 1700, att: .05, vol: .13, t0 })) },
+  { e: '🎹', n: 'піаніно', play: () => [[523, 0], [659, .3], [784, .6]].forEach(([f, t0]) => { nt(f, .8, { type: 'triangle', vol: .22, att: .005, t0 }); nt(f * 2, .3, { vol: .05, t0 }); }) },
+  { e: '🎸', n: 'гітара', play: () => [[196, 0], [247, .28], [294, .56], [392, .84]].forEach(([f, t0]) => nt(f, .5, { type: 'sawtooth', lp: 1100, att: .003, vol: .2, t0 })) },
+  { e: '🎻', n: 'скрипка', play: () => [[440, 0], [494, .5], [523, 1]].forEach(([f, t0]) => nt(f, .6, { type: 'sawtooth', lp: 2400, att: .14, vol: .11, vib: 5.5, t0 })) },
+];
+const IN = { gen: 0, ok: 0, lv: 3, cur: null, busy: true };
+function inNew() {
+  const gen = ++IN.gen;
+  IN.busy = false; IN.cur = pick(INST);
+  const opts = shuffle([IN.cur, ...shuffle(INST.filter((i) => i !== IN.cur)).slice(0, IN.lv - 1)]);
+  $('#inOpts').innerHTML = opts.map((i) => `<button class="big mopt" data-e="${i.e}" aria-label="${i.n}">${i.e}</button>`).join('');
+  $('#inAsk').innerHTML = 'Хто грає?<small>слухай і вгадай</small>';
+  say('Хто грає?');
+  setTimeout(() => { if (gen === IN.gen) IN.cur.play(); }, 1100);
+}
+START.inst = () => { IN.ok = 0; IN.lv = 3; inNew(); };
+STOP.inst = () => { IN.gen++; };
+$('#inAgain').onclick = () => { if (IN.cur) { blip(); ac(); IN.cur.play(); } };
+$('#inOpts').onclick = (e) => {
+  const b = e.target.closest('.mopt'); if (!b || IN.busy) return;
+  if (b.dataset.e !== IN.cur.e) { memNo(b); say('Спробуй ще'); return; }
+  IN.busy = true; b.classList.add('ok'); memWin(['Так!', IN.cur.n]);
+  if (++IN.ok % 3 === 0) IN.lv = Math.min(6, IN.lv + 1);
+  setTimeout(inNew, 1900);
+};
+
+/* ---------- 2. ВИСОКО ЧИ НИЗЬКО? ----------
+   Рівні 1-2: одна нота - тоненька мишка чи грубий ведмідь. З 3-го: дві ноти, яка вища. */
+const PT = { gen: 0, ok: 0, lv: 1, q: null, busy: true };
+function ptMake() {
+  if (PT.lv <= 2) {
+    const hi = Math.random() < .5;
+    return { kind: 1, ans: hi ? 'hi' : 'lo', f: hi ? (PT.lv === 1 ? 1000 + rnd(500) : 650 + rnd(150)) : (PT.lv === 1 ? 150 + rnd(80) : 330 + rnd(80)) };
+  }
+  const base = 330 + rnd(300), gap = PT.lv === 3 ? 1.6 : PT.lv === 4 ? 1.35 : 1.18, firstHigh = Math.random() < .5;
+  return { kind: 2, ans: firstHigh ? '1' : '2', f1: firstHigh ? base * gap : base, f2: firstHigh ? base : base * gap };
+}
+function ptPlay() {
+  const q = PT.q; if (!q) return;
+  if (q.kind === 1) nt(q.f, .8, { type: 'triangle', vol: .3 });
+  else { nt(q.f1, .5, { type: 'triangle', vol: .28 }); nt(q.f2, .5, { type: 'triangle', vol: .28, t0: .7 }); }
+}
+function ptNew() {
+  const gen = ++PT.gen, q = PT.q = ptMake();
+  PT.busy = false;
+  $('#ptProg').innerHTML = Array.from({ length: 3 }, (_, i) => `<i class="${i < PT.ok % 3 ? 'on' : ''}"></i>`).join('');
+  if (q.kind === 1) {
+    $('#ptAsk').innerHTML = 'Високо чи низько?<small>мишка тоненька, ведмідь грубий</small>';
+    $('#ptOpts').innerHTML = '<button class="big mopt" data-a="hi" aria-label="високо">🐭</button><button class="big mopt" data-a="lo" aria-label="низько">🐻</button>';
+    say('Високо чи низько?');
+  } else {
+    $('#ptAsk').innerHTML = 'Яка нота вища?<small>слухай уважно</small>';
+    $('#ptOpts').innerHTML = '<button class="big mopt" data-a="1" aria-label="перша">☝️</button><button class="big mopt" data-a="2" aria-label="друга">✌️</button>';
+    say('Яка нота вища?');
+  }
+  setTimeout(() => { if (gen === PT.gen) ptPlay(); }, 1200);
+}
+START.pitch = () => { PT.ok = 0; PT.lv = LS.get('ptLv', 1); ptNew(); };
+STOP.pitch = () => { PT.gen++; };
+$('#ptAgain').onclick = () => { blip(); ac(); ptPlay(); };
+$('#ptOpts').onclick = (e) => {
+  const b = e.target.closest('.mopt'); if (!b || PT.busy) return;
+  if (b.dataset.a !== PT.q.ans) { memNo(b); say('Спробуй ще'); return; }
+  PT.busy = true; b.classList.add('ok'); memWin(PT.q.kind === 1 ? (PT.q.ans === 'hi' ? 'Високо' : 'Низько') : (PT.q.ans === '1' ? 'Перша' : 'Друга'));
+  if (++PT.ok % 3 === 0 && PT.lv < 5) { PT.lv++; LS.set('ptLv', PT.lv); }
+  setTimeout(ptNew, 1800);
+};
+
+/* ---------- 3. СКІЛЬКИ РАЗІВ СТУКАЄ? ---------- */
+const KN = { gen: 0, ok: 0, max: 3, n: 1, busy: true };
+function knPlay() {
+  for (let i = 0; i < KN.n; i++) {
+    nt(260, .14, { type: 'triangle', to: 110, vol: .45, t0: i * .55 });
+    envNoise({ dur: .05, vol: .12, t0: i * .55, fpts: [[0, 2600], [1, 1400]] });
+  }
+}
+function knNew() {
+  const gen = ++KN.gen;
+  KN.busy = false; KN.n = 1 + rnd(KN.max);
+  $('#knBox').textContent = '🙈';
+  const o = new Set([KN.n]);
+  while (o.size < 4) o.add(Math.max(1, Math.min(KN.max + 1, KN.n + rnd(5) - 2)));
+  $('#knOpts').innerHTML = [...o].sort((a, b) => a - b).map((n) => `<button class="big num" data-n="${n}">${n}</button>`).join('');
+  $('#knAsk').innerHTML = 'Скільки разів стукає?<small>порахуй на слух</small>';
+  say('Скільки разів стукає?');
+  setTimeout(() => { if (gen === KN.gen) knPlay(); }, 1500);
+}
+START.knock = () => { KN.ok = 0; KN.max = 3; knNew(); };
+STOP.knock = () => { KN.gen++; };
+$('#knAgain').onclick = () => { blip(); ac(); knPlay(); };
+$('#knOpts').onclick = (e) => {
+  const b = e.target.closest('.num'); if (!b || KN.busy) return;
+  if (+b.dataset.n !== KN.n) { memNo(b); say('Спробуй ще'); return; }
+  KN.busy = true; b.classList.add('ok');
+  $('#knBox').innerHTML = Array.from({ length: KN.n }, () => '<i>🔔</i>').join('');
+  memWin(['Так!', ...numW(KN.n)]);
+  if (++KN.ok % 3 === 0) KN.max = Math.min(8, KN.max + 1);
+  setTimeout(knNew, 2000);
+};
+
+/* ---------- 4. ЧИЯ ТІНЬ? ---------- */
+const SH_POOL = ['🐱', '🐶', '🐰', '🐻', '🦁', '🐘', '🐒', '🦊', '🐸', '🐧', '🦒', '🐢', '🐟', '🦋', '🐞', '🚗', '✈️', '🚂', '🏠', '🌳', '🍎', '⭐', '🎈', '👑', '🚀', '🦆', '🐌', '🐙'];
+const SH = { ok: 0, n: 3, cur: '', busy: true };
+function shNew() {
+  SH.busy = false; SH.cur = pick(SH_POOL);
+  const opts = shuffle([SH.cur, ...shuffle(SH_POOL.filter((e) => e !== SH.cur)).slice(0, SH.n - 1)]);
+  $('#shBig').textContent = SH.cur;
+  $('#shOpts').innerHTML = opts.map((e) => `<button class="big shb" data-e="${e}"><span class="sil">${e}</span></button>`).join('');
+  $('#shAsk').innerHTML = 'Чия це тінь?<small>знайди, хто так стоїть</small>';
+  say('Чия це тінь?');
+}
+START.shadow = () => { SH.ok = 0; SH.n = 3; shNew(); };
+$('#shOpts').onclick = (e) => {
+  const b = e.target.closest('.shb'); if (!b || SH.busy) return;
+  if (b.dataset.e !== SH.cur) { memNo(b); say('Спробуй ще'); return; }
+  SH.busy = true; b.classList.add('ok'); memWin('Так!');
+  if (++SH.ok % 3 === 0) SH.n = Math.min(6, SH.n + 1);
+  setTimeout(shNew, 1600);
+};
+
+/* ---------- 5. ЗНАЙДИ ВСІХ ---------- */
+const FA_CAT = [['🍎', '🍌', '🍇', '🍓', '🍊', '🍉', '🍒', '🥝'], ['🐱', '🐶', '🐰', '🐻', '🐼', '🦊', '🐯', '🐮'], ['🚗', '🚕', '🚌', '🚓', '🚒', '🚑', '🚜', '🚲']];
+const FA_LV = [[12, 3], [12, 4], [16, 4], [16, 5], [20, 5], [20, 6]];       // [клітинок, скільки шукати]
+const FA = { lv: 0, ok: 0, tgt: '', left: 0, busy: true };
+function faNew() {
+  const [cells, k] = FA_LV[FA.lv], cat = pick(FA_CAT);
+  FA.tgt = pick(cat); FA.left = k; FA.busy = false;
+  const others = cat.filter((e) => e !== FA.tgt), at = new Set();
+  while (at.size < k) at.add(rnd(cells));
+  $('#faGrid').innerHTML = Array.from({ length: cells }, (_, i) => at.has(i)
+    ? `<button data-t="1">${FA.tgt}</button>` : `<button>${pick(others)}</button>`).join('');
+  faAsk(); say('Знайди всіх');
+}
+const faAsk = () => { $('#faAsk').innerHTML = `Знайди всіх ${FA.tgt}<small>ще ${FA.left}</small>`; };
+START.findall = () => { FA.lv = 0; FA.ok = 0; faNew(); };
+$('#faGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || FA.busy || b.classList.contains('found')) return;
+  if (!b.dataset.t) { b.classList.add('no'); oops(); vibe(100); setTimeout(() => b.classList.remove('no'), 450); return; }
+  b.classList.add('found'); blip(); vibe(25); FA.left--; faAsk();
+  if (FA.left > 0) return;
+  FA.busy = true; memWin('Молодець!');
+  if (++FA.ok % 2 === 0) FA.lv = Math.min(FA_LV.length - 1, FA.lv + 1);
+  setTimeout(faNew, 1800);
+};
+
+/* ---------- 6. ЗАПАМʼЯТАЙ ЧИСЛА ---------- */
+const DG = { gen: 0, n: 2, ok: 0, seq: [], pos: 0, busy: true };
+async function dgShow(gen) {
+  DG.busy = true; $('#dgBig').textContent = '';
+  await sleep(500);
+  for (const d of DG.seq) {
+    if (gen !== DG.gen) return;
+    const el = $('#dgBig'); el.textContent = d; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+    nt(440 + d * 55, .3, { type: 'triangle', vol: .2 }); say(numW(d));
+    await sleep(1000); if (gen !== DG.gen) return;
+    el.textContent = ''; await sleep(250);
+  }
+  if (gen !== DG.gen) return;
+  $('#dgBig').textContent = '❔'; DG.busy = false;
+  $('#dgAsk').innerHTML = 'Тепер ти!<small>натискай числа по порядку</small>'; say('Тепер ти!');
+}
+function dgNew() {
+  const gen = ++DG.gen;
+  DG.seq = Array.from({ length: DG.n }, () => rnd(10)); DG.pos = 0;
+  $('#dgIn').innerHTML = DG.seq.map(() => '<span></span>').join('');
+  $('#dgAsk').innerHTML = 'Запамʼятай числа<small>дивись і слухай</small>'; say('Запамʼятай числа');
+  setTimeout(() => { if (gen === DG.gen) dgShow(gen); }, 1400);
+}
+START.digits = () => {
+  DG.n = 2; DG.ok = 0;
+  $('#dgPad').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((d) => `<button data-d="${d}">${d}</button>`).join('');
+  dgNew();
+};
+STOP.digits = () => { DG.gen++; };
+$('#dgAgain').onclick = () => { if (DG.busy) return; blip(); DG.pos = 0; $$('#dgIn span').forEach((s) => { s.textContent = ''; s.className = ''; }); dgShow(++DG.gen); };
+$('#dgPad').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || DG.busy) return;
+  const d = +b.dataset.d, slot = $$('#dgIn span')[DG.pos];
+  if (d !== DG.seq[DG.pos]) {
+    b.classList.add('no'); oops(); vibe(100); say('Спробуй ще'); setTimeout(() => b.classList.remove('no'), 450);
+    DG.pos = 0; $$('#dgIn span').forEach((s) => { s.textContent = ''; s.className = ''; });
+    return;
+  }
+  slot.textContent = d; slot.className = 'f'; blip(); DG.pos++;
+  if (DG.pos < DG.n) return;
+  DG.busy = true; memWin('Молодець!');
+  if (++DG.ok % 2 === 0) DG.n = Math.min(7, DG.n + 1);
+  setTimeout(dgNew, 1900);
+};
+
+/* ---------- 7. ЛОВИ ЗІРОЧКИ ---------- */
+const CT = { run: false, raf: 0, x: 0, items: [], score: 0, lives: 3, left: 0, t: 0, spawn: 0 };
+function ctHud() { $('#ctHud').innerHTML = `<span>⭐ ${CT.score}</span><span>${'❤️'.repeat(CT.lives)}${'🖤'.repeat(3 - CT.lives)}</span><span>⏱ ${Math.ceil(CT.left)}</span>`; }
+function ctEnd() {
+  CT.run = false; cancelAnimationFrame(CT.raf);
+  const n = roundStars(CT.score, 8); confetti(); cheer();
+  roundBox($('#ctStage'), n ? '🎉' : '👍', `Зібрано: ${CT.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй зловити ще більше', ctStart);
+  say('Молодець!');
+}
+function ctStart() {
+  const st = $('#ctStage');
+  $$('#ctStage .cti').forEach((e) => e.remove());
+  CT.items = []; CT.score = 0; CT.lives = 3; CT.left = 40; CT.spawn = 0; CT.run = true; CT.t = performance.now();
+  CT.x = st.clientWidth / 2; ctHud();
+  say('Лови зірочки');
+  cancelAnimationFrame(CT.raf); CT.raf = requestAnimationFrame(ctLoop);
+}
+function ctLoop(now) {
+  if (!CT.run) return;
+  const dt = Math.min(0.05, (now - CT.t) / 1000); CT.t = now;
+  const st = $('#ctStage'), W = st.clientWidth, H = st.clientHeight, bx = CT.x, by = H - 62;
+  $('#ctBasket').style.transform = `translateX(${bx}px) translateX(-50%)`;
+  CT.left -= dt; CT.spawn -= dt;
+  if (CT.spawn <= 0) {
+    CT.spawn = Math.max(.42, .85 - (40 - CT.left) * .01);
+    const bad = Math.random() < .2, e = bad ? '💣' : pick(['⭐', '⭐', '🍎', '🍓', '🍪']);
+    const el = document.createElement('span'); el.className = 'cti'; el.textContent = e; st.appendChild(el);
+    CT.items.push({ el, bad, x: 24 + Math.random() * (W - 48), y: -40, v: 130 + Math.random() * 70 + (40 - CT.left) * 2 });
+  }
+  CT.items = CT.items.filter((it) => {
+    it.y += it.v * dt;
+    it.el.style.transform = `translate(${it.x - 18}px,${it.y}px)`;
+    if (it.y > by - 20 && it.y < by + 40 && Math.abs(it.x - bx) < 38) {
+      it.el.remove();
+      if (it.bad) { CT.lives--; oops(); vibe(120); } else { CT.score++; blip(); beep(660 + Math.min(CT.score, 20) * 20, .08, 'triangle', .14); }
+      ctHud(); return false;
+    }
+    if (it.y > H) { it.el.remove(); return false; }
+    return true;
+  });
+  ctHud();
+  if (CT.left <= 0 || CT.lives <= 0) { ctEnd(); return; }
+  CT.raf = requestAnimationFrame(ctLoop);
+}
+START.catch = () => { CT.x = 0; ctStart(); };
+STOP.catch = () => { CT.run = false; cancelAnimationFrame(CT.raf); };
+{
+  const mv = (e) => { const r = $('#ctStage').getBoundingClientRect(); CT.x = Math.max(28, Math.min(r.width - 28, e.clientX - r.left)); };
+  $('#ctStage').addEventListener('pointerdown', mv); $('#ctStage').addEventListener('pointermove', mv);
+}
+
+/* ---------- 8. БУЛЬБАШКИ ---------- */
+const BU = { run: false, gen: 0, score: 0, left: 0, timer: 0, tick: 0 };
+const buHud = () => { $('#buHud').innerHTML = `<span>🫧 ${BU.score}</span><span>⏱ ${Math.ceil(BU.left)}</span>`; };
+function buSpawn() {
+  const st = $('#buStage'), W = st.clientWidth, size = 54 + rnd(34), b = document.createElement('div');
+  b.className = 'bub'; b.style.width = b.style.height = size + 'px'; b.style.left = rnd(Math.max(1, W - size)) + 'px';
+  b.style.animationDuration = Math.max(3.2, 6.2 - (30 - BU.left) * .07 - Math.random() * 1.6) + 's';
+  b.innerHTML = `<span style="font-size:${size * .5}px">${pick(['🐟', '⭐', '🐠', '🌈', '🐙', '🍓', '🐝', '💎'])}</span>`;
+  b.addEventListener('animationend', () => { if (!b.classList.contains('pp')) b.remove(); });
+  st.appendChild(b);
+}
+function buEnd() {
+  BU.run = false; clearInterval(BU.timer);
+  const n = roundStars(BU.score, 10); confetti(); cheer();
+  roundBox($('#buStage'), n ? '🎉' : '👍', `Лопнуто: ${BU.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй лопнути ще більше', buStart);
+  say('Молодець!');
+}
+function buStart() {
+  $$('#buStage .bub').forEach((e) => e.remove());
+  BU.score = 0; BU.left = 30; BU.run = true; BU.tick = 0;
+  $('#buStage').style.setProperty('--h', $('#buStage').clientHeight + 'px');
+  buHud(); say('Лопай бульбашки'); buSpawn();
+  clearInterval(BU.timer);
+  BU.timer = setInterval(() => {
+    BU.left -= 0.35; BU.tick++; buHud();
+    if (BU.left <= 0) { buEnd(); return; }
+    buSpawn(); if (BU.left < 20 && BU.tick % 2) buSpawn();
+  }, 350);
+}
+START.bubbles = () => buStart();
+STOP.bubbles = () => { BU.run = false; clearInterval(BU.timer); };
+$('#buStage').addEventListener('pointerdown', (e) => {
+  const b = e.target.closest('.bub'); if (!b || !BU.run || b.classList.contains('pp')) return;
+  b.classList.add('pp'); BU.score++; buHud(); vibe(15);
+  beep(500 + Math.min(BU.score, 25) * 28, .09, 'sine', .2);
+  setTimeout(() => b.remove(), 260);
+});
+
+/* ---------- 9. ХТО ВИГЛЯНУВ? ---------- */
+const MO = { run: false, gen: 0, score: 0, left: 0, hits: 0, timer: 0, tmo: [] };
+const moHud = () => { $('#moHud').innerHTML = `<span>🐹 ${MO.score}</span><span>⏱ ${Math.ceil(MO.left)}</span>`; };
+function moEnd() {
+  MO.run = false; clearInterval(MO.timer); MO.tmo.forEach(clearTimeout); MO.tmo = [];
+  $$('#moHoles .hole').forEach((h) => h.classList.remove('up'));
+  const n = roundStars(MO.score, 8); confetti(); cheer();
+  roundBox($('#moStage'), n ? '🎉' : '👍', `Упіймано: ${MO.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй упіймати ще більше', moStart);
+  say('Молодець!');
+}
+function moPop() {
+  if (!MO.run) return;
+  const holes = $$('#moHoles .hole').filter((h) => !h.classList.contains('up'));
+  if (!holes.length) return;
+  const h = pick(holes), friend = MO.score >= 8 && Math.random() < .22;
+  h.dataset.f = friend ? '1' : ''; h.querySelector('.mo').textContent = friend ? '🐰' : '🐹';
+  h.classList.remove('hit'); h.classList.add('up');
+  const stay = Math.max(620, 1250 - MO.score * 18);
+  MO.tmo.push(setTimeout(() => h.classList.remove('up'), stay));
+}
+function moStart() {
+  MO.score = 0; MO.left = 35; MO.run = true; MO.tmo.forEach(clearTimeout); MO.tmo = [];
+  $('#moHoles').innerHTML = Array.from({ length: 9 }, () => '<button class="hole" aria-label="нірка"><span class="mo">🐹</span></button>').join('');
+  moHud(); say('Хто виглянув?');
+  clearInterval(MO.timer);
+  let t = 0;
+  MO.timer = setInterval(() => {
+    MO.left -= 0.2; t += 0.2; moHud();
+    if (MO.left <= 0) { moEnd(); return; }
+    if (t >= Math.max(0.5, 1.0 - MO.score * 0.018)) { t = 0; moPop(); }
+  }, 200);
+}
+START.mole = () => moStart();
+STOP.mole = () => { MO.run = false; clearInterval(MO.timer); MO.tmo.forEach(clearTimeout); MO.tmo = []; };
+$('#moHoles').addEventListener('pointerdown', (e) => {
+  const h = e.target.closest('.hole'); if (!h || !MO.run || !h.classList.contains('up')) return;
+  if (h.dataset.f) { oops(); vibe(120); MO.score = Math.max(0, MO.score - 1); h.classList.remove('up'); moHud(); return; }
+  h.classList.add('hit'); MO.score++; moHud(); vibe(20); beep(520 + Math.min(MO.score, 25) * 25, .1, 'triangle', .22);
+  setTimeout(() => h.classList.remove('up', 'hit'), 180);
+});
 
 /* ================================================================
    МЕНЮ ЗА ГРУПАМИ  (гортається пальцем або кнопками вгорі)

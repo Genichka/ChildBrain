@@ -1,19 +1,22 @@
 {
-  "version": "1.4.0",
-  "date": "2026-10-13",
+  "version": "1.5.0",
+  "date": "2026-10-15",
   "changes": [
-    "Звук натискань можна вимкнути: кнопка 🔔 угорі, поруч із зірочками (вимкнена виглядає як 🔕)",
-    "Вона мовчить і в «Пʼятнашках», коли цифру перетягуєш пальцем або торкаєшся не туди. Те саме у лабіринті, хрестиках-нуліках і сапері",
-    "Вибір запамʼятовується, навіть якщо закрити додаток. Голос і звуки самих ігор вимикаються окремо в налаштуваннях для батьків"
+    "Пазли: 40 малюнків, шматочки тепер як у справжніх пазлах, а зібрані картинки позначаються ✓",
+    "9 нових ігор: на слух — «Хто грає?», «Високо чи низько?», «Скільки разів?»; на увагу — «Чия тінь?», «Знайди всіх»; на памʼять — «Запамʼятай числа»; на швидкість — «Лови зірочки», «Бульбашки», «Хто виглянув?»",
+    "Абетка: виправлено слова (Ь — кінь, Ю — юла, Ф — фея; ґудзик і юла тепер намальовані), для «и» і «ь» зʼявилась примітка",
+    "Абетка й нові ігри тепер озвучені записаним голосом (+95 фраз)"
   ],
   "changes_ro": [
-    "Sunetul la atingere se poate opri: butonul 🔔 de sus, lângă steluțe (oprit arată ca 🔕)",
-    "Tace și în „Puzzle glisant”, când tragi o cifră cu degetul sau atingi greșit. La fel în labirint, X și 0 și Detectorul de mine",
-    "Alegerea se păstrează chiar dacă închizi aplicația. Vocea și sunetele jocurilor se opresc separat, din setările pentru părinți"
+    "Puzzle: 40 de imagini, piesele arată acum ca la puzzle-urile adevărate, iar imaginile terminate sunt bifate ✓",
+    "9 jocuri noi: auz — „Cine cântă?”, „Sus sau jos?”, „De câte ori?”; atenție — „A cui e umbra?”, „Găsește-i pe toți”; memorie — „Ține minte numerele”; viteză — „Prinde stelele”, „Baloane de săpun”, „Cine a ieșit?”",
+    "Alfabet: cuvinte corectate (Ь — cal, Ю — titirez, Ф — zână; nasturele și titirezul sunt acum desenate), notă pentru „и” și „ь”",
+    "Alfabetul și jocurile noi vorbesc acum cu voce înregistrată (+95 de fraze)"
   ],
   "changes_en": [
-    "Tap sound can be turned off: the 🔔 button at the top, next to the stars (it turns into 🔕 when off)",
-    "It stays quiet in the sliding puzzle too, when you drag a number or tap the wrong one. Same in the maze, tic-tac-toe and minesweeper",
-    "Your choice is remembered after you close the app. The voice and the games' own sounds are switched off separately in the parents' settings"
+    "Jigsaw: 40 pictures, pieces now look like real jigsaw pieces, and finished pictures get a ✓",
+    "9 new games: hearing — “Who's playing?”, “High or low?”, “How many times?”; attention — “Whose shadow?”, “Find them all”; memory — “Remember the numbers”; speed — “Catch the stars”, “Bubbles”, “Who peeked out?”",
+    "Alphabet: fixed the words (Ь — horse, Ю — spinning top, Ф — fairy; the button and the top are now drawn), with a note for “и” and “ь”",
+    "The alphabet and the new games now speak with a recorded voice (+95 phrases)"
   ]
 }
