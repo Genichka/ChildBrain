@@ -1,13 +1,13 @@
 {
-  "version": "1.5.2",
+  "version": "1.5.3",
   "date": "2026-10-17",
   "changes": [
-    "Зореліт: два ланцюжки з боків уже з 1-го рівня, три життя ❤️, літаючі вороги (метеори, тарілки, дротики), бос кожного 5-го рівня, нові бонуси (щит, бомба, мороз, наскрізні постріли, життя), комбо й рахунок"
+    "Меню: усі кнопки ігор однакового розміру, на екрані вміщується 8 ігор (2×4) на кожній сторінці; назва «EnergyUA Junior» більше не обрізається"
   ],
   "changes_ro": [
-    "Nava stelară: două lanțuri din părți încă de la nivelul 1, trei vieți ❤️, dușmani zburători (meteoriți, farfurii, săgeți), șef la fiecare al 5-lea nivel, bonusuri noi (scut, bombă, îngheț, trageri prin toate, viață), combo și scor"
+    "Meniu: toate butoanele jocurilor au aceeași mărime, pe ecran încap 8 jocuri (2×4) pe fiecare pagină; titlul „EnergyUA Junior” nu mai e tăiat"
   ],
   "changes_en": [
-    "Starship: two chains from the sides from level 1, three lives ❤️, flying enemies (meteors, saucers, darts), a boss every 5th level, new bonuses (shield, bomb, freeze, piercing shots, extra life), combos and score"
+    "Menu: all game buttons are the same size, 8 games (2×4) fit on every page; the “EnergyUA Junior” title is no longer cut off"
   ]
 }
