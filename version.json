@@ -1,13 +1,13 @@
 {
-  "version": "1.5.3",
+  "version": "1.5.4",
   "date": "2026-10-17",
   "changes": [
-    "Меню: усі кнопки ігор однакового розміру, на екрані вміщується 8 ігор (2×4) на кожній сторінці; назва «EnergyUA Junior» більше не обрізається"
+    "Меню: зірочки тепер після кнопки «Швидкість», назва «EnergyUA Junior» показується повністю"
   ],
   "changes_ro": [
-    "Meniu: toate butoanele jocurilor au aceeași mărime, pe ecran încap 8 jocuri (2×4) pe fiecare pagină; titlul „EnergyUA Junior” nu mai e tăiat"
+    "Meniu: stelele sunt acum după butonul „Viteză”, titlul „EnergyUA Junior” se vede complet"
   ],
   "changes_en": [
-    "Menu: all game buttons are the same size, 8 games (2×4) fit on every page; the “EnergyUA Junior” title is no longer cut off"
+    "Menu: the stars are now after the “Speed” button, the “EnergyUA Junior” title is shown in full"
   ]
 }

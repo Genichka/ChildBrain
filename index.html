@@ -59,6 +59,8 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 }
 .pager button i{font-style:normal;font-size:18px;line-height:1.1}
 .pager button.on{background:#ffd93d26;border-color:#ffd93d99;color:var(--yel)}
+.pager button.pst{background:#ffd93d22;border-color:#ffd93d66;color:var(--yel)}
+.pager button.pst b{font-size:15px;line-height:1.1}
 .pages{
   flex:1;min-height:0;display:flex;gap:12px;position:relative;
   overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
@@ -502,7 +504,8 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 #back svg{width:24px;height:24px;display:block}
 #back:active{color:#fff}
 .top #back{order:0}.top h1{order:1}.top #starBtn{order:2}.top #clkBtn{order:3}
-.in-menu .top #starBtn{order:0}.in-menu .top #back{order:2}
+.in-menu .top #starBtn{display:none}.in-menu .top #back{order:2}
+.in-menu .top h1{overflow:visible;text-overflow:clip}
 
 /* вибір мови в налаштуваннях для батьків */
 .langs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:0 0 12px}
@@ -582,6 +585,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
     <button data-pg="4"><i>🔤</i>Букви</button>
     <button data-pg="5"><i>🧩</i>Логіка</button>
     <button data-pg="6"><i>⚡</i>Швидкість</button>
+    <button class="pst" id="starBtn2" aria-label="Зірочки"><i>⭐</i><b id="starN2">0</b></button>
   </div>
   <div class="pages" id="pages">
     <div class="page" data-grp="Увага"><p class="gdesc">👀 <b>Увага</b> — помічати колір, форму, зайве й відсутнє</p><div class="menu">
@@ -1026,7 +1030,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.5.3';
+const APP_VERSION = '1.5.4';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1931,7 +1935,7 @@ const STICKERS = ['🦊', '🐻', '🐼', '🦁', '🐸', '🐵', '🦄', '🐙'
 const NEED = 5;   // зірочок на одну наліпку
 function addStar(n = 1) {
   S.stars += n; LS.set('stars', S.stars);
-  $('#starN').textContent = S.stars;
+  $('#starN').textContent = $('#starN2').textContent = S.stars;
   const due = Math.min(STICKERS.length, Math.floor(S.stars / NEED));
   if (due > S.got.length) {
     const left = STICKERS.filter((x) => !S.got.includes(x));
@@ -2000,7 +2004,7 @@ function exitApp() {
 }
 START.bye = () => { $('#back').style.visibility = 'hidden'; };
 STOP.bye = () => { $('#back').style.visibility = 'visible'; ac(); };
-$('#starBtn').onclick = () => go('album');
+$('#starBtn').onclick = $('#starBtn2').onclick = () => go('album');
 /* 🔔 / 🔕 - увімк./вимк. звук торкання кнопок. Голос і звуки самих ігор не чіпає. */
 function clkSync() {
   const b = $('#clkBtn'); if (!b) return;
@@ -6209,7 +6213,7 @@ $('#moHoles').addEventListener('pointerdown', (e) => {
    МЕНЮ ЗА ГРУПАМИ  (гортається пальцем або кнопками вгорі)
    ================================================================ */
 (() => {
-  const pg = $('#pages'), bs = $$('#pager button');
+  const pg = $('#pages'), bs = $$('#pager button[data-pg]');
   const mark = (i) => bs.forEach((b) => b.classList.toggle('on', +b.dataset.pg === i));
   const goPage = (i, smooth) => {
     const p = pg.children[i]; if (!p) return;
@@ -6460,7 +6464,7 @@ $('#bkFile').onchange = async (e) => {
 
 /* ---------- старт ---------- */
 $('#byeAgain').onclick = () => { blip(); go('menu'); };
-$('#starN').textContent = S.stars;
+$('#starN').textContent = $('#starN2').textContent = S.stars;
 $('#verLine').textContent = 'v' + APP_VERSION;
 // прапорець мови під меню: відкриває налаштування для батьків (через замок), де мову й міняють
 $('#langBtn').textContent = LANGS[LANG].flag + ' ' + ({ uk: 'UA', ro: 'RO', en: 'EN' })[LANG];
