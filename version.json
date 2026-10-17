@@ -1,13 +1,13 @@
 {
-  "version": "1.5.1",
+  "version": "1.5.2",
   "date": "2026-10-17",
   "changes": [
-    "Пазли: підказка-малюнок на дошці стала яскравішою, зʼявився режим на 50 шматочків, верх екрана компактніший — унизу видно всі шматочки одразу"
+    "Зореліт: два ланцюжки з боків уже з 1-го рівня, три життя ❤️, літаючі вороги (метеори, тарілки, дротики), бос кожного 5-го рівня, нові бонуси (щит, бомба, мороз, наскрізні постріли, життя), комбо й рахунок"
   ],
   "changes_ro": [
-    "Puzzle: imaginea-ghid de pe tablă e mai luminoasă, a apărut modul cu 50 de piese, partea de sus e mai compactă — jos se văd toate piesele deodată"
+    "Nava stelară: două lanțuri din părți încă de la nivelul 1, trei vieți ❤️, dușmani zburători (meteoriți, farfurii, săgeți), șef la fiecare al 5-lea nivel, bonusuri noi (scut, bombă, îngheț, trageri prin toate, viață), combo și scor"
   ],
   "changes_en": [
-    "Jigsaw: the guide picture on the board is brighter, a 50-piece mode was added, the top is more compact — all pieces are visible at once at the bottom"
+    "Starship: two chains from the sides from level 1, three lives ❤️, flying enemies (meteors, saucers, darts), a boss every 5th level, new bonuses (shield, bomb, freeze, piercing shots, extra life), combos and score"
   ]
 }

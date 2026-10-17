@@ -386,6 +386,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   flex:1;min-height:0;width:100%;display:block;background:#07051a;
   border:3px solid var(--line);border-radius:18px;touch-action:none;
 }
+#s-arcade .arc-top{font-size:15px;align-items:center}
 .arc-hint{color:var(--dim);font-size:12.5px;text-align:center;margin-top:6px;font-weight:700}
 .gcv{flex:1;min-height:0;width:100%;display:block;border:3px solid var(--line);border-radius:18px;touch-action:none}
 #brkC{background:#120a2e}
@@ -884,7 +885,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <!-- зореліт -->
 <section class="scr" id="s-arcade">
-  <div class="arc-top"><span id="arcLvl">Рівень 1</span><span id="arcLeft"></span></div>
+  <div class="arc-top"><span id="arcLvl">Рівень 1</span><span id="arcHp"></span><span id="arcLeft"></span></div>
   <canvas id="arcC"></canvas>
   <div class="arc-hint">веди пальцем — кораблик стріляє сам</div>
 </section>
@@ -1025,7 +1026,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.5.1';
+const APP_VERSION = '1.5.2';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1472,6 +1473,15 @@ Object.assign(I18N, {
   "+ кораблик": { ro: "+ navă", en: "+ ship" },
   "Усі кульки лопнули": { ro: "Toate bilele s-au spart", en: "All the balls popped" },
   "Кульки долетіли до діри": { ro: "Bilele au ajuns la gaura neagră", en: "The balls reached the hole" },
+  "щит!": { ro: "scut!", en: "shield!" },
+  "бабах!": { ro: "bum!", en: "boom!" },
+  "мороз!": { ro: "îngheț!", en: "freeze!" },
+  "наскрізь!": { ro: "prin toate!", en: "piercing!" },
+  "+ життя": { ro: "+ viață", en: "+ life" },
+  "БОС!": { ro: "ȘEF!", en: "BOSS!" },
+  "Бос переможений!": { ro: "Șeful a fost învins!", en: "Boss defeated!" },
+  "Ідеально — жодного життя не втрачено!": { ro: "Perfect — nicio viață pierdută!", en: "Perfect — no lives lost!" },
+  "Життя скінчилися": { ro: "Vieți terminate", en: "Out of lives" },
   "Нічого страшного — спробуй ще!": { ro: "Nu-i nimic — mai încearcă!", en: "It's okay — try again!" },
   "Веди кораблик пальцем": { ro: "Mișcă nava cu degetul", en: "Move the ship with your finger" },
   "веди пальцем — кораблик стріляє сам": { ro: "mișcă degetul — nava trage singură", en: "move your finger — the ship shoots by itself" },
@@ -2928,34 +2938,39 @@ $('#recList').onclick = (e) => {
 };
 
 /* ================================================================
-   9. ЗОРЕЛІТ  (аркада: ланцюжок кульок із числами повзе звивистою
-   трасою до чорної діри, кораблик знизу стріляє сам — дитина лише
-   водить його пальцем. Кожне влучання зменшує число на 1, на нулі
-   кулька лопається. Кольорові кульки — бонуси.)
+   9. ЗОРЕЛІТ  (аркада: два ланцюжки кульок із числами повзуть звивистими
+   трасами до чорних дір, кораблик знизу стріляє сам — дитина лише водить
+   його пальцем. Кожне влучання зменшує число на 1, на нулі кулька лопається.
+   1.5.2: три життя; літаючі вороги (метеори, тарілки, дротики, бос кожного
+   5-го рівня); бонуси падають із ворогів і сидять у кульках; комбо, рахунок.)
    ================================================================ */
 const AR = {
   run: false, raf: 0, last: 0, w: 0, h: 0, dpr: 1, R: 20, sp: 40,
   pts: [], cum: [], len: 0, cells: [], total: 0, shots: [], fx: [], txt: [], stars: [],
+  en: [], drops: [], eshots: [], rings: [], banner: null, over: false,
   x: 0, tx: 0, ships: 1, guns: 1, rate: 4, cool: 0, spd: 0, t: 0,
-  lvl: LS.get('arcLvl', 1), popT: 0,
+  lvl: LS.get('arcLvl', 1), popT: 0, hitT: 0, best: LS.get('arcBest', 0),
+  lives: 3, score: 0, combo: 0, comboT: 0, shield: false, freeze: 0, pierce: 0, inv: 0, shake: 0, flash: 0,
+  spawnT: 0, spawnN: 0, boss: null, lostLife: false,
 };
 const AR_BONUS = {
-  gun:  { em: '🔥', col: '#ff9f43', nm: '+ постріл' },
-  rate: { em: '⚡', col: '#ffd93d', nm: 'швидше!' },
-  ship: { em: '🚀', col: '#2fd8d0', nm: '+ кораблик' },
+  gun:    { em: '🔥', col: '#ff9f43', nm: '+ постріл' },
+  rate:   { em: '⚡', col: '#ffd93d', nm: 'швидше!' },
+  ship:   { em: '🚀', col: '#2fd8d0', nm: '+ кораблик' },
+  shield: { em: '🛡️', col: '#4aa8ff', nm: 'щит!' },
+  bomb:   { em: '💣', col: '#ff5a5f', nm: 'бабах!' },
+  freeze: { em: '❄️', col: '#8be9ff', nm: 'мороз!' },
+  pierce: { em: '💎', col: '#ff6ad5', nm: 'наскрізь!' },
+  heart:  { em: '❤️', col: '#ff6b81', nm: '+ життя' },
 };
-const AR_ORDER = ['gun', 'rate', 'ship', 'gun', 'rate', 'gun', 'ship', 'rate', 'gun'];
+const AR_ORDER = ['gun', 'shield', 'rate', 'bomb', 'ship', 'freeze', 'gun', 'pierce', 'heart', 'rate', 'bomb', 'shield'];
 
-/* 1.2.0: ланцюжки виїжджають з різних боків.
-   1-й рівень - зліва, 2-й - справа, 3-й - згори; з 4-го два ланцюжки одразу:
-   лівою половиною екрана і правою, кожен зі своєю чорною дірою внизу своєї
-   половини. Дитині треба встигати перегонити кораблик з боку на бік. */
-const AR_TWO = 0.8;   // підібрано ботами: «дитина» доходить до 4-5 рівня (у 1.1.0 - до 6-го)
+/* З 1-го рівня два ланцюжки одразу: лівою половиною екрана і правою, кожен зі своєю
+   чорною дірою внизу своєї половини. Звідки виїжджають - змінюється з рівнем:
+   1 - обидва з боків, 2 - лівий згори, 3 - обидва згори, далі по колу. */
+const AR_TWO = 0.8;
 function arPlan(L, rows) {
-  if (L <= 1) return [{ rows, dir: 1, top: false }];
-  if (L === 2) return [{ rows, dir: -1, top: false }];
-  if (L === 3) return [{ rows, dir: 1, top: true }];
-  const topL = L % 3 === 0, topR = L % 3 === 1 && L > 4;
+  const topL = L === 2 || L === 3 || (L > 3 && L % 3 === 0), topR = L === 3 || (L > 4 && L % 3 === 1);
   return [{ rows, dir: 1, top: topL, half: 0 }, { rows, dir: -1, top: topR, half: 1 }];
 }
 /** Одна траса «змійкою»: рядки з півколами на краях. dir 1 - перший рядок іде зліва направо. */
@@ -3018,16 +3033,16 @@ function arAt(t, s) {
   return [p[lo][0] + (p[hi][0] - p[lo][0]) * k, p[lo][1] + (p[hi][1] - p[lo][1]) * k];
 }
 const arLeft = () => AR.trs.reduce((a, t) => a + t.cells.length, 0);
+const arLeftUI = () => { $('#arcLeft').textContent = `🎯 ${AR.total - arLeft()} з ${AR.total}`; };
+const arHpUI = () => { $('#arcHp').textContent = '❤️'.repeat(Math.max(0, AR.lives)) + '🤍'.repeat(Math.max(0, 3 - AR.lives)); };
 function arNewLevel() {
-  /* 1.0.9: ланцюжок швидший і довшає з рівнем, бонусів із рівнями меншає,
-     за рівень ланцюжок розганяється до +30 %. 1.2.0: з 4-го рівня кульки
-     діляться на два ланцюжки з різних боків. */
+  /* два ланцюжки з першого рівня; далі довші, швидші, з міцнішими числами,
+     більше ворогів, а кожного 5-го рівня - бос. */
   arLayout();
-  const L = AR.lvl, T = AR.trs.length, n = Math.min(64, 18 + Math.round(L * 3.5));
+  const L = AR.lvl, n = Math.min(64, 16 + Math.round(L * 4)), cnt = Math.round(n / 2);
   const every = L <= 3 ? 6 : L <= 6 ? 7 : 8;
   let b = 0;
   AR.trs.forEach((t, k) => {
-    const cnt = T > 1 ? (k ? n - Math.round(n * 0.45) : Math.round(n * 0.45)) : n;
     t.cells = [];
     for (let i = 0; i < cnt; i++) {
       // у кожному ланцюжку числа ростуть від голови до хвоста; бонуси по черзі в обох
@@ -3037,47 +3052,169 @@ function arNewLevel() {
     }
   });
   AR.total = arLeft(); AR.shots = []; AR.fx = []; AR.txt = [];
+  AR.en = []; AR.drops = []; AR.eshots = []; AR.rings = []; AR.boss = null;
   AR.ships = 1; AR.guns = 1; AR.rate = 4; AR.cool = 0;
-  // два ланцюжки одночасно - кожен повзе трохи повільніше, інакше з 4-го рівня стіна
-  AR.spd0 = AR.R * Math.min(1.5, 0.66 + 0.06 * L) * (T > 1 ? AR_TWO : 1);
+  AR.lives = 3; AR.lostLife = false; AR.combo = 0; AR.comboT = 0;
+  AR.shield = false; AR.freeze = 0; AR.pierce = 0; AR.inv = 1.2; AR.shake = 0; AR.flash = 0;
+  AR.spawnT = 4; AR.spawnN = 0; AR.over = false;
+  AR.spd0 = AR.R * Math.min(1.5, 0.62 + 0.06 * L) * AR_TWO;
   AR.spd = AR.spd0; AR.age = 0;
+  const boss = L % 5 === 0;
+  if (boss) arSpawn('boss');
+  AR.banner = { t: T(`Рівень ${L}`), sub: boss ? '⚠️ ' + T('БОС!') : '', age: 0, dur: 2 };
   $('#arcLvl').textContent = `Рівень ${L}`;
-  arLeftUI();
+  arLeftUI(); arHpUI();
 }
-const arLeftUI = () => { $('#arcLeft').textContent = `🎯 ${AR.total - arLeft()} з ${AR.total}`; };
 function arShipXs() {
   const xs = [AR.x], d = AR.R * 2.3;
   if (AR.ships > 1) xs.push(AR.x - d);
   if (AR.ships > 2) xs.push(AR.x + d);
   return xs;
 }
+const arShipYk = (k) => AR.shipY + (k ? AR.R * 0.4 : 0);
+/** Чи торкається коло (x, y, rad) якогось із корабликів. */
+const arShipHit = (x, y, rad) => arShipXs().some((px, k) => Math.hypot(px - x, arShipYk(k) - y) < rad + AR.R * (k ? 0.5 : 0.65));
 function arBurst(x, y, col, n = 14) {
+  if (AR.fx.length > 700) return;
   for (let i = 0; i < n; i++) {
     const a = Math.random() * 7, v = AR.R * (1.5 + Math.random() * 4);
     AR.fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.5 + Math.random() * 0.4, col });
   }
 }
+const arRing = (x, y, max, col, life = 0.45) => AR.rings.push({ x, y, r: 0, max, life, t: life, col });
+const arText = (x, y, t, life = 1.4) => AR.txt.push({ x, y, t, life });
+/** Комбо: кульки й вороги, збиті одна за одною за ~1,4 с, множать очки. */
+function arCombo(x, y) {
+  AR.combo = AR.comboT > 0 ? AR.combo + 1 : 1;
+  AR.comboT = 1.4;
+  const m = AR.combo;
+  AR.score += 10 * m;
+  if (m >= 3 && (m === 3 || m % 5 === 0)) { arText(x, y - AR.R, `×${m} 🔥`, 1.1); beep(700 + Math.min(m, 15) * 40, 0.1, 'square', 0.1); }
+  return m;
+}
+function arGive(k, x, y, fromCell) {
+  const { R } = AR;
+  if (k === 'gun') AR.guns = Math.min(3, AR.guns + 1);
+  if (k === 'rate') AR.rate = Math.min(8, AR.rate + 1.25);
+  if (k === 'ship') AR.ships = Math.min(3, AR.ships + 1);
+  if (k === 'shield') AR.shield = true;
+  if (k === 'freeze') { AR.freeze = 4.5; arRing(AR.w / 2, AR.h / 2, AR.w * 0.8, '#8be9ff', 0.8); }
+  if (k === 'pierce') AR.pierce = 9;
+  if (k === 'heart') { AR.lives = Math.min(5, AR.lives + 1); arHpUI(); }
+  if (k === 'bomb') { if (fromCell) arBlast(x, y, R * 4.2, 9, false); else arBlast(AR.x, AR.shipY, 0, 4, true); }
+  arText(x, y, AR_BONUS[k].em + ' ' + T(AR_BONUS[k].nm), 1.4);
+  AR.score += 25;
+  [784, 988, 1175].forEach((f, j) => setTimeout(() => beep(f, 0.1, 'square', 0.09), j * 60));
+}
+function arBlast(x, y, rad, dmg, glob) {
+  const { R } = AR;
+  arRing(x, y, glob ? AR.w : rad, '#ff9f43', glob ? 0.7 : 0.45);
+  arBurst(x, y, '#ff9f43', glob ? 50 : 30); arBurst(x, y, '#ffd93d', 14);
+  AR.shake = Math.max(AR.shake, R * (glob ? 0.9 : 0.5)); vibe(40);
+  beep(110, 0.3, 'sawtooth', 0.2);
+  const list = [];
+  AR.trs.forEach((t) => t.cells.forEach((c) => {
+    if (c.s <= -R) return;
+    const p = arAt(t, c.s);
+    if (glob || Math.hypot(p[0] - x, p[1] - y) < rad) list.push([t, c, p]);
+  }));
+  list.forEach(([t, c, p]) => {
+    if (!t.cells.includes(c)) return;
+    c.hp -= dmg; c.hit = 0.1;
+    if (c.hp <= 0) arPop(t, c, p);
+  });
+  AR.en.slice().forEach((e) => { if (glob || Math.hypot(e.x - x, e.y - y) < rad + e.r) arHitEn(e, dmg); });
+}
 function arPop(t, c, p) {
-  t.cells.splice(t.cells.indexOf(c), 1);
+  const i = t.cells.indexOf(c);
+  if (i < 0) return;
+  t.cells.splice(i, 1);
   const col = c.kind ? AR_BONUS[c.kind].col : '#9dff6a';
   arBurst(p[0], p[1], col, c.kind ? 26 : 14);
   vibe(15);
-  if (AR.t - AR.popT > 0.06) { beep(600 + rnd(300), 0.09, 'triangle', 0.14); AR.popT = AR.t; }
-  if (c.kind) {
-    const k = c.kind;
-    if (k === 'gun') AR.guns = Math.min(3, AR.guns + 1);
-    if (k === 'rate') AR.rate = Math.min(8, AR.rate + 1.25);
-    if (k === 'ship') AR.ships = Math.min(3, AR.ships + 1);
-    AR.txt.push({ x: p[0], y: p[1], t: AR_BONUS[k].em + ' ' + AR_BONUS[k].nm, life: 1.4 });
-    [784, 988, 1175].forEach((f, j) => setTimeout(() => beep(f, 0.1, 'square', 0.09), j * 60));
-  }
+  const m = arCombo(p[0], p[1]);
+  if (AR.t - AR.popT > 0.06) { beep(520 + Math.min(m, 12) * 45 + rnd(120), 0.09, 'triangle', 0.14); AR.popT = AR.t; }
+  if (c.kind) arGive(c.kind, p[0], p[1], true);
   arLeftUI();
 }
+/* ---------- вороги ---------- */
+function arSpawn(k) {
+  const { w, h, R } = AR, L = AR.lvl;
+  const e = { k, x: 0, y: 0, vx: 0, vy: 0, r: R, hp: 1, max: 1, t: 0, hit: 0, fire: 2, rot: 0, vr: 0, ph: Math.random() * 6 };
+  if (k === 'meteor') {
+    e.r = R * (0.85 + Math.random() * 0.45); e.hp = 2 + Math.floor(L * 0.4) + (e.r > R * 1.1 ? 1 : 0);
+    e.x = w * (0.12 + Math.random() * 0.76); e.y = -e.r * 1.5;
+    e.vx = (Math.random() - 0.5) * R * 1.6; e.vy = R * Math.min(5, 2.5 + 0.12 * L);
+    e.vr = (Math.random() - 0.5) * 3; e.poly = Array.from({ length: 9 }, () => 0.78 + Math.random() * 0.3);
+  } else if (k === 'ufo') {
+    const d = Math.random() < 0.5 ? 1 : -1;
+    e.r = R * 1.15; e.hp = 3 + Math.floor(L * 0.7); e.y = h * 0.6; e.x = d > 0 ? -e.r * 1.5 : w + e.r * 1.5;
+    e.vx = d * R * Math.min(4.5, 2.6 + 0.12 * L); e.fire = 1.8 + Math.random();
+  } else if (k === 'dart') {
+    e.r = R * 0.8; e.hp = 1 + Math.floor(L / 6); e.x = w * (0.1 + Math.random() * 0.8); e.y = -e.r * 2;
+    e.vy = R * Math.min(7, 3.6 + 0.15 * L);
+  } else {   // бос
+    e.r = R * 2.5; e.hp = 40 + 8 * L; e.y = -e.r * 2; e.x = w / 2; e.fire = 2.5;
+  }
+  e.max = e.hp;
+  AR.en.push(e);
+  if (k === 'boss') AR.boss = e;
+  return e;
+}
+function arEShot(x, y, sp, spread) {
+  const a = Math.atan2(AR.shipY - y, AR.x - x) + spread;
+  AR.eshots.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: AR.R * 0.3 });
+  beep(240, 0.12, 'sawtooth', 0.07);
+}
+function arHitEn(e, dmg) {
+  e.hp -= dmg; e.hit = 0.08;
+  if (AR.t - AR.hitT > 0.05) { beep(180 + rnd(60), 0.04, 'square', 0.07); AR.hitT = AR.t; }
+  if (e.hp <= 0) arKillEn(e, true);
+}
+function arKillEn(e, drop) {
+  const i = AR.en.indexOf(e);
+  if (i < 0) return;
+  AR.en.splice(i, 1);
+  const col = { ufo: '#ff6ad5', meteor: '#ffa24a', dart: '#ff5a5f', boss: '#ff4d6d' }[e.k];
+  arBurst(e.x, e.y, col, e.k === 'boss' ? 70 : 28); arBurst(e.x, e.y, '#fff', 10);
+  arRing(e.x, e.y, e.r * 2.6, col, 0.5);
+  AR.shake = Math.max(AR.shake, AR.R * (e.k === 'boss' ? 1.2 : 0.35)); vibe(e.k === 'boss' ? 120 : 25);
+  beep(90, 0.3, 'sawtooth', 0.18); setTimeout(() => beep(60, 0.25, 'sawtooth', 0.14), 90);
+  if (!drop) return;
+  const m = arCombo(e.x, e.y);
+  AR.score += (e.k === 'boss' ? 500 : 40) * Math.max(1, Math.floor(m / 2));
+  const pool = ['gun', 'rate', 'shield', 'bomb', 'freeze', 'pierce', AR.lives < 5 ? 'heart' : 'shield', 'ship'];
+  const make = (dx) => AR.drops.push({ x: Math.max(AR.R, Math.min(AR.w - AR.R, e.x + dx)), y: e.y, kind: pick(pool), t: 0 });
+  if (e.k === 'boss') { AR.boss = null; make(-AR.R * 2); make(0); make(AR.R * 2); say('Бос переможений!'); }
+  else if (e.k === 'ufo') { make(0); if (AR.lvl === 1 && AR.drops.length) AR.drops[AR.drops.length - 1].kind = 'pierce'; }
+  else if (Math.random() < (e.k === 'meteor' ? 0.28 : 0.22)) make(0);
+}
+/** Ворог, куля або діра зачепили. hole - діра їсть кульку і відкидає ланцюжок: щит не рятує. */
+function arHurt(hole) {
+  const { R } = AR;
+  if (!hole) {
+    if (AR.inv > 0) return;
+    if (AR.shield) {
+      AR.shield = false; AR.inv = 1;
+      arRing(AR.x, AR.shipY, R * 3, '#4aa8ff', 0.5); arBurst(AR.x, AR.shipY, '#4aa8ff', 24); beep(300, 0.2, 'triangle', 0.18);
+      return;
+    }
+    AR.inv = 2.2; arBurst(AR.x, AR.shipY, '#ff5a5f', 30);
+  }
+  AR.lives--; AR.lostLife = true; AR.combo = 0; AR.comboT = 0;
+  AR.shake = R * 0.9; AR.flash = 1; vibe(140); oops();
+  arText(AR.w / 2, AR.h * 0.72, '💔', 1.2);
+  arHpUI();
+  if (AR.lives <= 0) arEnd(false);
+}
 function arStep(dt) {
+  const { R, w, h } = AR, L = AR.lvl;
   AR.t += dt;
   AR.age = (AR.age || 0) + dt;
+  AR.comboT -= dt; AR.inv -= dt; AR.freeze -= dt; AR.pierce -= dt; AR.shake *= Math.pow(0.02, dt); AR.flash -= dt * 2;
+  if (AR.banner && (AR.banner.age += dt) > AR.banner.dur) AR.banner = null;
   AR.spd = (AR.spd0 || AR.spd) * Math.min(1.3, 1 + AR.age * 0.006);   // +0,6 % за секунду, до +30 %
-  const v = AR.spd;
+  const v = AR.spd * (AR.freeze > 0 ? 0.06 : 1);
   // ланцюжки: перша кулька повзе рівно, решта підтягується, якщо між ними дірка
   AR.trs.forEach((t) => {
     const cs = t.cells;
@@ -3089,38 +3226,116 @@ function arStep(dt) {
       if (c.s > tgt) c.s = tgt;
     }
   });
+  // чорна діра з'їла першу кульку: мінус життя, ланцюжок відкидає назад
+  AR.trs.forEach((t) => {
+    if (t.cells.length && t.cells[0].s >= t.len) {
+      t.cells.shift();
+      const e = t.pts[t.pts.length - 1];
+      arBurst(e[0], e[1], '#c26bff', 30); arRing(e[0], e[1], R * 3.2, '#c26bff', 0.55);
+      t.cells.forEach((o) => { o.s -= AR.sp * 5; });
+      arLeftUI(); arHurt(true);
+    }
+  });
+  if (!AR.run) return;
   // кораблик
   AR.x += (AR.tx - AR.x) * Math.min(1, dt * 14);
+  if (Math.random() < 0.8) AR.fx.push({ x: AR.x + (Math.random() - 0.5) * R * 0.2, y: AR.shipY + R * 0.9, vx: (Math.random() - 0.5) * R, vy: R * (2 + Math.random() * 2), life: 0.25, col: '#ffb347' });
   // постріли
   AR.cool -= dt;
   if (AR.cool <= 0) {
     AR.cool = 1 / AR.rate;
+    const pr = AR.pierce > 0 ? 3 : 0;
     arShipXs().forEach((sx, k) => {
-      const y = AR.shipY - AR.R * (k ? 0.5 : 0.9);
-      for (let g = 0; g < AR.guns; g++) AR.shots.push({ x: sx + (g - (AR.guns - 1) / 2) * AR.R * 0.38, y });
+      const y = AR.shipY - R * (k ? 0.5 : 0.9);
+      for (let g = 0; g < AR.guns; g++) AR.shots.push({ x: sx + (g - (AR.guns - 1) / 2) * R * 0.38, y, pr, seen: null });
     });
   }
+  // вороги: поява
+  AR.spawnT -= dt;
+  const cap = Math.min(4, 1 + Math.floor(L / 3));
+  if (AR.spawnT <= 0 && AR.en.filter((e) => e.k !== 'boss').length < cap) {
+    let k;
+    if (AR.spawnN === 1) k = 'ufo';   // перша тарілка - з подарунком, навіть на 1-му рівні
+    else { const pool = ['meteor', 'meteor', 'ufo']; if (L >= 3) pool.push('dart', 'dart'); if (L >= 6) pool.push('dart', 'ufo'); k = pick(pool); }
+    AR.spawnN++; arSpawn(k);
+    AR.spawnT = Math.max(3, 9 - 0.5 * L) * (0.75 + Math.random() * 0.5);
+  }
+  // вороги: рух, стрільба, зіткнення з корабликом
+  const esp = h * Math.min(0.5, 0.26 + 0.012 * L);
+  for (let i = AR.en.length - 1; i >= 0; i--) {
+    const e = AR.en[i];
+    e.t += dt; if (e.hit > 0) e.hit -= dt;
+    if (e.k === 'meteor') {
+      e.x += e.vx * dt; e.y += e.vy * dt; e.rot += e.vr * dt;
+      if (e.y > h + e.r * 2 || e.x < -e.r * 3 || e.x > w + e.r * 3) { AR.en.splice(i, 1); continue; }
+    } else if (e.k === 'ufo') {
+      e.x += e.vx * dt; e.y = h * 0.6 + Math.sin(e.t * 2 + e.ph) * R * 1.4;
+      if ((e.vx > 0 && e.x > w + e.r * 2) || (e.vx < 0 && e.x < -e.r * 2)) { AR.en.splice(i, 1); continue; }
+      if (L >= 2 && e.x > R && e.x < w - R && (e.fire -= dt) <= 0) { arEShot(e.x, e.y + e.r * 0.4, esp, (Math.random() - 0.5) * 0.3); e.fire = Math.max(1.4, 3 - 0.1 * L) * (0.8 + Math.random() * 0.5); }
+    } else if (e.k === 'dart') {
+      e.vx += Math.sign(AR.x - e.x) * R * 6 * dt; e.vx = Math.max(-R * 3, Math.min(R * 3, e.vx));
+      e.x += e.vx * dt; e.y += e.vy * dt;
+      if (e.y > h + e.r * 2) { AR.en.splice(i, 1); continue; }
+    } else {   // бос: спускається, гойдається з боку в бік, стріляє віялом
+      e.y += (h * 0.5 - e.y) * Math.min(1, dt * 1.2);
+      e.x = w / 2 + Math.sin(e.t * 0.9) * (w / 2 - e.r * 1.1);
+      if (e.t > 1.5 && (e.fire -= dt) <= 0) {
+        for (let q = -1; q <= 1; q++) arEShot(e.x, e.y + e.r * 0.4, esp, q * 0.28);
+        e.fire = Math.max(1.3, 2.6 - 0.08 * L);
+      }
+    }
+    if (e.k !== 'boss' && arShipHit(e.x, e.y, e.r * 0.75)) { arKillEn(e, false); arHurt(false); if (!AR.run) return; }
+  }
+  // кулі ворогів
+  for (let i = AR.eshots.length - 1; i >= 0; i--) {
+    const b = AR.eshots[i];
+    b.x += b.vx * dt; b.y += b.vy * dt;
+    if (b.y > h + R || b.y < -R * 3 || b.x < -R || b.x > w + R) { AR.eshots.splice(i, 1); continue; }
+    if (arShipHit(b.x, b.y, b.r)) { AR.eshots.splice(i, 1); arBurst(b.x, b.y, '#ff5a5f', 10); arHurt(false); if (!AR.run) return; }
+  }
+  // подарунки, що падають
+  for (let i = AR.drops.length - 1; i >= 0; i--) {
+    const d = AR.drops[i];
+    d.t += dt; d.y += R * 2.3 * dt; d.x += Math.sin(d.t * 3) * R * 0.5 * dt;
+    if (d.y > h + R) { AR.drops.splice(i, 1); continue; }
+    if (arShipHit(d.x, d.y, R * 0.6)) { AR.drops.splice(i, 1); arBurst(d.x, d.y, AR_BONUS[d.kind].col, 18); arGive(d.kind, d.x, d.y, false); }
+  }
+  // влучання
   const live = [];
-  AR.trs.forEach((t) => t.cells.forEach((c) => { if (c.s > -AR.R) live.push({ t, c, p: arAt(t, c.s) }); }));
-  const vy = AR.h * 1.5 * dt, hr = AR.R * 0.95;
+  AR.trs.forEach((t) => t.cells.forEach((c) => { if (c.s > -R) live.push({ t, c, p: arAt(t, c.s) }); }));
+  const vy = h * 1.5 * dt, hr = R * 0.95;
   for (let j = AR.shots.length - 1; j >= 0; j--) {
     const b = AR.shots[j];
     b.y -= vy;
     if (b.y < -20) { AR.shots.splice(j, 1); continue; }
+    let gone = false;
+    // «наскрізний» постріл пролітає крізь кілька цілей і б'є кожну лише раз
+    const use = (o) => {
+      if (b.pr > 0) { (b.seen || (b.seen = new Set())).add(o); b.pr--; return false; }
+      return true;
+    };
     for (const o of live) {
-      if (o.c.hp <= 0 || Math.abs(b.x - o.p[0]) > hr || Math.abs(b.y - o.p[1]) > hr) continue;
-      AR.shots.splice(j, 1);
+      if (o.c.hp <= 0 || (b.seen && b.seen.has(o.c)) || Math.abs(b.x - o.p[0]) > hr || Math.abs(b.y - o.p[1]) > hr) continue;
       o.c.hp--; o.c.hit = 0.08;
       if (o.c.hp <= 0) arPop(o.t, o.c, o.p);
-      break;
+      if (use(o.c)) { gone = true; break; }
     }
+    if (!gone) {
+      for (const e of AR.en.slice()) {
+        if ((b.seen && b.seen.has(e)) || Math.abs(b.x - e.x) > e.r * 0.9 || Math.abs(b.y - e.y) > e.r * 0.7) continue;
+        arHitEn(e, 1);
+        if (use(e)) { gone = true; break; }
+      }
+    }
+    if (gone) AR.shots.splice(j, 1);
   }
   AR.trs.forEach((t) => t.cells.forEach((c) => { if (c.hit > 0) c.hit -= dt; }));
   AR.fx = AR.fx.filter((f) => { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 0.94; f.vy *= 0.94; return (f.life -= dt) > 0; });
-  AR.txt = AR.txt.filter((t) => { t.y -= AR.R * 0.8 * dt; return (t.life -= dt) > 0; });
+  AR.txt = AR.txt.filter((t) => { t.y -= R * 0.8 * dt; return (t.life -= dt) > 0; });
+  AR.rings = AR.rings.filter((r) => { r.r = r.max * (1 - r.life / r.t); return (r.life -= dt) > 0; });
   // кінець рівня
-  if (!arLeft()) arEnd(true);
-  else if (AR.trs.some((t) => t.cells.length && t.cells[0].s >= t.len)) arEnd(false);
+  if (!AR.run) return;
+  if (!arLeft() && !AR.boss) arEnd(true);
 }
 function arHex(g, x, y, r) {
   g.beginPath();
@@ -3142,9 +3357,50 @@ function arShip(g, x, y, s, col) {
   g.beginPath(); g.moveTo(-s * 0.15, s * 0.78); g.lineTo(0, s * (1.05 + Math.random() * 0.3)); g.lineTo(s * 0.15, s * 0.78); g.fill();
   g.restore();
 }
+const arNum = (g, e, size) => {
+  g.fillStyle = '#fff'; g.font = `900 ${Math.round(size)}px Nunito,system-ui,sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(e.hp, 0, 0);
+};
+/** Вороги: усе малюємо лініями в тому ж неоновому стилі, що й кульки. */
+function arDrawEn(g, e) {
+  const { R } = AR, r = e.r, glow = (c, lw) => { g.strokeStyle = c + '44'; g.lineWidth = lw * 2.6; g.stroke(); g.strokeStyle = e.hit > 0 ? '#fff' : c; g.lineWidth = lw; g.stroke(); };
+  g.save(); g.translate(e.x, e.y); g.lineJoin = 'round'; g.lineCap = 'round';
+  if (e.k === 'meteor') {
+    for (let q = 1; q <= 3; q++) { g.strokeStyle = `rgba(255,162,74,${0.28 - q * 0.07})`; g.lineWidth = r * (0.9 - q * 0.2); g.beginPath(); g.moveTo(-e.vx * 0.05 * q, -e.vy * 0.05 * q * 1.6); g.lineTo(-e.vx * 0.05 * q * 3, -e.vy * 0.05 * q * 5); g.stroke(); }
+    g.save(); g.rotate(e.rot); g.beginPath();
+    e.poly.forEach((k, i) => { const a = i / e.poly.length * Math.PI * 2; g[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r * k, Math.sin(a) * r * k); });
+    g.closePath(); g.fillStyle = '#2a1408'; g.fill(); glow('#ffa24a', R * 0.1);
+    g.fillStyle = '#ffa24a55'; g.beginPath(); g.arc(-r * 0.3, -r * 0.25, r * 0.16, 0, 7); g.arc(r * 0.28, r * 0.3, r * 0.1, 0, 7); g.fill();
+    g.restore(); arNum(g, e, r * 0.7);
+  } else if (e.k === 'ufo' || e.k === 'boss') {
+    const c = e.k === 'boss' ? '#ff4d6d' : '#ff6ad5', blink = Math.floor(AR.t * 6);
+    // купол
+    g.beginPath(); g.arc(0, -r * 0.1, r * 0.55, Math.PI, 0); g.closePath(); g.fillStyle = '#1d0b3a'; g.fill(); glow('#9be7ff', R * 0.07);
+    // тарілка
+    g.beginPath(); g.ellipse(0, r * 0.08, r, r * 0.38, 0, 0, 7); g.fillStyle = '#1a0b33'; g.fill(); glow(c, R * 0.1);
+    for (let q = -2; q <= 2; q++) { g.fillStyle = (q + blink) % 2 ? '#ffee58' : c; g.beginPath(); g.arc(q * r * 0.36, r * 0.12 + Math.abs(q) * r * 0.02, r * 0.07, 0, 7); g.fill(); }
+    g.translate(0, -r * 0.22); arNum(g, e, r * (e.k === 'boss' ? 0.4 : 0.5));
+    if (e.k === 'boss') {   // смужка життя
+      g.translate(0, -r * 0.95); const bw = r * 1.8;
+      g.fillStyle = '#0008'; g.fillRect(-bw / 2, 0, bw, R * 0.22);
+      g.fillStyle = c; g.fillRect(-bw / 2, 0, bw * Math.max(0, e.hp / e.max), R * 0.22);
+    }
+  } else {   // дротик
+    const tilt = Math.max(-0.5, Math.min(0.5, e.vx / (R * 6)));
+    g.rotate(-tilt);
+    g.fillStyle = `hsl(${20 + rnd(30)},100%,60%)`; g.beginPath(); g.moveTo(-r * 0.2, -r * 0.5); g.lineTo(0, -r * (0.9 + Math.random() * 0.4)); g.lineTo(r * 0.2, -r * 0.5); g.fill();
+    g.beginPath(); g.moveTo(0, r); g.lineTo(-r * 0.85, -r * 0.7); g.lineTo(0, -r * 0.25); g.lineTo(r * 0.85, -r * 0.7); g.closePath();
+    g.fillStyle = '#2a0b12'; g.fill(); glow('#ff5a5f', R * 0.09);
+    g.fillStyle = '#ffee58'; g.beginPath(); g.arc(0, r * 0.1, r * 0.13, 0, 7); g.fill();
+    g.rotate(tilt); if (e.hp > 1) { g.translate(0, -r * 0.25); arNum(g, e, r * 0.6); }
+  }
+  g.restore();
+}
 function arDraw() {
   const g = $('#arcC').getContext('2d'), { w, h, R } = AR;
   g.clearRect(0, 0, w, h);
+  g.save();
+  if (AR.shake > 0.5) g.translate((Math.random() - 0.5) * AR.shake, (Math.random() - 0.5) * AR.shake);
   // зірки, що повільно пливуть униз
   g.fillStyle = '#ffffff';
   AR.stars.forEach((s) => {
@@ -3152,14 +3408,16 @@ function arDraw() {
     g.globalAlpha = 0.25 + s[2] * 0.35; g.fillRect(s[0] * w, y, s[2] * AR.dpr, s[2] * AR.dpr);
   });
   g.globalAlpha = 1;
+  if (AR.freeze > 0) { g.fillStyle = '#8be9ff'; g.globalAlpha = 0.07 + 0.03 * Math.sin(AR.t * 8); g.fillRect(-20, -20, w + 40, h + 40); g.globalAlpha = 1; }
   AR.trs.forEach((t, k) => {
     // траса - ледь помітна стежка, щоб було видно, куди повзе ланцюжок
-    g.strokeStyle = k ? '#ffb3ff14' : '#ffffff12'; g.lineWidth = R * 1.9; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.strokeStyle = AR.freeze > 0 ? '#8be9ff22' : k ? '#ffb3ff14' : '#ffffff12'; g.lineWidth = R * 1.9; g.lineCap = 'round'; g.lineJoin = 'round';
     g.beginPath(); t.pts.forEach((p, i) => g[i ? 'lineTo' : 'moveTo'](p[0], p[1])); g.stroke();
-    // чорна діра в кінці траси
-    const e = t.pts[t.pts.length - 1], pulse = 1 + Math.sin(AR.t * 4) * 0.07;
+    // чорна діра в кінці траси; коли ланцюжок близько - червоніє й пульсує швидше
+    const e = t.pts[t.pts.length - 1], near = t.cells.length && t.cells[0].s > t.len - R * 9;
+    const pulse = 1 + Math.sin(AR.t * (near ? 11 : 4)) * (near ? 0.14 : 0.07);
     for (let q = 3; q >= 1; q--) {
-      g.strokeStyle = `hsla(${280 + q * 20},100%,65%,${0.25 + 0.2 * (3 - q)})`;
+      g.strokeStyle = `hsla(${near ? 350 : 280 + q * 20},100%,65%,${0.25 + 0.2 * (3 - q)})`;
       g.lineWidth = R * 0.18;
       g.beginPath(); g.arc(e[0], e[1], R * (0.45 + q * 0.32) * pulse, AR.t * q, AR.t * q + 5); g.stroke();
     }
@@ -3199,13 +3457,36 @@ function arDraw() {
       }
     }
   });
+  // вороги, їхні кулі, подарунки
+  AR.en.forEach((e) => arDrawEn(g, e));
+  g.fillStyle = '#ff5a5f';
+  AR.eshots.forEach((b) => { g.globalAlpha = 0.3; g.beginPath(); g.arc(b.x, b.y, b.r * 2, 0, 7); g.fill(); g.globalAlpha = 1; g.beginPath(); g.arc(b.x, b.y, b.r, 0, 7); g.fill(); g.fillStyle = '#fff'; g.beginPath(); g.arc(b.x, b.y, b.r * 0.45, 0, 7); g.fill(); g.fillStyle = '#ff5a5f'; });
+  AR.drops.forEach((d) => {
+    const col = AR_BONUS[d.kind].col, pu = 1 + Math.sin(d.t * 8) * 0.08, r = R * 0.62 * pu;
+    g.beginPath(); g.arc(d.x, d.y, r, 0, 7); g.fillStyle = '#0b0820'; g.fill();
+    g.strokeStyle = col + '55'; g.lineWidth = R * 0.3; g.stroke(); g.strokeStyle = col; g.lineWidth = R * 0.09; g.stroke();
+    g.font = `${Math.round(R * 0.75)}px ${EMOJI_FONT}`; g.fillStyle = '#fff'; g.fillText(AR_BONUS[d.kind].em, d.x, d.y + R * 0.04);
+  });
   // постріли
-  g.strokeStyle = '#b8ff5c'; g.lineWidth = Math.max(2, R * 0.1); g.lineCap = 'round';
-  g.beginPath(); AR.shots.forEach((b) => { g.moveTo(b.x, b.y); g.lineTo(b.x, b.y + R * 0.5); }); g.stroke();
-  // кораблики
-  arShipXs().forEach((sx, k) => arShip(g, sx, AR.shipY + (k ? R * 0.4 : 0), R * (k ? 0.75 : 1), k ? '#2fd8d0' : '#b8ff5c'));
-  // іскри й написи
+  g.lineCap = 'round';
+  const pierce = AR.shots.filter((b) => b.pr > 0 || b.seen);
+  g.strokeStyle = '#b8ff5c'; g.lineWidth = Math.max(2, R * 0.1);
+  g.beginPath(); AR.shots.forEach((b) => { if (b.pr > 0 || b.seen) return; g.moveTo(b.x, b.y); g.lineTo(b.x, b.y + R * 0.5); }); g.stroke();
+  if (pierce.length) {
+    g.strokeStyle = '#ff6ad555'; g.lineWidth = Math.max(5, R * 0.3);
+    g.beginPath(); pierce.forEach((b) => { g.moveTo(b.x, b.y); g.lineTo(b.x, b.y + R * 0.9); }); g.stroke();
+    g.strokeStyle = '#ffd6f6'; g.lineWidth = Math.max(2, R * 0.12);
+    g.beginPath(); pierce.forEach((b) => { g.moveTo(b.x, b.y); g.lineTo(b.x, b.y + R * 0.9); }); g.stroke();
+  }
+  // кораблики (після удару мигають)
+  if (AR.inv <= 0 || Math.floor(AR.t * 12) % 2) arShipXs().forEach((sx, k) => arShip(g, sx, arShipYk(k), R * (k ? 0.75 : 1), k ? '#2fd8d0' : '#b8ff5c'));
+  if (AR.shield) {
+    g.beginPath(); g.arc(AR.x, AR.shipY, R * (1.45 + Math.sin(AR.t * 6) * 0.05), 0, 7);
+    g.fillStyle = '#4aa8ff18'; g.fill(); g.strokeStyle = '#4aa8ff'; g.lineWidth = R * 0.09; g.globalAlpha = 0.7; g.stroke(); g.globalAlpha = 1;
+  }
+  // іскри, хвилі від вибухів, написи
   AR.fx.forEach((f) => { g.globalAlpha = Math.min(1, f.life * 2); g.fillStyle = f.col; g.fillRect(f.x - R * 0.08, f.y - R * 0.08, R * 0.16, R * 0.16); });
+  AR.rings.forEach((r) => { g.globalAlpha = Math.max(0, r.life / r.t); g.strokeStyle = r.col; g.lineWidth = R * 0.25; g.beginPath(); g.arc(r.x, r.y, Math.max(1, r.r), 0, 7); g.stroke(); });
   g.globalAlpha = 1;
   AR.txt.forEach((t) => {
     g.globalAlpha = Math.min(1, t.life);
@@ -3213,6 +3494,25 @@ function arDraw() {
     g.lineWidth = R * 0.15; g.strokeStyle = '#000a'; g.strokeText(t.t, t.x, t.y); g.fillStyle = '#fff'; g.fillText(t.t, t.x, t.y);
   });
   g.globalAlpha = 1;
+  g.restore();
+  // червоний спалах після удару
+  if (AR.flash > 0) { g.fillStyle = '#ff2d55'; g.globalAlpha = Math.min(0.35, AR.flash * 0.35); g.fillRect(0, 0, w, h); g.globalAlpha = 1; }
+  // рахунок і таймери бонусів унизу
+  g.textBaseline = 'middle';
+  g.font = `900 ${Math.round(R * 0.5)}px Nunito,system-ui,${EMOJI_FONT}`;
+  g.textAlign = 'left'; g.fillStyle = '#ffd93d'; g.fillText('⭐ ' + AR.score, R * 0.5, h - R * 0.5);
+  if (AR.comboT > 0 && AR.combo >= 2) { g.fillStyle = '#ff9f43'; g.font = `900 ${Math.round(R * 0.8)}px Nunito,system-ui,sans-serif`; g.fillText('×' + AR.combo, R * 0.5, h - R * 1.35); }
+  g.textAlign = 'right'; g.font = `900 ${Math.round(R * 0.5)}px Nunito,system-ui,${EMOJI_FONT}`;
+  let ty = h - R * 0.5;
+  [[AR.freeze, '❄️', '#8be9ff'], [AR.pierce, '💎', '#ff6ad5']].forEach(([tm, em, col]) => { if (tm > 0) { g.fillStyle = col; g.fillText(`${em} ${Math.ceil(tm)}`, w - R * 0.5, ty); ty -= R * 0.8; } });
+  // великий напис на початку рівня
+  if (AR.banner) {
+    const b = AR.banner, a = Math.max(0, Math.min(1, b.age * 4, (b.dur - b.age) * 3)), sc = 1 + Math.max(0, 1 - b.age * 5) * 0.6;
+    g.save(); g.translate(w / 2, h * 0.66); g.scale(sc, sc); g.globalAlpha = a; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `900 ${Math.round(R * 1.7)}px Nunito,system-ui,sans-serif`; g.lineWidth = R * 0.3; g.strokeStyle = '#7a3cff'; g.strokeText(b.t, 0, 0); g.fillStyle = '#fff'; g.fillText(b.t, 0, 0);
+    if (b.sub) { g.font = `900 ${Math.round(R * 1.0)}px Nunito,system-ui,${EMOJI_FONT}`; g.fillStyle = '#ff6b81'; g.fillText(b.sub, 0, R * 1.5); }
+    g.restore();
+  }
 }
 function arLoop(ts) {
   if (!AR.run) return;
@@ -3224,21 +3524,28 @@ function arLoop(ts) {
   AR.raf = requestAnimationFrame(arLoop);
 }
 function arEnd(win) {
+  if (AR.over) return;
+  AR.over = true;
   AR.run = false; cancelAnimationFrame(AR.raf); arDraw();
+  const rec = AR.score > AR.best;
+  if (rec) { AR.best = AR.score; LS.set('arcBest', AR.best); }
+  if (AR.score) toast(`⭐ ${AR.score}` + (rec ? ' 🏆' : ''));
   if (win) {
-    cheer(); confetti(); vibe(60); addStar(AR.lvl >= 3 ? 2 : 1);
-    const done = AR.lvl;
+    cheer(); confetti(); vibe(60); addStar((AR.lvl >= 3 ? 2 : 1) + (AR.lostLife ? 0 : 1));
+    const done = AR.lvl, flawless = !AR.lostLife;
     AR.lvl++; LS.set('arcLvl', AR.lvl);
     say('Молодець!');
     setTimeout(() => dialog({
-      em: '🏆', h: `Рівень ${done} пройдено!`, p: 'Усі кульки лопнули',
+      em: '🏆', h: `Рівень ${done} пройдено!`,
+      p: done % 5 === 0 ? 'Бос переможений!' : flawless ? 'Ідеально — жодного життя не втрачено!' : 'Усі кульки лопнули',
       btn: `🚀 Рівень ${AR.lvl}`, btn2: '🏠 Меню',
       onBtn: arStart, onBtn2: () => go('menu'),
     }), 500);
   } else {
     oops(); vibe(150);
+    AR.score = 0;
     setTimeout(() => dialog({
-      em: '🌀', h: 'Кульки долетіли до діри', p: 'Нічого страшного — спробуй ще!',
+      em: '🌀', h: 'Життя скінчилися', p: 'Нічого страшного — спробуй ще!',
       btn: '🔁 Ще раз', btn2: '🏠 Меню', btn3: AR.lvl > 1 ? '⬇️ Легше' : '',
       onBtn: arStart, onBtn2: () => go('menu'),
       onBtn3: () => { AR.lvl = Math.max(1, AR.lvl - 1); LS.set('arcLvl', AR.lvl); arStart(); },
@@ -3253,7 +3560,7 @@ function arStart() {
   AR.run = true; AR.last = 0;
   AR.raf = requestAnimationFrame(arLoop);
 }
-START.arcade = () => { arStart(); say('Веди кораблик пальцем'); };
+START.arcade = () => { AR.score = 0; arStart(); say('Веди кораблик пальцем'); };
 STOP.arcade = () => { AR.run = false; cancelAnimationFrame(AR.raf); };
 (() => {
   const c = $('#arcC');
