@@ -1,22 +1,13 @@
 {
-  "version": "1.5.0",
-  "date": "2026-10-15",
+  "version": "1.5.1",
+  "date": "2026-10-17",
   "changes": [
-    "Пазли: 40 малюнків, шматочки тепер як у справжніх пазлах, а зібрані картинки позначаються ✓",
-    "9 нових ігор: на слух — «Хто грає?», «Високо чи низько?», «Скільки разів?»; на увагу — «Чия тінь?», «Знайди всіх»; на памʼять — «Запамʼятай числа»; на швидкість — «Лови зірочки», «Бульбашки», «Хто виглянув?»",
-    "Абетка: виправлено слова (Ь — кінь, Ю — юла, Ф — фея; ґудзик і юла тепер намальовані), для «и» і «ь» зʼявилась примітка",
-    "Абетка й нові ігри тепер озвучені записаним голосом (+95 фраз)"
+    "Пазли: підказка-малюнок на дошці стала яскравішою, зʼявився режим на 50 шматочків, верх екрана компактніший — унизу видно всі шматочки одразу"
   ],
   "changes_ro": [
-    "Puzzle: 40 de imagini, piesele arată acum ca la puzzle-urile adevărate, iar imaginile terminate sunt bifate ✓",
-    "9 jocuri noi: auz — „Cine cântă?”, „Sus sau jos?”, „De câte ori?”; atenție — „A cui e umbra?”, „Găsește-i pe toți”; memorie — „Ține minte numerele”; viteză — „Prinde stelele”, „Baloane de săpun”, „Cine a ieșit?”",
-    "Alfabet: cuvinte corectate (Ь — cal, Ю — titirez, Ф — zână; nasturele și titirezul sunt acum desenate), notă pentru „и” și „ь”",
-    "Alfabetul și jocurile noi vorbesc acum cu voce înregistrată (+95 de fraze)"
+    "Puzzle: imaginea-ghid de pe tablă e mai luminoasă, a apărut modul cu 50 de piese, partea de sus e mai compactă — jos se văd toate piesele deodată"
   ],
   "changes_en": [
-    "Jigsaw: 40 pictures, pieces now look like real jigsaw pieces, and finished pictures get a ✓",
-    "9 new games: hearing — “Who's playing?”, “High or low?”, “How many times?”; attention — “Whose shadow?”, “Find them all”; memory — “Remember the numbers”; speed — “Catch the stars”, “Bubbles”, “Who peeked out?”",
-    "Alphabet: fixed the words (Ь — horse, Ю — spinning top, Ф — fairy; the button and the top are now drawn), with a note for “и” and “ь”",
-    "The alphabet and the new games now speak with a recorded voice (+95 phrases)"
+    "Jigsaw: the guide picture on the board is brighter, a 50-piece mode was added, the top is more compact — all pieces are visible at once at the bottom"
   ]
 }
