@@ -1,13 +1,13 @@
 {
-  "version": "1.5.4",
-  "date": "2026-10-17",
+  "version": "1.5.6",
+  "date": "2026-10-18",
   "changes": [
-    "Меню: зірочки тепер після кнопки «Швидкість», назва «EnergyUA Junior» показується повністю"
+    "«Стрибунець»: шлях до хатинки утричі довший; кожні 40 клітинок повертається одне сердечко"
   ],
   "changes_ro": [
-    "Meniu: stelele sunt acum după butonul „Viteză”, titlul „EnergyUA Junior” se vede complet"
+    "„Săritorul”: drumul până la căsuță e de trei ori mai lung; la fiecare 40 de pătrățele revine o inimioară"
   ],
   "changes_en": [
-    "Menu: the stars are now after the “Speed” button, the “EnergyUA Junior” title is shown in full"
+    "“Jumper”: the way to the house is three times longer; one heart comes back every 40 cells"
   ]
 }
