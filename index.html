@@ -149,6 +149,12 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .alW{font-size:22px;font-weight:800;letter-spacing:2px}
 .alW b{color:var(--yel)}
 .alN{width:100%;text-align:center;font-size:13px;color:var(--dim);font-weight:700}
+.stwrap{display:block;max-height:44vh;overflow:auto;text-align:left;font-size:14px;margin-top:6px}
+.strow{display:grid;grid-template-columns:1fr 34px 62px 46px;gap:6px;padding:5px 0;border-bottom:1px solid var(--line);align-items:center}
+.strow b{text-align:right;color:var(--yel);font-size:16px}
+.strow .stt,.strow .std{color:var(--dim);text-align:right;font-size:12px}
+.strow.sth{color:var(--dim);font-size:11px;font-weight:700;border-bottom:2px solid var(--line)}
+.stnote{display:block;margin-top:8px;color:var(--dim);font-size:12px;line-height:1.35}
 .alR{width:100%;text-align:center;font-size:20px;font-weight:900;color:var(--grn);min-height:1.4em;opacity:0;transform:scale(.9);transition:opacity .25s,transform .25s}
 .alR.on{opacity:1;transform:none}
 #letWord{min-height:1.3em}
@@ -206,7 +212,7 @@ body:has(#s-jigsaw.on) .top{padding:4px 12px;min-height:46px}
 body:has(#s-jigsaw.on) .top .icon{width:40px;height:40px;font-size:20px;border-radius:13px}
 body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radius:13px}
 .jgb{position:relative;box-sizing:content-box;margin:0 auto;border:3px solid var(--line);border-radius:6px;background:#23262d;touch-action:none}
-.jgb .ghost{position:absolute;inset:0;background-size:100% 100%;opacity:.6;pointer-events:none}
+.jgb .ghost{position:absolute;inset:0;background-size:100% 100%;opacity:.9;filter:saturate(1.15) brightness(1.05);pointer-events:none}
 .jgb .grid{position:absolute;inset:0;display:grid}
 .jgs{position:relative;z-index:0}
 .jgs svg{position:absolute;left:var(--m);top:var(--m);overflow:visible;pointer-events:none}
@@ -1034,7 +1040,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.5.6';
+const APP_VERSION = '1.6.1';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1972,10 +1978,58 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
                  inst: 'Хто грає?', pitch: 'Високо чи низько?', knock: 'Скільки разів?', shadow: 'Чия тінь?', findall: 'Знайди всіх', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
                  rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', jigsaw: 'Пазли', bye: 'EnergyUA Junior' };
+
+/* ---------- статистика запусків (лише на цьому пристрої) ----------
+   Скільки разів відкривали кожну гру, скільки часу в ній провели й коли востаннє.
+   Нічого не йде в мережу. Дані лежать у памʼяті браузера (і потрапляють у резервну копію).
+   Дивитись: Налаштування для батьків → «Статистика ігор». */
+const ST_SKIP = new Set(['menu', 'album', 'rec', 'bye']);
+const STATS = LS.get('stats', null) || { since: Date.now(), opens: 0, g: {} };
+if (!STATS.g) STATS.g = {};
+STATS.opens = (STATS.opens || 0) + 1;
+const stSave = () => LS.set('stats', STATS);
+stSave();
+let stCur = '', stT0 = 0;
+function stLeave() {
+  if (stCur && stT0) { const g = STATS.g[stCur]; if (g) g.t = (g.t || 0) + Math.min(1800, Math.round((Date.now() - stT0) / 1000)); stSave(); }
+  stCur = ''; stT0 = 0;
+}
+function stEnter(name) {
+  if (ST_SKIP.has(name) || !TITLES[name]) return;
+  const g = STATS.g[name] || (STATS.g[name] = { n: 0, t: 0, last: 0 });
+  g.n++; g.last = Date.now(); stCur = name; stT0 = Date.now(); stSave();
+}
+document.addEventListener('visibilitychange', () => {   // у фоні час не рахуємо
+  if (document.hidden) { if (stCur && stT0) { const g = STATS.g[stCur]; if (g) g.t = (g.t || 0) + Math.min(1800, Math.round((Date.now() - stT0) / 1000)); stT0 = 0; stSave(); } }
+  else if (stCur) stT0 = Date.now();
+});
+Object.assign(I18N, {
+  'Статистика ігор': { ro: 'Statistica jocurilor', en: 'Game statistics' },
+  '📊 Статистика ігор': { ro: '📊 Statistica jocurilor', en: '📊 Game statistics' },
+  'Гра': { ro: 'Joc', en: 'Game' }, 'Раз': { ro: 'Ori', en: 'Times' }, 'Час': { ro: 'Timp', en: 'Time' }, 'Коли': { ro: 'Când', en: 'Last' },
+  'Запусків ігор': { ro: 'Lansări de jocuri', en: 'Games started' },
+  'Відкривали додаток': { ro: 'Aplicația deschisă', en: 'App opened' },
+  'Час в іграх': { ro: 'Timp în jocuri', en: 'Time in games' },
+  'Статистика з': { ro: 'Statistici din', en: 'Statistics since' },
+  'Ще не запускали': { ro: 'Încă nelansate', en: 'Not played yet' },
+  'Поки що порожньо — зіграйте в якусь гру': { ro: 'Încă nimic — jucați un joc', en: 'Nothing yet — play a game' },
+  '📤 У файл (CSV)': { ro: '📤 În fișier (CSV)', en: '📤 To file (CSV)' },
+  '🗑️ Скинути': { ro: '🗑️ Resetează', en: '🗑️ Reset' },
+  'Скинути статистику?': { ro: 'Resetezi statistica?', en: 'Reset the statistics?' },
+  'Лічильники обнуляться. Зірочки й наліпки лишаться.': { ro: 'Contoarele se vor goli. Stelele și abțibildurile rămân.', en: 'The counters will be cleared. Stars and stickers stay.' },
+  'Так, скинути': { ro: 'Da, resetează', en: 'Yes, reset' },
+  'Лише на цьому пристрої, нікуди не надсилається.': { ro: 'Doar pe acest dispozitiv, nu se trimite nicăieri.', en: 'Only on this device, nothing is sent anywhere.' },
+});
+I18N_RE.push(
+  [/^(\d+) хв$/, { ro: '{1} min', en: '{1} min' }],
+  [/^(\d+) с$/, { ro: '{1} s', en: '{1} s' }],
+  [/^(\d+) г (\d+) хв$/, { ro: '{1} h {2} min', en: '{1} h {2} min' }],
+);
 let SCR = 'menu';
 const STOP = {};   // кожна гра кладе сюди свою зупинку
 function go(name) {
   if (STOP[SCR]) STOP[SCR]();
+  stLeave(); stEnter(name);
   SCR = name;
   $$('.scr').forEach((s) => s.classList.toggle('on', s.id === 's-' + name));
   if (TITLES[name] && name !== 'menu' && name !== 'bye') $('#title').textContent = TITLES[name];
@@ -5332,7 +5386,7 @@ function jgPiece(k, cell) {
 /** Порожнє місце - лише контур шматочка. */
 function jgHole(k) {
   const c = k % JG.cols, r = Math.floor(k / JG.cols), px = jgBox(JG.cell), W = 100 + 2 * JG_M;
-  return `<svg class="jo" xmlns="http://www.w3.org/2000/svg" viewBox="${-JG_M} ${-JG_M} ${W} ${W}" width="${px}" height="${px}"><path d="${jgPath(c, r)}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.2" stroke-dasharray="6 5"/></svg>`;
+  return `<svg class="jo" xmlns="http://www.w3.org/2000/svg" viewBox="${-JG_M} ${-JG_M} ${W} ${W}" width="${px}" height="${px}"><path d="${jgPath(c, r)}" fill="none" stroke="#fff" stroke-opacity="1" stroke-width="3" stroke-dasharray="6 5"/></svg>`;
 }
 function jgInfo() {
   $('#jgInfo').innerHTML = `${T('Перетягуй шматочки на місце')} · ${T('Зібрано')}: <b>${JG.filled.size} / ${JG.cols * JG.rows}</b>`;
@@ -6386,6 +6440,45 @@ async function checkUpdate(silent) {
   if (from !== APP_VERSION) setTimeout(() => toast(`✅ Оновлено: ${from} → ${APP_VERSION}`), 900);
 })();
 
+
+/* ---------- статистика ігор (для батьків) ---------- */
+const stFmt = (sec) => (sec >= 3600 ? `${Math.floor(sec / 3600)} г ${Math.round((sec % 3600) / 60)} хв` : sec >= 60 ? `${Math.round(sec / 60)} хв` : `${sec} с`);
+const stDate = (ms) => (ms ? new Date(ms).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' }) : '—');
+function stRows() {
+  return Object.entries(STATS.g).filter(([k, g]) => g.n && TITLES[k]).sort((a, b) => b[1].n - a[1].n || b[1].last - a[1].last);
+}
+function statDialog() {
+  stLeave();                                     // дорахувати час поточної гри (панель відкривають з меню)
+  const rows = stRows(), tot = rows.reduce((x, [, g]) => x + g.n, 0), sec = rows.reduce((x, [, g]) => x + (g.t || 0), 0);
+  const never = Object.keys(TITLES).filter((k) => !ST_SKIP.has(k) && !(STATS.g[k] && STATS.g[k].n)).map((k) => TITLES[k]);
+  const head = `<span class="strow sth"><span>Гра</span><span style="text-align:right">Раз</span><span style="text-align:right">Час</span><span style="text-align:right">Коли</span></span>`;
+  const list = rows.length
+    ? head + rows.map(([k, g]) => `<span class="strow"><span>${esc(TITLES[k])}</span><b>${g.n}</b><span class="stt">${stFmt(g.t || 0)}</span><span class="std">${stDate(g.last)}</span></span>`).join('')
+    : '<span class="stnote">Поки що порожньо — зіграйте в якусь гру</span>';
+  dialog({
+    em: '📊', h: 'Статистика ігор',
+    p: `Запусків ігор: <b>${tot}</b> · Час в іграх: <b>${stFmt(sec)}</b><br>Відкривали додаток: <b>${STATS.opens}</b> · Статистика з: <b>${stDate(STATS.since)}</b>` +
+       `<span class="stwrap">${list}${never.length ? `<span class="stnote">Ще не запускали: ${never.map(esc).join(', ')}</span>` : ''}</span>` +
+       `<span class="stnote">Лише на цьому пристрої, нікуди не надсилається.</span>`,
+    btn: 'Закрити', btn2: '📤 У файл (CSV)', btn3: '🗑️ Скинути',
+    onBtn2: statCsv,
+    onBtn3: () => dialog({ em: '🗑️', h: 'Скинути статистику?', p: 'Лічильники обнуляться. Зірочки й наліпки лишаться.', btn: 'Так, скинути', btn2: 'Закрити',
+      onBtn: () => { STATS.g = {}; STATS.opens = 1; STATS.since = Date.now(); stSave(); toast('Статистику скинуто'); } }),
+  });
+}
+function statCsv() {
+  const q = (t) => `"${String(t).replace(/"/g, '""')}"`;
+  const lines = [['Гра', 'Запусків', 'Хвилин', 'Востаннє'].map(q).join(';')];
+  stRows().forEach(([k, g]) => lines.push([q(TITLES[k]), g.n, Math.round((g.t || 0) / 60), q(g.last ? new Date(g.last).toISOString().slice(0, 16).replace('T', ' ') : '')].join(';')));
+  const d = new Date(), stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
+  a.download = `energyua-junior-stats-${stamp}.csv`;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast('📤 Збережено у файл');
+}
+document.addEventListener('click', (e) => { if (e.target.closest('#stBtn')) { closeDialog(); statDialog(); } });
+
 function parentPanel() {
   const noVoice = VOICE_READY && !UA_VOICE && (LANG !== 'uk' || !VPACK);
   const HINT = {
@@ -6413,6 +6506,7 @@ function parentPanel() {
         Голос: <b>${voiceInfo()}</b><br>
         Звуки тварин: <b>${Object.keys(REC).length ? `свої записи (${Object.keys(REC).length} з ${ANI_SET.length})` : (SND_PACK ? 'справжні, з папки sounds' : 'справжні записи з інтернету')}</b><br>
         Зірочок: <b>${S.stars}</b> · Наліпок: <b>${S.got.length}</b><br>
+        <button class="mini" id="stBtn">📊 Статистика ігор</button><br>
         Версія <b>${APP_VERSION}</b> (оновлення — кнопкою під меню)${hint}
         <a class="eua" href="https://www.youtube.com/@YevhenShchuka" target="_blank" rel="noopener">${BOLT_SVG}<span><b><span class="bw">Energy</span><span class="bh">UA</span></b><small>YouTube-канал автора ↗</small></span></a>`,
     btn: 'Закрити', btn2: 'Змінити', btn3: '🎤 Свої голоси',

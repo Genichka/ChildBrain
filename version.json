@@ -1,13 +1,19 @@
 {
-  "version": "1.5.6",
+  "version": "1.6.1",
   "date": "2026-10-18",
   "changes": [
-    "«Стрибунець»: шлях до хатинки утричі довший; кожні 40 клітинок повертається одне сердечко"
+    "Пазли: малюнок-підказка на дошці виразніший, контури місць яскравіші",
+    "Статистика ігор для батьків: скільки разів і скільки часу грали в кожну гру (Налаштування → «Статистика ігор»), можна зберегти у файл CSV або скинути",
+    "Дані лишаються лише на цьому пристрої й нікуди не надсилаються"
   ],
   "changes_ro": [
-    "„Săritorul”: drumul până la căsuță e de trei ori mai lung; la fiecare 40 de pătrățele revine o inimioară"
+    "Puzzle: imaginea-ghid de pe tablă e mai vizibilă, conturul locurilor e mai luminos",
+    "Statistica jocurilor pentru părinți: de câte ori și cât timp s-a jucat fiecare joc (Setări → „Statistica jocurilor”), se poate salva în CSV sau reseta",
+    "Datele rămân doar pe acest dispozitiv și nu se trimit nicăieri"
   ],
   "changes_en": [
-    "“Jumper”: the way to the house is three times longer; one heart comes back every 40 cells"
+    "Jigsaw: the hint picture on the board is clearer and the slot outlines are brighter",
+    "Game statistics for parents: how many times and how long each game was played (Settings → “Game statistics”), can be saved as CSV or reset",
+    "The data stays on this device only and is never sent anywhere"
   ]
 }
