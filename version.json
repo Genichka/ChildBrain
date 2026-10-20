@@ -1,19 +1,16 @@
 {
-  "version": "1.6.1",
-  "date": "2026-10-18",
+  "version": "1.6.2",
+  "date": "2026-10-20",
   "changes": [
-    "Пазли: малюнок-підказка на дошці виразніший, контури місць яскравіші",
-    "Статистика ігор для батьків: скільки разів і скільки часу грали в кожну гру (Налаштування → «Статистика ігор»), можна зберегти у файл CSV або скинути",
-    "Дані лишаються лише на цьому пристрої й нікуди не надсилаються"
+    "Голос більше не обривається на півслові: нове завдання починається, лише коли гра договорила похвалу («Так! Решта — фрукти» тощо)",
+    "Те саме для повторів мелодії, інструментів, чисел і для «Новий рівень» у «Рахуємо»"
   ],
   "changes_ro": [
-    "Puzzle: imaginea-ghid de pe tablă e mai vizibilă, conturul locurilor e mai luminos",
-    "Statistica jocurilor pentru părinți: de câte ori și cât timp s-a jucat fiecare joc (Setări → „Statistica jocurilor”), se poate salva în CSV sau reseta",
-    "Datele rămân doar pe acest dispozitiv și nu se trimit nicăieri"
+    "Vocea nu se mai oprește la jumătatea cuvântului: sarcina nouă începe doar după ce jocul a terminat lauda",
+    "La fel pentru repetarea melodiei, a instrumentelor, a numerelor și pentru „Nivel nou” la „Socotim”"
   ],
   "changes_en": [
-    "Jigsaw: the hint picture on the board is clearer and the slot outlines are brighter",
-    "Game statistics for parents: how many times and how long each game was played (Settings → “Game statistics”), can be saved as CSV or reset",
-    "The data stays on this device only and is never sent anywhere"
+    "The voice no longer cuts off mid-word: the next task starts only after the game has finished its praise",
+    "The same for replaying the melody, instruments and numbers, and for “New level” in Counting"
   ]
 }

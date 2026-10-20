@@ -1040,7 +1040,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.6.1';
+const APP_VERSION = '1.6.2';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1898,6 +1898,10 @@ async function speechDone(minMs = 0, maxMs = 7000) {
   while (vNow() < V_END && vNow() - t0 < maxMs) await sleep(80);
   await sleep(150);                                   // маленька пауза між фразами
 }
+/** Наступна дія гри - лише коли голос договорить (і не раніше за minMs).
+ *  Раніше нове завдання стартувало за фіксованим таймером і обривало
+ *  довшу похвалу («Так! Решта — фрукти») на півслові. */
+function afterSay(fn, minMs = 0) { return speechDone(minMs).then(fn); }
 function say(text, rate = 0.88) {
   if (!text || (Array.isArray(text) && !text.length)) return;
   LAST_SAY = text;
@@ -2039,7 +2043,6 @@ function go(name) {
   $('#back').innerHTML = name === 'menu' ? ICON_EXIT : ICON_BACK;
   $('#back').setAttribute('aria-label', name === 'menu' ? 'Вихід' : 'Назад');
   document.body.classList.toggle('in-menu', name === 'menu');
-  $('#back').setAttribute('aria-label', name === 'menu' ? 'Вихід' : 'Назад');
   closeDialog();
   if (START[name]) START[name]();
   if (name === 'menu' && UPD && updAsked !== UPD.version) setTimeout(askUpdate, 400);
@@ -2125,7 +2128,7 @@ $('#pads').onclick = (e) => {
     MEL.busy = true; oops(); vibe(120);
     $('#melAsk').innerHTML = 'Майже! <small>послухай ще раз</small>';
     say('Спробуй ще');
-    setTimeout(melPlay, 1200);
+    afterSay(melPlay, 1200);
   }
 };
 $('#melGo').onclick = () => { if (!MEL.busy) melPlay(); };
@@ -2167,7 +2170,7 @@ $('#cards').onclick = async (e) => {
       $('#memAsk').innerHTML = 'Усі пари знайдено! 🎉';
       say('Молодець! Усі пари знайдено');
       MEM.busy = true;
-      setTimeout(() => { MEM.pairs = Math.min(8, MEM.pairs + 1); memDeal(); }, 1800);
+      afterSay(() => { MEM.pairs = Math.min(8, MEM.pairs + 1); memDeal(); }, 1800);
     }
   } else {
     await sleep(900);
@@ -2199,7 +2202,7 @@ $('#nums').onclick = (e) => {
   if (+b.dataset.v === CNT.n) {
     CNT.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
     say(`Так! ${CNT.n}`);
-    setTimeout(() => { CNT.max = Math.min(10, CNT.max + 1); cntNew(); }, 1500);
+    afterSay(() => { CNT.max = Math.min(10, CNT.max + 1); cntNew(); }, 1500);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
@@ -2656,7 +2659,7 @@ function aniNew() {
   ANI.cur = pick(opts); ANI.busy = false;
   $('#aniAsk').innerHTML = 'Хто так говорить?<small>натисни 🔊, щоб почути ще раз</small>';
   $('#animals').innerHTML = opts.map((a) => `<button class="big anim" data-n="${a[1]}">${a[0]}</button>`).join('');
-  if (ANI.first) { ANI.first = false; say('Хто так говорить?'); setTimeout(aniSay, 1700); }
+  if (ANI.first) { ANI.first = false; say('Хто так говорить?'); afterSay(aniSay, 1700); }
   else setTimeout(aniSay, 450);
 }
 START.animal = () => { ANI.first = true; probePack(); aniNew(); };
@@ -2668,7 +2671,7 @@ $('#animals').onclick = (e) => {
     ANI.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar(); aniGrow();
     $('#aniAsk').innerHTML = `Так! Це ${ANI.cur[1]}<small>каже «${ANI.cur[2]}»</small>`;
     say(`Так! Це ${ANI.cur[1]}`);
-    setTimeout(aniNew, 1900);
+    afterSay(aniNew, 1900);
   } else {
     b.classList.add('no'); oops(); vibe(120);
     setTimeout(() => b.classList.remove('no'), 500);
@@ -2879,7 +2882,7 @@ $('#shapes').onclick = (e) => {
     say('Так!');
     SHP.ok++;
     if (SHP.ok >= 3 && SHP.lvl < 3) { SHP.lvl++; SHP.ok = 0; }
-    setTimeout(shpNew, 1400);
+    afterSay(shpNew, 1400);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
@@ -2924,7 +2927,7 @@ $('#odds').onclick = (e) => {
     say(`Так! Решта — ${ODD.nm}`);
     ODD.ok++;
     if (ODD.ok >= 4 && ODD.n < 4) { ODD.n = 4; ODD.ok = 0; }
-    setTimeout(oddNew, 1700);
+    afterSay(oddNew, 1700);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
@@ -4544,17 +4547,16 @@ $('#mtAns').onclick = (e) => {
   if (+b.dataset.v === q.ans) {
     MT.busy = true; b.classList.add('ok'); cheer(); vibe(40);
     if (MT.miss === 0) { MT.ok++; if (MT.ok % 3 === 0) addStar(); }   // з першої спроби - іде в залік
-    else { MT.busy = true; setTimeout(mtNew, 1700); say(mtYes(q.ans)); return; }
+    else { MT.busy = true; afterSay(mtNew, 1700); say(mtYes(q.ans)); return; }
     say(mtYes(q.ans));
     if (MT.ok >= MT_NEED && MT.lvl < MT_LV.length) {
       confetti();
       MT.lvl++; MT.ok = 0; MT.top = Math.max(MT.top, MT.lvl);
       LS.set('mathLvl', MT.lvl); LS.set('mathTop', MT.top);
-      setTimeout(() => { toast(`🎉 Новий рівень: ${MT_LV[MT.lvl - 1].nm}`); say('Молодець! Новий рівень!'); }, 1300);
-      setTimeout(mtNew, 3300);
+      afterSay(() => { toast(`🎉 Новий рівень: ${MT_LV[MT.lvl - 1].nm}`); say('Молодець! Новий рівень!'); afterSay(mtNew, 600); }, 900);
     } else {
       if (MT.ok >= MT_NEED) { confetti(); MT.ok = 0; }
-      setTimeout(mtNew, 1700);
+      afterSay(mtNew, 1700);
     }
   } else {
     b.classList.add('no'); oops(); vibe(120);
@@ -4619,7 +4621,7 @@ $('#tmAns').onclick = (e) => {
     if (TM.miss === 0) TM.ok++;                       // з першої спроби - іде в залік
     say(mtYes(q.ans));
     if (TM.ok >= TM_NEED) { confetti(); addStar(); TM.ok = 0; }
-    setTimeout(tmNew, 1700);
+    afterSay(tmNew, 1700);
   } else {
     b.classList.add('no'); oops(); vibe(120);
     TM.miss++;
@@ -4750,7 +4752,7 @@ $('#alAns').onclick = (e) => {
     const nm = (alSet().find((r) => r[0] === q.ans) || [])[1] || q.ans;
     say(LANG === 'uk' ? `Так! Буква ${nm}` : (LET_L[LANG] ? LET_L[LANG].yes(q.ans) : `${T('Так!')} ${q.ans}`));
     if (AL_S.ok >= AL_NEED) { confetti(); addStar(); AL_S.ok = 0; }
-    setTimeout(() => { if (SCR === 'alpha') alNew(); }, 1700);
+    afterSay(() => { if (SCR === 'alpha') alNew(); }, 1700);
   } else {
     b.classList.add('no'); oops(); vibe(120);
     AL_S.miss++;
@@ -4850,7 +4852,7 @@ $('#nmAns').onclick = (e) => {
     if (NM_S.miss === 0) NM_S.ok++;
     say(mtYes(q.ans));
     if (NM_S.ok >= NM_NEED) { confetti(); addStar(); NM_S.ok = 0; }
-    setTimeout(() => { if (SCR === 'nums') nmNew(); }, 1700);
+    afterSay(() => { if (SCR === 'nums') nmNew(); }, 1700);
   } else {
     b.classList.add('no'); oops(); vibe(120);
     NM_S.miss++;
@@ -4897,7 +4899,7 @@ $('#sqAns').onclick = (e) => {
       confetti(); addStar(); SQ.ok = 0;
       if (SQ.lvl < 2) { SQ.lvl++; LS.set('seqLvl', SQ.lvl); setTimeout(() => toast('🎉 ' + T('Складніше!')), 900); }
     }
-    setTimeout(() => { if (SCR === 'seq') sqNew(); }, 1700);
+    afterSay(() => { if (SCR === 'seq') sqNew(); }, 1700);
   } else {
     b.classList.add('no'); oops(); vibe(120);
     if (++SQ.miss >= 2) $(`#sqAns .big[data-e="${q.ans}"]`).classList.add('glow');
@@ -4947,7 +4949,7 @@ function mzMove(d) {
   if (MZ.x === MZ.n - 1 && MZ.y === MZ.n - 1) {
     MZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
     MZ.lvl = Math.min(3, MZ.lvl + 1); LS.set('mazeLvl', MZ.lvl);
-    setTimeout(() => { if (SCR === 'maze') mzNew(); }, 2000);
+    afterSay(() => { if (SCR === 'maze') mzNew(); }, 2000);
   }
 }
 $('#mzPad').onclick = (e) => { const b = e.target.closest('button'); if (b) mzMove(b.dataset.d); };
@@ -4994,7 +4996,7 @@ $('#stBaskets').onclick = (e) => {
       confetti(); addStar(); ST.ok = 0;
       if (ST.lvl < 1) { ST.lvl++; LS.set('sortLvl', ST.lvl); setTimeout(() => toast('🎉 ' + T('Складніше!')), 900); }
     }
-    setTimeout(() => { if (SCR === 'sort') stNew(); }, 1500);
+    afterSay(() => { if (SCR === 'sort') stNew(); }, 1500);
   } else {
     b.classList.add('no'); oops(); vibe(120);
     if (++ST.miss >= 2) $(`#stBaskets .srt[data-k="${ST.q.k}"]`).classList.add('glow');
@@ -5070,7 +5072,7 @@ function pzMove(i) {
   if (pzSolved(PZ.t)) {
     PZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
     toast(`🎉 ${T('Ходів')}: ${PZ.moves}`);
-    setTimeout(() => { if (SCR === 'puzzle') pzNew(); }, 2600);
+    afterSay(() => { if (SCR === 'puzzle') pzNew(); }, 2600);
   }
 }
 /** Торкання (без руху пальця) - як і раніше. Після перетягування «клік» ігнорується. */
@@ -5457,7 +5459,7 @@ function jgPlace(k, i) {
     JG.busy = true; confetti(); cheer(); vibe(60); addStar(JG.cols * JG.rows >= 40 ? 3 : JG.cols * JG.rows >= 12 ? 2 : 1); say('Молодець!');
     { const dn = LS.get('jgDone', []); if (!dn.includes(JG.pic)) { dn.push(JG.pic); LS.set('jgDone', dn); } }
     JG.pic = (JG.pic + 1) % JG_PICS.length; LS.set('jgPic', JG.pic);        // наступного разу - інша картинка
-    setTimeout(() => { if (SCR === 'jigsaw') jgNew(); }, 3400);
+    afterSay(() => { if (SCR === 'jigsaw') jgNew(); }, 3400);
   }
   return true;
 }
@@ -5717,7 +5719,7 @@ $('#gnOpts').onclick = (e) => {
   const q = $('#gnRow .q'); if (q) { q.textContent = GN.miss; q.className = 'mcell back'; }
   memWin('Так! ' + (MP_NAME[GN.miss] || ''));
   if (++GN.ok >= 2) { GN.ok = 0; GN.n = Math.min(7, GN.n + 1); }
-  setTimeout(gnNew, 1800);
+  afterSay(gnNew, 1800);
 };
 
 /* ================================================================
@@ -5760,10 +5762,10 @@ $('#houses').onclick = (e) => {
     return;
   }
   HD.busy = true; h.classList.add('ok');
-  if (HD.ask.length) { cheer(); vibe(30); say(`Так! Тут ${a[1]}`); setTimeout(hdNext, 1300); return; }
+  if (HD.ask.length) { cheer(); vibe(30); say(`Так! Тут ${a[1]}`); afterSay(hdNext, 1300); return; }
   memWin(`Так! Тут ${a[1]}`);
   if (++HD.ok >= 2) { HD.ok = 0; HD.n = Math.min(6, HD.n + 1); }
-  setTimeout(hdNew, 1800);
+  afterSay(hdNew, 1800);
 };
 
 /* ================================================================
@@ -5879,7 +5881,7 @@ $('#spCards').onclick = async (e) => {
     if (SP.done === SP.pairs) {
       confetti(); addStar();
       $('#spAsk').innerHTML = 'Усі пари знайдено! 🎉';
-      setTimeout(() => { if (gen !== SP.gen) return; SP.pairs = Math.min(5, SP.pairs + 1); spDeal(); }, 2000);
+      afterSay(() => { if (gen !== SP.gen) return; SP.pairs = Math.min(5, SP.pairs + 1); spDeal(); }, 2000);
       SP.open = []; return;
     }
   } else {
@@ -5979,7 +5981,7 @@ function inNew() {
   $('#inOpts').innerHTML = opts.map((i) => `<button class="big mopt" data-e="${i.e}" aria-label="${i.n}">${i.e}</button>`).join('');
   $('#inAsk').innerHTML = 'Хто грає?<small>слухай і вгадай</small>';
   say('Хто грає?');
-  setTimeout(() => { if (gen === IN.gen) IN.cur.play(); }, 1100);
+  afterSay(() => { if (gen === IN.gen) IN.cur.play(); }, 1100);
 }
 START.inst = () => { IN.ok = 0; IN.lv = 3; inNew(); };
 STOP.inst = () => { IN.gen++; };
@@ -5989,7 +5991,7 @@ $('#inOpts').onclick = (e) => {
   if (b.dataset.e !== IN.cur.e) { memNo(b); say('Спробуй ще'); return; }
   IN.busy = true; b.classList.add('ok'); memWin(['Так!', IN.cur.n]);
   if (++IN.ok % 3 === 0) IN.lv = Math.min(6, IN.lv + 1);
-  setTimeout(inNew, 1900);
+  afterSay(inNew, 1900);
 };
 
 /* ---------- 2. ВИСОКО ЧИ НИЗЬКО? ----------
@@ -6021,7 +6023,7 @@ function ptNew() {
     $('#ptOpts').innerHTML = '<button class="big mopt" data-a="1" aria-label="перша">☝️</button><button class="big mopt" data-a="2" aria-label="друга">✌️</button>';
     say('Яка нота вища?');
   }
-  setTimeout(() => { if (gen === PT.gen) ptPlay(); }, 1200);
+  afterSay(() => { if (gen === PT.gen) ptPlay(); }, 1200);
 }
 START.pitch = () => { PT.ok = 0; PT.lv = LS.get('ptLv', 1); ptNew(); };
 STOP.pitch = () => { PT.gen++; };
@@ -6031,7 +6033,7 @@ $('#ptOpts').onclick = (e) => {
   if (b.dataset.a !== PT.q.ans) { memNo(b); say('Спробуй ще'); return; }
   PT.busy = true; b.classList.add('ok'); memWin(PT.q.kind === 1 ? (PT.q.ans === 'hi' ? 'Високо' : 'Низько') : (PT.q.ans === '1' ? 'Перша' : 'Друга'));
   if (++PT.ok % 3 === 0 && PT.lv < 5) { PT.lv++; LS.set('ptLv', PT.lv); }
-  setTimeout(ptNew, 1800);
+  afterSay(ptNew, 1800);
 };
 
 /* ---------- 3. СКІЛЬКИ РАЗІВ СТУКАЄ? ---------- */
@@ -6051,7 +6053,7 @@ function knNew() {
   $('#knOpts').innerHTML = [...o].sort((a, b) => a - b).map((n) => `<button class="big num" data-n="${n}">${n}</button>`).join('');
   $('#knAsk').innerHTML = 'Скільки разів стукає?<small>порахуй на слух</small>';
   say('Скільки разів стукає?');
-  setTimeout(() => { if (gen === KN.gen) knPlay(); }, 1500);
+  afterSay(() => { if (gen === KN.gen) knPlay(); }, 1500);
 }
 START.knock = () => { KN.ok = 0; KN.max = 3; knNew(); };
 STOP.knock = () => { KN.gen++; };
@@ -6063,7 +6065,7 @@ $('#knOpts').onclick = (e) => {
   $('#knBox').innerHTML = Array.from({ length: KN.n }, () => '<i>🔔</i>').join('');
   memWin(['Так!', ...numW(KN.n)]);
   if (++KN.ok % 3 === 0) KN.max = Math.min(8, KN.max + 1);
-  setTimeout(knNew, 2000);
+  afterSay(knNew, 2000);
 };
 
 /* ---------- 4. ЧИЯ ТІНЬ? ---------- */
@@ -6083,7 +6085,7 @@ $('#shOpts').onclick = (e) => {
   if (b.dataset.e !== SH.cur) { memNo(b); say('Спробуй ще'); return; }
   SH.busy = true; b.classList.add('ok'); memWin('Так!');
   if (++SH.ok % 3 === 0) SH.n = Math.min(6, SH.n + 1);
-  setTimeout(shNew, 1600);
+  afterSay(shNew, 1600);
 };
 
 /* ---------- 5. ЗНАЙДИ ВСІХ ---------- */
@@ -6108,7 +6110,7 @@ $('#faGrid').onclick = (e) => {
   if (FA.left > 0) return;
   FA.busy = true; memWin('Молодець!');
   if (++FA.ok % 2 === 0) FA.lv = Math.min(FA_LV.length - 1, FA.lv + 1);
-  setTimeout(faNew, 1800);
+  afterSay(faNew, 1800);
 };
 
 /* ---------- 6. ЗАПАМʼЯТАЙ ЧИСЛА ---------- */
@@ -6132,7 +6134,7 @@ function dgNew() {
   DG.seq = Array.from({ length: DG.n }, () => rnd(10)); DG.pos = 0;
   $('#dgIn').innerHTML = DG.seq.map(() => '<span></span>').join('');
   $('#dgAsk').innerHTML = 'Запамʼятай числа<small>дивись і слухай</small>'; say('Запамʼятай числа');
-  setTimeout(() => { if (gen === DG.gen) dgShow(gen); }, 1400);
+  afterSay(() => { if (gen === DG.gen) dgShow(gen); }, 1400);
 }
 START.digits = () => {
   DG.n = 2; DG.ok = 0;
@@ -6153,7 +6155,7 @@ $('#dgPad').onclick = (e) => {
   if (DG.pos < DG.n) return;
   DG.busy = true; memWin('Молодець!');
   if (++DG.ok % 2 === 0) DG.n = Math.min(7, DG.n + 1);
-  setTimeout(dgNew, 1900);
+  afterSay(dgNew, 1900);
 };
 
 /* ---------- 7. ЛОВИ ЗІРОЧКИ ---------- */
