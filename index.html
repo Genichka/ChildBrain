@@ -183,9 +183,15 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .sqrow span.q{border:3px dashed var(--yel);border-radius:14px;padding:0 8px;color:var(--yel)}
 #sqAns .big{width:92px;height:92px;font-size:46px}
 #sqAns .big.glow,.srt.glow{box-shadow:0 0 0 4px var(--grn),0 0 24px var(--grn)}
-.mz{display:grid;margin:0 auto;width:min(84vw,40vh,320px);aspect-ratio:1;background:#0b0c0e;border:4px solid var(--line);border-radius:14px;touch-action:none}
-.mz div{box-sizing:border-box;display:grid;place-items:center;line-height:1;border:0 solid #5794f2}
-.mz .wt{border-top-width:3px}.mz .wr{border-right-width:3px}.mz .wb{border-bottom-width:3px}.mz .wl{border-left-width:3px}
+.mz{position:relative;margin:0 auto;width:min(84vw,40vh,320px);aspect-ratio:1;background:#0b0c0e;border-radius:14px;touch-action:none;box-shadow:0 0 0 2px var(--line),0 6px 18px #0006}
+.mz svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mz .mz-wall{fill:none;stroke:#5794f2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 2px #5794f288)}
+.mz .mz-trail{fill:none;stroke:#73bf69;stroke-opacity:.55;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:.01 .22}
+.mz .mz-tok{position:absolute;display:grid;place-items:center;line-height:1;pointer-events:none;transition:left .16s ease-out,top .16s ease-out}
+.mz .mz-cheese{animation:mzGlow 1.6s ease-in-out infinite}
+@keyframes mzGlow{50%{transform:scale(1.12);filter:drop-shadow(0 0 6px #fade2a)}}
+.mz .mz-me.bump{animation:mzBump .22s}
+@keyframes mzBump{25%{transform:translate(var(--bx),var(--by))}}
 .srt{width:auto;min-width:96px;height:auto;padding:10px 14px;font-size:40px;display:flex;flex-direction:column;align-items:center;gap:2px}
 .srt small{font-size:14px;font-weight:800}
 /* ---------- пʼятнашки ---------- */
@@ -1040,7 +1046,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.6.2';
+const APP_VERSION = '1.6.3';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -4909,7 +4915,7 @@ $('#sqAns').onclick = (e) => {
 };
 
 /* ---- Лабіринт - мишка шукає сир; лабіринт щоразу новий, з кожною перемогою більший ---- */
-const MZ = { lvl: Math.min(3, LS.get('mazeLvl', 0)), n: 4, w: null, x: 0, y: 0, busy: false };
+const MZ = { lvl: Math.min(3, LS.get('mazeLvl', 0)), n: 4, w: null, x: 0, y: 0, busy: false, trail: [] };
 /** Ідеальний лабіринт (обхід у глибину): між будь-якими двома клітинками рівно один шлях. */
 function mzGen(N) {
   const w = Array.from({ length: N }, () => Array.from({ length: N }, () => ({ t: 1, r: 1, b: 1, l: 1 })));
@@ -4925,33 +4931,72 @@ function mzGen(N) {
   }
   return w;
 }
+/* Лабіринт малюємо SVG-лініями (раніше - рамками клітинок, і клітинки «гуляли»,
+   коли мишка переходила: емодзі змінювало розмір рядка/стовпця сітки).
+   Стіни малюються раз на лабіринт, мишка - окремий шар, що плавно їде по клітинках. */
 function mzDraw() {
-  const N = MZ.n, bd = $('#mzBoard');
-  bd.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
-  bd.style.fontSize = `calc(min(84vw, 40vh, 320px) / ${N} * .6)`;
-  let h = '';
+  const N = MZ.n, bd = $('#mzBoard'), W = MZ.w;
+  const sw = N <= 4 ? 0.09 : N <= 5 ? 0.08 : 0.07;
+  let d = '';
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    const c = MZ.w[y][x], cls = ['t', 'r', 'b', 'l'].filter((k) => c[k]).map((k) => 'w' + k).join(' ');
-    h += `<div class="${cls}">${x === MZ.x && y === MZ.y ? '🐭' : x === N - 1 && y === N - 1 ? '🧀' : ''}</div>`;
+    const c = W[y][x];
+    if (c.t) d += `M${x} ${y}h1`;
+    if (c.l) d += `M${x} ${y}v1`;
+    if (x === N - 1 && c.r) d += `M${x + 1} ${y}v1`;
+    if (y === N - 1 && c.b) d += `M${x} ${y + 1}h1`;
   }
-  bd.innerHTML = h;
+  const cell = 100 / N, fs = `calc(min(84vw, 40vh, 320px) / ${N} * .62)`;
+  const tok = (cls, em, x, y) => `<div class="mz-tok ${cls}" style="width:${cell}%;height:${cell}%;left:${x * cell}%;top:${y * cell}%;font-size:${fs}">${em}</div>`;
+  bd.innerHTML = `<svg viewBox="-0.08 -0.08 ${N + 0.16} ${N + 0.16}" aria-hidden="true">` +
+    `<rect x="${N - 1}" y="${N - 1}" width="1" height="1" fill="#fade2a" fill-opacity=".12"/>` +
+    `<polyline class="mz-trail" stroke-width="${sw * 1.6}" points=""/>` +
+    `<path class="mz-wall" stroke-width="${sw}" d="${d}"/></svg>` +
+    tok('mz-cheese', '🧀', N - 1, N - 1) + tok('mz-me', '🐭', MZ.x, MZ.y);
+  mzPlace();
+}
+/** Перемістити мишку й домалювати слід - без перемальовування стін. */
+function mzPlace() {
+  const bd = $('#mzBoard'), me = bd.querySelector('.mz-me'), cell = 100 / MZ.n;
+  if (!me) return;
+  me.style.left = MZ.x * cell + '%'; me.style.top = MZ.y * cell + '%';
+  bd.querySelector('.mz-trail').setAttribute('points', MZ.trail.map(([x, y]) => `${x + .5},${y + .5}`).join(' '));
 }
 function mzNew() {
-  MZ.n = 4 + MZ.lvl; MZ.w = mzGen(MZ.n); MZ.x = MZ.y = 0; MZ.busy = false;
+  MZ.gen = (MZ.gen || 0) + 1;
+  MZ.n = 4 + MZ.lvl; MZ.w = mzGen(MZ.n); MZ.x = MZ.y = 0; MZ.busy = false; MZ.trail = [[0, 0]];
   mzDraw();
 }
 START.maze = () => { mzNew(); say('Допоможи мишці знайти сир'); };
 function mzMove(d) {
   if (MZ.busy || SCR !== 'maze') return;
   const [dx, dy, k] = { u: [0, -1, 't'], d: [0, 1, 'b'], l: [-1, 0, 'l'], r: [1, 0, 'r'] }[d];
-  if (MZ.w[MZ.y][MZ.x][k]) { tapBeep(170, 0.07, 'square', 0.08); return; }   // стіна
-  MZ.x += dx; MZ.y += dy; mzDraw(); blip();
+  if (MZ.w[MZ.y][MZ.x][k]) {                                   // стіна - мишка тицяється в неї
+    tapBeep(170, 0.07, 'square', 0.08);
+    const me = $('#mzBoard .mz-me');
+    if (me) { me.style.setProperty('--bx', dx * 12 + '%'); me.style.setProperty('--by', dy * 12 + '%');
+      me.classList.remove('bump'); void me.offsetWidth; me.classList.add('bump'); }
+    return;
+  }
+  MZ.x += dx; MZ.y += dy; blip();
+  // слід: повернулась назад - слід укорочується, пішла далі - подовжується
+  const pv = MZ.trail[MZ.trail.length - 2];
+  if (pv && pv[0] === MZ.x && pv[1] === MZ.y) MZ.trail.pop(); else MZ.trail.push([MZ.x, MZ.y]);
+  mzPlace();
   if (MZ.x === MZ.n - 1 && MZ.y === MZ.n - 1) {
     MZ.busy = true; confetti(); cheer(); vibe(60); addStar(); say('Молодець!');
     MZ.lvl = Math.min(3, MZ.lvl + 1); LS.set('mazeLvl', MZ.lvl);
-    afterSay(() => { if (SCR === 'maze') mzNew(); }, 2000);
+    const gen = MZ.gen;          // вийшли й зайшли знову - старий таймер новий лабіринт не чіпає
+    afterSay(() => { if (SCR === 'maze' && gen === MZ.gen) mzNew(); }, 2000);
   }
 }
+/* Торкнутись сусідньої клітинки - мишка йде туди (малим так простіше, ніж свайп). */
+$('#mzBoard').addEventListener('click', (e) => {
+  const r = $('#mzBoard').getBoundingClientRect(), N = MZ.n;
+  const cx = Math.floor((e.clientX - r.left) / r.width * N), cy = Math.floor((e.clientY - r.top) / r.height * N);
+  const dx = cx - MZ.x, dy = cy - MZ.y;
+  if (Math.abs(dx) + Math.abs(dy) !== 1) return;
+  mzMove(dx === 1 ? 'r' : dx === -1 ? 'l' : dy === 1 ? 'd' : 'u');
+});
 $('#mzPad').onclick = (e) => { const b = e.target.closest('button'); if (b) mzMove(b.dataset.d); };
 document.addEventListener('keydown', (e) => {
   const d = { ArrowUp: 'u', ArrowDown: 'd', ArrowLeft: 'l', ArrowRight: 'r' }[e.key];
