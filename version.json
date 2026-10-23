@@ -1,7 +1,8 @@
 {
-  "version": "1.7.9",
+  "version": "1.8.0",
   "date": "2026-10-23",
   "changes": [
+    "Заставка зі звуком із відео EnergyUA. Якщо браузер не пускає звук одразу — внизу «🔊 торкнись — зі звуком»: перший дотик вмикає звук, другий пропускає заставку",
     "Заставка — тільки при вході в гру, не після «Оновити» чи перезавантаження",
     "Заставка EnergyUA при запуску: батарейка заряджається до 100 %, спалах — і зʼявляється логотип. Торкнись — пропустити",
     "Тепер для дітей 4–8 років: нова назва й опис додатка",
@@ -22,6 +23,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Intro cu sunet din clipul EnergyUA. Dacă browserul nu pornește sunetul — jos „🔊 atinge — cu sunet”: prima atingere pornește sunetul, a doua sare peste intro",
     "Intro doar la intrarea în joc, nu după „Actualizează” sau reîncărcare",
     "Intro EnergyUA la pornire: bateria se încarcă la 100 %, o sclipire — și apare logoul. Atinge ca să sari peste",
     "Acum pentru copii de 4–8 ani: nume și descriere noi",
@@ -42,6 +44,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Intro with the EnergyUA video sound. If the browser blocks it — “🔊 tap — with sound” at the bottom: first tap turns the sound on, second skips",
     "Intro only when you open the game, not after Update or a reload",
     "EnergyUA intro on launch: a battery charges to 100 %, a flash — and the logo appears. Tap to skip",
     "Now for kids aged 4–8: new app name and description",
