@@ -1,17 +1,26 @@
 {
-  "version": "1.7.0",
+  "version": "1.7.1",
   "date": "2026-10-23",
   "changes": [
+    "Тетріс: поле майже вдвічі більше — займає весь вільний екран",
+    "Звук падіння фігурок (тихий «тук» і удар, коли фігурка лягла), вимикається кнопкою 🔊 угорі гри",
+    "Пауза ⏸️: фігурки зупиняються; якщо згорнути гру чи вимкнути екран, пауза вмикається сама",
     "Нова гра «Тетріс» у групі «Логіка»: тінь показує, куди впаде фігурка; три швидкості — на «Поволі» лише прості фігури",
     "Керування кнопками ⬅️ 🔄 ➡️ ⬇️ (затисни — повторює) або пальцем: торкнися поля — поворот, веди вбік — фігурка йде за пальцем, змахни вниз — падає",
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Tetris: tabla e aproape de două ori mai mare — ocupă tot ecranul liber",
+    "Sunet la căderea pieselor, se oprește cu butonul 🔊 din joc",
+    "Pauză ⏸️: piesele se opresc; la minimizare sau ecran stins pauza pornește singură",
     "Joc nou „Tetris” în grupa „Logică”: umbra arată unde cade piesa; trei viteze — la „Încet” doar piese simple",
     "Butoane ⬅️ 🔄 ➡️ ⬇️ (ține apăsat — se repetă) sau cu degetul: atinge tabla — rotire, trage lateral — piesa te urmează, glisează în jos — cade",
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Tetris: the board is almost twice as big — it fills the free screen",
+    "Falling sound for pieces, switch it off with the 🔊 button in the game",
+    "Pause ⏸️: pieces stop; the game pauses itself when you leave the app or the screen turns off",
     "New game “Tetris” in the Logic group: a shadow shows where the piece lands; three speeds — “Slow” uses only simple pieces",
     "Buttons ⬅️ 🔄 ➡️ ⬇️ (hold to repeat) or touch: tap the board to rotate, drag sideways to move, swipe down to drop",
     "Stars for cleared lines, the best score is remembered"
