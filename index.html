@@ -171,6 +171,18 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #nmTabs .mtl{font-size:14px;padding:4px}
 #nmRange .mtl{font-size:15px;min-height:40px}
 .nmg{grid-template-columns:repeat(var(--c,5),1fr)}
+/* велика цифра внизу: її видно здалеку, її можна обвести пальцем */
+#s-nums{overflow-y:auto}
+.nmbig{position:relative;flex:1;min-height:210px;margin-top:10px;background:var(--card);border:2px solid var(--line);border-radius:20px;overflow:hidden}
+.nmbig[hidden]{display:none}
+#nmTrace{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.nmbig-hint{position:absolute;left:0;right:0;top:8px;text-align:center;font-size:13px;font-weight:800;color:var(--dim);pointer-events:none}
+.nmbig-hint.ok{color:var(--grn)}
+.nmbig-ctl{position:absolute;left:8px;right:8px;bottom:8px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.nmbig-ctl .mini{pointer-events:auto}
+.alP.dots i{display:inline-block;transition:transform .2s,filter .2s}
+.alP.dots i.hl{transform:scale(1.45);filter:drop-shadow(0 0 6px #ffd93d)}
+.alP.dots i.dim{opacity:.35}
 .nmg.sm button{font-size:13px;min-height:32px}
 .nmg.sm{gap:4px}
 .alP.dots{font-size:22px;line-height:1.1;max-width:210px;text-align:center}
@@ -546,7 +558,8 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .tet-hud div{display:flex;flex-direction:column;align-items:center;font-size:11px;color:var(--dim);font-weight:700;line-height:1.1}
 .tet-hud b{font-size:21px;color:var(--txt);font-variant-numeric:tabular-nums}
 .tet-ico{width:46px;height:46px;border-radius:14px;background:var(--card);border:3px solid var(--line);font-size:20px;padding:0}
-.tet-ico.off{opacity:.6;border-style:dashed}
+.tet-ico.off{opacity:.45;border-style:dashed;filter:grayscale(1)}
+.tet-hud .tet-ico2{display:flex;flex-direction:row;gap:6px}
 #tetNext{width:44px;height:44px;background:var(--card);border:2px solid var(--line);border-radius:10px}
 #tetBoard{position:relative;width:100%;max-width:440px;display:flex;justify-content:center}
 .tet-paused{position:absolute;inset:0;margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
@@ -743,7 +756,8 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
         <div><span>Рядів</span><b id="tetLines">0</b></div>
         <div><span>Далі</span><canvas id="tetNext" width="44" height="44"></canvas></div>
         <div><span>Рекорд</span><b id="tetBest">0</b></div>
-        <button class="tet-ico" id="tetSnd" aria-label="Звук падіння">🔊</button>
+        <div class="tet-ico2"><button class="tet-ico" id="tetGhost" aria-label="Підказка, куди впаде фігурка">👻</button>
+        <button class="tet-ico" id="tetSnd" aria-label="Звук падіння">🔊</button></div>
       </div>
       <div id="tetBoard"><canvas id="tetC" width="300" height="480"></canvas>
         <div class="tet-paused" id="tetPausedBox" hidden><b>Пауза</b><button class="btn go" id="tetResume">▶️ Грати далі</button></div></div>
@@ -803,6 +817,14 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   <div class="mtlv" id="nmRange"></div>
   <div class="alcard" id="nmCard"></div>
   <div class="alg nmg" id="nmGrid"></div>
+  <div class="nmbig" id="nmBig">
+    <canvas id="nmTrace" aria-label="Обведи цифру пальцем"></canvas>
+    <div class="nmbig-hint" id="nmHint">✍️ Обведи цифру пальцем</div>
+    <div class="nmbig-ctl">
+      <button class="mini" id="nmCount">🍎 Порахуй зі мною</button>
+      <button class="mini" id="nmClear" aria-label="Стерти">🧽 Стерти</button>
+    </div>
+  </div>
   <div class="mtprog" id="nmProg" hidden></div>
   <div class="ask mtask" id="nmAsk" hidden></div>
   <div class="play" id="nmPlay" hidden><div class="row" id="nmAns"></div></div>
@@ -1092,7 +1114,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.7.1';
+const APP_VERSION = '1.7.2';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1286,7 +1308,14 @@ Object.assign(I18N, {
   "Хто як говорить": { ro: "Cine face așa?", en: "Who says that?" },
   "Змійка": { ro: "Șarpele", en: "Snake" },
   "Тетріс": { ro: "Tetris", en: "Tetris" },
+  "✍️ Обведи цифру пальцем": { ro: "✍️ Urmărește cifra cu degetul", en: "✍️ Trace the number with your finger" },
+  "🍎 Порахуй зі мною": { ro: "🍎 Numără cu mine", en: "🍎 Count with me" },
+  "🧽 Стерти": { ro: "🧽 Șterge", en: "🧽 Clear" },
+  "🎉 Молодець!": { ro: "🎉 Bravo!", en: "🎉 Well done!" },
+  "👆 Веди точно по цифрі": { ro: "👆 Mergi exact pe cifră", en: "👆 Stay on the number" },
   "Пауза": { ro: "Pauză", en: "Paused" },
+  "👻 Підказку ввімкнено: видно, куди впаде фігурка": { ro: "👻 Indiciu pornit: vezi unde cade piesa", en: "👻 Hint on: you can see where the piece lands" },
+  "👻 Підказку вимкнено": { ro: "👻 Indiciu oprit", en: "👻 Hint off" },
   "▶️ Грати далі": { ro: "▶️ Continuă", en: "▶️ Resume" },
   "Рядів": { ro: "Rânduri", en: "Lines" },
   "Рекорд": { ro: "Record", en: "Best" },
@@ -4863,6 +4892,9 @@ function nmCard() {
     (n >= 1 && n <= 20 ? `<span class="alP dots">${mtEm('🍎', n)}</span>` : '') +
     `<span class="alW">${nm}</span>`;
   $$('#nmGrid button').forEach((b, i) => b.classList.toggle('on', i + nmLim()[0] === n));
+  $('#nmCount').hidden = !(n >= 1 && n <= 20);
+  NM_T.gen++;                                  // перемкнули число - лічба зупиняється
+  requestAnimationFrame(nmTraceReset);
 }
 function nmSay() { const n = NM_S.cur; say(LANG === 'uk' ? numW(n) : nmName(n)); }
 function nmProg() {
@@ -4879,12 +4911,12 @@ function nmNew() {
 function nmRender() {
   const learn = NM_S.mode === 'learn', [lo, hi] = nmLim();
   nmTabs();
-  $('#nmCard').hidden = $('#nmGrid').hidden = !learn;
+  $('#nmCard').hidden = $('#nmGrid').hidden = $('#nmBig').hidden = !learn;
   $('#nmProg').hidden = $('#nmAsk').hidden = $('#nmPlay').hidden = learn;
   if (learn) {
     if (NM_S.cur < lo || NM_S.cur > hi) NM_S.cur = Math.max(lo, 1);
     const g = $('#nmGrid');
-    g.style.setProperty('--c', hi > 20 ? 10 : 6);
+    g.style.setProperty('--c', hi > 20 ? 10 : hi > 10 ? 7 : 6);
     g.classList.toggle('sm', hi > 20);
     g.innerHTML = Array.from({ length: hi - lo + 1 }, (_, i) => `<button data-n="${lo + i}">${lo + i}</button>`).join('');
     nmCard();
@@ -4904,6 +4936,116 @@ $('#nmGrid').onclick = (e) => {
   NM_S.cur = +b.dataset.n; nmCard(); nmSay();
 };
 $('#nmCard').onclick = () => nmSay();
+
+/* ---- велика цифра: обведи пальцем, порахуй зі мною ----
+   Цифра на весь нижній блок. Дитина веде пальцем по ній - лінія лишається; коли
+   обведено більшу частину цифри (і не мазанина по всьому полю) - «Молодець!»,
+   цифра зафарбовується, і за мить відкривається наступна. «Порахуй зі мною» -
+   яблучка в картці підсвічуються по одному, а голос рахує: один, два, три… */
+const NM_T = { mask: null, ink: null, maskN: 0, drawing: false, last: null, done: false, gen: 0, traced: LS.get('nmTraced', 0) };
+function nmTraceFont(c, txt) {
+  const h = c.height, w = c.width;
+  let size = Math.round(h * 0.8);
+  const g = c.getContext('2d');
+  g.font = `900 ${size}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  const tw = g.measureText(txt).width;
+  if (tw > w * 0.86) size = Math.round(size * w * 0.86 / tw);
+  return `900 ${size}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+}
+function nmTraceReset() {
+  const c = $('#nmTrace'); if (!c || $('#nmBig').hidden) return;
+  const r = c.getBoundingClientRect(), dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  if (!r.width || !r.height) return;
+  c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr);
+  const txt = String(NM_S.cur), font = nmTraceFont(c, txt);
+  NM_T.font = font; NM_T.txt = txt; NM_T.done = false; NM_T.dpr = dpr;
+  // маска цифри - щоб порахувати, яку частину обведено
+  const m = document.createElement('canvas'); m.width = c.width; m.height = c.height;
+  const mg = m.getContext('2d'); mg.font = font; mg.textAlign = 'center'; mg.textBaseline = 'middle';
+  mg.fillStyle = '#000'; mg.fillText(txt, m.width / 2, m.height * 0.53);
+  const md = mg.getImageData(0, 0, m.width, m.height).data;
+  NM_T.mask = new Uint8Array(m.width * m.height); NM_T.maskN = 0;
+  for (let i = 0; i < NM_T.mask.length; i++) if (md[i * 4 + 3] > 100) { NM_T.mask[i] = 1; NM_T.maskN++; }
+  const ink = document.createElement('canvas'); ink.width = c.width; ink.height = c.height; NM_T.ink = ink;
+  NM_T.lw = Math.max(10, parseInt(font.split(' ')[1], 10) * 0.13);
+  nmTraceDraw();
+  const hint = $('#nmHint'); hint.textContent = '✍️ Обведи цифру пальцем'; hint.classList.remove('ok');
+}
+function nmTraceDraw(fill) {
+  const c = $('#nmTrace'), g = c.getContext('2d');
+  g.clearRect(0, 0, c.width, c.height);
+  g.font = NM_T.font; g.textAlign = 'center'; g.textBaseline = 'middle';
+  const x = c.width / 2, y = c.height * 0.53;
+  g.fillStyle = fill || 'rgba(255,255,255,0.10)'; g.fillText(NM_T.txt, x, y);
+  if (!fill) {
+    g.setLineDash([NM_T.lw * 0.6, NM_T.lw * 0.5]); g.lineWidth = Math.max(2, NM_T.lw * 0.14);
+    g.strokeStyle = 'rgba(255,255,255,0.55)'; g.strokeText(NM_T.txt, x, y); g.setLineDash([]);
+    g.drawImage(NM_T.ink, 0, 0);
+  }
+}
+function nmTracePos(e) {
+  const c = $('#nmTrace'), r = c.getBoundingClientRect();
+  return [(e.clientX - r.left) * c.width / r.width, (e.clientY - r.top) * c.height / r.height];
+}
+function nmTraceLine(a, b) {
+  const g = NM_T.ink.getContext('2d');
+  g.strokeStyle = '#ffd93d'; g.lineWidth = NM_T.lw; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke();
+}
+function nmTraceCheck() {
+  if (!NM_T.maskN || NM_T.done) return;
+  const d = NM_T.ink.getContext('2d').getImageData(0, 0, NM_T.ink.width, NM_T.ink.height).data;
+  let on = 0, all = 0;
+  for (let i = 0; i < NM_T.mask.length; i++) if (d[i * 4 + 3] > 40) { all++; if (NM_T.mask[i]) on++; }
+  const cover = on / NM_T.maskN, precise = all ? on / all : 0;
+  const hint = $('#nmHint');
+  if (cover >= 0.55 && precise >= 0.45) {
+    NM_T.done = true; hint.textContent = '🎉 Молодець!'; hint.classList.add('ok');
+    nmTraceDraw('#ffd93d'); cheer(); vibe(40); say('Молодець!');
+    NM_T.traced++; LS.set('nmTraced', NM_T.traced);
+    if (NM_T.traced % 3 === 0) { addStar(); confetti(); }
+    const [lo, hi] = nmLim(), gen = ++NM_T.gen;
+    afterSay(() => {
+      if (SCR !== 'nums' || NM_T.gen !== gen) return;
+      NM_S.cur = NM_S.cur >= hi ? Math.max(lo, 1) : NM_S.cur + 1;   // далі - наступне число
+      nmCard(); nmSay();
+    }, 1400);
+  } else if (all > NM_T.maskN * 0.4 && precise < 0.45) {
+    hint.textContent = '👆 Веди точно по цифрі'; hint.classList.remove('ok');
+  } else if (cover > 0.15) {
+    hint.textContent = `Ще трохи! ${Math.round(cover * 100)}%`; hint.classList.remove('ok');
+  }
+}
+(() => {
+  const c = $('#nmTrace');
+  c.addEventListener('pointerdown', (e) => {
+    if (NM_T.done || !NM_T.ink) return;
+    NM_T.drawing = true; NM_T.last = nmTracePos(e); nmTraceLine(NM_T.last, NM_T.last); nmTraceDraw();
+    try { c.setPointerCapture(e.pointerId); } catch (x) { /* */ }
+  });
+  c.addEventListener('pointermove', (e) => {
+    if (!NM_T.drawing) return;
+    const p = nmTracePos(e); nmTraceLine(NM_T.last, p); NM_T.last = p; nmTraceDraw();
+  });
+  const up = () => { if (!NM_T.drawing) return; NM_T.drawing = false; nmTraceCheck(); };
+  c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
+})();
+$('#nmClear').onclick = () => { blip(); NM_T.gen++; nmTraceReset(); };
+$('#nmCount').onclick = async () => {
+  const n = NM_S.cur; if (n < 1 || n > 20) return;
+  const gen = ++NM_T.gen, apples = [...$('#nmCard').querySelectorAll('.dots i')];
+  apples.forEach((a) => { a.classList.remove('hl'); a.classList.add('dim'); });
+  for (let i = 1; i <= n; i++) {
+    if (NM_T.gen !== gen || SCR !== 'nums') { apples.forEach((a) => a.classList.remove('hl', 'dim')); return; }
+    const a = apples[i - 1]; if (a) { a.classList.remove('dim'); a.classList.add('hl'); setTimeout(() => a.classList.remove('hl'), 420); }
+    blip();
+    say(LANG === 'uk' ? numW(i) : nmName(i));
+    await speechDone(520);
+  }
+  if (NM_T.gen === gen) { apples.forEach((a) => a.classList.remove('dim')); cheer(); }
+};
+window.addEventListener('resize', () => { if (SCR === 'nums' && !$('#nmBig').hidden) requestAnimationFrame(nmTraceReset); });
+
 $('#nmAns').onclick = (e) => {
   const b = e.target.closest('.let'); if (!b || NM_S.busy) return;
   const q = NM_S.q;
@@ -6408,7 +6550,7 @@ const TT_LV = [
   { k: 'mid', em: '🐰', nm: 'Звичайно', ms: 680, set: 'OITLJSZ', star: 3 },
   { k: 'fast', em: '🚀', nm: 'Швидко', ms: 430, set: 'OITLJSZ', star: 4 },
 ];
-const TET = { paused: false, snd: LS.get('tetSnd', true), lv: LS.get('tetLv', 'slow'), board: [], cur: null, next: null, bag: [], lines: 0, best: LS.get('tetBest', 0),
+const TET = { paused: false, ghost: LS.get('tetGhost', true), snd: LS.get('tetSnd', true), lv: LS.get('tetLv', 'slow'), board: [], cur: null, next: null, bag: [], lines: 0, best: LS.get('tetBest', 0),
              over: true, raf: 0, acc: 0, last: 0, cell: 30, flash: null, rep: null };
 const ttLv = () => TT_LV.find((l) => l.k === TET.lv) || TT_LV[0];
 const ttRot = (m) => m[0].map((_, i) => m.map((r) => r[i]).reverse());
@@ -6450,8 +6592,8 @@ function ttDraw() {
   }
   const p = TET.cur;
   if (p && !TET.over) {
-    const gy = ttGhostY();                    // тінь: куди впаде
-    p.m.forEach((r, ry) => r.forEach((v, rx) => {
+    const gy = TET.ghost ? ttGhostY() : -99;  // тінь: куди впаде (можна вимкнути кнопкою 👻)
+    if (TET.ghost) p.m.forEach((r, ry) => r.forEach((v, rx) => {
       if (!v || gy + ry < 0) return;
       g.strokeStyle = p.c; g.lineWidth = Math.max(2, s * 0.08); g.globalAlpha = 0.55;
       g.strokeRect((p.x + rx) * s + s * 0.12, (gy + ry) * s + s * 0.12, s * 0.76, s * 0.76); g.globalAlpha = 1;
@@ -6569,9 +6711,14 @@ function ttStart() {
   const n = $('#tetNext'); n.width = n.height = Math.round(44 * dpr);
   TET.board = Array.from({ length: TT_ROWS }, () => new Array(TT_COLS).fill(0));
   TET.bag = []; TET.next = null; TET.lines = 0; TET.over = false; TET.flash = null; TET.acc = 0;
-  ttLvUI(); ttHud(); ttSndUI(); ttSetPause(false); ttSpawn(); ttDraw();
+  ttLvUI(); ttHud(); ttSndUI(); ttGhostUI(); ttSetPause(false); ttSpawn(); ttDraw();
   cancelAnimationFrame(TET.raf); TET.last = performance.now(); TET.raf = requestAnimationFrame(ttLoop);
 }
+function ttGhostUI() { const b = $('#tetGhost'); b.classList.toggle('off', !TET.ghost); b.setAttribute('aria-pressed', TET.ghost ? 'true' : 'false'); }
+$('#tetGhost').onclick = () => {
+  TET.ghost = !TET.ghost; LS.set('tetGhost', TET.ghost); ttGhostUI(); blip(); ttDraw();
+  toast(TET.ghost ? '👻 Підказку ввімкнено: видно, куди впаде фігурка' : '👻 Підказку вимкнено');
+};
 function ttSndUI() { const b = $('#tetSnd'); b.textContent = TET.snd ? '🔊' : '🔇'; b.classList.toggle('off', !TET.snd); }
 function ttSetPause(on) {
   if (TET.over && on) return;

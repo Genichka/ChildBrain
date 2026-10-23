@@ -1,7 +1,10 @@
 {
-  "version": "1.7.1",
+  "version": "1.7.2",
   "date": "2026-10-23",
   "changes": [
+    "«Цифри й числа»: внизу велика цифра — її можна обвести пальцем; обвів — «Молодець!», цифра зафарбовується, і відкривається наступна",
+    "«🍎 Порахуй зі мною»: яблучка підсвічуються по одному, а голос рахує вголос",
+    "Тетріс: кнопка 👻 вмикає й вимикає підказку, куди впаде фігурка",
     "Тетріс: поле майже вдвічі більше — займає весь вільний екран",
     "Звук падіння фігурок (тихий «тук» і удар, коли фігурка лягла), вимикається кнопкою 🔊 угорі гри",
     "Пауза ⏸️: фігурки зупиняються; якщо згорнути гру чи вимкнути екран, пауза вмикається сама",
@@ -10,6 +13,9 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "„Cifre și numere”: jos e o cifră mare — o poți urmări cu degetul; gata — „Bravo!”, cifra se colorează și urmează următoarea",
+    "„🍎 Numără cu mine”: merele se aprind pe rând, iar vocea numără",
+    "Tetris: butonul 👻 pornește și oprește indiciul unde cade piesa",
     "Tetris: tabla e aproape de două ori mai mare — ocupă tot ecranul liber",
     "Sunet la căderea pieselor, se oprește cu butonul 🔊 din joc",
     "Pauză ⏸️: piesele se opresc; la minimizare sau ecran stins pauza pornește singură",
@@ -18,6 +24,9 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "“Numbers”: a big number at the bottom you can trace with your finger; trace it — “Well done!”, it fills in and the next one opens",
+    "“🍎 Count with me”: apples light up one by one while the voice counts aloud",
+    "Tetris: the 👻 button turns the landing hint on and off",
     "Tetris: the board is almost twice as big — it fills the free screen",
     "Falling sound for pieces, switch it off with the 🔊 button in the game",
     "Pause ⏸️: pieces stop; the game pauses itself when you leave the app or the screen turns off",
