@@ -1,7 +1,8 @@
 {
-  "version": "1.8.2",
+  "version": "1.8.3",
   "date": "2026-10-23",
   "changes": [
+    "Абетка: на кожну букву по 2–4 слова — натисни ту саму букву ще раз, і буде нове слово (крапки показують, котре)",
     "Ігри памʼятають, до якого рівня дійшла дитина, і наступного разу починають на один крок нижче — для розминки",
     "Лови зірочки, Бульбашки, Хто виглянув?: рекорд — «🏆 Новий рекорд!» або «Рекорд: N»",
     "Статистика ігор для батьків: нова колонка «Рівень» (рівень з максимуму або рекорд), і в CSV теж",
@@ -29,6 +30,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Alfabetul (ucraineană): 2–4 cuvinte pentru fiecare literă — apasă din nou aceeași literă pentru alt cuvânt",
     "Jocurile țin minte nivelul atins și data viitoare încep cu un pas mai jos — pentru încălzire",
     "Prinde stelele, Bule, Cine a ieșit?: record — „🏆 Record nou!” sau „Record: N”",
     "Statistici pentru părinți: coloană nouă „Nivel” (nivelul din maxim sau recordul), și în CSV",
@@ -56,6 +58,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Alphabet (Ukrainian): 2–4 words per letter — tap the same letter again for another word",
     "Games remember the level reached and next time start one step lower — as a warm-up",
     "Catch the stars, Bubbles, Who popped up?: best score — “🏆 New record!” or “Best: N”",
     "Parent stats: new “Level” column (level out of max, or best score), also in CSV",

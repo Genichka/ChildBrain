@@ -149,6 +149,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .alP{font-size:64px;line-height:1}
 .alW{font-size:22px;font-weight:800;letter-spacing:2px}
 .alW b{color:var(--yel)}
+.alDots{display:flex;gap:5px;align-items:center}
+.alDots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.alDots i.on{background:var(--yel)}
 .alN{width:100%;text-align:center;font-size:13px;color:var(--dim);font-weight:700}
 .stwrap{display:block;max-height:44vh;overflow:auto;text-align:left;font-size:14px;margin-top:6px}
 .strow{display:grid;grid-template-columns:1fr 28px 52px 42px 50px;gap:6px;padding:5px 0;border-bottom:1px solid var(--line);align-items:center}
@@ -1240,7 +1243,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.8.2';
+const APP_VERSION = '1.8.3';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -4896,6 +4899,42 @@ const AL_PIC = {
   'Ґ': '<svg viewBox="0 0 64 64" width="1em" height="1em"><circle cx="32" cy="32" r="28" fill="#5794f2" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="#1f60c4" stroke-width="3"/><g fill="#0b2a5b"><circle cx="25" cy="26" r="3.4"/><circle cx="39" cy="26" r="3.4"/><circle cx="25" cy="38" r="3.4"/><circle cx="39" cy="38" r="3.4"/></g></svg>',
   'Ю': '<svg viewBox="0 0 64 64" width="1em" height="1em"><rect x="29" y="3" width="6" height="13" rx="3" fill="#b0865c"/><ellipse cx="32" cy="20" rx="23" ry="8" fill="#f2495c"/><path d="M9 20Q12 44 32 60Q52 44 55 20Z" fill="#fade2a"/><path d="M13 29Q32 38 51 29" stroke="#f2495c" stroke-width="4" fill="none"/><path d="M19 41Q32 48 45 41" stroke="#5794f2" stroke-width="4" fill="none"/></svg>',
 };
+/* Ще слова на кожну букву: повторне натискання тієї ж букви - наступне слово. */
+const AL_MORE = {
+  'А': [["🦈", "АКУЛА"], ["🍊", "АПЕЛЬСИН"], ["🚌", "АВТОБУС"]],
+  'Б': [["🍌", "БАНАН"], ["🐿️", "БІЛКА"], ["🥁", "БАРАБАН"]],
+  'В': [["🐻", "ВЕДМІДЬ"], ["🍇", "ВИНОГРАД"], ["🐦‍⬛", "ВОРОНА"]],
+  'Г': [["🍐", "ГРУША"], ["🎸", "ГІТАРА"], ["🦍", "ГОРИЛА"]],
+  'Ґ': [["🐦‍⬛", "ҐАВА"]],
+  'Д': [["🌳", "ДУБ"], ["🌧️", "ДОЩ"], ["🔔", "ДЗВІНОЧОК"]],
+  'Е': [["🍦", "ЕСКІМО"], ["📺", "ЕКРАН"]],
+  'Є': [["🦄", "ЄДИНОРІГ"]],
+  'Ж': [["🐸", "ЖАБКА"], ["🪲", "ЖУК"], ["🌰", "ЖОЛУДЬ"]],
+  'З': [["🐰", "ЗАЙЧИК"], ["⭐", "ЗІРКА"], ["🐍", "ЗМІЯ"]],
+  'И': [["🐋", "КИТ"], ["🐟", "РИБА"], ["🧀", "СИР"]],
+  'І': [["🦃", "ІНДИК"], ["🪻", "ІРИС"]],
+  'Ї': [["🍲", "ЇЖА"]],
+  'Й': [["🥛", "ЙОГУРТ"]],
+  'К': [["🐄", "КОРОВА"], ["🍉", "КАВУН"], ["🐊", "КРОКОДИЛ"]],
+  'Л': [["🦁", "ЛЕВ"], ["✈️", "ЛІТАК"], ["🦢", "ЛЕБІДЬ"]],
+  'М': [["🐒", "МАВПА"], ["🥕", "МОРКВА"], ["🦋", "МЕТЕЛИК"]],
+  'Н': [["🦏", "НОСОРІГ"], ["✂️", "НОЖИЦІ"], ["🌙", "НІЧ"]],
+  'О': [["🦅", "ОРЕЛ"], ["🦌", "ОЛЕНЬ"], ["🫏", "ОСЛИК"]],
+  'П': [["🦜", "ПАПУГА"], ["🐓", "ПІВНИК"], ["🍓", "ПОЛУНИЦЯ"]],
+  'Р': [["🚀", "РАКЕТА"], ["🐌", "РАВЛИК"], ["✋", "РУКА"]],
+  'С': [["🐘", "СЛОН"], ["🦉", "СОВА"], ["🧀", "СИР"]],
+  'Т': [["🎺", "ТРУБА"], ["🦭", "ТЮЛЕНЬ"], ["🎂", "ТОРТ"]],
+  'У': [["😊", "УСМІШКА"], ["🧑‍🏫", "УЧИТЕЛЬ"]],
+  'Ф': [["🦩", "ФЛАМІНГО"], ["🎆", "ФЕЄРВЕРК"], ["⚽", "ФУТБОЛ"]],
+  'Х': [["☁️", "ХМАРА"], ["🐹", "ХОМʼЯК"], ["🌊", "ХВИЛЯ"]],
+  'Ц': [["🍬", "ЦУКЕРКА"], ["🧅", "ЦИБУЛЯ"], ["🦗", "ЦВІРКУН"]],
+  'Ч': [["🐢", "ЧЕРЕПАХА"], ["⛵", "ЧОВНИК"], ["🍒", "ЧЕРЕШНЯ"]],
+  'Ш': [["🧢", "ШАПКА"], ["🍫", "ШОКОЛАД"], ["🌲", "ШИШКА"]],
+  'Щ': [["🐟", "ЩУКА"], ["🪥", "ЩІТКА"], ["🐶", "ЩЕНЯ"]],
+  'Ь': [["🦌", "ОЛЕНЬ"], ["🐻", "ВЕДМІДЬ"], ["🦢", "ЛЕБІДЬ"]],
+  'Ю': [["🍲", "ЮШКА"], ["⛺", "ЮРТА"]],
+  'Я': [["🎄", "ЯЛИНКА"], ["⚓", "ЯКІР"], ["🦎", "ЯЩІРКА"]],
+};
 const AL_LAT = (rows) => rows.map(([c, em, w]) => [c, c, em, w]);
 const AL = {
   uk: AL_UK,
@@ -4915,7 +4954,13 @@ const AL_TABS = [['learn', '👀 Вчимо'], ['find', '🎯 Знайди'], ['
 const AL_ASK = { find: { uk: 'Знайди букву', ro: 'Găsește litera', en: 'Find the letter' },
   next: { uk: 'Яка буква пропущена?', ro: 'Ce literă lipsește?', en: 'Which letter is missing?' } };
 const AL_NEED = 5;
-const AL_S = { mode: LS.get('alMode', 'learn'), cur: 0, ok: 0, miss: 0, busy: false, q: null };
+const AL_S = { mode: LS.get('alMode', 'learn'), cur: 0, w: 0, ok: 0, miss: 0, busy: false, q: null };
+/** Усі слова букви: [емодзі, СЛОВО, власний малюнок або null]. Перше - основне. */
+function alWords(i) {
+  const [ch, , em, word] = alSet()[i];
+  const main = [em, word, LANG === 'uk' && AL_PIC[ch] ? AL_PIC[ch] : null];
+  return LANG === 'uk' && AL_MORE[ch] ? [main, ...AL_MORE[ch].map(([e, w]) => [e, w, null])] : [main];
+}
 const alSet = () => AL[LANG] || AL.uk;
 /** Нове завдання: {mode, ans, say, txt, small, opts}. Чотири різні варіанти, серед них правильний. */
 function alMake(mode, set) {
@@ -4936,9 +4981,10 @@ function alTabs() {
   $('#alTabs').innerHTML = AL_TABS.map(([m, t]) => `<button class="mtl${m === AL_S.mode ? ' on' : ''}" data-m="${m}">${T(t)}</button>`).join('');
 }
 function alCard() {
-  const [ch, name, em, word] = alSet()[AL_S.cur], k = word.indexOf(ch);
+  const [ch, name] = alSet()[AL_S.cur], ws = alWords(AL_S.cur), [em, word, pic] = ws[AL_S.w % ws.length], k = word.indexOf(ch);
   const w = k < 0 ? word : `${word.slice(0, k)}<b>${ch}</b>${word.slice(k + 1)}`;
-  $('#alCard').innerHTML = `<span class="alL">${ch}${LANG === 'uk' ? ch.toLowerCase() : ch.toLowerCase()}</span><span class="alP">${(LANG === 'uk' && AL_PIC[ch]) || em}</span><span class="alW">${w}</span>` +
+  const dots = ws.length > 1 ? `<span class="alDots">${ws.map((_, i) => `<i class="${i === AL_S.w % ws.length ? 'on' : ''}"></i>`).join('')}</span>` : '';
+  $('#alCard').innerHTML = `<span class="alL">${ch}${ch.toLowerCase()}</span><span class="alP">${pic || em}</span><span class="alW">${w}</span>${dots}` +
     (LANG === 'uk' ? `<span class="alN">${T('Буква')} «${name}»${AL_NOTE[ch] ? '<br>' + T(AL_NOTE[ch]) : ''}</span>` : '') +
     `<span class="alR" id="alR">🗣️ ${T('Повтори за мною!')}</span>`;
   $$('#alGrid button').forEach((b, i) => b.classList.toggle('on', i === AL_S.cur));
@@ -4946,7 +4992,7 @@ function alCard() {
 /* Спершу буква, пауза, потім слово, ще пауза - і прохання повторити (дитина вимовляє вголос). */
 let alGen = 0;
 async function alSay() {
-  const g = ++alGen, [, name, , word] = alSet()[AL_S.cur];
+  const g = ++alGen, [, name] = alSet()[AL_S.cur], ws = alWords(AL_S.cur), word = ws[AL_S.w % ws.length][1];
   const live = () => g === alGen && SCR === 'alpha' && AL_S.mode === 'learn';
   const r = $('#alR'); if (r) r.classList.remove('on');
   say(`${name}.`); await speechDone();
@@ -4975,6 +5021,7 @@ function alRender() {
   $('#alProg').hidden = $('#alAsk').hidden = $('#alPlay').hidden = learn;
   if (learn) {
     if (AL_S.cur >= alSet().length) AL_S.cur = 0;
+    AL_S.w = 0;
     $('#alGrid').innerHTML = alSet().map(([c], i) => `<button data-i="${i}">${c}</button>`).join('');
     alCard();
   } else { AL_S.ok = 0; alNew(); }
@@ -4986,7 +5033,10 @@ $('#alTabs').onclick = (e) => {
 };
 $('#alGrid').onclick = (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  AL_S.cur = +b.dataset.i; alCard(); alSay();
+  const i = +b.dataset.i;
+  if (i === AL_S.cur) AL_S.w = (AL_S.w + 1) % alWords(i).length;   // та сама буква ще раз - наступне слово
+  else { AL_S.cur = i; AL_S.w = 0; }
+  alCard(); alSay();
 };
 $('#alCard').onclick = () => alSay();
 $('#alAns').onclick = (e) => {
