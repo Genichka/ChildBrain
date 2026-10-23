@@ -538,6 +538,19 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .t36{background:linear-gradient(170deg,#ffa6b0,#f2495c)}
 .t37{background:linear-gradient(170deg,#c0d8ff,#5794f2)}
 .t38{background:linear-gradient(170deg,#ffcb7d,#ff9830)}
+.t39{background:linear-gradient(170deg,#c0d8ff,#b877d9)}
+/* ---------- тетріс ---------- */
+.tet-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.tet-hud{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;width:100%;max-width:360px}
+.tet-hud div{display:flex;flex-direction:column;align-items:center;font-size:12px;color:var(--dim);font-weight:700}
+.tet-hud b{font-size:24px;color:var(--txt);font-variant-numeric:tabular-nums}
+#tetNext{width:52px;height:52px;background:var(--card);border:2px solid var(--line);border-radius:10px}
+#tetBoard{width:100%;max-width:360px;display:flex;justify-content:center}
+#tetC{background:#0b0c0e;border:3px solid var(--line);border-radius:12px;touch-action:none;display:block}
+#tetPad{display:grid;grid-template-columns:repeat(4,64px);gap:9px}
+#tetPad button{height:60px;border-radius:18px;background:var(--card);border:3px solid var(--line);font-size:26px;touch-action:none;user-select:none;-webkit-user-select:none}
+#tetPad button:active{background:#ffffff2e}
+#tetPad .tet-drop{grid-column:1/-1;height:46px;font-size:16px;font-weight:800;color:var(--txt)}
 .knbox{text-align:center;font-size:64px;min-height:84px;line-height:1.3;letter-spacing:6px}
 .knbox i{font-style:normal;font-size:34px;animation:in .25s backwards}
 .shbig{text-align:center;font-size:92px;line-height:1.1;min-height:104px}
@@ -646,6 +659,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
       <button class="tile t27" data-go="sort"><span class="em">🧺</span><span class="nm">Розсортуй</span></button>
       <button class="tile t28" data-go="puzzle"><span class="em">🔲</span><span class="nm">Пʼятнашки</span></button>
       <button class="tile t29" data-go="jigsaw"><span class="em">🖼️</span><span class="nm">Пазли</span></button>
+      <button class="tile t39" data-go="tetris"><span class="em">🧱</span><span class="nm">Тетріс</span></button>
     </div></div>
     <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
       <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
@@ -714,6 +728,27 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 </section>
 
 <!-- змійка -->
+<section class="scr" id="s-tetris">
+  <div class="play">
+    <div class="tet-wrap">
+      <div class="tet-hud">
+        <div><span>Рядів</span><b id="tetLines">0</b></div>
+        <div><span>Далі</span><canvas id="tetNext" width="52" height="52"></canvas></div>
+        <div><span>Рекорд</span><b id="tetBest">0</b></div>
+      </div>
+      <div id="tetBoard"><canvas id="tetC" width="300" height="480"></canvas></div>
+      <div id="tetPad">
+        <button data-t="l" aria-label="Ліворуч">⬅️</button>
+        <button data-t="rot" aria-label="Повернути">🔄</button>
+        <button data-t="r" aria-label="Праворуч">➡️</button>
+        <button data-t="d" aria-label="Нижче">⬇️</button>
+        <button data-t="drop" class="tet-drop">⏬ Кинути вниз</button>
+      </div>
+      <div class="speed" id="tetLvSel"></div>
+    </div>
+  </div>
+</section>
+
 <section class="scr" id="s-snake">
   <div class="ask"><span id="snAsk">Збирай яблучка 🍎</span></div>
   <div class="play">
@@ -1047,7 +1082,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.6.4';
+const APP_VERSION = '1.7.0';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1240,6 +1275,12 @@ Object.assign(I18N, {
   "Перша буква": { ro: "Prima literă", en: "First letter" },
   "Хто як говорить": { ro: "Cine face așa?", en: "Who says that?" },
   "Змійка": { ro: "Șarpele", en: "Snake" },
+  "Тетріс": { ro: "Tetris", en: "Tetris" },
+  "Рядів": { ro: "Rânduri", en: "Lines" },
+  "Рекорд": { ro: "Record", en: "Best" },
+  "⏬ Кинути вниз": { ro: "⏬ Aruncă jos", en: "⏬ Drop" },
+  "🎉 Тетріс! Чотири ряди!": { ro: "🎉 Tetris! Patru rânduri!", en: "🎉 Tetris! Four lines!" },
+  "Це новий рекорд!": { ro: "Este un record nou!", en: "That's a new record!" },
   "Колір і форма": { ro: "Culoare și formă", en: "Colour and shape" },
   "Що зайве?": { ro: "Ce nu se potrivește?", en: "Odd one out" },
   "Мої наліпки": { ro: "Abțibildurile mele", en: "My stickers" },
@@ -1981,7 +2022,7 @@ const closeDialog = () => $('#ov').classList.add('hid');
 
 /* ---------- перемикання екранів ---------- */
 const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію', memory: 'Знайди пару', count: 'Скільки?',
-                 letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка',
+                 letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка', tetris: 'Тетріс',
                  shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
                  arcade: 'Зореліт', ttt: 'Хрестики-нулики', mines: 'Сапер',
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
@@ -6333,6 +6374,223 @@ $('#moHoles').addEventListener('pointerdown', (e) => {
   h.classList.add('hit'); MO.score++; moHud(); vibe(20); beep(520 + Math.min(MO.score, 25) * 25, .1, 'triangle', .22);
   setTimeout(() => h.classList.remove('up', 'hit'), 180);
 });
+
+/* ================================================================
+   ТЕТРІС  (для малят: тінь показує, куди впаде фігурка; поле нижче звичайного;
+   на «Поволі» - лише прості фігури, без «зигзагів»)
+   Керування: кнопки ⬅️ 🔄 ➡️ ⬇️ (затисни - повторює) або пальцем по полю:
+   торкнувся - поворот, тягнеш убік - фігурка йде за пальцем, змахнув униз - падає.
+   ================================================================ */
+const TT_COLS = 10, TT_ROWS = 16;
+const TT_SHAPES = {
+  O: { c: '#fade2a', m: [[1, 1], [1, 1]] },
+  I: { c: '#5794f2', m: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]] },
+  T: { c: '#b877d9', m: [[0, 1, 0], [1, 1, 1], [0, 0, 0]] },
+  L: { c: '#ff9830', m: [[0, 0, 1], [1, 1, 1], [0, 0, 0]] },
+  J: { c: '#3274d9', m: [[1, 0, 0], [1, 1, 1], [0, 0, 0]] },
+  S: { c: '#73bf69', m: [[0, 1, 1], [1, 1, 0], [0, 0, 0]] },
+  Z: { c: '#f2495c', m: [[1, 1, 0], [0, 1, 1], [0, 0, 0]] },
+};
+const TT_LV = [
+  { k: 'slow', em: '🐢', nm: 'Поволі', ms: 950, set: 'OITLJ', star: 2 },
+  { k: 'mid', em: '🐰', nm: 'Звичайно', ms: 680, set: 'OITLJSZ', star: 3 },
+  { k: 'fast', em: '🚀', nm: 'Швидко', ms: 430, set: 'OITLJSZ', star: 4 },
+];
+const TET = { lv: LS.get('tetLv', 'slow'), board: [], cur: null, next: null, bag: [], lines: 0, best: LS.get('tetBest', 0),
+             over: true, raf: 0, acc: 0, last: 0, cell: 30, flash: null, rep: null };
+const ttLv = () => TT_LV.find((l) => l.k === TET.lv) || TT_LV[0];
+const ttRot = (m) => m[0].map((_, i) => m.map((r) => r[i]).reverse());
+function ttTake() {
+  if (!TET.bag.length) TET.bag = shuffle(ttLv().set.split(''));
+  const k = TET.bag.pop(), m = TT_SHAPES[k].m.map((r) => r.slice());
+  return { k, m, c: TT_SHAPES[k].c, x: Math.floor((TT_COLS - m[0].length) / 2), y: k === 'I' ? -1 : 0 };
+}
+function ttFits(p, m = p.m, x = p.x, y = p.y) {
+  for (let r = 0; r < m.length; r++) for (let c = 0; c < m[r].length; c++) {
+    if (!m[r][c]) continue;
+    const bx = x + c, by = y + r;
+    if (bx < 0 || bx >= TT_COLS || by >= TT_ROWS) return false;
+    if (by >= 0 && TET.board[by][bx]) return false;
+  }
+  return true;
+}
+function ttGhostY() { let y = TET.cur.y; while (ttFits(TET.cur, TET.cur.m, TET.cur.x, y + 1)) y++; return y; }
+function ttCell(g, x, y, s, col, alpha) {
+  const pad = s * 0.06;
+  g.globalAlpha = alpha == null ? 1 : alpha;
+  g.fillStyle = col;
+  if (g.roundRect) { g.beginPath(); g.roundRect(x * s + pad, y * s + pad, s - pad * 2, s - pad * 2, s * 0.2); g.fill(); }
+  else g.fillRect(x * s + pad, y * s + pad, s - pad * 2, s - pad * 2);
+  if (alpha == null) {                       // світла смужка зверху - кубик виглядає обʼємним
+    g.fillStyle = '#ffffff40';
+    g.fillRect(x * s + pad * 2.2, y * s + pad * 2, s - pad * 4.4, s * 0.16);
+  }
+  g.globalAlpha = 1;
+}
+function ttDraw() {
+  const c = $('#tetC'), g = c.getContext('2d'), s = TET.cell;
+  g.clearRect(0, 0, c.width, c.height);
+  g.fillStyle = '#ffffff08';
+  for (let x = 0; x < TT_COLS; x++) for (let y = 0; y < TT_ROWS; y++) if ((x + y) % 2) g.fillRect(x * s, y * s, s, s);
+  for (let y = 0; y < TT_ROWS; y++) for (let x = 0; x < TT_COLS; x++) {
+    const v = TET.board[y][x]; if (!v) continue;
+    ttCell(g, x, y, s, TET.flash && TET.flash.includes(y) ? '#ffffff' : v);
+  }
+  const p = TET.cur;
+  if (p && !TET.over) {
+    const gy = ttGhostY();                    // тінь: куди впаде
+    p.m.forEach((r, ry) => r.forEach((v, rx) => {
+      if (!v || gy + ry < 0) return;
+      g.strokeStyle = p.c; g.lineWidth = Math.max(2, s * 0.08); g.globalAlpha = 0.55;
+      g.strokeRect((p.x + rx) * s + s * 0.12, (gy + ry) * s + s * 0.12, s * 0.76, s * 0.76); g.globalAlpha = 1;
+    }));
+    p.m.forEach((r, ry) => r.forEach((v, rx) => { if (v && p.y + ry >= 0) ttCell(g, p.x + rx, p.y + ry, s, p.c); }));
+  }
+  // що далі
+  const n = $('#tetNext'), ng = n.getContext('2d'), ns = n.width / 4;
+  ng.clearRect(0, 0, n.width, n.height);
+  if (TET.next) {
+    const m = TET.next.m, rows = m.filter((r) => r.some(Boolean)), w = Math.max(...rows.map((r) => r.lastIndexOf(1) - r.indexOf(1) + 1));
+    const minX = Math.min(...rows.map((r) => r.indexOf(1)));
+    const ox = (4 - w) / 2 - minX, oy = (4 - rows.length) / 2 - m.findIndex((r) => r.some(Boolean));
+    m.forEach((r, ry) => r.forEach((v, rx) => { if (v) ttCell(ng, rx + ox, ry + oy, ns, TET.next.c); }));
+  }
+}
+function ttHud() {
+  $('#tetLines').textContent = TET.lines;
+  $('#tetBest').textContent = TET.best;
+}
+function ttLvUI() {
+  $('#tetLvSel').innerHTML = TT_LV.map((l) =>
+    `<button class="sbtn${l.k === TET.lv ? ' on' : ''}" data-l="${l.k}"><span>${l.em}</span>${l.nm}</button>`).join('');
+}
+function ttSpawn() {
+  TET.cur = TET.next || ttTake(); TET.next = ttTake();
+  if (!ttFits(TET.cur)) { ttOver(); return false; }
+  return true;
+}
+function ttLock() {
+  const p = TET.cur;
+  p.m.forEach((r, ry) => r.forEach((v, rx) => { if (v && p.y + ry >= 0) TET.board[p.y + ry][p.x + rx] = p.c; }));
+  if (p.m.some((r, ry) => r.some((v) => v) && p.y + ry < 0)) { ttOver(); return; }
+  const full = [];
+  for (let y = 0; y < TT_ROWS; y++) if (TET.board[y].every(Boolean)) full.push(y);
+  blip();
+  if (full.length) {
+    TET.flash = full; TET.cur = null; ttDraw();
+    [523, 659, 784, 1047].slice(0, full.length + 1).forEach((f, i) => setTimeout(() => beep(f, 0.12, 'triangle', 0.18), i * 70));
+    vibe(40);
+    setTimeout(() => {
+      TET.board = TET.board.filter((_, y) => !full.includes(y));
+      while (TET.board.length < TT_ROWS) TET.board.unshift(new Array(TT_COLS).fill(0));
+      TET.flash = null;
+      const before = TET.lines; TET.lines += full.length;
+      const per = ttLv().star;
+      if (Math.floor(TET.lines / per) > Math.floor(before / per)) { addStar(); confetti(); }
+      if (full.length >= 2) toast(full.length >= 4 ? '🎉 Тетріс! Чотири ряди!' : `👏 Одразу ${full.length} ряди!`);
+      ttHud();
+      if (ttSpawn()) ttDraw();
+    }, 220);
+    return;
+  }
+  if (ttSpawn()) ttDraw();
+}
+function ttMove(dx) {
+  if (TET.over || !TET.cur) return false;
+  if (ttFits(TET.cur, TET.cur.m, TET.cur.x + dx, TET.cur.y)) { TET.cur.x += dx; ttDraw(); return true; }
+  return false;
+}
+function ttTurn() {
+  if (TET.over || !TET.cur || TET.cur.k === 'O') return;
+  const m = ttRot(TET.cur.m);
+  for (const k of [0, -1, 1, -2, 2]) {       // біля стінки - трохи відсуваємо, щоб поворот вдався
+    if (ttFits(TET.cur, m, TET.cur.x + k, TET.cur.y)) { TET.cur.m = m; TET.cur.x += k; beep(880, 0.04, 'square', 0.08); ttDraw(); return; }
+  }
+}
+function ttDown() {                          // на клітинку вниз; не може - фігурка лягає
+  if (TET.over || !TET.cur) return;
+  if (ttFits(TET.cur, TET.cur.m, TET.cur.x, TET.cur.y + 1)) { TET.cur.y++; ttDraw(); } else ttLock();
+  TET.acc = 0;
+}
+function ttDrop() {
+  if (TET.over || !TET.cur) return;
+  TET.cur.y = ttGhostY(); ttDraw(); vibe(20); ttLock(); TET.acc = 0;
+}
+function ttLoop(now) {
+  if (TET.over) return;
+  const dt = now - TET.last; TET.last = now;
+  if (TET.cur && !TET.flash) {
+    TET.acc += dt;
+    // що більше рядів, то трохи швидше, але не швидше за 0,55 від початкової швидкості
+    const ms = ttLv().ms * Math.max(0.55, 1 - Math.floor(TET.lines / 8) * 0.07);
+    if (TET.acc >= ms) { TET.acc = 0; ttDown(); }
+  }
+  TET.raf = requestAnimationFrame(ttLoop);
+}
+function ttOver() {
+  TET.over = true; cancelAnimationFrame(TET.raf); ttDraw(); oops(); vibe(150);
+  const rec = TET.lines > TET.best;
+  if (rec) { TET.best = TET.lines; LS.set('tetBest', TET.best); }
+  ttHud();
+  setTimeout(() => dialog({
+    em: rec && TET.lines ? '🏆' : '🧱', h: `Складено рядів: ${TET.lines}`,
+    p: rec && TET.lines ? 'Це новий рекорд!' : (TET.best ? `Рекорд: ${TET.best}` : ''),
+    btn: '🔁 Ще раз', btn2: '🏠 Меню', onBtn: ttStart, onBtn2: () => go('menu'),
+  }), 350);
+  if (TET.lines) say('Молодець!');
+}
+function ttStart() {
+  const c = $('#tetC'), dpr = Math.min(3, window.devicePixelRatio || 1);
+  const wrap = $('#tetBoard'), r = wrap.getBoundingClientRect();
+  // поле під розмір екрана: висота - не більше половини екрана, ширина - не більше рядка
+  const cssCell = Math.max(14, Math.floor(Math.min((r.width || 300) / TT_COLS, (window.innerHeight * 0.52) / TT_ROWS)));
+  c.style.width = cssCell * TT_COLS + 'px'; c.style.height = cssCell * TT_ROWS + 'px';
+  TET.cell = Math.round(cssCell * dpr); c.width = TET.cell * TT_COLS; c.height = TET.cell * TT_ROWS;
+  TET.cssCell = cssCell;
+  const n = $('#tetNext'); n.width = n.height = Math.round(52 * dpr);
+  TET.board = Array.from({ length: TT_ROWS }, () => new Array(TT_COLS).fill(0));
+  TET.bag = []; TET.next = null; TET.lines = 0; TET.over = false; TET.flash = null; TET.acc = 0;
+  ttLvUI(); ttHud(); ttSpawn(); ttDraw();
+  cancelAnimationFrame(TET.raf); TET.last = performance.now(); TET.raf = requestAnimationFrame(ttLoop);
+}
+START.tetris = () => ttStart();
+STOP.tetris = () => { TET.over = true; cancelAnimationFrame(TET.raf); clearInterval(TET.rep); };
+$('#tetLvSel').onclick = (e) => {
+  const b = e.target.closest('[data-l]'); if (!b) return;
+  TET.lv = b.dataset.l; LS.set('tetLv', TET.lv); blip(); ttStart();
+};
+/* кнопки: торкнувся - крок; тримаєш - повторює */
+document.querySelectorAll('#tetPad [data-t]').forEach((b) => {
+  const act = { l: () => ttMove(-1), r: () => ttMove(1), rot: ttTurn, d: ttDown, drop: ttDrop }[b.dataset.t];
+  const stop = () => { clearInterval(TET.rep); TET.rep = null; };
+  b.addEventListener('pointerdown', (e) => {
+    e.preventDefault(); ac(); act();
+    stop();
+    if (b.dataset.t === 'l' || b.dataset.t === 'r' || b.dataset.t === 'd') {
+      const t0 = Date.now();
+      TET.rep = setInterval(() => { if (Date.now() - t0 > 260) act(); }, 75);
+    }
+  });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => b.addEventListener(ev, stop));
+});
+/* пальцем по полю */
+(() => {
+  const c = $('#tetC'); let sx = 0, sy = 0, lx = 0, t0 = 0, moved = false, on = false;
+  c.addEventListener('pointerdown', (e) => { on = true; sx = lx = e.clientX; sy = e.clientY; t0 = Date.now(); moved = false; ac(); try { c.setPointerCapture(e.pointerId); } catch (x) { /* */ } });
+  c.addEventListener('pointermove', (e) => {
+    if (!on || TET.over) return;
+    const step = TET.cssCell || 24;
+    while (e.clientX - lx >= step) { ttMove(1); lx += step; moved = true; }
+    while (lx - e.clientX >= step) { ttMove(-1); lx -= step; moved = true; }
+  });
+  c.addEventListener('pointerup', (e) => {
+    if (!on) return; on = false;
+    const dx = e.clientX - sx, dy = e.clientY - sy, quick = Date.now() - t0 < 450;
+    if (dy > 60 && Math.abs(dy) > Math.abs(dx) * 1.4 && quick) ttDrop();
+    else if (!moved && Math.abs(dx) < 12 && Math.abs(dy) < 12) ttTurn();
+  });
+  c.addEventListener('pointercancel', () => { on = false; });
+})();
 
 /* ================================================================
    МЕНЮ ЗА ГРУПАМИ  (гортається пальцем або кнопками вгорі)

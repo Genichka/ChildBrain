@@ -1,22 +1,19 @@
 {
-  "version": "1.6.4",
-  "date": "2026-10-21",
+  "version": "1.7.0",
+  "date": "2026-10-23",
   "changes": [
-    "Пазли: підказка на дошці знову бліда й сірувата, а поставлені шматочки яскраві з тінню — одразу видно, що вже зібрано",
-    "Лабіринт перероблено: стіни більше не зсуваються, мишка плавно їде по клітинках і залишає за собою слід, сир світиться",
-    "Лабіринт: можна торкнутися сусідньої клітинки — мишка піде туди; натрапила на стіну — тицяється в неї",
-    "Голос не обривається на півслові: нове завдання починається, лише коли гра договорила похвалу"
+    "Нова гра «Тетріс» у групі «Логіка»: тінь показує, куди впаде фігурка; три швидкості — на «Поволі» лише прості фігури",
+    "Керування кнопками ⬅️ 🔄 ➡️ ⬇️ (затисни — повторює) або пальцем: торкнися поля — поворот, веди вбік — фігурка йде за пальцем, змахни вниз — падає",
+    "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
-    "Puzzle: imaginea-ghid de pe tablă e din nou estompată, iar piesele puse sunt vii, cu umbră — se vede imediat ce e deja asamblat",
-    "Labirintul refăcut: pereții nu se mai mișcă, șoricelul merge lin și lasă o urmă, cașcavalul strălucește",
-    "Labirint: atinge căsuța vecină — șoricelul merge acolo; dă de perete — se lovește ușor de el",
-    "Vocea nu se mai oprește la jumătatea cuvântului: sarcina nouă începe doar după ce jocul a terminat lauda"
+    "Joc nou „Tetris” în grupa „Logică”: umbra arată unde cade piesa; trei viteze — la „Încet” doar piese simple",
+    "Butoane ⬅️ 🔄 ➡️ ⬇️ (ține apăsat — se repetă) sau cu degetul: atinge tabla — rotire, trage lateral — piesa te urmează, glisează în jos — cade",
+    "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
-    "Jigsaw: the hint picture on the board is faded and greyish again, while placed pieces are bright with a shadow — easy to see what's already done",
-    "Maze redone: the walls no longer shift, the mouse glides between cells and leaves a trail, the cheese glows",
-    "Maze: tap a neighbouring cell and the mouse goes there; bumping into a wall gives a little nudge",
-    "The voice no longer cuts off mid-word: the next task starts only after the game has finished its praise"
+    "New game “Tetris” in the Logic group: a shadow shows where the piece lands; three speeds — “Slow” uses only simple pieces",
+    "Buttons ⬅️ 🔄 ➡️ ⬇️ (hold to repeat) or touch: tap the board to rotate, drag sideways to move, swipe down to drop",
+    "Stars for cleared lines, the best score is remembered"
   ]
 }
