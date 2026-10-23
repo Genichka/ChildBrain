@@ -1,9 +1,9 @@
 {
-  "version": "1.7.5",
+  "version": "1.7.6",
   "date": "2026-10-23",
   "changes": [
+    "Головна: посилання на канал EnergyUA тепер маленька кнопка «підпишись ↗» в одному рядку з версією",
     "Тетріс: повернулась кнопка ⏬ «Кинути вниз» — у ряду з ⬅️ 🔄 ➡️ ⬇️",
-    "Під версією на головній — посилання на YouTube-канал автора EnergyUA",
     "Тетріс: швидкість — маленька кнопка 🐢/🐰/🚀 угорі, поруч із паузою; кнопки ⬅️ 🔄 ➡️ ⬇️ як і були",
     "Тетріс: поле на весь екран — уся ширина, а рядків стільки, скільки влазить за висотою",
     "Тетріс: підказка 👻, куди впаде фігурка, тепер вимкнена, поки її не ввімкнути",
@@ -18,8 +18,8 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Ecranul principal: linkul spre canalul EnergyUA e acum un buton mic „abonează-te ↗” pe același rând cu versiunea",
     "Tetris: a revenit butonul ⏬ „Aruncă jos” — în rândul cu ⬅️ 🔄 ➡️ ⬇️",
-    "Sub versiune, pe ecranul principal — linkul spre canalul YouTube al autorului EnergyUA",
     "Tetris: viteza — butonul mic 🐢/🐰/🚀 sus, lângă pauză; butoanele ⬅️ 🔄 ➡️ ⬇️ rămân ca înainte",
     "Tetris: tabla pe tot ecranul — toată lățimea, iar rânduri câte încap pe înălțime",
     "Tetris: indiciul 👻 unde cade piesa e oprit, până îl pornești",
@@ -34,8 +34,8 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Home: the EnergyUA channel link is now a small “subscribe ↗” button on the same line as the version",
     "Tetris: the ⏬ Drop button is back — in the row with ⬅️ 🔄 ➡️ ⬇️",
-    "Under the version on the home screen — a link to the author's YouTube channel EnergyUA",
     "Tetris: speed is a small 🐢/🐰/🚀 button at the top, next to pause; ⬅️ 🔄 ➡️ ⬇️ buttons stay as before",
     "Tetris: the board fills the screen — full width, as many rows as fit the height",
     "Tetris: the 👻 landing hint is now off until you turn it on",
