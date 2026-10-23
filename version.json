@@ -1,7 +1,10 @@
 {
-  "version": "1.8.1",
+  "version": "1.8.2",
   "date": "2026-10-23",
   "changes": [
+    "Ігри памʼятають, до якого рівня дійшла дитина, і наступного разу починають на один крок нижче — для розминки",
+    "Лови зірочки, Бульбашки, Хто виглянув?: рекорд — «🏆 Новий рекорд!» або «Рекорд: N»",
+    "Статистика ігор для батьків: нова колонка «Рівень» (рівень з максимуму або рекорд), і в CSV теж",
     "Хрестики-нулики: гра 🤖 з компʼютером або 👫 удвох на одному телефоні",
     "Хрестики-нулики: рівні 🐣 Легко · 🦊 Середньо · 🧠 Важко (на «Важко» компʼютер не програє — лише нічия)",
     "Хрестики-нулики: статистика перемог, поразок і нічиїх для кожного рівня й для гри удвох, кнопка 🗑️ скидає",
@@ -26,6 +29,9 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Jocurile țin minte nivelul atins și data viitoare încep cu un pas mai jos — pentru încălzire",
+    "Prinde stelele, Bule, Cine a ieșit?: record — „🏆 Record nou!” sau „Record: N”",
+    "Statistici pentru părinți: coloană nouă „Nivel” (nivelul din maxim sau recordul), și în CSV",
     "X și 0: joc 🤖 cu calculatorul sau 👫 în doi pe același telefon",
     "X și 0: niveluri 🐣 Ușor · 🦊 Mediu · 🧠 Greu (la „Greu” calculatorul nu pierde — doar egal)",
     "X și 0: statistici de victorii, înfrângeri și egaluri pentru fiecare nivel și pentru jocul în doi, 🗑️ resetează",
@@ -50,6 +56,9 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Games remember the level reached and next time start one step lower — as a warm-up",
+    "Catch the stars, Bubbles, Who popped up?: best score — “🏆 New record!” or “Best: N”",
+    "Parent stats: new “Level” column (level out of max, or best score), also in CSV",
     "Tic-tac-toe: play 🤖 vs computer or 👫 two players on one phone",
     "Tic-tac-toe: levels 🐣 Easy · 🦊 Medium · 🧠 Hard (on Hard the computer never loses — a draw at best)",
     "Tic-tac-toe: win / loss / draw stats for each level and for two players, 🗑️ resets",

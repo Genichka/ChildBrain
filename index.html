@@ -151,9 +151,10 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 .alW b{color:var(--yel)}
 .alN{width:100%;text-align:center;font-size:13px;color:var(--dim);font-weight:700}
 .stwrap{display:block;max-height:44vh;overflow:auto;text-align:left;font-size:14px;margin-top:6px}
-.strow{display:grid;grid-template-columns:1fr 34px 62px 46px;gap:6px;padding:5px 0;border-bottom:1px solid var(--line);align-items:center}
+.strow{display:grid;grid-template-columns:1fr 28px 52px 42px 50px;gap:6px;padding:5px 0;border-bottom:1px solid var(--line);align-items:center}
 .strow b{text-align:right;color:var(--yel);font-size:16px}
 .strow .stt,.strow .std{color:var(--dim);text-align:right;font-size:12px}
+.strow .stl{color:var(--yel);text-align:right;font-size:12px;font-weight:800;white-space:nowrap}
 .strow.sth{color:var(--dim);font-size:11px;font-weight:700;border-bottom:2px solid var(--line)}
 .stnote{display:block;margin-top:8px;color:var(--dim);font-size:12px;line-height:1.35}
 .alR{width:100%;text-align:center;font-size:20px;font-weight:900;color:var(--grn);min-height:1.4em;opacity:0;transform:scale(.9);transition:opacity .25s,transform .25s}
@@ -629,6 +630,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .endbox{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#111217e6;z-index:5;text-align:center;padding:14px;animation:in .3s backwards}
 .endbox .em{font-size:64px;line-height:1}
 .endbox b{font-size:24px}
+.endbox .rb-rec{color:var(--yel);font-weight:800;font-size:16px}
 .endbox span{color:var(--dim);font-weight:700}
 /* ---------- заставка EnergyUA: батарейка заряджається → логотип ---------- */
 #splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;
@@ -1238,7 +1240,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.8.1';
+const APP_VERSION = '1.8.2';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1258,6 +1260,13 @@ const LS = {
     catch (e) { return false; }   // памʼять заповнена
   },
 };
+/* ---------- прогрес в іграх без вибору рівня ----------
+   Запамʼятовуємо, до якого рівня дійшла дитина; при вході - на один крок нижче (розминка з успіху),
+   а далі гра сама швидко підвищує складність. В іграх на швидкість - рекорд. */
+const PROG = LS.get('prog', null) || {};
+function progSave(k, v) { if (PROG[k] === v) return; PROG[k] = v; LS.set('prog', PROG); }
+function progStart(k, min, step = 1) { const v = PROG[k]; return v == null ? min : Math.max(min, v - step); }
+function progBest(k, score) { if (score > (PROG[k] || 0)) { progSave(k, score); return true; } return false; }
 const S = {
   stars: LS.get('stars', 0),
   got: LS.get('got', []),        // здобуті наліпки
@@ -1446,6 +1455,8 @@ Object.assign(I18N, {
   "⏬ Кинути вниз": { ro: "⏬ Aruncă jos", en: "⏬ Drop" },
   "🎉 Тетріс! Чотири ряди!": { ro: "🎉 Tetris! Patru rânduri!", en: "🎉 Tetris! Four lines!" },
   "Це новий рекорд!": { ro: "Este un record nou!", en: "That's a new record!" },
+  "🏆 Новий рекорд!": { ro: "🏆 Record nou!", en: "🏆 New record!" },
+  "Рівень": { ro: "Nivel", en: "Level" },
   "Колір і форма": { ro: "Culoare și formă", en: "Colour and shape" },
   "Що зайве?": { ro: "Ce nu se potrivește?", en: "Odd one out" },
   "Мої наліпки": { ro: "Abțibildurile mele", en: "My stickers" },
@@ -1878,6 +1889,7 @@ I18N_RE.push(
   [new RegExp("^Знайди всіх (\\S+)$"), { ro: "Găsește-i pe toți {1}", en: "Find them all {1}" }],
   [new RegExp("^ще (\\d+)$"), { ro: "încă {1}", en: "{1} to go" }],
   [new RegExp("^Зібрано: (\\d+)$"), { ro: "Strâns: {1}", en: "Caught: {1}" }],
+  [new RegExp("^Рекорд: (\\d+)$"), { ro: "Record: {1}", en: "Best: {1}" }],
   [new RegExp("^Лопнуто: (\\d+)$"), { ro: "Sparte: {1}", en: "Popped: {1}" }],
   [new RegExp("^Упіймано: (\\d+)$"), { ro: "Prinse: {1}", en: "Caught: {1}" }],
   [new RegExp("^Зірочок у альбом: (\\d+)$"), { ro: "Steluțe în album: {1}", en: "Stars for the album: {1}" }],
@@ -2339,7 +2351,7 @@ function melNext() {
   MEL.lvl = MEL.seq.length;
   melPlay();
 }
-START.melody = () => { MEL.seq = []; MEL.step = 0; melNext(); say('Слухай мелодію і повтори'); };
+START.melody = () => { const L = progStart('melody', 1); MEL.seq = Array.from({ length: L - 1 }, () => rnd(4)); MEL.step = 0; melNext(); say('Слухай мелодію і повтори'); };
 STOP.melody = () => { MEL.gen++; MEL.busy = true; $$('.pad').forEach((p) => p.classList.remove('lit')); };
 $('#pads').onclick = (e) => {
   const b = e.target.closest('.pad'); if (!b || MEL.busy) return;
@@ -2353,6 +2365,7 @@ $('#pads').onclick = (e) => {
       setTimeout(() => {
         cheer(); confetti(); vibe(40);
         if (MEL.lvl % 3 === 0) addStar();
+        progSave('melody', MEL.lvl + 1);
         $('#melAsk').innerHTML = `Молодець! <small>мелодія з ${MEL.lvl} нот</small>`;
         setTimeout(melNext, 1100);
       }, 250);
@@ -2383,7 +2396,7 @@ function memDeal() {
   el.innerHTML = deck.map((c, i) => `<button class="card" data-i="${i}" data-e="${c[0]}" data-w="${c[1]}"><span class="face">${c[0]}</span></button>`).join('');
   $('#memAsk').innerHTML = `Знайди однакові<small>${MEM.pairs} пари</small>`;
 }
-START.memory = () => { MEM.pairs = 3; memDeal(); say('Знайди однакові картинки'); };
+START.memory = () => { MEM.pairs = progStart('memory', 3); memDeal(); say('Знайди однакові картинки'); };
 $('#cards').onclick = async (e) => {
   const c = e.target.closest('.card');
   if (!c || MEM.busy || c.classList.contains('open') || c.classList.contains('done')) return;
@@ -2403,7 +2416,7 @@ $('#cards').onclick = async (e) => {
       $('#memAsk').innerHTML = 'Усі пари знайдено! 🎉';
       say('Молодець! Усі пари знайдено');
       MEM.busy = true;
-      afterSay(() => { MEM.pairs = Math.min(8, MEM.pairs + 1); memDeal(); }, 1800);
+      afterSay(() => { MEM.pairs = Math.min(8, MEM.pairs + 1); progSave('memory', MEM.pairs); memDeal(); }, 1800);
     }
   } else {
     await sleep(900);
@@ -2429,13 +2442,13 @@ function cntNew() {
   $('#cntAsk').textContent = `Скільки тут ${word}?`;
   say(`Скільки тут ${word}?`);
 }
-START.count = () => { CNT.max = 5; cntNew(); };
+START.count = () => { CNT.max = progStart('count', 5); cntNew(); };
 $('#nums').onclick = (e) => {
   const b = e.target.closest('.num'); if (!b || CNT.busy) return;
   if (+b.dataset.v === CNT.n) {
     CNT.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
     say(`Так! ${CNT.n}`);
-    afterSay(() => { CNT.max = Math.min(10, CNT.max + 1); cntNew(); }, 1500);
+    afterSay(() => { CNT.max = Math.min(10, CNT.max + 1); progSave('count', CNT.max); cntNew(); }, 1500);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
@@ -3107,14 +3120,14 @@ function shpNew() {
   $('#shpAsk').innerHTML = `${find} ${what}<small>натисни потрібну фігуру</small>`;
   say(find + ' ' + what);
 }
-START.shape = () => { SHP.lvl = 1; SHP.ok = 0; shpNew(); };
+START.shape = () => { SHP.lvl = progStart('shape', 1); SHP.ok = 0; shpNew(); };
 $('#shapes').onclick = (e) => {
   const b = e.target.closest('.shp'); if (!b || SHP.busy) return;
   if (b.dataset.k === SHP.key) {
     SHP.busy = true; b.classList.add('ok'); cheer(); confetti(); vibe(40); addStar();
     say('Так!');
     SHP.ok++;
-    if (SHP.ok >= 3 && SHP.lvl < 3) { SHP.lvl++; SHP.ok = 0; }
+    if (SHP.ok >= 3 && SHP.lvl < 3) { SHP.lvl++; SHP.ok = 0; progSave('shape', SHP.lvl); }
     afterSay(shpNew, 1400);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
@@ -3151,7 +3164,7 @@ function oddNew() {
   $('#oddAsk').innerHTML = 'Що тут зайве?<small>натисни те, що не підходить</small>';
   say('Що тут зайве?');
 }
-START.odd = () => { ODD.n = 3; ODD.ok = 0; oddNew(); };
+START.odd = () => { ODD.n = progStart('odd', 3); ODD.ok = 0; oddNew(); };
 $('#odds').onclick = (e) => {
   const b = e.target.closest('.odd'); if (!b || ODD.busy) return;
   if (b.dataset.e === ODD.key) {
@@ -3159,7 +3172,7 @@ $('#odds').onclick = (e) => {
     $('#oddAsk').innerHTML = `Так! Решта — ${ODD.nm}`;
     say(`Так! Решта — ${ODD.nm}`);
     ODD.ok++;
-    if (ODD.ok >= 4 && ODD.n < 4) { ODD.n = 4; ODD.ok = 0; }
+    if (ODD.ok >= 4 && ODD.n < 4) { ODD.n = 4; ODD.ok = 0; progSave('odd', 4); }
     afterSay(oddNew, 1700);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
@@ -6196,7 +6209,7 @@ async function gnNew() {
   say('Що зникло?');
   GN.busy = false;
 }
-START.gone = () => { GN.n = 3; GN.ok = 0; gnNew(); };
+START.gone = () => { GN.n = progStart('gone', 3); GN.ok = 0; gnNew(); };
 STOP.gone = () => { GN.gen++; };
 $('#gnOpts').onclick = (e) => {
   const b = e.target.closest('.mopt'); if (!b || GN.busy) return;
@@ -6204,7 +6217,7 @@ $('#gnOpts').onclick = (e) => {
   GN.busy = true; b.classList.add('ok');
   const q = $('#gnRow .q'); if (q) { q.textContent = GN.miss; q.className = 'mcell back'; }
   memWin('Так! ' + (MP_NAME[GN.miss] || ''));
-  if (++GN.ok >= 2) { GN.ok = 0; GN.n = Math.min(7, GN.n + 1); }
+  if (++GN.ok >= 2) { GN.ok = 0; GN.n = Math.min(7, GN.n + 1); progSave('gone', GN.n); }
   afterSay(gnNew, 1800);
 };
 
@@ -6235,7 +6248,7 @@ function hdNext() {
   $('#hdAsk').innerHTML = `Де ${HD.cur[1]}?<small>натисни на будиночок</small>`;
   say(`Де ${HD.cur[1]}?`);
 }
-START.hide = () => { HD.n = 3; HD.ok = 0; hdNew(); };
+START.hide = () => { HD.n = progStart('hide', 3); HD.ok = 0; hdNew(); };
 STOP.hide = () => { HD.gen++; };
 $('#houses').onclick = (e) => {
   const h = e.target.closest('.house'); if (!h || HD.busy || h.classList.contains('open')) return;
@@ -6250,7 +6263,7 @@ $('#houses').onclick = (e) => {
   HD.busy = true; h.classList.add('ok');
   if (HD.ask.length) { cheer(); vibe(30); say(`Так! Тут ${a[1]}`); afterSay(hdNext, 1300); return; }
   memWin(`Так! Тут ${a[1]}`);
-  if (++HD.ok >= 2) { HD.ok = 0; HD.n = Math.min(6, HD.n + 1); }
+  if (++HD.ok >= 2) { HD.ok = 0; HD.n = Math.min(6, HD.n + 1); progSave('hide', HD.n); }
   afterSay(hdNew, 1800);
 };
 
@@ -6278,7 +6291,7 @@ async function grShow(fresh) {
   $('#grAsk').innerHTML = 'Тепер ти!<small>натисни ті, що світились</small>';
   GR.busy = false;
 }
-START.grid = () => { GR.k = 2; GR.ok = 0; grShow(true); };
+START.grid = () => { GR.k = progStart('grid', 2); GR.ok = 0; grShow(true); };
 STOP.grid = () => { GR.gen++; };
 $('#gridb').onclick = (e) => {
   const c = e.target.closest('.gcell'); if (!c || GR.busy) return;
@@ -6292,7 +6305,7 @@ $('#gridb').onclick = (e) => {
   GR.got.add(i); c.classList.add('good'); blip();
   if (GR.got.size < GR.k) return;
   GR.busy = true; memWin();
-  if (++GR.ok >= 2) { GR.ok = 0; GR.k = Math.min(8, GR.k + 1); }
+  if (++GR.ok >= 2) { GR.ok = 0; GR.k = Math.min(8, GR.k + 1); progSave('grid', GR.k); }
   setTimeout(() => grShow(true), 1500);
 };
 
@@ -6321,7 +6334,7 @@ async function bkNew() {
   say('Що в кошику?');
   BK.busy = false;
 }
-START.basket = () => { BK.n = 2; BK.ok = 0; bkNew(); };
+START.basket = () => { BK.n = progStart('basket', 2); BK.ok = 0; bkNew(); };
 STOP.basket = () => { BK.gen++; };
 $('#bkOpts').onclick = (e) => {
   const b = e.target.closest('.mopt'); if (!b || BK.busy || b.classList.contains('got')) return;
@@ -6329,7 +6342,7 @@ $('#bkOpts').onclick = (e) => {
   BK.found.add(b.dataset.e); b.classList.add('got'); blip();
   if (BK.found.size < BK.n) return;
   BK.busy = true; memWin('Усе знайшов!');
-  if (++BK.ok >= 2) { BK.ok = 0; BK.n = Math.min(6, BK.n + 1); }
+  if (++BK.ok >= 2) { BK.ok = 0; BK.n = Math.min(6, BK.n + 1); progSave('basket', BK.n); }
   setTimeout(bkNew, 1800);
 };
 
@@ -6348,7 +6361,7 @@ function spDeal() {
     `<button class="scard" data-i="${i}" data-n="${a[1]}" data-e="${a[0]}">🎵</button>`).join('');
   $('#spAsk').innerHTML = `Знайди однакові звуки<small>${SP.pairs} ${pairsWord(SP.pairs)} · натискай і слухай</small>`;
 }
-START.spairs = () => { SP.pairs = 2; probePack(); spDeal(); say('Знайди картки, що звучать однаково'); };
+START.spairs = () => { SP.pairs = progStart('spairs', 2); probePack(); spDeal(); say('Знайди картки, що звучать однаково'); };
 STOP.spairs = () => { SP.gen++; if (CUR_AUDIO) { CUR_AUDIO.pause(); CUR_AUDIO = null; } };
 $('#spCards').onclick = async (e) => {
   const c = e.target.closest('.scard');
@@ -6367,7 +6380,7 @@ $('#spCards').onclick = async (e) => {
     if (SP.done === SP.pairs) {
       confetti(); addStar();
       $('#spAsk').innerHTML = 'Усі пари знайдено! 🎉';
-      afterSay(() => { if (gen !== SP.gen) return; SP.pairs = Math.min(5, SP.pairs + 1); spDeal(); }, 2000);
+      afterSay(() => { if (gen !== SP.gen) return; SP.pairs = Math.min(5, SP.pairs + 1); progSave('spairs', SP.pairs); spDeal(); }, 2000);
       SP.open = []; return;
     }
   } else {
@@ -6396,7 +6409,7 @@ async function orNew() {
   say('Постав так, як було');
   OR.busy = false;
 }
-START.order = () => { OR.n = 3; OR.ok = 0; orNew(); };
+START.order = () => { OR.n = progStart('order', 3); OR.ok = 0; orNew(); };
 STOP.order = () => { OR.gen++; };
 $('#orPool').onclick = (e) => {
   const b = e.target.closest('.mopt'); if (!b || OR.busy || b.classList.contains('used')) return;
@@ -6413,7 +6426,7 @@ $('#orPool').onclick = (e) => {
   b.classList.add('used'); OR.pos++; OR.miss = 0; blip();
   if (OR.pos < OR.n) return;
   OR.busy = true; memWin('Усе на місці!');
-  if (++OR.ok >= 2) { OR.ok = 0; OR.n = Math.min(6, OR.n + 1); }
+  if (++OR.ok >= 2) { OR.ok = 0; OR.n = Math.min(6, OR.n + 1); progSave('order', OR.n); }
   setTimeout(orNew, 1800);
 };
 
@@ -6441,9 +6454,9 @@ function nt(f, dur, o = {}) {
   osc.connect(fl); fl.connect(g); g.connect(a.destination); osc.start(t); osc.stop(t + dur + 0.05);
 }
 /** Коротка заставка перед раундом на час. */
-function roundBox(stage, em, title, sub, again) {
+function roundBox(stage, em, title, sub, again, rec) {
   const d = document.createElement('div'); d.className = 'endbox';
-  d.innerHTML = `<div class="em">${em}</div><b>${title}</b><span>${sub}</span><button class="btn go">▶️ Ще раз</button>`;
+  d.innerHTML = `<div class="em">${em}</div><b>${title}</b><span>${sub}</span>${rec ? `<span class="rb-rec">${rec}</span>` : ''}<button class="btn go">▶️ Ще раз</button>`;
   stage.appendChild(d);
   d.querySelector('button').onclick = () => { blip(); d.remove(); again(); };
 }
@@ -6469,14 +6482,14 @@ function inNew() {
   say('Хто грає?');
   afterSay(() => { if (gen === IN.gen) IN.cur.play(); }, 1100);
 }
-START.inst = () => { IN.ok = 0; IN.lv = 3; inNew(); };
+START.inst = () => { IN.ok = 0; IN.lv = progStart('inst', 3); inNew(); };
 STOP.inst = () => { IN.gen++; };
 $('#inAgain').onclick = () => { if (IN.cur) { blip(); ac(); IN.cur.play(); } };
 $('#inOpts').onclick = (e) => {
   const b = e.target.closest('.mopt'); if (!b || IN.busy) return;
   if (b.dataset.e !== IN.cur.e) { memNo(b); say('Спробуй ще'); return; }
   IN.busy = true; b.classList.add('ok'); memWin(['Так!', IN.cur.n]);
-  if (++IN.ok % 3 === 0) IN.lv = Math.min(6, IN.lv + 1);
+  if (++IN.ok % 3 === 0) { IN.lv = Math.min(6, IN.lv + 1); progSave('inst', IN.lv); }
   afterSay(inNew, 1900);
 };
 
@@ -6511,7 +6524,7 @@ function ptNew() {
   }
   afterSay(() => { if (gen === PT.gen) ptPlay(); }, 1200);
 }
-START.pitch = () => { PT.ok = 0; PT.lv = LS.get('ptLv', 1); ptNew(); };
+START.pitch = () => { PT.ok = 0; PT.lv = Math.max(1, LS.get('ptLv', 1) - 1); ptNew(); };
 STOP.pitch = () => { PT.gen++; };
 $('#ptAgain').onclick = () => { blip(); ac(); ptPlay(); };
 $('#ptOpts').onclick = (e) => {
@@ -6541,7 +6554,7 @@ function knNew() {
   say('Скільки разів стукає?');
   afterSay(() => { if (gen === KN.gen) knPlay(); }, 1500);
 }
-START.knock = () => { KN.ok = 0; KN.max = 3; knNew(); };
+START.knock = () => { KN.ok = 0; KN.max = progStart('knock', 3); knNew(); };
 STOP.knock = () => { KN.gen++; };
 $('#knAgain').onclick = () => { blip(); ac(); knPlay(); };
 $('#knOpts').onclick = (e) => {
@@ -6550,7 +6563,7 @@ $('#knOpts').onclick = (e) => {
   KN.busy = true; b.classList.add('ok');
   $('#knBox').innerHTML = Array.from({ length: KN.n }, () => '<i>🔔</i>').join('');
   memWin(['Так!', ...numW(KN.n)]);
-  if (++KN.ok % 3 === 0) KN.max = Math.min(8, KN.max + 1);
+  if (++KN.ok % 3 === 0) { KN.max = Math.min(8, KN.max + 1); progSave('knock', KN.max); }
   afterSay(knNew, 2000);
 };
 
@@ -6565,12 +6578,12 @@ function shNew() {
   $('#shAsk').innerHTML = 'Чия це тінь?<small>знайди, хто так стоїть</small>';
   say('Чия це тінь?');
 }
-START.shadow = () => { SH.ok = 0; SH.n = 3; shNew(); };
+START.shadow = () => { SH.ok = 0; SH.n = progStart('shadow', 3); shNew(); };
 $('#shOpts').onclick = (e) => {
   const b = e.target.closest('.shb'); if (!b || SH.busy) return;
   if (b.dataset.e !== SH.cur) { memNo(b); say('Спробуй ще'); return; }
   SH.busy = true; b.classList.add('ok'); memWin('Так!');
-  if (++SH.ok % 3 === 0) SH.n = Math.min(6, SH.n + 1);
+  if (++SH.ok % 3 === 0) { SH.n = Math.min(6, SH.n + 1); progSave('shadow', SH.n); }
   afterSay(shNew, 1600);
 };
 
@@ -6588,14 +6601,14 @@ function faNew() {
   faAsk(); say('Знайди всіх');
 }
 const faAsk = () => { $('#faAsk').innerHTML = `Знайди всіх ${FA.tgt}<small>ще ${FA.left}</small>`; };
-START.findall = () => { FA.lv = 0; FA.ok = 0; faNew(); };
+START.findall = () => { FA.lv = progStart('findall', 0); FA.ok = 0; faNew(); };
 $('#faGrid').onclick = (e) => {
   const b = e.target.closest('button'); if (!b || FA.busy || b.classList.contains('found')) return;
   if (!b.dataset.t) { b.classList.add('no'); oops(); vibe(100); setTimeout(() => b.classList.remove('no'), 450); return; }
   b.classList.add('found'); blip(); vibe(25); FA.left--; faAsk();
   if (FA.left > 0) return;
   FA.busy = true; memWin('Молодець!');
-  if (++FA.ok % 2 === 0) FA.lv = Math.min(FA_LV.length - 1, FA.lv + 1);
+  if (++FA.ok % 2 === 0) { FA.lv = Math.min(FA_LV.length - 1, FA.lv + 1); progSave('findall', FA.lv); }
   afterSay(faNew, 1800);
 };
 
@@ -6623,7 +6636,7 @@ function dgNew() {
   afterSay(() => { if (gen === DG.gen) dgShow(gen); }, 1400);
 }
 START.digits = () => {
-  DG.n = 2; DG.ok = 0;
+  DG.n = progStart('digits', 2); DG.ok = 0;
   $('#dgPad').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((d) => `<button data-d="${d}">${d}</button>`).join('');
   dgNew();
 };
@@ -6640,7 +6653,7 @@ $('#dgPad').onclick = (e) => {
   slot.textContent = d; slot.className = 'f'; blip(); DG.pos++;
   if (DG.pos < DG.n) return;
   DG.busy = true; memWin('Молодець!');
-  if (++DG.ok % 2 === 0) DG.n = Math.min(7, DG.n + 1);
+  if (++DG.ok % 2 === 0) { DG.n = Math.min(7, DG.n + 1); progSave('digits', DG.n); }
   afterSay(dgNew, 1900);
 };
 
@@ -6650,7 +6663,7 @@ function ctHud() { $('#ctHud').innerHTML = `<span>⭐ ${CT.score}</span><span>${
 function ctEnd() {
   CT.run = false; cancelAnimationFrame(CT.raf);
   const n = roundStars(CT.score, 8); confetti(); cheer();
-  roundBox($('#ctStage'), n ? '🎉' : '👍', `Зібрано: ${CT.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй зловити ще більше', ctStart);
+  roundBox($('#ctStage'), n ? '🎉' : '👍', `Зібрано: ${CT.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй зловити ще більше', ctStart, progBest('catch', CT.score) ? '🏆 Новий рекорд!' : `Рекорд: ${PROG.catch}`);
   say('Молодець!');
 }
 function ctStart() {
@@ -6709,7 +6722,7 @@ function buSpawn() {
 function buEnd() {
   BU.run = false; clearInterval(BU.timer);
   const n = roundStars(BU.score, 10); confetti(); cheer();
-  roundBox($('#buStage'), n ? '🎉' : '👍', `Лопнуто: ${BU.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй лопнути ще більше', buStart);
+  roundBox($('#buStage'), n ? '🎉' : '👍', `Лопнуто: ${BU.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй лопнути ще більше', buStart, progBest('bubbles', BU.score) ? '🏆 Новий рекорд!' : `Рекорд: ${PROG.bubbles}`);
   say('Молодець!');
 }
 function buStart() {
@@ -6740,7 +6753,7 @@ function moEnd() {
   MO.run = false; clearInterval(MO.timer); MO.tmo.forEach(clearTimeout); MO.tmo = [];
   $$('#moHoles .hole').forEach((h) => h.classList.remove('up'));
   const n = roundStars(MO.score, 8); confetti(); cheer();
-  roundBox($('#moStage'), n ? '🎉' : '👍', `Упіймано: ${MO.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй упіймати ще більше', moStart);
+  roundBox($('#moStage'), n ? '🎉' : '👍', `Упіймано: ${MO.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй упіймати ще більше', moStart, progBest('mole', MO.score) ? '🏆 Новий рекорд!' : `Рекорд: ${PROG.mole}`);
   say('Молодець!');
 }
 function moPop() {
@@ -7177,6 +7190,37 @@ async function checkUpdate(silent) {
 /* ---------- статистика ігор (для батьків) ---------- */
 const stFmt = (sec) => (sec >= 3600 ? `${Math.floor(sec / 3600)} г ${Math.round((sec % 3600) / 60)} хв` : sec >= 60 ? `${Math.round(sec / 60)} хв` : `${sec} с`);
 const stDate = (ms) => (ms ? new Date(ms).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' }) : '—');
+/** Рівень / рекорд гри для статистики: «4/6» - рівень 4 з 6, «🏆 31» - рекорд, «№7» - рівень без межі. */
+const PG_RANGE = { memory: [3, 8], count: [5, 10], shape: [1, 3], odd: [3, 4], gone: [3, 7], hide: [3, 6], grid: [2, 8], basket: [2, 6],
+  spairs: [2, 5], order: [3, 6], inst: [3, 6], knock: [3, 8], shadow: [3, 6], findall: [0, 5], digits: [2, 7] };
+function stLevel(k) {
+  try {
+    const of = (v, a, b) => `${Math.min(b, Math.max(a, v)) - a + 1}/${b - a + 1}`;
+    const best = (v) => v ? `🏆 ${v}` : '';
+    if (PG_RANGE[k]) return PROG[k] == null ? '' : of(PROG[k], PG_RANGE[k][0], PG_RANGE[k][1]);
+    switch (k) {
+      case 'melody': return PROG.melody ? `🎵 ${PROG.melody - 1}` : '';
+      case 'catch': case 'bubbles': case 'mole': return best(PROG[k]);
+      case 'pitch': return of(LS.get('ptLv', 1), 1, 5);
+      case 'math': return of(LS.get('mathTop', 1), 1, MT_LV.length);
+      case 'mines': return of(LS.get('mnLvl', 0), 0, MN_LV.length - 1);
+      case 'seq': return of(LS.get('seqLvl', 0), 0, 2);
+      case 'maze': return of(LS.get('mazeLvl', 0), 0, 3);
+      case 'sort': return of(LS.get('sortLvl', 0), 0, 1);
+      case 'puzzle': return of(LS.get('pzLvl', 1), 0, 2);
+      case 'jigsaw': { const d = LS.get('jgDone', []).length; return d ? `🖼️ ${d}` : ''; }
+      case 'arcade': return `№${LS.get('arcLvl', 1)}` + (LS.get('arcBest', 0) ? ` · ${best(LS.get('arcBest', 0))}` : '');
+      case 'brick': return `№${LS.get('brkLvl', 1)}`;
+      case 'jump': return `№${LS.get('jmpLvl', 1)}`;
+      case 'dino': return best(LS.get('dinoBest', 0));
+      case 'snake': return best(LS.get('best', 0));
+      case 'tetris': return best(LS.get('tetBest', 0));
+      case 'animal': return `🐮 ${LS.get('aniN', 0) || ''}`.trim();
+      case 'ttt': { const s = LS.get('tttStat', null); if (!s || !s.bot) return ''; const w = Object.values(s.bot).reduce((x, v) => x + (v.w || 0), 0); return w ? `🏆 ${w}` : ''; }
+    }
+  } catch (e) { /* */ }
+  return '';
+}
 function stRows() {
   return Object.entries(STATS.g).filter(([k, g]) => g.n && TITLES[k]).sort((a, b) => b[1].n - a[1].n || b[1].last - a[1].last);
 }
@@ -7184,9 +7228,9 @@ function statDialog() {
   stLeave();                                     // дорахувати час поточної гри (панель відкривають з меню)
   const rows = stRows(), tot = rows.reduce((x, [, g]) => x + g.n, 0), sec = rows.reduce((x, [, g]) => x + (g.t || 0), 0);
   const never = Object.keys(TITLES).filter((k) => !ST_SKIP.has(k) && !(STATS.g[k] && STATS.g[k].n)).map((k) => TITLES[k]);
-  const head = `<span class="strow sth"><span>Гра</span><span style="text-align:right">Раз</span><span style="text-align:right">Час</span><span style="text-align:right">Коли</span></span>`;
+  const head = `<span class="strow sth"><span>Гра</span><span style="text-align:right">Раз</span><span style="text-align:right">Час</span><span style="text-align:right">Коли</span><span style="text-align:right">Рівень</span></span>`;
   const list = rows.length
-    ? head + rows.map(([k, g]) => `<span class="strow"><span>${esc(TITLES[k])}</span><b>${g.n}</b><span class="stt">${stFmt(g.t || 0)}</span><span class="std">${stDate(g.last)}</span></span>`).join('')
+    ? head + rows.map(([k, g]) => `<span class="strow"><span>${esc(TITLES[k])}</span><b>${g.n}</b><span class="stt">${stFmt(g.t || 0)}</span><span class="std">${stDate(g.last)}</span><span class="stl" translate="no">${esc(stLevel(k))}</span></span>`).join('')
     : '<span class="stnote">Поки що порожньо — зіграйте в якусь гру</span>';
   dialog({
     em: '📊', h: 'Статистика ігор',
@@ -7201,8 +7245,8 @@ function statDialog() {
 }
 function statCsv() {
   const q = (t) => `"${String(t).replace(/"/g, '""')}"`;
-  const lines = [['Гра', 'Запусків', 'Хвилин', 'Востаннє'].map(q).join(';')];
-  stRows().forEach(([k, g]) => lines.push([q(TITLES[k]), g.n, Math.round((g.t || 0) / 60), q(g.last ? new Date(g.last).toISOString().slice(0, 16).replace('T', ' ') : '')].join(';')));
+  const lines = [['Гра', 'Запусків', 'Хвилин', 'Востаннє', 'Рівень / рекорд'].map(q).join(';')];
+  stRows().forEach(([k, g]) => lines.push([q(TITLES[k]), g.n, Math.round((g.t || 0) / 60), q(g.last ? new Date(g.last).toISOString().slice(0, 16).replace('T', ' ') : ''), q(stLevel(k))].join(';')));
   const d = new Date(), stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
