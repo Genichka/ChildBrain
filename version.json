@@ -1,7 +1,8 @@
 {
-  "version": "1.7.4",
+  "version": "1.7.5",
   "date": "2026-10-23",
   "changes": [
+    "Тетріс: повернулась кнопка ⏬ «Кинути вниз» — у ряду з ⬅️ 🔄 ➡️ ⬇️",
     "Під версією на головній — посилання на YouTube-канал автора EnergyUA",
     "Тетріс: швидкість — маленька кнопка 🐢/🐰/🚀 угорі, поруч із паузою; кнопки ⬅️ 🔄 ➡️ ⬇️ як і були",
     "Тетріс: поле на весь екран — уся ширина, а рядків стільки, скільки влазить за висотою",
@@ -17,6 +18,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Tetris: a revenit butonul ⏬ „Aruncă jos” — în rândul cu ⬅️ 🔄 ➡️ ⬇️",
     "Sub versiune, pe ecranul principal — linkul spre canalul YouTube al autorului EnergyUA",
     "Tetris: viteza — butonul mic 🐢/🐰/🚀 sus, lângă pauză; butoanele ⬅️ 🔄 ➡️ ⬇️ rămân ca înainte",
     "Tetris: tabla pe tot ecranul — toată lățimea, iar rânduri câte încap pe înălțime",
@@ -32,6 +34,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Tetris: the ⏬ Drop button is back — in the row with ⬅️ 🔄 ➡️ ⬇️",
     "Under the version on the home screen — a link to the author's YouTube channel EnergyUA",
     "Tetris: speed is a small 🐢/🐰/🚀 button at the top, next to pause; ⬅️ 🔄 ➡️ ⬇️ buttons stay as before",
     "Tetris: the board fills the screen — full width, as many rows as fit the height",
