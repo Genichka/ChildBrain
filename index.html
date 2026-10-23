@@ -663,9 +663,14 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   <div class="sp-logo"><div class="sp-name" translate="no">EnergyUA</div><svg class="sp-bolt" viewBox="0 0 20 30" aria-hidden="true"><path d="M13 0 L1 17 H9 L6 30 L19 11 H11 Z" fill="#ffd21f"/></svg><div class="sp-jr" translate="no">Junior</div></div>
 </div>
 <script>
-/* Заставка EnergyUA (~3,8 с): батарейка 0→100 %, спалах, логотип, згасання. Торкання - пропустити. */
+/* Заставка EnergyUA (~3,8 с): батарейка 0→100 %, спалах, логотип, згасання. Торкання - пропустити.
+   Показується тільки при вході в гру (раз на запуск), не при оновленні чи перезавантаженні. */
 (() => {
   const sp = document.getElementById('splash'); if (!sp) return;
+  // лише при вході в гру: після «Оновити» чи перезавантаження в тому ж вікні - без заставки
+  let seen = false;
+  try { seen = sessionStorage.getItem('euaSplash') === '1'; sessionStorage.setItem('euaSplash', '1'); } catch (e) { /* */ }
+  if (seen) { sp.remove(); return; }
   const dust = sp.querySelector('.sp-dust'), cells = sp.querySelectorAll('.sp-cell'), pct = sp.querySelector('.sp-pct');
   for (let k = 0; k < 40; k++) {
     const d = document.createElement('i');
@@ -1192,7 +1197,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.7.8';
+const APP_VERSION = '1.7.9';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */

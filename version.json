@@ -1,7 +1,8 @@
 {
-  "version": "1.7.8",
+  "version": "1.7.9",
   "date": "2026-10-23",
   "changes": [
+    "Заставка — тільки при вході в гру, не після «Оновити» чи перезавантаження",
     "Заставка EnergyUA при запуску: батарейка заряджається до 100 %, спалах — і зʼявляється логотип. Торкнись — пропустити",
     "Тепер для дітей 4–8 років: нова назва й опис додатка",
     "Вхід для батьків: приклад складніший (напр. 14 × 7) — таблицю множення вже знають і діти",
@@ -21,6 +22,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Intro doar la intrarea în joc, nu după „Actualizează” sau reîncărcare",
     "Intro EnergyUA la pornire: bateria se încarcă la 100 %, o sclipire — și apare logoul. Atinge ca să sari peste",
     "Acum pentru copii de 4–8 ani: nume și descriere noi",
     "Intrarea pentru părinți: exercițiu mai greu (ex. 14 × 7) — tabla înmulțirii o știu și copiii",
@@ -40,6 +42,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Intro only when you open the game, not after Update or a reload",
     "EnergyUA intro on launch: a battery charges to 100 %, a flash — and the logo appears. Tap to skip",
     "Now for kids aged 4–8: new app name and description",
     "Parent gate: a harder sum (e.g. 14 × 7) — kids may already know the times table",
