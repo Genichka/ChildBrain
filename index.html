@@ -437,6 +437,17 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .ttc{aspect-ratio:1;font-size:clamp(46px,15vw,66px);line-height:1}
 .ttc.win{background:#ffd93d33;border-color:#ffd93d;animation:pop .5s}
 .tx{color:#ff5a5f} .to{color:#4aa8ff}
+#s-ttt .play{gap:9px}
+#s-ttt .speed{max-width:340px}
+.ttt-mode{grid-template-columns:repeat(2,1fr)!important}
+#s-ttt .sbtn{min-height:40px;padding:5px 4px;border-radius:13px}
+.ttt-lv[hidden]{display:none}
+.ttt-stat{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;width:min(86vw,340px);margin:0 auto}
+.ttt-stat .ts{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:5px 2px;border-radius:12px;background:var(--card);border:2px solid var(--line)}
+.ttt-stat .ts b{font-size:18px;font-variant-numeric:tabular-nums;line-height:1.1}
+.ttt-stat .ts small{font-size:11px;color:var(--dim);font-weight:700}
+.ttt-stat .ts-h{width:100%;text-align:center;font-size:11px;color:var(--dim);font-weight:700}
+.ttt-stat .mini{min-height:34px;padding:4px 9px;flex:none}
 
 /* ---------- сапер ---------- */
 .mines{display:grid;gap:5px;width:min(92vw,400px);margin:0 auto}
@@ -1127,8 +1138,11 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 <section class="scr" id="s-ttt">
   <div class="ask" id="tttAsk">Ти ставиш <b class="tx">✕</b></div>
   <div class="play">
+    <div class="speed ttt-mode" id="tttMode"></div>
+    <div class="speed ttt-lv" id="tttLv"></div>
     <div class="ttt" id="ttt"></div>
     <div class="score" id="tttScore"></div>
+    <div class="ttt-stat" id="tttStat"></div>
   </div>
 </section>
 
@@ -1224,7 +1238,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.8.0';
+const APP_VERSION = '1.8.1';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1745,6 +1759,25 @@ Object.assign(I18N, {
   "Нічия! 🤝": { ro: "Egalitate! 🤝", en: "It's a draw! 🤝" },
   "ніхто не переміг": { ro: "nimeni n-a câștigat", en: "nobody won" },
   "Склади три хрестики в ряд": { ro: "Pune trei X-uri în linie", en: "Get three crosses in a row" },
+  "З компʼютером": { ro: "Cu calculatorul", en: "Vs computer" },
+  "Удвох": { ro: "În doi", en: "Two players" },
+  "Легко": { ro: "Ușor", en: "Easy" },
+  "Середньо": { ro: "Mediu", en: "Medium" },
+  "Важко": { ro: "Greu", en: "Hard" },
+  "Перемоги": { ro: "Victorii", en: "Wins" },
+  "Поразки": { ro: "Înfrângeri", en: "Losses" },
+  "Нічиї": { ro: "Egaluri", en: "Draws" },
+  "Виграв ✕": { ro: "A câștigat ✕", en: "✕ won" },
+  "Виграв ◯": { ro: "A câștigat ◯", en: "◯ won" },
+  "Хід:": { ro: "Rândul:", en: "Turn:" },
+  "🎉 Перемога:": { ro: "🎉 Câștigă:", en: "🎉 Winner:" },
+  "наступну гру починає ◯": { ro: "următorul joc începe ◯", en: "◯ starts the next game" },
+  "наступну гру починає ✕": { ro: "următorul joc începe ✕", en: "✕ starts the next game" },
+  "Скинути статистику?": { ro: "Ștergi statisticile?", en: "Reset statistics?" },
+  "Лише для цього рівня.": { ro: "Doar pentru acest nivel.", en: "Only for this level." },
+  "Лише для гри удвох.": { ro: "Doar pentru jocul în doi.", en: "Only for two-player games." },
+  "Скинути": { ro: "Resetează", en: "Reset" },
+  "Ні": { ro: "Nu", en: "No" },
   "Гра думає… 🤔": { ro: "Jocul se gândește… 🤔", en: "The game is thinking… 🤔" },
   "🔁 Нова гра": { ro: "🔁 Joc nou", en: "🔁 New game" },
   "Відкривай клітинки": { ro: "Deschide căsuțele", en: "Open the squares" },
@@ -5851,80 +5884,181 @@ $('#jgTray').addEventListener('pointerdown', (e) => {
 });
 
 /* ================================================================
-   10. ХРЕСТИКИ-НУЛИКИ  (дитина ✕ і ходить першою, Гралик ◯;
-   Гралик розумнішає після перемог дитини і поступається після програшів)
+   10. ХРЕСТИКИ-НУЛИКИ
+   Два режими: 🤖 з компʼютером (рівні 🐣 Легко · 🦊 Середньо · 🧠 Важко) і 👫 удвох на одному телефоні.
+   З компʼютером дитина ✕ і ходить першою. Удвох - по черзі починає то ✕, то ◯.
+   Статистика (перемоги / поразки / нічиї) зберігається окремо для кожного рівня і для гри удвох.
    ================================================================ */
-const TT = { b: [], busy: false, lvl: LS.get('tttLvl', 0), me: 0, bot: 0, wins: 0 };
+const TT_LVS = [
+  { k: 'easy', em: '🐣', nm: 'Легко' },     // здебільшого навмання, інколи блокує
+  { k: 'mid', em: '🦊', nm: 'Середньо' },   // завжди виграє / блокує, займає центр і кути
+  { k: 'hard', em: '🧠', nm: 'Важко' },     // грає ідеально (мінімакс) - виграти не можна, лише нічия
+];
+const TT = { b: [], busy: false, mode: LS.get('tttMode', 'bot'), lv: LS.get('tttDiff', 'easy'), turn: 'x', first: 'x', me: 0, bot: 0, dr: 0 };
+if (!TT_LVS.some((l) => l.k === TT.lv)) TT.lv = 'easy';
+const ttStatAll = () => {
+  const s = LS.get('tttStat', null) || {};
+  s.bot = s.bot || {}; TT_LVS.forEach((l) => { s.bot[l.k] = s.bot[l.k] || { w: 0, l: 0, d: 0 }; });
+  s.duo = s.duo || { x: 0, o: 0, d: 0 };
+  return s;
+};
 const TT_LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 function tttLine(b) {
   for (const L of TT_LINES) if (b[L[0]] && b[L[0]] === b[L[1]] && b[L[0]] === b[L[2]]) return L;
   return null;
 }
+/** Мінімакс: найкращий хід для m ('o' або 'x'). Повертає [оцінка, клітинка]. */
+function tttMinimax(b, m, depth) {
+  const w = tttLine(b);
+  if (w) return [b[w[0]] === 'o' ? 10 - depth : depth - 10, -1];
+  if (b.every(Boolean)) return [0, -1];
+  let best = m === 'o' ? [-99, -1] : [99, -1];
+  for (let i = 0; i < 9; i++) {
+    if (b[i]) continue;
+    b[i] = m; const [s] = tttMinimax(b, m === 'o' ? 'x' : 'o', depth + 1); b[i] = '';
+    if (m === 'o' ? s > best[0] : s < best[0]) best = [s, i];
+    else if (s === best[0] && Math.random() < 0.3) best = [s, i];   // різні, але однаково добрі ходи
+  }
+  return best;
+}
 function tttBot() {
   const b = TT.b, free = [];
   b.forEach((v, i) => { if (!v) free.push(i); });
+  if (TT.lv === 'hard') return free.length === 9 ? pick([0, 2, 4, 6, 8]) : tttMinimax(b.slice(), 'o', 0)[1];
   const find = (m) => { for (const i of free) { b[i] = m; const w = tttLine(b); b[i] = ''; if (w) return i; } return -1; };
-  // 0 - здебільшого навмання; 1 - завжди виграє/блокує; 2 - ще й займає центр і кути
-  if (TT.lvl >= 1 || Math.random() < 0.35) {
+  if (TT.lv === 'mid' || Math.random() < 0.35) {
     let i = find('o'); if (i >= 0) return i;
     i = find('x'); if (i >= 0) return i;
   }
-  if (TT.lvl >= 2) {
+  if (TT.lv === 'mid') {
     if (!b[4]) return 4;
     const cn = [0, 2, 6, 8].filter((i) => !b[i]);
     if (cn.length) return pick(cn);
   }
   return pick(free);
 }
+const ttMark = (m) => m === 'x' ? '<b class="tx">✕</b>' : '<b class="to">◯</b>';
+function tttPanels() {
+  $('#tttMode').innerHTML = [['bot', '🤖', 'З компʼютером'], ['duo', '👫', 'Удвох']].map(([k, em, nm]) =>
+    `<button class="sbtn${TT.mode === k ? ' on' : ''}" data-m="${k}"><span>${em}</span>${nm}</button>`).join('');
+  $('#tttLv').hidden = TT.mode !== 'bot';
+  $('#tttLv').innerHTML = TT_LVS.map((l) =>
+    `<button class="sbtn${TT.lv === l.k ? ' on' : ''}" data-l="${l.k}"><span>${l.em}</span>${l.nm}</button>`).join('');
+}
+function tttStatUI() {
+  const s = ttStatAll(), box = $('#tttStat');
+  if (TT.mode === 'bot') {
+    const l = TT_LVS.find((x) => x.k === TT.lv), v = s.bot[TT.lv];
+    box.innerHTML = `<div class="ts-h">📊 ${l.em} <span>${l.nm}</span></div>` +
+      `<div class="ts"><b>${v.w}</b><small>Перемоги</small></div><div class="ts"><b>${v.l}</b><small>Поразки</small></div>` +
+      `<div class="ts"><b>${v.d}</b><small>Нічиї</small></div><button class="mini" id="tttReset" aria-label="Скинути статистику">🗑️</button>`;
+  } else {
+    const v = s.duo;
+    box.innerHTML = `<div class="ts-h">📊 👫 <span>Удвох</span></div>` +
+      `<div class="ts"><b class="tx">${v.x}</b><small>Виграв ✕</small></div><div class="ts"><b class="to">${v.o}</b><small>Виграв ◯</small></div>` +
+      `<div class="ts"><b>${v.d}</b><small>Нічиї</small></div><button class="mini" id="tttReset" aria-label="Скинути статистику">🗑️</button>`;
+  }
+}
+function tttAddStat(res) {               // res: 'x' | 'o' | 'd'
+  const s = ttStatAll();
+  if (TT.mode === 'bot') { const v = s.bot[TT.lv]; if (res === 'x') v.w++; else if (res === 'o') v.l++; else v.d++; }
+  else s.duo[res]++;
+  LS.set('tttStat', s); tttStatUI();
+}
 function tttUI(win) {
   $('#ttt').innerHTML = TT.b.map((v, i) =>
     `<button class="big ttc${win && win.includes(i) ? ' win' : ''}" data-i="${i}">${v === 'x' ? '<span class="tx">✕</span>' : v === 'o' ? '<span class="to">◯</span>' : ''}</button>`).join('');
-  $('#tttScore').innerHTML = `Ти <span class="tx">${TT.me}</span> : <span class="to">${TT.bot}</span> Гра`;
+  $('#tttScore').innerHTML = TT.mode === 'bot'
+    ? `Ти <span class="tx">${TT.me}</span> : <span class="to">${TT.bot}</span> 🤖`
+    : `<span class="tx">✕ ${TT.me}</span> : <span class="to">${TT.bot} ◯</span>`;
+}
+function tttAsk() {
+  $('#tttAsk').innerHTML = TT.mode === 'bot'
+    ? 'Твій хід! Ти ставиш <b class="tx">✕</b><small>склади три в ряд</small>'
+    : `Хід: ${ttMark(TT.turn)}<small>склади три в ряд</small>`;
 }
 function tttNew() {
   TT.b = Array(9).fill(''); TT.busy = false;
-  $('#tttAsk').innerHTML = 'Твій хід! Ти ставиш <b class="tx">✕</b><small>склади три в ряд</small>';
-  tttUI();
+  TT.turn = TT.mode === 'duo' ? TT.first : 'x';
+  tttAsk(); tttUI();
+}
+function tttRestart() {                  // новий режим / рівень - рахунок сесії з нуля
+  TT.me = 0; TT.bot = 0; TT.dr = 0; TT.first = 'x';
+  tttPanels(); tttStatUI(); tttNew();
 }
 function tttCheck() {
   const w = tttLine(TT.b);
+  const next = () => { if (TT.mode === 'duo') TT.first = TT.first === 'x' ? 'o' : 'x'; };
   if (w) {
-    TT.busy = true; tttUI(w);
-    if (TT.b[w[0]] === 'x') {
-      TT.me++; TT.wins++; cheer(); confetti(); vibe(40); addStar();
-      $('#tttAsk').innerHTML = 'Ти переміг! 🎉';
-      say('Ти переміг!');
-      if (TT.wins >= 2 && TT.lvl < 2) { TT.lvl++; TT.wins = 0; LS.set('tttLvl', TT.lvl); }
+    TT.busy = true;
+    const who = TT.b[w[0]];
+    if (who === 'x') TT.me++; else TT.bot++;
+    if (TT.mode === 'bot') {
+      if (who === 'x') {
+        cheer(); confetti(); vibe(40); addStar();
+        $('#tttAsk').innerHTML = 'Ти переміг! 🎉'; say('Ти переміг!');
+      } else {
+        oops();
+        $('#tttAsk').innerHTML = 'Цього разу виграла гра 🙂<small>граймо ще!</small>';
+      }
     } else {
-      TT.bot++; oops(); TT.wins = 0;
-      $('#tttAsk').innerHTML = 'Цього разу виграла гра 🙂<small>граймо ще!</small>';
-      if (TT.lvl > 0) { TT.lvl--; LS.set('tttLvl', TT.lvl); }
+      cheer(); confetti(); vibe(40);
+      $('#tttAsk').innerHTML = `🎉 Перемога: ${ttMark(who)}<small>наступну гру починає ${TT.first === 'x' ? '◯' : '✕'}</small>`;
+      say('Молодець!');
     }
-    tttUI(w);
-    setTimeout(tttNew, 2200);
+    tttUI(w); tttAddStat(who); next();
+    setTimeout(() => { if (SCR === 'ttt') tttNew(); }, 2200);
     return true;
   }
   if (TT.b.every(Boolean)) {
-    TT.busy = true; beep(523, 0.2, 'triangle', 0.18);
+    TT.busy = true; TT.dr++; beep(523, 0.2, 'triangle', 0.18);
     $('#tttAsk').innerHTML = 'Нічия! 🤝<small>ніхто не переміг</small>';
-    setTimeout(tttNew, 1900);
+    tttAddStat('d'); next();
+    setTimeout(() => { if (SCR === 'ttt') tttNew(); }, 1900);
     return true;
   }
   return false;
 }
-START.ttt = () => { TT.me = 0; TT.bot = 0; tttNew(); say('Склади три хрестики в ряд'); };
+START.ttt = () => { tttRestart(); say('Склади три хрестики в ряд'); };
 STOP.ttt = () => { TT.busy = true; };
+$('#tttMode').onclick = (e) => {
+  const b = e.target.closest('[data-m]'); if (!b || b.dataset.m === TT.mode) return;
+  TT.mode = b.dataset.m; LS.set('tttMode', TT.mode); blip(); tttRestart();
+};
+$('#tttLv').onclick = (e) => {
+  const b = e.target.closest('[data-l]'); if (!b || b.dataset.l === TT.lv) return;
+  TT.lv = b.dataset.l; LS.set('tttDiff', TT.lv); blip(); tttRestart();
+};
+$('#tttStat').onclick = (e) => {
+  if (!e.target.closest('#tttReset')) return;
+  blip();
+  dialog({
+    em: '🗑️', h: 'Скинути статистику?', p: TT.mode === 'bot' ? 'Лише для цього рівня.' : 'Лише для гри удвох.',
+    btn: 'Скинути', btn2: 'Ні',
+    onBtn: () => {
+      const s = ttStatAll();
+      if (TT.mode === 'bot') s.bot[TT.lv] = { w: 0, l: 0, d: 0 }; else s.duo = { x: 0, o: 0, d: 0 };
+      LS.set('tttStat', s); tttStatUI();
+    },
+  });
+};
 $('#ttt').onclick = (e) => {
   const c = e.target.closest('[data-i]'); if (!c || TT.busy) return;
   const i = +c.dataset.i; if (TT.b[i]) return;
+  if (TT.mode === 'duo') {
+    TT.b[i] = TT.turn; tapBeep(TT.turn === 'x' ? 660 : 440, 0.1, 'triangle', 0.18); tttUI();
+    if (tttCheck()) return;
+    TT.turn = TT.turn === 'x' ? 'o' : 'x'; tttAsk();
+    return;
+  }
   TT.b[i] = 'x'; tapBeep(660, 0.1, 'triangle', 0.18); tttUI();
   if (tttCheck()) return;
   TT.busy = true;
   $('#tttAsk').innerHTML = 'Гра думає… 🤔';
   setTimeout(() => {
-    if (SCR !== 'ttt') return;
+    if (SCR !== 'ttt' || TT.mode !== 'bot') return;
     TT.b[tttBot()] = 'o'; tapBeep(440, 0.1, 'triangle', 0.16); tttUI();
-    if (!tttCheck()) { TT.busy = false; $('#tttAsk').innerHTML = 'Твій хід! Ти ставиш <b class="tx">✕</b><small>склади три в ряд</small>'; }
+    if (!tttCheck()) { TT.busy = false; tttAsk(); }
   }, 650);
 };
 

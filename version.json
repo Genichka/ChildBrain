@@ -1,7 +1,10 @@
 {
-  "version": "1.8.0",
+  "version": "1.8.1",
   "date": "2026-10-23",
   "changes": [
+    "Хрестики-нулики: гра 🤖 з компʼютером або 👫 удвох на одному телефоні",
+    "Хрестики-нулики: рівні 🐣 Легко · 🦊 Середньо · 🧠 Важко (на «Важко» компʼютер не програє — лише нічия)",
+    "Хрестики-нулики: статистика перемог, поразок і нічиїх для кожного рівня й для гри удвох, кнопка 🗑️ скидає",
     "Заставка зі звуком із відео EnergyUA. Якщо браузер не пускає звук одразу — внизу «🔊 торкнись — зі звуком»: перший дотик вмикає звук, другий пропускає заставку",
     "Заставка — тільки при вході в гру, не після «Оновити» чи перезавантаження",
     "Заставка EnergyUA при запуску: батарейка заряджається до 100 %, спалах — і зʼявляється логотип. Торкнись — пропустити",
@@ -23,6 +26,9 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "X și 0: joc 🤖 cu calculatorul sau 👫 în doi pe același telefon",
+    "X și 0: niveluri 🐣 Ușor · 🦊 Mediu · 🧠 Greu (la „Greu” calculatorul nu pierde — doar egal)",
+    "X și 0: statistici de victorii, înfrângeri și egaluri pentru fiecare nivel și pentru jocul în doi, 🗑️ resetează",
     "Intro cu sunet din clipul EnergyUA. Dacă browserul nu pornește sunetul — jos „🔊 atinge — cu sunet”: prima atingere pornește sunetul, a doua sare peste intro",
     "Intro doar la intrarea în joc, nu după „Actualizează” sau reîncărcare",
     "Intro EnergyUA la pornire: bateria se încarcă la 100 %, o sclipire — și apare logoul. Atinge ca să sari peste",
@@ -44,6 +50,9 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Tic-tac-toe: play 🤖 vs computer or 👫 two players on one phone",
+    "Tic-tac-toe: levels 🐣 Easy · 🦊 Medium · 🧠 Hard (on Hard the computer never loses — a draw at best)",
+    "Tic-tac-toe: win / loss / draw stats for each level and for two players, 🗑️ resets",
     "Intro with the EnergyUA video sound. If the browser blocks it — “🔊 tap — with sound” at the bottom: first tap turns the sound on, second skips",
     "Intro only when you open the game, not after Update or a reload",
     "EnergyUA intro on launch: a battery charges to 100 %, a flash — and the logo appears. Tap to skip",
