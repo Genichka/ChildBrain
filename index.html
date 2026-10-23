@@ -619,9 +619,80 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .endbox .em{font-size:64px;line-height:1}
 .endbox b{font-size:24px}
 .endbox span{color:var(--dim);font-weight:700}
+/* ---------- заставка EnergyUA: батарейка заряджається → логотип ---------- */
+#splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  transition:opacity .35s ease;cursor:pointer;-webkit-user-select:none;user-select:none}
+#splash.out{opacity:0;pointer-events:none}
+#splash .sp-dust{position:absolute;inset:0;pointer-events:none;transition:opacity .6s}
+#splash .sp-dust i{position:absolute;width:2px;height:2px;border-radius:50%;background:#ffb02e;animation:spTw 1.6s ease-in-out infinite alternate}
+@keyframes spTw{from{opacity:.15}to{opacity:.8}}
+#splash .sp-flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#ffffff 0,#bdbdbd55 35%,#00000000 70%);opacity:0;pointer-events:none}
+#splash.full .sp-flash{animation:spFlash .5s ease-out forwards}
+@keyframes spFlash{0%{opacity:0}25%{opacity:.75}100%{opacity:0}}
+#splash .sp-bat{position:absolute;display:flex;flex-direction:column;align-items:center;gap:14px;transition:opacity .35s,transform .45s}
+#splash .sp-box{position:relative;width:min(64vw,300px);aspect-ratio:2.3;border:3px solid #d8d8d8;border-radius:12px;padding:6px;display:flex;gap:5px;
+  transition:box-shadow .3s,border-color .3s}
+#splash .sp-box::after{content:'';position:absolute;right:-12px;top:32%;width:8px;height:36%;background:#d8d8d8;border-radius:0 4px 4px 0}
+#splash .sp-cell{flex:1;border-radius:4px;background:linear-gradient(180deg,#ffb000,#ff8a00);opacity:0}
+#splash .sp-cell:nth-child(n+3){background:linear-gradient(180deg,#ffd000,#ffa800)}
+#splash .sp-cell:nth-child(n+5){background:linear-gradient(180deg,#ffef3a,#ffc400)}
+#splash .sp-box .sp-bolt{position:absolute;left:50%;top:50%;width:13%;transform:translate(-50%,-50%);filter:drop-shadow(0 0 4px #ffcf33)}
+#splash .sp-pct{font:600 13px ui-monospace,'Roboto Mono',Menlo,Consolas,monospace;color:#cfcfcf;letter-spacing:.5px}
+#splash.full .sp-box{border-color:#fff8c0;box-shadow:0 0 22px 6px #ffd23a,0 0 60px 18px #ff9a0055}
+#splash.full .sp-cell{background:linear-gradient(180deg,#fff57a,#ffd400)}
+#splash.logo .sp-bat{opacity:0;transform:scale(1.15)}
+#splash.logo .sp-dust{opacity:0}
+#splash .sp-logo{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;transform:scale(.88);transition:opacity .4s,transform .6s cubic-bezier(.2,.9,.3,1.2)}
+#splash.logo .sp-logo{opacity:1;transform:none}
+#splash .sp-name{font-family:'Roboto Condensed','Arial Narrow','sans-serif-condensed',Impact,'Oswald',sans-serif;font-weight:700;font-stretch:condensed;
+  font-size:min(17vw,96px);line-height:1;letter-spacing:.5px;background:linear-gradient(180deg,#ffe94a 15%,#ffb300 60%,#ff8a10);
+  -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px #ff9d00aa) drop-shadow(0 0 2px #ffcc00)}
+#splash .sp-logo .sp-bolt{width:min(7vw,38px);filter:drop-shadow(0 0 6px #ffcf33)}
+#splash .sp-jr{font-family:Inter,Roboto,'Segoe UI',system-ui,sans-serif;font-weight:700;font-size:min(5vw,22px);letter-spacing:6px;color:var(--gf-blue);
+  opacity:0;transition:opacity .4s .35s;text-transform:uppercase;margin-top:4px}
+#splash.logo .sp-jr{opacity:.9}
+@media (prefers-reduced-motion:reduce){#splash .sp-dust i{animation:none}}
 </style>
 </head>
 <body class="in-menu">
+<!-- заставка при запуску: торкнись — пропустити -->
+<div id="splash" aria-hidden="true">
+  <div class="sp-dust"></div><div class="sp-flash"></div>
+  <div class="sp-bat"><div class="sp-box"><i class="sp-cell"></i><i class="sp-cell"></i><i class="sp-cell"></i><i class="sp-cell"></i><i class="sp-cell"></i><svg class="sp-bolt" viewBox="0 0 20 30" aria-hidden="true"><path d="M13 0 L1 17 H9 L6 30 L19 11 H11 Z" fill="#ffd21f"/></svg></div>
+    <div class="sp-pct" translate="no">0%</div></div>
+  <div class="sp-logo"><div class="sp-name" translate="no">EnergyUA</div><svg class="sp-bolt" viewBox="0 0 20 30" aria-hidden="true"><path d="M13 0 L1 17 H9 L6 30 L19 11 H11 Z" fill="#ffd21f"/></svg><div class="sp-jr" translate="no">Junior</div></div>
+</div>
+<script>
+/* Заставка EnergyUA (~3,8 с): батарейка 0→100 %, спалах, логотип, згасання. Торкання - пропустити. */
+(() => {
+  const sp = document.getElementById('splash'); if (!sp) return;
+  const dust = sp.querySelector('.sp-dust'), cells = sp.querySelectorAll('.sp-cell'), pct = sp.querySelector('.sp-pct');
+  for (let k = 0; k < 40; k++) {
+    const d = document.createElement('i');
+    d.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-delay:${-Math.random() * 1.6}s;opacity:${0.2 + Math.random() * 0.5}`;
+    if (Math.random() < 0.3) d.style.width = d.style.height = '3px';
+    dust.appendChild(d);
+  }
+  const CHARGE = 1700, T = [];
+  let done = false, raf = 0;
+  const end = () => {
+    if (done) return; done = true; cancelAnimationFrame(raf); T.forEach(clearTimeout);
+    sp.classList.add('out'); setTimeout(() => sp.remove(), 380);
+  };
+  const t0 = performance.now();
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / CHARGE), v = Math.round(k * 100);
+    pct.textContent = v + '%';
+    cells.forEach((c, i) => { c.style.opacity = Math.max(0, Math.min(1, (v - i * 20) / 20)).toFixed(2); });
+    if (k < 1) raf = requestAnimationFrame(step);
+  };
+  raf = requestAnimationFrame(step);
+  T.push(setTimeout(() => sp.classList.add('full'), CHARGE + 80));
+  T.push(setTimeout(() => sp.classList.add('logo'), CHARGE + 450));
+  T.push(setTimeout(end, 3800));
+  sp.addEventListener('pointerdown', (e) => { e.preventDefault(); end(); });
+})();
+</script>
 
 <header class="top">
   <button class="icon" id="back" aria-label="Вихід"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg></button>
@@ -1121,7 +1192,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.7.7';
+const APP_VERSION = '1.7.8';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
