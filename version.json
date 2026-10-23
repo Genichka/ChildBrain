@@ -1,7 +1,8 @@
 {
-  "version": "1.8.4",
+  "version": "1.8.5",
   "date": "2026-10-23",
   "changes": [
+    "Прибирання коду: дублі й непотрібні переклади, обʼєднані повторені стилі, старі налаштування стираються з памʼяті телефона",
     "«Скільки разів?»: виправлено зависання гри, коли випадав 1 стук",
     "Абетка: на кожну букву по 2–4 слова — натисни ту саму букву ще раз, і буде нове слово (крапки показують, котре)",
     "Ігри памʼятають, до якого рівня дійшла дитина, і наступного разу починають на один крок нижче — для розминки",
@@ -31,6 +32,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Curățenie în cod: dubluri și traduceri inutile eliminate, stiluri repetate unite, setările vechi se șterg din telefon",
     "„De câte ori?”: reparat blocarea jocului când ieșea o singură bătaie",
     "Alfabetul (ucraineană): 2–4 cuvinte pentru fiecare literă — apasă din nou aceeași literă pentru alt cuvânt",
     "Jocurile țin minte nivelul atins și data viitoare încep cu un pas mai jos — pentru încălzire",
@@ -60,6 +62,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Code cleanup: duplicate and unused translations removed, repeated styles merged, old settings cleared from the phone",
     "“How many times?”: fixed the game freezing when there was just 1 knock",
     "Alphabet (Ukrainian): 2–4 words per letter — tap the same letter again for another word",
     "Games remember the level reached and next time start one step lower — as a warm-up",

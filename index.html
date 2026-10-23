@@ -34,7 +34,7 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 
 /* ---------- шапка ---------- */
 .top{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:60px}
-.top h1{font-size:clamp(12px,3.6vw,18px);margin:0;flex:1;min-width:0;text-align:center;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1{order:1;font-size:clamp(12px,3.6vw,18px);margin:0;flex:1;min-width:0;text-align:center;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .icon{
   width:50px;height:50px;flex:0 0 auto;border-radius:16px;background:var(--card);
   border:2px solid var(--line);font-size:24px;display:grid;place-items:center;
@@ -215,10 +215,9 @@ button{font-family:inherit;font-weight:800;color:inherit;cursor:pointer;border:0
 #pzLv{grid-template-columns:repeat(3,1fr)}
 .pz{display:grid;gap:6px;margin:0 auto;width:min(88vw,42vh,360px);touch-action:none;user-select:none;-webkit-user-select:none}
 .pz>div{border-radius:12px;background:#ffffff0d}
-.pzt{border-radius:12px;border:0;background:linear-gradient(170deg,#8ab8ff,#3274d9);color:#fff;font-weight:900;box-shadow:0 4px 0 #0004;padding:0;animation:in .2s backwards}
+.pzt{border-radius:12px;border:0;background:linear-gradient(170deg,#8ab8ff,#3274d9);color:#fff;font-weight:900;box-shadow:0 4px 0 #0004;padding:0;animation:in .2s backwards;transition:transform .14s ease-out}
 .pzt:active{transform:translateY(3px);box-shadow:0 1px 0 #0004}
 .pzt.ok{background:linear-gradient(170deg,#96d98d,#56a64b)}
-.pzt{transition:transform .14s ease-out}
 .pz.still .pzt{animation:none}
 .pzt.drag{transition:none;position:relative;z-index:5;box-shadow:0 8px 16px #0006}
 /* ---------- пазли ---------- */
@@ -554,7 +553,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 #back{color:var(--gf-txt)}
 #back svg{width:24px;height:24px;display:block}
 #back:active{color:#fff}
-.top #back{order:0}.top h1{order:1}.top #starBtn{order:2}.top #clkBtn{order:3}
+.top #back{order:0}.top #starBtn{order:2}.top #clkBtn{order:3}
 .in-menu .top #starBtn{display:none}.in-menu .top #back{order:2}
 .in-menu .top h1{overflow:visible;text-overflow:clip}
 
@@ -1243,7 +1242,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.8.4';
+const APP_VERSION = '1.8.5';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1267,6 +1266,8 @@ const LS = {
    Запамʼятовуємо, до якого рівня дійшла дитина; при вході - на один крок нижче (розминка з успіху),
    а далі гра сама швидко підвищує складність. В іграх на швидкість - рекорд. */
 const PROG = LS.get('prog', null) || {};
+// старі ключі прибраних функцій (1.8.1: автоскладність хрестиків; 1.7.3: стара тінь тетрісу)
+try { ['tttLvl', 'tetGhost'].forEach((k) => localStorage.removeItem('gralyk.' + k)); } catch (e) { /* */ }
 function progSave(k, v) { if (PROG[k] === v) return; PROG[k] = v; LS.set('prog', PROG); }
 function progStart(k, min, step = 1) { const v = PROG[k]; return v == null ? min : Math.max(min, v - step); }
 function progBest(k, score) { if (score > (PROG[k] || 0)) { progSave(k, score); return true; } return false; }
@@ -1395,7 +1396,6 @@ Object.assign(I18N, {
   "Лопай бульбашки": { ro: "Sparge baloanele", en: "Pop the bubbles" },
   "нірка": { ro: "vizuină", en: "burrow" },
   "барабан": { ro: "tobă", en: "drum" },
-  "дзвіночок": { ro: "clopoțel", en: "bell" },
   "труба": { ro: "trompetă", en: "trumpet" },
   "піаніно": { ro: "pian", en: "piano" },
   "гітара": { ro: "chitară", en: "guitar" },
@@ -1408,17 +1408,13 @@ Object.assign(I18N, {
   "Букви": { ro: "Litere", en: "Letters" },
   "рахувати, додавати й множити": { ro: "să numeri, să aduni și să înmulțești", en: "counting, adding and multiplying" },
   "упізнавати букви й першу букву слова": { ro: "să recunoști literele și prima literă din cuvânt", en: "recognising letters and the first letter of a word" },
-  "Лічба": { ro: "Numărat", en: "Counting" },
   "Логіка": { ro: "Logică", en: "Logic" },
   "Швидкість": { ro: "Viteză", en: "Speed" },
-  "Розваги": { ro: "Distracție", en: "Fun" },
   "розрізняти звуки й запамʼятовувати почуте": { ro: "să deosebești sunetele și să ții minte ce ai auzit", en: "telling sounds apart and remembering what you hear" },
   "помічати колір, форму, зайве й відсутнє": { ro: "să observi culoarea, forma, ce e în plus și ce lipsește", en: "noticing colour, shape, the odd one and the missing one" },
   "запамʼятати, де що лежить і як стояло": { ro: "să ții minte unde e fiecare lucru și cum a stat", en: "remembering where things are and how they stood" },
-  "рахувати й упізнавати перші букви": { ro: "să numeri și să recunoști primele litere", en: "counting and recognising first letters" },
   "думати наперед і робити висновки": { ro: "să gândești dinainte și să tragi concluzii", en: "thinking ahead and drawing conclusions" },
   "реакція й точність рухів": { ro: "reacție și mișcări precise", en: "reaction and precise moves" },
-  "просто побігати й пострибати": { ro: "doar să alergi și să sari", en: "just running and jumping" },
   "Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐": { ro: "Alege un joc și joacă-te. Steluțele se adună în albumul de abțibilduri ⭐", en: "Pick a game and play. Stars go into the sticker album ⭐" },
   "🔄 Оновити": { ro: "🔄 Actualizează", en: "🔄 Update" },
   "Вихід": { ro: "Ieșire", en: "Exit" },
@@ -1455,7 +1451,6 @@ Object.assign(I18N, {
   "▶️ Грати далі": { ro: "▶️ Continuă", en: "▶️ Resume" },
   "Рядів": { ro: "Rânduri", en: "Lines" },
   "Рекорд": { ro: "Record", en: "Best" },
-  "⏬ Кинути вниз": { ro: "⏬ Aruncă jos", en: "⏬ Drop" },
   "🎉 Тетріс! Чотири ряди!": { ro: "🎉 Tetris! Patru rânduri!", en: "🎉 Tetris! Four lines!" },
   "Це новий рекорд!": { ro: "Este un record nou!", en: "That's a new record!" },
   "🏆 Новий рекорд!": { ro: "🏆 Record nou!", en: "🏆 New record!" },
@@ -1714,7 +1709,6 @@ Object.assign(I18N, {
   "швидше!": { ro: "mai repede!", en: "faster!" },
   "+ кораблик": { ro: "+ navă", en: "+ ship" },
   "Усі кульки лопнули": { ro: "Toate bilele s-au spart", en: "All the balls popped" },
-  "Кульки долетіли до діри": { ro: "Bilele au ajuns la gaura neagră", en: "The balls reached the hole" },
   "щит!": { ro: "scut!", en: "shield!" },
   "бабах!": { ro: "bum!", en: "boom!" },
   "мороз!": { ro: "îngheț!", en: "freeze!" },
@@ -6839,9 +6833,9 @@ $('#moHoles').addEventListener('pointerdown', (e) => {
 });
 
 /* ================================================================
-   ТЕТРІС  (для дітей: тінь показує, куди впаде фігурка; поле нижче звичайного;
+   ТЕТРІС  (поле на весь екран; тінь-підказка 👻, куди впаде фігурка - вимкнена, поки не ввімкнути;
    на «Поволі» - лише прості фігури, без «зигзагів»)
-   Керування: кнопки ⬅️ 🔄 ➡️ ⬇️ (затисни - повторює) або пальцем по полю:
+   Керування: кнопки ⬅️ 🔄 ➡️ ⬇️ (затисни - повторює), ⏬ - кинути вниз, або пальцем по полю:
    торкнувся - поворот, тягнеш убік - фігурка йде за пальцем, змахнув униз - падає.
    ================================================================ */
 const TT_COLS = 10; let TT_ROWS = 16;   // рядків стільки, скільки влазить на екран (не менше 16)
