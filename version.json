@@ -1,7 +1,8 @@
 {
-  "version": "1.9.0",
+  "version": "1.9.1",
   "date": "2026-10-23",
   "changes": [
+    "«Знайди всіх»: що шукати — велика картинка в рамці під завданням",
     "Три нові гри на увагу: 🪞 Знайди відмінність, 🎯 Такий самий, 🔢 Числа по порядку",
     "Числа по порядку: натискай 1, 2, 3… по черзі на час — є рекорд для кожного розміру",
     "Прибирання коду: дублі й непотрібні переклади, обʼєднані повторені стилі, старі налаштування стираються з памʼяті телефона",
@@ -34,6 +35,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "„Găsește-i pe toți”: ce cauți — o imagine mare în ramă sub sarcină",
     "Trei jocuri noi de atenție: 🪞 Găsește diferența, 🎯 La fel, 🔢 Numere în ordine",
     "Numere în ordine: apasă 1, 2, 3… pe rând contra cronometru — record pentru fiecare mărime",
     "Curățenie în cod: dubluri și traduceri inutile eliminate, stiluri repetate unite, setările vechi se șterg din telefon",
@@ -66,6 +68,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "“Find them all”: what to look for is now a big framed picture under the task",
     "Three new attention games: 🪞 Spot the difference, 🎯 The same, 🔢 Numbers in order",
     "Numbers in order: tap 1, 2, 3… against the clock — a best time for each size",
     "Code cleanup: duplicate and unused translations removed, repeated styles merged, old settings cleared from the phone",
