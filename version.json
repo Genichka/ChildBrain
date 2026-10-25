@@ -1,7 +1,10 @@
 {
-  "version": "1.9.2",
-  "date": "2026-10-23",
+  "version": "1.9.3",
+  "date": "2026-10-26",
   "changes": [
+    "Музична заморозка: перед грою два правила з картинками й голосом — торкнись правила, і голос скаже ще раз",
+    "Музична заморозка: угорі табличка «🎵 Лопай!» / «❄️ Завмри!», голос каже «Завмри!» і «Лопай!»",
+    "Музична заморозка: у тиші кульки справді замерзають — зупиняються, біліють, на них сніжинка; торкнувся — кулька не лопається, а трусить головою",
     "Слух: нові ігри 🎹 Піаніно, 🥁 Повтори ритм, 🧊 Музична заморозка, 💎 Скарб на слух",
     "Піаніно: обери пісеньку — клавіша, яку натискати, світиться; склав — гра програє її цілком",
     "«Хто грає?» і «Скільки разів?» прибрано — у групі «Слух» тепер 8 ігор",
@@ -38,6 +41,9 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Statuile muzicale: înainte de joc — două reguli cu imagini și voce; atinge o regulă și vocea o repetă",
+    "Statuile muzicale: sus apare „🎵 Sparge!” / „❄️ Îngheață!”, vocea spune „Îngheață!” și „Sparge!”",
+    "Statuile muzicale: în liniște baloanele chiar îngheață — se opresc, se albesc, au un fulg; dacă atingi unul, nu se sparge, ci clatină din cap",
     "Auz: jocuri noi 🎹 Pian, 🥁 Repetă ritmul, 🧊 Statuile muzicale, 💎 Comoara după sunet",
     "Pian: alege un cântec — clapa de apăsat strălucește; la final jocul îl cântă tot",
     "„Cine cântă?” și „De câte ori?” au fost scoase — grupa „Auz” are acum 8 jocuri",
@@ -74,6 +80,9 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Musical freeze: two picture rules with voice before the game — tap a rule to hear it again",
+    "Musical freeze: a sign at the top says “🎵 Pop!” / “❄️ Freeze!”, and the voice says “Freeze!” and “Pop!”",
+    "Musical freeze: in the silence balloons really freeze — they stop, turn white and get a snowflake; tap one and it won't pop, it just shakes",
     "Hearing: new games 🎹 Piano, 🥁 Repeat the rhythm, 🧊 Musical freeze, 💎 Treasure by ear",
     "Piano: pick a song — the key to press glows; finish it and the game plays it back",
     "“Who's playing?” and “How many times?” removed — the Hearing group now has 8 games",
