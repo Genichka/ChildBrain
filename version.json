@@ -1,7 +1,9 @@
 {
-  "version": "1.8.5",
+  "version": "1.9.0",
   "date": "2026-10-23",
   "changes": [
+    "Три нові гри на увагу: 🪞 Знайди відмінність, 🎯 Такий самий, 🔢 Числа по порядку",
+    "Числа по порядку: натискай 1, 2, 3… по черзі на час — є рекорд для кожного розміру",
     "Прибирання коду: дублі й непотрібні переклади, обʼєднані повторені стилі, старі налаштування стираються з памʼяті телефона",
     "«Скільки разів?»: виправлено зависання гри, коли випадав 1 стук",
     "Абетка: на кожну букву по 2–4 слова — натисни ту саму букву ще раз, і буде нове слово (крапки показують, котре)",
@@ -32,6 +34,8 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Trei jocuri noi de atenție: 🪞 Găsește diferența, 🎯 La fel, 🔢 Numere în ordine",
+    "Numere în ordine: apasă 1, 2, 3… pe rând contra cronometru — record pentru fiecare mărime",
     "Curățenie în cod: dubluri și traduceri inutile eliminate, stiluri repetate unite, setările vechi se șterg din telefon",
     "„De câte ori?”: reparat blocarea jocului când ieșea o singură bătaie",
     "Alfabetul (ucraineană): 2–4 cuvinte pentru fiecare literă — apasă din nou aceeași literă pentru alt cuvânt",
@@ -62,6 +66,8 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Three new attention games: 🪞 Spot the difference, 🎯 The same, 🔢 Numbers in order",
+    "Numbers in order: tap 1, 2, 3… against the clock — a best time for each size",
     "Code cleanup: duplicate and unused translations removed, repeated styles merged, old settings cleared from the phone",
     "“How many times?”: fixed the game freezing when there was just 1 knock",
     "Alphabet (Ukrainian): 2–4 words per letter — tap the same letter again for another word",

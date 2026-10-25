@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EnergyUA Junior">
 <title>EnergyUA Junior — ігри для дітей 4–8 років</title>
-<meta name="description" content="39 ігор для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
+<meta name="description" content="42 гри для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -572,6 +572,9 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .t37{background:linear-gradient(170deg,#c0d8ff,#5794f2)}
 .t38{background:linear-gradient(170deg,#ffcb7d,#ff9830)}
 .t39{background:linear-gradient(170deg,#c0d8ff,#b877d9)}
+.t40{background:linear-gradient(170deg,#a8f0e0,#33b5a0)}
+.t41{background:linear-gradient(170deg,#ffd9a8,#f2495c)}
+.t42{background:linear-gradient(170deg,#d6c2ff,#5794f2)}
 /* ---------- тетріс ---------- */
 .tet-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;flex:1;min-height:0}
 #s-tetris{padding:0 4px 4px}
@@ -603,6 +606,25 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .fagrid button.found{background:#73bf6940;border-color:var(--ok)}
 .fagrid button.found::after{content:"✓";position:absolute;right:4px;top:0;font-size:18px;font-weight:900;color:var(--grn)}
 .fagrid button.no{animation:shake .4s;border-color:var(--no)}
+/* знайди відмінність: дві однакові сітки, у нижній одна клітинка інша */
+.dfwrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.dfgrid{display:grid;gap:6px;width:min(78vw,300px);padding:8px;border-radius:18px;background:var(--card);border:2px solid var(--line)}
+.dfgrid button{aspect-ratio:1;border-radius:12px;background:#ffffff0a;border:2px solid transparent;font-size:var(--dfs,34px);padding:0;line-height:1}
+.dfgrid button.ok{background:#73bf6940;border-color:var(--ok);animation:pop .4s}
+.dfgrid button.no{animation:shake .4s;border-color:var(--no)}
+/* такий самий: ряд-зразок і варіанти */
+.smtgt{display:flex;justify-content:center;gap:6px;font-size:44px;padding:10px 14px;border-radius:18px;background:#ffd93d1f;border:3px solid #ffd93d99;width:max-content;margin:0 auto}
+.smopts{display:flex;flex-direction:column;gap:10px;width:min(86vw,340px);margin:0 auto}
+.smopts button{display:flex;justify-content:center;gap:6px;font-size:34px;padding:8px;border-radius:16px;background:var(--card);border:3px solid var(--line)}
+.smopts button.ok{background:#73bf6940;border-color:var(--ok);animation:pop .4s}
+.smopts button.no{animation:shake .4s;border-color:var(--no);opacity:.55}
+/* числа по порядку */
+.schud{display:flex;justify-content:center;gap:18px;font-size:16px;font-weight:800;color:var(--dim)}
+.schud b{color:var(--txt);font-variant-numeric:tabular-nums}
+.scgrid{display:grid;gap:7px;width:min(88vw,360px);margin:0 auto}
+.scgrid button{aspect-ratio:1;border-radius:14px;background:var(--card);border:3px solid var(--line);font-size:var(--scs,30px);font-weight:900;color:var(--txt);padding:0}
+.scgrid button.done{opacity:.25;border-color:var(--ok);background:#73bf6926}
+.scgrid button.no{animation:shake .4s;border-color:var(--no)}
 .dgbig{text-align:center;font-size:84px;font-weight:900;color:var(--yel);min-height:100px;line-height:1.2}
 .dgbig.pop{animation:pop .4s}
 .dgin{display:flex;gap:8px;justify-content:center;min-height:48px}
@@ -768,6 +790,9 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
       <button class="tile t12" data-go="gone"><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
       <button class="tile t33" data-go="shadow"><span class="em">👤</span><span class="nm">Чия<br>тінь?</span></button>
       <button class="tile t34" data-go="findall"><span class="em">🔎</span><span class="nm">Знайди<br>всіх</span></button>
+      <button class="tile t40" data-go="diff"><span class="em">🪞</span><span class="nm">Знайди<br>відмінність</span></button>
+      <button class="tile t41" data-go="same"><span class="em">🎯</span><span class="nm">Такий<br>самий</span></button>
+      <button class="tile t42" data-go="schulte"><span class="em">🔢</span><span class="nm">Числа по<br>порядку</span></button>
     </div></div>
     <div class="page" data-grp="Слух"><p class="gdesc">👂 <b>Слух</b> — розрізняти звуки й запамʼятовувати почуте</p><div class="menu">
       <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
@@ -1055,6 +1080,24 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   <div class="play"><div class="fagrid" id="faGrid"></div></div>
 </section>
 
+<!-- знайди відмінність -->
+<section class="scr" id="s-diff">
+  <div class="ask" id="dfAsk">Знайди відмінність</div>
+  <div class="play"><div class="dfwrap"><div class="dfgrid" id="dfA"></div><div class="dfgrid" id="dfB"></div></div></div>
+</section>
+
+<!-- такий самий -->
+<section class="scr" id="s-same">
+  <div class="ask" id="smAsk">Знайди такий самий ряд</div>
+  <div class="play"><div class="smtgt" id="smTgt"></div><div class="smopts" id="smOpts"></div></div>
+</section>
+
+<!-- числа по порядку (таблиця Шульте) -->
+<section class="scr" id="s-schulte">
+  <div class="ask" id="scAsk">Числа по порядку</div>
+  <div class="play"><div class="schud" id="scHud"></div><div class="scgrid" id="scGrid"></div></div>
+</section>
+
 <!-- запамʼятай числа -->
 <section class="scr" id="s-digits">
   <div class="ask" id="dgAsk">Запамʼятай числа</div>
@@ -1242,7 +1285,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.8.5';
+const APP_VERSION = '1.9.0';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1361,6 +1404,17 @@ Object.assign(I18N, {
   "Скільки<br>разів?": { ro: "De câte<br>ori?", en: "How<br>many times?" },
   "Чия<br>тінь?": { ro: "A cui<br>e umbra?", en: "Whose<br>shadow?" },
   "Знайди<br>всіх": { ro: "Găsește<br>-i pe toți", en: "Find<br>them all" },
+  "Знайди<br>відмінність": { ro: "Găsește<br>diferența", en: "Spot the<br>difference" },
+  "Такий<br>самий": { ro: "La<br>fel", en: "The<br>same" },
+  "Числа по<br>порядку": { ro: "Numere<br>în ordine", en: "Numbers<br>in order" },
+  "Знайди відмінність": { ro: "Găsește diferența", en: "Spot the difference" },
+  "внизу одна картинка інша": { ro: "jos o imagine e altfel", en: "one picture below is different" },
+  "Такий самий": { ro: "La fel", en: "The same" },
+  "Знайди такий самий ряд": { ro: "Găsește același șir", en: "Find the same row" },
+  "порівняй кожну картинку": { ro: "compară fiecare imagine", en: "compare every picture" },
+  "Числа по порядку": { ro: "Numere în ordine", en: "Numbers in order" },
+  "натискай по порядку: 1, 2, 3…": { ro: "apasă în ordine: 1, 2, 3…", en: "tap in order: 1, 2, 3…" },
+  "натискай по порядку": { ro: "apasă în ordine", en: "tap in order" },
   "Запамʼятай<br>числа": { ro: "Ține minte<br>numerele", en: "Remember<br>the numbers" },
   "Лови<br>зірочки": { ro: "Prinde<br>stelele", en: "Catch<br>the stars" },
   "Бульбашки": { ro: "Baloane de săpun", en: "Bubbles" },
@@ -1887,6 +1941,8 @@ I18N_RE.push(
   [new RegExp("^ще (\\d+)$"), { ro: "încă {1}", en: "{1} to go" }],
   [new RegExp("^Зібрано: (\\d+)$"), { ro: "Strâns: {1}", en: "Caught: {1}" }],
   [new RegExp("^Рекорд: (\\d+)$"), { ro: "Record: {1}", en: "Best: {1}" }],
+  [new RegExp("^Знайди (\\d+)$"), { ro: "Găsește {1}", en: "Find {1}" }],
+  [new RegExp("^([\\d.]+) с$"), { ro: "{1} s", en: "{1} s" }],
   [new RegExp("^Лопнуто: (\\d+)$"), { ro: "Sparte: {1}", en: "Popped: {1}" }],
   [new RegExp("^Упіймано: (\\d+)$"), { ro: "Prinse: {1}", en: "Caught: {1}" }],
   [new RegExp("^Зірочок у альбом: (\\d+)$"), { ro: "Steluțe în album: {1}", en: "Stars for the album: {1}" }],
@@ -2222,7 +2278,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 inst: 'Хто грає?', pitch: 'Високо чи низько?', knock: 'Скільки разів?', shadow: 'Чия тінь?', findall: 'Знайди всіх', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
+                 inst: 'Хто грає?', pitch: 'Високо чи низько?', knock: 'Скільки разів?', shadow: 'Чия тінь?', findall: 'Знайди всіх', diff: 'Знайди відмінність', same: 'Такий самий', schulte: 'Числа по порядку', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
                  rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', jigsaw: 'Пазли', bye: 'EnergyUA Junior' };
 
 /* ---------- статистика запусків (лише на цьому пристрої) ----------
@@ -6657,6 +6713,111 @@ $('#faGrid').onclick = (e) => {
   afterSay(faNew, 1800);
 };
 
+/* ---------- 7. ЗНАЙДИ ВІДМІННІСТЬ ----------
+   Дві однакові сітки картинок; у нижній одна клітинка інша. Торкнись її (у будь-якій сітці).
+   Рівні: 2×2 → 3×3 → 3×4 → 4×4; з 3-го рівня відмінна картинка - з тієї ж групи (схожа). */
+const DF_SETS = [['🍎', '🍌', '🍇', '🍓', '🍊', '🍉', '🍒', '🍐', '🥝', '🍋'], ['🐱', '🐶', '🐰', '🐻', '🐼', '🦊', '🐯', '🐮', '🐷', '🐸'],
+  ['🚗', '🚕', '🚌', '🚓', '🚒', '🚑', '🚜', '🚲', '✈️', '🚀'], ['⭐', '🌙', '☀️', '☁️', '🌈', '❄️', '⚡', '🔥', '💧', '🌸']];
+const DF_LV = [[2, 2], [3, 2], [3, 3], [4, 3], [4, 4]];          // [стовпців, рядків]
+const DF = { lv: 0, ok: 0, at: -1, busy: true };
+function dfNew() {
+  const [c, r] = DF_LV[DF.lv], n = c * r, sameSet = DF.lv >= 2;
+  const set = pick(DF_SETS), all = DF_SETS.flat();
+  const a = Array.from({ length: n }, () => pick(set));
+  DF.at = rnd(n);
+  const pool = (sameSet ? set : all).filter((e) => e !== a[DF.at]);
+  const b = a.slice(); b[DF.at] = pick(pool);
+  const fs = Math.round(Math.min(40, 220 / c)) + 'px';
+  [['#dfA', a], ['#dfB', b]].forEach(([id, arr]) => {
+    const g = $(id); g.style.gridTemplateColumns = `repeat(${c},1fr)`; g.style.setProperty('--dfs', fs);
+    g.innerHTML = arr.map((e, i) => `<button data-i="${i}">${e}</button>`).join('');
+  });
+  DF.busy = false;
+  $('#dfAsk').innerHTML = 'Знайди відмінність<small>внизу одна картинка інша</small>';
+  say('Знайди відмінність');
+}
+START.diff = () => { DF.lv = progStart('diff', 0); DF.ok = 0; dfNew(); };
+['#dfA', '#dfB'].forEach((id) => { $(id).onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || DF.busy) return;
+  const i = +b.dataset.i;
+  if (i !== DF.at) { memNo(b); say('Спробуй ще'); return; }
+  DF.busy = true;
+  $$(`#dfA button[data-i="${i}"], #dfB button[data-i="${i}"]`).forEach((x) => x.classList.add('ok'));
+  memWin('Так!');
+  if (++DF.ok % 2 === 0) { DF.lv = Math.min(DF_LV.length - 1, DF.lv + 1); progSave('diff', DF.lv); }
+  afterSay(dfNew, 1700);
+}; });
+
+/* ---------- 8. ТАКИЙ САМИЙ ----------
+   Зверху ряд-зразок, нижче кілька рядів; правильний - точнісінько такий самий.
+   Хибні: переставлені дві картинки або одна замінена. Рівні: довжина 2→5, варіантів 3→4. */
+const SM_LV = [[2, 3], [3, 3], [3, 4], [4, 4], [5, 4]];          // [картинок у ряду, варіантів]
+const SM = { lv: 0, ok: 0, key: '', busy: true };
+function smNew() {
+  const [len, k] = SM_LV[SM.lv], set = pick(DF_SETS);
+  const tgt = shuffle(set).slice(0, len), key = tgt.join('');
+  const opts = new Map([[key, tgt]]);
+  let guard = 0;
+  while (opts.size < k && guard++ < 200) {
+    const v = tgt.slice();
+    if (Math.random() < 0.5 && len >= 2) { const i = rnd(len); let j = rnd(len); if (i === j) j = (i + 1) % len; [v[i], v[j]] = [v[j], v[i]]; }
+    else { const i = rnd(len); v[i] = pick(set.filter((e) => !tgt.includes(e))); }
+    opts.set(v.join(''), v);
+  }
+  SM.key = key; SM.busy = false;
+  $('#smTgt').innerHTML = tgt.map((e) => `<span>${e}</span>`).join('');
+  $('#smOpts').innerHTML = shuffle([...opts.entries()]).map(([kk, v]) => `<button data-k="${kk}">${v.map((e) => `<span>${e}</span>`).join('')}</button>`).join('');
+  $('#smAsk').innerHTML = 'Знайди такий самий ряд<small>порівняй кожну картинку</small>';
+  say('Знайди такий самий ряд');
+}
+START.same = () => { SM.lv = progStart('same', 0); SM.ok = 0; smNew(); };
+$('#smOpts').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || SM.busy || b.classList.contains('no')) return;
+  if (b.dataset.k !== SM.key) { memNo(b); b.classList.add('no'); say('Спробуй ще'); return; }
+  SM.busy = true; b.classList.add('ok'); memWin('Так!');
+  if (++SM.ok % 2 === 0) { SM.lv = Math.min(SM_LV.length - 1, SM.lv + 1); progSave('same', SM.lv); }
+  afterSay(smNew, 1700);
+};
+
+/* ---------- 9. ЧИСЛА ПО ПОРЯДКУ (таблиця Шульте) ----------
+   Числа розкидані по сітці - натискай 1, 2, 3… по черзі. Голос підказує, яке шукати.
+   Рівні: 1–6, 1–9, 1–12, 1–16, 1–20, 1–25. Час і найкращий час для кожного розміру. */
+const SC_LV = [[3, 2], [3, 3], [4, 3], [4, 4], [5, 4], [5, 5]];   // [стовпців, рядків]
+const SC = { lv: 0, ok: 0, next: 1, n: 0, t0: 0, tm: 0, busy: true };
+const scSayNext = () => say(LANG === 'uk' ? ['Знайди', ...numW(SC.next)] : `Знайди ${SC.next}`);
+function scHud() {
+  const s = SC.t0 ? (performance.now() - SC.t0) / 1000 : 0, best = PROG['schT' + SC.n];
+  $('#scHud').innerHTML = `<span>⏱ <b>${s.toFixed(1)}</b></span>` + (best ? `<span>🏆 <b>${best.toFixed(1)}</b></span>` : '');
+}
+function scNew() {
+  const [c, r] = SC_LV[SC.lv]; SC.n = c * r; SC.next = 1; SC.t0 = 0;
+  const g = $('#scGrid'); g.style.gridTemplateColumns = `repeat(${c},1fr)`; g.style.setProperty('--scs', Math.round(Math.min(34, 150 / c)) + 'px');
+  g.innerHTML = shuffle(Array.from({ length: SC.n }, (_, i) => i + 1)).map((v) => `<button data-v="${v}">${v}</button>`).join('');
+  clearInterval(SC.tm); scHud();
+  SC.busy = false;
+  $('#scAsk').innerHTML = `Знайди 1<small>натискай по порядку: 1, 2, 3…</small>`;
+  scSayNext();
+}
+START.schulte = () => { SC.lv = progStart('schulte', 0); SC.ok = 0; scNew(); };
+STOP.schulte = () => { clearInterval(SC.tm); SC.busy = true; };
+$('#scGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || SC.busy || b.classList.contains('done')) return;
+  if (+b.dataset.v !== SC.next) { b.classList.add('no'); oops(); vibe(100); setTimeout(() => b.classList.remove('no'), 450); return; }
+  if (SC.next === 1) { SC.t0 = performance.now(); SC.tm = setInterval(scHud, 100); }
+  b.classList.add('done'); blip(); vibe(20);
+  if (SC.next < SC.n) {
+    SC.next++; $('#scAsk').innerHTML = `Знайди ${SC.next}<small>натискай по порядку</small>`; scSayNext(); return;
+  }
+  clearInterval(SC.tm); SC.busy = true;
+  const s = (performance.now() - SC.t0) / 1000, k = 'schT' + SC.n, rec = !PROG[k] || s < PROG[k];
+  if (rec) progSave(k, Math.round(s * 10) / 10);
+  scHud();
+  $('#scAsk').innerHTML = rec ? `🏆 Новий рекорд!<small>${s.toFixed(1)} с</small>` : `Молодець!<small>${s.toFixed(1)} с</small>`;
+  memWin('Молодець!');
+  if (++SC.ok % 2 === 0) { SC.lv = Math.min(SC_LV.length - 1, SC.lv + 1); progSave('schulte', SC.lv); }
+  afterSay(() => { if (SCR === 'schulte') scNew(); }, 2200);
+};
+
 /* ---------- 6. ЗАПАМʼЯТАЙ ЧИСЛА ---------- */
 const DG = { gen: 0, n: 2, ok: 0, seq: [], pos: 0, busy: true };
 async function dgShow(gen) {
@@ -7237,7 +7398,7 @@ const stFmt = (sec) => (sec >= 3600 ? `${Math.floor(sec / 3600)} г ${Math.round
 const stDate = (ms) => (ms ? new Date(ms).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' }) : '—');
 /** Рівень / рекорд гри для статистики: «4/6» - рівень 4 з 6, «🏆 31» - рекорд, «№7» - рівень без межі. */
 const PG_RANGE = { memory: [3, 8], count: [5, 10], shape: [1, 3], odd: [3, 4], gone: [3, 7], hide: [3, 6], grid: [2, 8], basket: [2, 6],
-  spairs: [2, 5], order: [3, 6], inst: [3, 6], knock: [3, 8], shadow: [3, 6], findall: [0, 5], digits: [2, 7] };
+  spairs: [2, 5], order: [3, 6], inst: [3, 6], knock: [3, 8], shadow: [3, 6], findall: [0, 5], digits: [2, 7], diff: [0, 4], same: [0, 4], schulte: [0, 5] };
 function stLevel(k) {
   try {
     const of = (v, a, b) => `${Math.min(b, Math.max(a, v)) - a + 1}/${b - a + 1}`;
