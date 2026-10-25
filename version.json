@@ -1,7 +1,10 @@
 {
-  "version": "1.9.1",
+  "version": "1.9.2",
   "date": "2026-10-23",
   "changes": [
+    "Слух: нові ігри 🎹 Піаніно, 🥁 Повтори ритм, 🧊 Музична заморозка, 💎 Скарб на слух",
+    "Піаніно: обери пісеньку — клавіша, яку натискати, світиться; склав — гра програє її цілком",
+    "«Хто грає?» і «Скільки разів?» прибрано — у групі «Слух» тепер 8 ігор",
     "«Знайди всіх»: що шукати — велика картинка в рамці під завданням",
     "Три нові гри на увагу: 🪞 Знайди відмінність, 🎯 Такий самий, 🔢 Числа по порядку",
     "Числа по порядку: натискай 1, 2, 3… по черзі на час — є рекорд для кожного розміру",
@@ -35,6 +38,9 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Auz: jocuri noi 🎹 Pian, 🥁 Repetă ritmul, 🧊 Statuile muzicale, 💎 Comoara după sunet",
+    "Pian: alege un cântec — clapa de apăsat strălucește; la final jocul îl cântă tot",
+    "„Cine cântă?” și „De câte ori?” au fost scoase — grupa „Auz” are acum 8 jocuri",
     "„Găsește-i pe toți”: ce cauți — o imagine mare în ramă sub sarcină",
     "Trei jocuri noi de atenție: 🪞 Găsește diferența, 🎯 La fel, 🔢 Numere în ordine",
     "Numere în ordine: apasă 1, 2, 3… pe rând contra cronometru — record pentru fiecare mărime",
@@ -68,6 +74,9 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Hearing: new games 🎹 Piano, 🥁 Repeat the rhythm, 🧊 Musical freeze, 💎 Treasure by ear",
+    "Piano: pick a song — the key to press glows; finish it and the game plays it back",
+    "“Who's playing?” and “How many times?” removed — the Hearing group now has 8 games",
     "“Find them all”: what to look for is now a big framed picture under the task",
     "Three new attention games: 🪞 Spot the difference, 🎯 The same, 🔢 Numbers in order",
     "Numbers in order: tap 1, 2, 3… against the clock — a best time for each size",

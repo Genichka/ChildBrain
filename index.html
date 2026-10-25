@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EnergyUA Junior">
 <title>EnergyUA Junior — ігри для дітей 4–8 років</title>
-<meta name="description" content="42 гри для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
+<meta name="description" content="44 гри для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -575,6 +575,10 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .t40{background:linear-gradient(170deg,#a8f0e0,#33b5a0)}
 .t41{background:linear-gradient(170deg,#ffd9a8,#f2495c)}
 .t42{background:linear-gradient(170deg,#d6c2ff,#5794f2)}
+.t43{background:linear-gradient(170deg,#fff6b3,#ff9830)}
+.t44{background:linear-gradient(170deg,#ffb3a8,#c4162a)}
+.t45{background:linear-gradient(170deg,#c7f0ff,#4aa8ff)}
+.t46{background:linear-gradient(170deg,#ffe9a8,#b8860b)}
 /* ---------- тетріс ---------- */
 .tet-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;flex:1;min-height:0}
 #s-tetris{padding:0 4px 4px}
@@ -594,8 +598,49 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 #tetPad{display:grid;grid-template-columns:repeat(5,minmax(0,64px));gap:8px;width:100%;justify-content:center}
 #tetPad button{height:54px;border-radius:18px;background:var(--card);border:3px solid var(--line);font-size:26px;touch-action:none;user-select:none;-webkit-user-select:none}
 #tetPad button:active{background:#ffffff2e}
-.knbox{text-align:center;font-size:64px;min-height:84px;line-height:1.3;letter-spacing:6px}
-.knbox i{font-style:normal;font-size:34px;animation:in .25s backwards}
+/* ---------- піаніно ---------- */
+.pisongs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0 0 6px}
+.pisongs .sbtn{min-height:40px;padding:4px 10px;border-radius:13px;flex:0 0 auto}
+.pibar{height:10px;border-radius:6px;background:var(--card);border:1px solid var(--line);overflow:hidden;width:min(90vw,420px);margin:0 auto}
+.pibar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yel),var(--org));transition:width .2s}
+.pibar.free{visibility:hidden}
+.pikeys{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;width:100%;max-width:460px;height:min(48vh,340px);margin:0 auto;touch-action:none}
+.pikeys button{border-radius:8px 8px 16px 16px;background:linear-gradient(180deg,#fafafa 0%,#fafafa 55%,var(--kc) 100%);border:2px solid #0004;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 0 10px;font-weight:900;font-size:clamp(11px,3.2vw,14px);color:#333;
+  touch-action:none;user-select:none;-webkit-user-select:none;transition:transform .08s,filter .08s}
+.pikeys button i{font-style:normal;display:block;width:60%;aspect-ratio:1;border-radius:50%;background:var(--kc);margin-bottom:6px}
+.pikeys button.next{box-shadow:0 0 0 3px #fff,0 0 22px 8px var(--kc);animation:piGlow .9s ease-in-out infinite}
+.pikeys button.down{transform:translateY(5px);filter:brightness(.82)}
+.pikeys button.no{animation:shake .3s}
+@keyframes piGlow{50%{transform:translateY(-6px)}}
+/* ---------- повтори ритм ---------- */
+.rhline{position:relative;height:34px;width:min(84vw,360px);margin:0 auto;border-bottom:2px dashed var(--line)}
+.rhline i{position:absolute;bottom:4px;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:var(--yel);opacity:.25;transition:opacity .1s,transform .1s}
+.rhline i.on{opacity:1;transform:scale(1.25)}
+.rhline.kid i{background:var(--blu);opacity:1;animation:in .15s}
+.rhline.kid i.ok{background:var(--grn)} .rhline.kid i.bad{background:var(--red)}
+.rhdrum{display:block;margin:6px auto;width:min(52vw,210px);aspect-ratio:1;border-radius:50%;font-size:min(30vw,120px);line-height:1;
+  background:radial-gradient(circle,#ffffff14,#ffffff05);border:4px solid var(--line);touch-action:none;transition:transform .07s}
+.rhdrum.hit{transform:scale(.9)}
+.rhdrum.wait{opacity:.45}
+/* ---------- музична заморозка ---------- */
+.stage.frst{background:linear-gradient(180deg,#4a148c,#1a237e)}
+.stage.frst.off{background:linear-gradient(180deg,#263238,#37474f)}
+.frd{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-size:90px;line-height:1;pointer-events:none}
+.frst:not(.off) .frd{animation:frDance .45s ease-in-out infinite alternate}
+@keyframes frDance{from{transform:translateX(-50%) rotate(-12deg)}to{transform:translateX(-50%) rotate(12deg) translateY(-12px)}}
+.frmsg{position:absolute;left:0;right:0;top:40%;text-align:center;font-size:30px;font-weight:900;color:#fff;pointer-events:none;text-shadow:0 2px 8px #000a}
+.frb{position:absolute;bottom:-90px;font-size:56px;line-height:1;padding:0;border:0;background:none;animation:frUp linear forwards;touch-action:none}
+@keyframes frUp{to{transform:translateY(calc(-1 * var(--h) - 120px))}}
+.frb.pp{animation:none;transform:scale(1.4);opacity:0;transition:transform .2s,opacity .2s}
+/* ---------- скарб на слух ---------- */
+.trhud{text-align:center;font-weight:800;color:var(--dim);font-size:15px}
+.trgrid2{display:grid;gap:5px;width:min(90vw,380px,calc((100vh - 260px) * .95));margin:0 auto}
+.trgrid2 button{aspect-ratio:1;border-radius:10px;padding:0;font-size:var(--trs,26px);border:2px solid #0003;
+  background:linear-gradient(160deg,#e8c27a,#c99a4b);box-shadow:inset 0 -3px 0 #0002}
+.trgrid2 button.dug{background:#5d4037;box-shadow:inset 0 3px 8px #0008}
+.trgrid2 button.d1{background:#f2495c} .trgrid2 button.d2{background:#ff9830} .trgrid2 button.d3{background:#fade2a} .trgrid2 button.d4{background:#5794f2}
+.trgrid2 button.gem{background:#73bf69;animation:pop .5s}
 .shbig{text-align:center;font-size:92px;line-height:1.1;min-height:104px}
 .shrow{gap:10px}
 .shb{width:96px;height:96px;font-size:56px;background:#e8eaf2;border-color:#ffffff66}
@@ -801,9 +846,11 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
       <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
       <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
       <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
-      <button class="tile t30" data-go="inst"><span class="em">🎺</span><span class="nm">Хто<br>грає?</span></button>
       <button class="tile t31" data-go="pitch"><span class="em">🎼</span><span class="nm">Високо<br>чи низько?</span></button>
-      <button class="tile t32" data-go="knock"><span class="em">🚪</span><span class="nm">Скільки<br>разів?</span></button>
+      <button class="tile t43" data-go="piano"><span class="em">🎹</span><span class="nm">Піаніно</span></button>
+      <button class="tile t44" data-go="rhythm"><span class="em">🥁</span><span class="nm">Повтори<br>ритм</span></button>
+      <button class="tile t45" data-go="freeze"><span class="em">🧊</span><span class="nm">Музична<br>заморозка</span></button>
+      <button class="tile t46" data-go="treasure"><span class="em">💎</span><span class="nm">Скарб<br>на слух</span></button>
     </div></div>
     <div class="page" data-grp="Памʼять"><p class="gdesc">🧠 <b>Памʼять</b> — запамʼятати, де що лежить і як стояло</p><div class="menu">
       <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
@@ -1039,15 +1086,6 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   </div>
 </section>
 
-<!-- 1.5: хто грає? -->
-<section class="scr" id="s-inst">
-  <div class="ask" id="inAsk">Хто грає?</div>
-  <div class="play">
-    <div class="row"><button class="btn go" id="inAgain">🔊 Ще раз</button></div>
-    <div class="row" id="inOpts"></div>
-  </div>
-</section>
-
 <!-- високо чи низько -->
 <section class="scr" id="s-pitch">
   <div class="ask" id="ptAsk">Високо чи низько?</div>
@@ -1058,14 +1096,34 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   </div>
 </section>
 
-<!-- скільки разів стукає -->
-<section class="scr" id="s-knock">
-  <div class="ask" id="knAsk">Скільки разів стукає?</div>
+<!-- піаніно: граємо пісеньки за підсвіченими клавішами -->
+<section class="scr" id="s-piano">
+  <div class="ask" id="piAsk">Піаніно</div>
+  <div class="pisongs" id="piSongs"></div>
+  <div class="play"><div class="pibar" id="piBar"><i></i></div><div class="pikeys" id="piKeys"></div></div>
+</section>
+
+<!-- повтори ритм -->
+<section class="scr" id="s-rhythm">
+  <div class="ask" id="rhAsk">Повтори ритм</div>
   <div class="play">
-    <div class="knbox" id="knBox">🙈</div>
-    <div class="row"><button class="btn go" id="knAgain">🔊 Ще раз</button></div>
-    <div class="row" id="knOpts"></div>
+    <div class="rhline" id="rhT"></div>
+    <div class="rhline kid" id="rhK"></div>
+    <button class="rhdrum" id="rhDrum" aria-label="Барабан">🥁</button>
+    <div class="row"><button class="btn go" id="rhAgain">🔊 Ще раз</button></div>
   </div>
+</section>
+
+<!-- музична заморозка -->
+<section class="scr" id="s-freeze">
+  <div class="hud" id="frHud"></div>
+  <div class="stage frst" id="frStage"><div class="frd" id="frDancer">💃</div><div class="frmsg" id="frMsg"></div></div>
+</section>
+
+<!-- скарб на слух -->
+<section class="scr" id="s-treasure">
+  <div class="ask" id="trAsk">Скарб на слух</div>
+  <div class="play"><div class="trhud" id="trHud"></div><div class="trgrid2" id="trGrid"></div></div>
 </section>
 
 <!-- чия тінь -->
@@ -1288,7 +1346,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.9.1';
+const APP_VERSION = '1.9.2';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1314,9 +1372,13 @@ const LS = {
 const PROG = LS.get('prog', null) || {};
 // старі ключі прибраних функцій (1.8.1: автоскладність хрестиків; 1.7.3: стара тінь тетрісу)
 try { ['tttLvl', 'tetGhost'].forEach((k) => localStorage.removeItem('gralyk.' + k)); } catch (e) { /* */ }
+// 1.9.2: прибрані ігри «Хто грає?» і «Скільки разів?»
+if ('inst' in PROG || 'knock' in PROG) { delete PROG.inst; delete PROG.knock; LS.set('prog', PROG); }
 function progSave(k, v) { if (PROG[k] === v) return; PROG[k] = v; LS.set('prog', PROG); }
 function progStart(k, min, step = 1) { const v = PROG[k]; return v == null ? min : Math.max(min, v - step); }
 function progBest(k, score) { if (score > (PROG[k] || 0)) { progSave(k, score); return true; } return false; }
+/** Рядок під результатом раунду: «🏆 Новий рекорд!», «Рекорд: N» або нічого, якщо рекорду ще немає. */
+function recLine(k, score) { return progBest(k, score) ? '🏆 Новий рекорд!' : PROG[k] ? `Рекорд: ${PROG[k]}` : ''; }
 const S = {
   stars: LS.get('stars', 0),
   got: LS.get('got', []),        // здобуті наліпки
@@ -1402,9 +1464,7 @@ Object.assign(I18N, {
   "Памʼять": { ro: "Memorie", en: "Memory" },
   "Слова на «и» майже не починаються — вона живе всередині слова: в-И-шня": { ro: "Aproape niciun cuvânt nu începe cu „и” — ea trăiește în mijlocul cuvântului: в-И-шня", en: "Almost no words start with “и” — it lives inside the word: в-И-шня" },
   "Мʼякий знак не звучить сам і стоїть після букви в кінці слова: кін-Ь": { ro: "Semnul moale nu se aude singur și stă după o literă, la sfârșitul cuvântului: кін-Ь", en: "The soft sign makes no sound of its own and comes after a letter at the end of a word: кін-Ь" },
-  "Хто<br>грає?": { ro: "Cine<br>cântă?", en: "Who's<br>playing?" },
   "Високо<br>чи низько?": { ro: "Sus<br>sau jos?", en: "High<br>or low?" },
-  "Скільки<br>разів?": { ro: "De câte<br>ori?", en: "How<br>many times?" },
   "Чия<br>тінь?": { ro: "A cui<br>e umbra?", en: "Whose<br>shadow?" },
   "Знайди<br>всіх": { ro: "Găsește<br>-i pe toți", en: "Find<br>them all" },
   "Знайди<br>відмінність": { ro: "Găsește<br>diferența", en: "Spot the<br>difference" },
@@ -1422,15 +1482,12 @@ Object.assign(I18N, {
   "Лови<br>зірочки": { ro: "Prinde<br>stelele", en: "Catch<br>the stars" },
   "Бульбашки": { ro: "Baloane de săpun", en: "Bubbles" },
   "Хто<br>виглянув?": { ro: "Cine<br>a ieșit?", en: "Who<br>peeked out?" },
-  "Хто грає?": { ro: "Cine cântă?", en: "Who's playing?" },
   "Високо чи низько?": { ro: "Sus sau jos?", en: "High or low?" },
-  "Скільки разів?": { ro: "De câte ori?", en: "How many times?" },
   "Чия тінь?": { ro: "A cui e umbra?", en: "Whose shadow?" },
   "Знайди всіх": { ro: "Găsește-i pe toți", en: "Find them all" },
   "Запамʼятай числа": { ro: "Ține minte numerele", en: "Remember the numbers" },
   "Лови зірочки": { ro: "Prinde stelele", en: "Catch the stars" },
   "Хто виглянув?": { ro: "Cine a ieșit?", en: "Who peeked out?" },
-  "слухай і вгадай": { ro: "ascultă și ghicește", en: "listen and guess" },
   "🔊 Ще раз": { ro: "🔊 Încă o dată", en: "🔊 Again" },
   "▶️ Ще раз": { ro: "▶️ Încă o dată", en: "▶️ Play again" },
   "мишка тоненька, ведмідь грубий": { ro: "șoricelul are glas subțire, ursul gros", en: "the mouse is squeaky, the bear is deep" },
@@ -1440,8 +1497,6 @@ Object.assign(I18N, {
   "Низько": { ro: "Jos", en: "Low" },
   "Перша": { ro: "Prima", en: "First" },
   "Друга": { ro: "A doua", en: "Second" },
-  "Скільки разів стукає?": { ro: "De câte ori bate?", en: "How many times does it knock?" },
-  "порахуй на слух": { ro: "numără după sunet", en: "count by ear" },
   "Чия це тінь?": { ro: "A cui e umbra asta?", en: "Whose shadow is this?" },
   "знайди, хто так стоїть": { ro: "găsește cine stă așa", en: "find who it belongs to" },
   "дивись і слухай": { ro: "privește și ascultă", en: "watch and listen" },
@@ -1452,11 +1507,6 @@ Object.assign(I18N, {
   "Спробуй упіймати ще більше": { ro: "Încearcă să prinzi și mai multe", en: "Try to catch even more" },
   "Лопай бульбашки": { ro: "Sparge baloanele", en: "Pop the bubbles" },
   "нірка": { ro: "vizuină", en: "burrow" },
-  "барабан": { ro: "tobă", en: "drum" },
-  "труба": { ro: "trompetă", en: "trumpet" },
-  "піаніно": { ro: "pian", en: "piano" },
-  "гітара": { ro: "chitară", en: "guitar" },
-  "скрипка": { ro: "vioară", en: "violin" },
   "високо": { ro: "sus", en: "high" },
   "низько": { ro: "jos", en: "low" },
   "перша": { ro: "prima", en: "first" },
@@ -1589,10 +1639,43 @@ Object.assign(I18N, {
   "Слухай…": { ro: "Ascultă…", en: "Listen…" },
   "▶️ Слухати ще": { ro: "▶️ Ascultă din nou", en: "▶️ Listen again" },
   "Тепер ти!": { ro: "Acum tu!", en: "Your turn!" },
-  "повтори мелодію": { ro: "repetă melodia", en: "repeat the tune" },
-  "Слухай мелодію і повтори": { ro: "Ascultă melodia și repet-o", en: "Listen to the tune and repeat it" },
+  "Піаніно": { ro: "Pian", en: "Piano" },
+  "Повтори<br>ритм": { ro: "Repetă<br>ritmul", en: "Repeat<br>the rhythm" },
+  "Музична<br>заморозка": { ro: "Statuile<br>muzicale", en: "Musical<br>freeze" },
+  "Скарб<br>на слух": { ro: "Comoara<br>după sunet", en: "Treasure<br>by ear" },
+  "Повтори ритм": { ro: "Repetă ritmul", en: "Repeat the rhythm" },
+  "Музична заморозка": { ro: "Statuile muzicale", en: "Musical freeze" },
+  "Скарб на слух": { ro: "Comoara după sunet", en: "Treasure by ear" },
+  "Зірочка": { ro: "Steluța", en: "Twinkle star" },
+  "Овечка": { ro: "Mielușelul", en: "Little lamb" },
+  "Дзвіночки": { ro: "Clopoței", en: "Jingle bells" },
+  "Ода радості": { ro: "Oda bucuriei", en: "Ode to joy" },
+  "Вільно": { ro: "Liber", en: "Free play" },
+  "⭐ Зірочка": { ro: "⭐ Steluța", en: "⭐ Twinkle star" },
+  "🐑 Овечка": { ro: "🐑 Mielușelul", en: "🐑 Little lamb" },
+  "🔔 Дзвіночки": { ro: "🔔 Clopoței", en: "🔔 Jingle bells" },
+  "🎉 Ода радості": { ro: "🎉 Oda bucuriei", en: "🎉 Ode to joy" },
+  "натискай клавішу, що світиться": { ro: "apasă clapa care strălucește", en: "press the glowing key" },
+  "Грай що хочеш 🎵": { ro: "Cântă ce vrei 🎵", en: "Play anything 🎵" },
+  "кожна клавіша — своя нота": { ro: "fiecare clapă — o notă", en: "each key is a note" },
+  "⭐ Молодець!": { ro: "⭐ Bravo!", en: "⭐ Well done!" },
+  "🐑 Молодець!": { ro: "🐑 Bravo!", en: "🐑 Well done!" },
+  "🔔 Молодець!": { ro: "🔔 Bravo!", en: "🔔 Well done!" },
+  "послухай свою пісеньку": { ro: "ascultă cântecul tău", en: "listen to your song" },
+  "Слухай ритм 👂": { ro: "Ascultă ritmul 👂", en: "Listen to the rhythm 👂" },
+  "потім постукай так само": { ro: "apoi bate la fel", en: "then tap the same" },
+  "Так! 🥁": { ro: "Da! 🥁", en: "Yes! 🥁" },
+  "точно в ритм": { ro: "exact în ritm", en: "right on the beat" },
   "Майже!": { ro: "Aproape!", en: "Almost!" },
   "послухай ще раз": { ro: "mai ascultă o dată", en: "listen once more" },
+  "постукай усі рази": { ro: "bate de toate ori", en: "tap every beat" },
+  "Слухай музику й лопай ще більше": { ro: "Ascultă muzica și sparge mai multe", en: "Listen to the music and pop even more" },
+  "🤫 Тихо!": { ro: "🤫 Liniște!", en: "🤫 Shh!" },
+  "Шукай скарб на слух 💎": { ro: "Caută comoara după sunet 💎", en: "Find the treasure by ear 💎" },
+  "ближче — вище й частіше пищить": { ro: "mai aproape — piuie mai sus și mai des", en: "closer — beeps higher and faster" },
+  "Скарб! 💎": { ro: "Comoara! 💎", en: "Treasure! 💎" },
+  "повтори мелодію": { ro: "repetă melodia", en: "repeat the tune" },
+  "Слухай мелодію і повтори": { ro: "Ascultă melodia și repet-o", en: "Listen to the tune and repeat it" },
   "Знайди однакові": { ro: "Găsește perechile", en: "Find the matching ones" },
   "натискай картки": { ro: "apasă pe cartonașe", en: "tap the cards" },
   "Знайди однакові картинки": { ro: "Găsește imaginile la fel", en: "Find the matching pictures" },
@@ -1945,6 +2028,9 @@ I18N_RE.push(
   [new RegExp("^Зібрано: (\\d+)$"), { ro: "Strâns: {1}", en: "Caught: {1}" }],
   [new RegExp("^Рекорд: (\\d+)$"), { ro: "Record: {1}", en: "Best: {1}" }],
   [new RegExp("^Знайди (\\d+)$"), { ro: "Găsește {1}", en: "Find {1}" }],
+  [new RegExp("^постукай (\\d+) (?:рази|разів)$"), { ro: "bate de {1} ori", en: "tap {1} times" }],
+  [new RegExp("^Копань: (\\d+)$"), { ro: "Săpături: {1}", en: "Digs: {1}" }],
+  [new RegExp("^копань: (\\d+)$"), { ro: "săpături: {1}", en: "digs: {1}" }],
   [new RegExp("^([\\d.]+) с$"), { ro: "{1} s", en: "{1} s" }],
   [new RegExp("^Лопнуто: (\\d+)$"), { ro: "Sparte: {1}", en: "Popped: {1}" }],
   [new RegExp("^Упіймано: (\\d+)$"), { ro: "Prinse: {1}", en: "Caught: {1}" }],
@@ -2281,7 +2367,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 inst: 'Хто грає?', pitch: 'Високо чи низько?', knock: 'Скільки разів?', shadow: 'Чия тінь?', findall: 'Знайди всіх', diff: 'Знайди відмінність', same: 'Такий самий', schulte: 'Числа по порядку', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
+                 pitch: 'Високо чи низько?', piano: 'Піаніно', rhythm: 'Повтори ритм', freeze: 'Музична заморозка', treasure: 'Скарб на слух', shadow: 'Чия тінь?', findall: 'Знайди всіх', diff: 'Знайди відмінність', same: 'Такий самий', schulte: 'Числа по порядку', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
                  rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', jigsaw: 'Пазли', bye: 'EnergyUA Junior' };
 
 /* ---------- статистика запусків (лише на цьому пристрої) ----------
@@ -6535,7 +6621,7 @@ $('#orPool').onclick = (e) => {
 
 /* ================================================================
    27. НОВІ ІГРИ 1.5
-   Слух: «Хто грає?», «Високо чи низько?», «Скільки разів?»; увага: «Чия тінь?», «Знайди всіх»;
+   Слух: «Високо чи низько?» (з 1.9.2 ще піаніно, ритм, заморозка, скарб); увага: «Чия тінь?», «Знайди всіх»;
    памʼять: «Запамʼятай числа»; швидкість: «Лови зірочки», «Бульбашки», «Хто виглянув?»
    Усі звуки синтезуються тут же, файлів немає.
    ================================================================ */
@@ -6565,36 +6651,6 @@ function roundBox(stage, em, title, sub, again, rec) {
 }
 /** Зірочки за раунд на швидкість: за кожні step очок. */
 function roundStars(score, step) { const n = Math.min(3, Math.floor(score / step)); if (n > 0) addStar(n); return n; }
-
-/* ---------- 1. ХТО ГРАЄ? ---------- */
-const INST = [
-  { e: '🥁', n: 'барабан', play: () => [0, .28, .56].forEach((t0) => { nt(170, .2, { to: 55, vol: .5, t0 }); envNoise({ dur: .1, vol: .15, t0, fpts: [[0, 3500], [1, 900]] }); }) },
-  { e: '🔔', n: 'дзвіночок', play: () => [0, .35, .7].forEach((t0) => { nt(1568, .9, { vol: .15, t0 }); nt(1568 * 2.76, .5, { vol: .06, t0 }); nt(1568 * 5.4, .25, { vol: .03, t0 }); }) },
-  { e: '🎺', n: 'труба', play: () => [[392, 0], [392, .32], [523, .64]].forEach(([f, t0]) => nt(f, .3, { type: 'sawtooth', lp: 1700, att: .05, vol: .13, t0 })) },
-  { e: '🎹', n: 'піаніно', play: () => [[523, 0], [659, .3], [784, .6]].forEach(([f, t0]) => { nt(f, .8, { type: 'triangle', vol: .22, att: .005, t0 }); nt(f * 2, .3, { vol: .05, t0 }); }) },
-  { e: '🎸', n: 'гітара', play: () => [[196, 0], [247, .28], [294, .56], [392, .84]].forEach(([f, t0]) => nt(f, .5, { type: 'sawtooth', lp: 1100, att: .003, vol: .2, t0 })) },
-  { e: '🎻', n: 'скрипка', play: () => [[440, 0], [494, .5], [523, 1]].forEach(([f, t0]) => nt(f, .6, { type: 'sawtooth', lp: 2400, att: .14, vol: .11, vib: 5.5, t0 })) },
-];
-const IN = { gen: 0, ok: 0, lv: 3, cur: null, busy: true };
-function inNew() {
-  const gen = ++IN.gen;
-  IN.busy = false; IN.cur = pick(INST);
-  const opts = shuffle([IN.cur, ...shuffle(INST.filter((i) => i !== IN.cur)).slice(0, IN.lv - 1)]);
-  $('#inOpts').innerHTML = opts.map((i) => `<button class="big mopt" data-e="${i.e}" aria-label="${i.n}">${i.e}</button>`).join('');
-  $('#inAsk').innerHTML = 'Хто грає?<small>слухай і вгадай</small>';
-  say('Хто грає?');
-  afterSay(() => { if (gen === IN.gen) IN.cur.play(); }, 1100);
-}
-START.inst = () => { IN.ok = 0; IN.lv = progStart('inst', 3); inNew(); };
-STOP.inst = () => { IN.gen++; };
-$('#inAgain').onclick = () => { if (IN.cur) { blip(); ac(); IN.cur.play(); } };
-$('#inOpts').onclick = (e) => {
-  const b = e.target.closest('.mopt'); if (!b || IN.busy) return;
-  if (b.dataset.e !== IN.cur.e) { memNo(b); say('Спробуй ще'); return; }
-  IN.busy = true; b.classList.add('ok'); memWin(['Так!', IN.cur.n]);
-  if (++IN.ok % 3 === 0) { IN.lv = Math.min(6, IN.lv + 1); progSave('inst', IN.lv); }
-  afterSay(inNew, 1900);
-};
 
 /* ---------- 2. ВИСОКО ЧИ НИЗЬКО? ----------
    Рівні 1-2: одна нота - тоненька мишка чи грубий ведмідь. З 3-го: дві ноти, яка вища. */
@@ -6638,37 +6694,256 @@ $('#ptOpts').onclick = (e) => {
   afterSay(ptNew, 1800);
 };
 
-/* ---------- 3. СКІЛЬКИ РАЗІВ СТУКАЄ? ---------- */
-const KN = { gen: 0, ok: 0, max: 3, n: 1, busy: true };
-function knPlay() {
-  for (let i = 0; i < KN.n; i++) {
-    nt(260, .14, { type: 'triangle', to: 110, vol: .45, t0: i * .55 });
-    envNoise({ dur: .05, vol: .12, t0: i * .55, fpts: [[0, 2600], [1, 1400]] });
+/* ---------- 3. ПІАНІНО ----------
+   Вісім кольорових клавіш (до–до). Обираєш пісеньку - клавіша, яку натискати, світиться й підстрибує.
+   Склав усю пісеньку - гра програє її цілком, клавіші світяться в такт. «🎵 Вільно» - грай що хочеш.
+   Мелодії - народні та класичні, суспільне надбання. */
+const PI_F = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
+const PI_NM = ['до', 'ре', 'мі', 'фа', 'соль', 'ля', 'сі', 'до'];
+const PI_C = ['#f2495c', '#ff9830', '#fade2a', '#73bf69', '#33b5a0', '#5794f2', '#b877d9', '#ff7383'];
+/* нота: номер клавіші 0-7, через двокрапку - тривалість у долях (1 за замовчуванням) */
+const PI_SONGS = [
+  { k: 'star', em: '⭐', nm: 'Зірочка', s: '0 0 4 4 5 5 4:2 3 3 2 2 1 1 0:2' },
+  { k: 'lamb', em: '🐑', nm: 'Овечка', s: '2 1 0 1 2 2 2:2 1 1 1:2 2 4 4:2 2 1 0 1 2 2 2 2 1 1 2 1 0:2' },
+  { k: 'bells', em: '🔔', nm: 'Дзвіночки', s: '2 2 2:2 2 2 2:2 2 4 0 1 2:4 3 3 3 3 3 2 2 2 2 1 1 2 1:2 4:2' },
+  { k: 'joy', em: '🎉', nm: 'Ода радості', s: '2 2 3 4 4 3 2 1 0 0 1 2 2:1.5 1:.5 1:2 2 2 3 4 4 3 2 1 0 0 1 2 1:1.5 0:.5 0:2' },
+  { k: 'free', em: '🎵', nm: 'Вільно', s: '' },
+];
+const piParse = (s) => s.split(' ').filter(Boolean).map((x) => { const [n, d] = x.split(':'); return [+n, d ? +d : 1]; });
+const PI = { song: LS.get('piSong', 'star'), notes: [], pos: 0, busy: false, gen: 0 };
+const piSong = () => PI_SONGS.find((s) => s.k === PI.song) || PI_SONGS[0];
+function piNote(i, len = .7) {
+  const f = PI_F[i];
+  nt(f, len, { type: 'triangle', vol: .3, att: .005 }); nt(f * 2, len * .5, { vol: .06, att: .005 }); nt(f * 3, len * .25, { vol: .025 });
+}
+function piKeysUI() {
+  $('#piKeys').innerHTML = PI_F.map((_, i) => `<button data-k="${i}" style="--kc:${PI_C[i]}"><i></i>${PI_NM[i]}</button>`).join('');
+}
+function piMark() {
+  $$('#piKeys button').forEach((b) => b.classList.remove('next'));
+  const free = PI.song === 'free';
+  $('#piBar').classList.toggle('free', free);
+  if (free || PI.busy) return;
+  $('#piBar i').style.width = (100 * PI.pos / PI.notes.length) + '%';
+  const nx = PI.notes[PI.pos]; if (nx) $(`#piKeys button[data-k="${nx[0]}"]`).classList.add('next');
+}
+function piAsk() {
+  const s = piSong();
+  $('#piAsk').innerHTML = s.k === 'free' ? 'Грай що хочеш 🎵<small>кожна клавіша — своя нота</small>'
+    : `${s.em} ${s.nm}<small>натискай клавішу, що світиться</small>`;
+}
+function piStart() {
+  PI.gen++; PI.busy = false; PI.notes = piParse(piSong().s); PI.pos = 0;
+  $('#piSongs').innerHTML = PI_SONGS.map((s) => `<button class="sbtn${s.k === PI.song ? ' on' : ''}" data-s="${s.k}"><span>${s.em}</span>${s.nm}</button>`).join('');
+  piKeysUI(); piAsk(); piMark();
+}
+async function piPlayback() {
+  const g = ++PI.gen, beat = 380;
+  for (const [n, d] of PI.notes) {
+    if (g !== PI.gen || SCR !== 'piano') return;
+    const b = $(`#piKeys button[data-k="${n}"]`);
+    piNote(n, Math.min(1.4, d * .45)); if (b) b.classList.add('down');
+    await sleep(Math.max(140, beat * d - 90)); if (b) b.classList.remove('down');
+    await sleep(90);
+  }
+  if (g !== PI.gen) return;
+  PI.busy = false; PI.pos = 0; piAsk(); piMark();
+}
+START.piano = () => piStart();
+STOP.piano = () => { PI.gen++; };
+$('#piSongs').onclick = (e) => {
+  const b = e.target.closest('[data-s]'); if (!b) return;
+  blip(); PI.song = b.dataset.s; LS.set('piSong', PI.song); piStart();
+};
+$('#piKeys').addEventListener('pointerdown', (e) => {
+  const b = e.target.closest('[data-k]'); if (!b) return;
+  e.preventDefault(); ac();
+  const k = +b.dataset.k;
+  b.classList.add('down'); setTimeout(() => b.classList.remove('down'), 160);
+  if (PI.busy) return;
+  if (PI.song === 'free') { piNote(k); return; }
+  const want = PI.notes[PI.pos];
+  if (!want) return;
+  if (k !== want[0]) { piNote(k, .35); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); return; }
+  piNote(k, Math.min(1.2, want[1] * .45));
+  PI.pos++; piMark();
+  if (PI.pos < PI.notes.length) return;
+  // уся пісенька - похвала й гра програє її цілком
+  PI.busy = true; piMark();
+  const done = LS.get('piDone', []); if (!done.includes(PI.song)) { done.push(PI.song); LS.set('piDone', done); }
+  progSave('piano', done.length);
+  $('#piAsk').innerHTML = `${piSong().em} Молодець!<small>послухай свою пісеньку</small>`;
+  memWin('Молодець!');
+  afterSay(() => { if (SCR === 'piano') piPlayback(); }, 1300);
+});
+
+/* ---------- 4. ПОВТОРИ РИТМ ----------
+   Барабан вистукує ритм (зверху - крапки на лінії), потім дитина стукає так само.
+   Темп не важливий (рахується співвідношення коротких і довгих пауз), допуск ~30 %.
+   Рівні: 3 рівні удари → 3 → 4 → 5 → 6 ударів з короткими й довгими паузами. */
+const RH_LV = [[3, false], [3, true], [4, true], [5, true], [6, true]];
+const RH = { lv: 0, ok: 0, gaps: [], taps: [], phase: 'idle', gen: 0, tmo: 0 };
+function rhBoom(kid) { nt(kid ? 190 : 160, .22, { to: 55, vol: .55 }); envNoise({ dur: .06, vol: .14, fpts: [[0, 3200], [1, 900]] }); }
+function rhMake() {
+  const [n, mixed] = RH_LV[RH.lv];
+  let g;
+  do { g = Array.from({ length: n - 1 }, () => (mixed ? pick([.32, .64]) : .5)); } while (mixed && new Set(g).size < 2);
+  RH.gaps = g;
+}
+function rhDots(id, times, total) {
+  $(id).innerHTML = times.map((t) => `<i style="left:${4 + 92 * (total ? t / total : 0)}%"></i>`).join('');
+}
+async function rhPlay() {
+  const g = ++RH.gen, tot = RH.gaps.reduce((a, b) => a + b, 0);
+  const times = [0]; RH.gaps.forEach((x) => times.push(times[times.length - 1] + x));
+  RH.phase = 'listen'; RH.taps = []; clearTimeout(RH.tmo);
+  rhDots('#rhT', times, tot); $('#rhK').innerHTML = '';
+  $('#rhDrum').classList.add('wait');
+  $('#rhAsk').innerHTML = 'Слухай ритм 👂<small>потім постукай так само</small>';
+  await sleep(700);
+  const t0 = performance.now();
+  for (let i = 0; i < times.length; i++) {
+    const wait = t0 + times[i] * 1000 - performance.now(); if (wait > 0) await sleep(wait);
+    if (g !== RH.gen || SCR !== 'rhythm') return;
+    rhBoom(false); const d = $$('#rhT i')[i]; if (d) d.classList.add('on');
+    $('#rhDrum').classList.add('hit'); setTimeout(() => $('#rhDrum').classList.remove('hit'), 110);
+  }
+  await sleep(500); if (g !== RH.gen) return;
+  RH.phase = 'tap'; $('#rhDrum').classList.remove('wait');
+  $('#rhAsk').innerHTML = `Тепер ти!<small>постукай ${times.length} ${times.length <= 4 ? 'рази' : 'разів'}</small>`;
+  say('Тепер ти!');
+}
+function rhCheck() {
+  const k = RH.taps.slice(1).map((t, i) => (t - RH.taps[i]) / 1000), tg = RH.gaps;
+  const s = Math.min(1.5, Math.max(.65, k.reduce((a, b) => a + b, 0) / tg.reduce((a, b) => a + b, 0)));
+  const good = k.map((x, i) => Math.abs(x / s - tg[i]) <= Math.max(.1, tg[i] * .32));
+  const tot = RH.taps[RH.taps.length - 1] - RH.taps[0];
+  rhDots('#rhK', RH.taps.map((t) => (t - RH.taps[0]) / 1000), tot / 1000);
+  $$('#rhK i').forEach((d, i) => d.classList.add(i === 0 || good[i - 1] ? 'ok' : 'bad'));
+  RH.phase = 'idle';
+  if (good.every(Boolean)) {
+    $('#rhAsk').innerHTML = 'Так! 🥁<small>точно в ритм</small>'; memWin('Так!');
+    if (++RH.ok % 2 === 0) { RH.lv = Math.min(RH_LV.length - 1, RH.lv + 1); progSave('rhythm', RH.lv); }
+    afterSay(() => { if (SCR === 'rhythm') { rhMake(); rhPlay(); } }, 1800);
+  } else {
+    oops(); $('#rhAsk').innerHTML = 'Майже!<small>послухай ще раз</small>';
+    setTimeout(() => { if (SCR === 'rhythm' && RH.phase === 'idle') rhPlay(); }, 1700);
   }
 }
-function knNew() {
-  const gen = ++KN.gen;
-  KN.busy = false; KN.n = 1 + rnd(KN.max);
-  $('#knBox').textContent = '🙈';
-  // чотири числа підряд, серед них правильне (раніше при 1 стуку бракувало варіантів - гра зависала)
-  const hi = Math.max(4, KN.max + 1), lo = Math.max(1, Math.min(KN.n - rnd(4), hi - 3));
-  const o = [lo, lo + 1, lo + 2, lo + 3];
-  $('#knOpts').innerHTML = o.map((n) => `<button class="big num" data-n="${n}">${n}</button>`).join('');
-  $('#knAsk').innerHTML = 'Скільки разів стукає?<small>порахуй на слух</small>';
-  say('Скільки разів стукає?');
-  afterSay(() => { if (gen === KN.gen) knPlay(); }, 1500);
+START.rhythm = () => { RH.lv = progStart('rhythm', 0); RH.ok = 0; rhMake(); rhPlay(); };
+STOP.rhythm = () => { RH.gen++; RH.phase = 'idle'; clearTimeout(RH.tmo); };
+$('#rhAgain').onclick = () => { blip(); ac(); rhPlay(); };
+$('#rhDrum').addEventListener('pointerdown', (e) => {
+  e.preventDefault(); ac();
+  const d = $('#rhDrum'); d.classList.add('hit'); setTimeout(() => d.classList.remove('hit'), 110);
+  rhBoom(true);
+  if (RH.phase !== 'tap') return;
+  RH.taps.push(performance.now());
+  const n = RH.gaps.length + 1, tot = RH.gaps.reduce((a, b) => a + b, 0);
+  $('#rhK').innerHTML += `<i style="left:${4 + 92 * Math.min(1, (RH.taps[RH.taps.length - 1] - RH.taps[0]) / 1000 / tot)}%"></i>`;
+  clearTimeout(RH.tmo);
+  if (RH.taps.length >= n) { rhCheck(); return; }
+  RH.tmo = setTimeout(() => { if (RH.phase === 'tap') { RH.phase = 'idle'; oops(); $('#rhAsk').innerHTML = 'Майже!<small>постукай усі рази</small>'; setTimeout(() => { if (SCR === 'rhythm') rhPlay(); }, 1500); } }, 2600);
+});
+
+/* ---------- 5. МУЗИЧНА ЗАМОРОЗКА ----------
+   Грає музика - лопай кульки. Музика замовкла - завмри! Лопнув у тиші - мінус кулька.
+   40 секунд, рекорд зберігається. Музика - простий веселий цикл з баса, акордів і мелодії. */
+const FR_MEL = [[0, 2, 4, 7], [4, 2, 0, 2], [5, 4, 2, 4], [7, 5, 4, 2]];
+const FR = { run: false, on: false, offAt: 0, score: 0, left: 40, step: 0, tm: 0, sw: 0, sp: 0, mel: 0 };
+const FR_SC = [261.63, 293.66, 329.63, 392, 440, 523.25, 587.33, 659.25];
+function frHud() { $('#frHud').innerHTML = `<span>🎈 ${FR.score}</span><span>⏱ ${Math.ceil(FR.left)}</span>`; }
+function frBeat() {                       // крок 0,2 с; 16 кроків - такт
+  if (!FR.run || !FR.on) return;
+  const s = FR.step++ % 16, bar = Math.floor(FR.step / 16) % 4, bass = [130.81, 98, 110, 87.31][bar];
+  if (s % 4 === 0) { nt(bass, .3, { type: 'triangle', vol: .32 }); nt(70, .12, { to: 40, vol: .4 }); }
+  if (s % 4 === 2) envNoise({ dur: .05, vol: .06, fpts: [[0, 7000], [1, 5000]] });
+  if (s % 2 === 0) { const m = FR_MEL[(bar + FR.mel) % 4][(s / 2) % 4]; nt(FR_SC[m], .18, { type: 'square', lp: 2500, vol: .07 }); }
 }
-START.knock = () => { KN.ok = 0; KN.max = progStart('knock', 3); knNew(); };
-STOP.knock = () => { KN.gen++; };
-$('#knAgain').onclick = () => { blip(); ac(); knPlay(); };
-$('#knOpts').onclick = (e) => {
-  const b = e.target.closest('.num'); if (!b || KN.busy) return;
-  if (+b.dataset.n !== KN.n) { memNo(b); say('Спробуй ще'); return; }
-  KN.busy = true; b.classList.add('ok');
-  $('#knBox').innerHTML = Array.from({ length: KN.n }, () => '<i>🔔</i>').join('');
-  memWin(['Так!', ...numW(KN.n)]);
-  if (++KN.ok % 3 === 0) { KN.max = Math.min(8, KN.max + 1); progSave('knock', KN.max); }
-  afterSay(knNew, 2000);
+function frSwitch() {
+  if (!FR.run) return;
+  FR.on = !FR.on;
+  const st = $('#frStage');
+  st.classList.toggle('off', !FR.on);
+  $('#frDancer').textContent = FR.on ? '💃' : '🧍';
+  $('#frMsg').textContent = FR.on ? '' : '🤫';
+  if (!FR.on) FR.offAt = performance.now();
+  else FR.mel = rnd(4);
+  FR.sw = setTimeout(frSwitch, FR.on ? 3000 + rnd(4000) : 1800 + rnd(1400));
+}
+function frSpawn() {
+  if (!FR.run) return;
+  const st = $('#frStage'), W = st.clientWidth, b = document.createElement('button');
+  b.className = 'frb'; b.textContent = pick(['🎈', '🎈', '🎈', '🎈', '⭐', '🫧']);
+  b.style.left = (8 + rnd(Math.max(1, W - 70))) + 'px';
+  b.style.animationDuration = (5.5 + Math.random() * 2.5) + 's';
+  b.addEventListener('animationend', () => b.remove());
+  st.appendChild(b);
+}
+function frEnd() {
+  FR.run = false; clearInterval(FR.tm); clearInterval(FR.sp); clearTimeout(FR.sw);
+  $('#frStage').classList.remove('off'); $('#frMsg').textContent = '';
+  const n = roundStars(FR.score, 8); confetti(); cheer();
+  roundBox($('#frStage'), n ? '🎉' : '👍', `Лопнуто: ${FR.score}`, n ? `Зірочок у альбом: ${n}` : 'Слухай музику й лопай ще більше', frStart,
+    recLine('freeze', FR.score));
+  say('Молодець!');
+}
+function frStart() {
+  $$('#frStage .frb, #frStage .endbox').forEach((e) => e.remove());
+  const st = $('#frStage'); st.style.setProperty('--h', st.clientHeight + 'px');
+  Object.assign(FR, { run: true, on: false, score: 0, left: 40, step: 0 });
+  frHud(); frSwitch();
+  clearInterval(FR.tm); clearInterval(FR.sp);
+  FR.tm = setInterval(() => { frBeat(); FR.left -= .2; if (FR.step % 5 === 0) frHud(); if (FR.left <= 0) frEnd(); }, 200);
+  FR.sp = setInterval(frSpawn, 650); frSpawn();
+}
+START.freeze = () => frStart();
+STOP.freeze = () => { FR.run = false; clearInterval(FR.tm); clearInterval(FR.sp); clearTimeout(FR.sw); };
+$('#frStage').addEventListener('pointerdown', (e) => {
+  const b = e.target.closest('.frb'); if (!b || !FR.run || b.classList.contains('pp')) return;
+  e.preventDefault(); ac();
+  if (FR.on || performance.now() - FR.offAt < 350) {          // у тиші пробачаємо перші 0,35 с
+    b.classList.add('pp'); FR.score++; vibe(15); beep(700 + Math.min(FR.score, 25) * 25, .07, 'triangle', .15);
+    setTimeout(() => b.remove(), 220);
+  } else {
+    oops(); vibe(120); FR.score = Math.max(0, FR.score - 1);
+    $('#frMsg').textContent = '🤫 Тихо!'; b.classList.add('pp'); setTimeout(() => b.remove(), 220);
+  }
+  frHud();
+});
+
+/* ---------- 6. СКАРБ НА СЛУХ ----------
+   Під піском схований скарб 💎. Копаєш клітинку - «детектор» пищить:
+   що ближче, то вище й частіше. На перших рівнях викопана ямка ще й кольорова (гаряче/холодно),
+   далі - лише звук. Рівні: 4×4 → 5×5 → 5×5 без кольору → 6×6 без кольору. */
+const TR_LV = [[4, true], [5, true], [5, false], [6, false]];
+const TRZ = { lv: 0, ok: 0, at: 0, n: 4, digs: 0, busy: true };
+function trBeep(d) {
+  if (d === 0) { [523, 659, 784, 1047].forEach((f, i) => nt(f, .25, { type: 'triangle', vol: .22, t0: i * .09 })); return; }
+  const [f, k, gap] = d === 1 ? [1350, 4, .09] : d === 2 ? [950, 3, .15] : d === 3 ? [680, 2, .22] : [400, 1, .3];
+  for (let i = 0; i < k; i++) nt(f, d >= 4 ? .32 : .07, { type: 'square', lp: 3000, vol: .1, t0: i * gap });
+}
+function trNew() {
+  const [n] = TR_LV[TRZ.lv]; TRZ.n = n; TRZ.at = rnd(n * n); TRZ.digs = 0; TRZ.busy = false;
+  const g = $('#trGrid'); g.style.gridTemplateColumns = `repeat(${n},1fr)`; g.style.setProperty('--trs', Math.round(150 / n) + 'px');
+  g.innerHTML = Array.from({ length: n * n }, (_, i) => `<button data-i="${i}"></button>`).join('');
+  $('#trAsk').innerHTML = 'Шукай скарб на слух 💎<small>ближче — вище й частіше пищить</small>';
+  $('#trHud').textContent = `Копань: 0`;
+}
+START.treasure = () => { TRZ.lv = progStart('treasure', 0); TRZ.ok = 0; trNew(); };
+$('#trGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || TRZ.busy) return;
+  ac();
+  const i = +b.dataset.i, n = TRZ.n, d = Math.max(Math.abs((i % n) - (TRZ.at % n)), Math.abs(Math.floor(i / n) - Math.floor(TRZ.at / n)));
+  if (b.classList.contains('dug')) { trBeep(d); return; }          // ще раз послухати викопану ямку
+  TRZ.digs++; $('#trHud').textContent = `Копань: ${TRZ.digs}`;
+  b.classList.add('dug'); trBeep(d);
+  if (d > 0) { if (TR_LV[TRZ.lv][1]) b.classList.add('d' + Math.min(4, d)); vibe(15); return; }
+  TRZ.busy = true; b.classList.add('gem'); b.textContent = '💎';
+  $('#trAsk').innerHTML = `Скарб! 💎<small>копань: ${TRZ.digs}</small>`;
+  setTimeout(() => memWin('Молодець!'), 450);
+  if (++TRZ.ok % 2 === 0) { TRZ.lv = Math.min(TR_LV.length - 1, TRZ.lv + 1); progSave('treasure', TRZ.lv); }
+  afterSay(() => { if (SCR === 'treasure') trNew(); }, 2200);
 };
 
 /* ---------- 4. ЧИЯ ТІНЬ? ---------- */
@@ -6873,7 +7148,7 @@ function ctHud() { $('#ctHud').innerHTML = `<span>⭐ ${CT.score}</span><span>${
 function ctEnd() {
   CT.run = false; cancelAnimationFrame(CT.raf);
   const n = roundStars(CT.score, 8); confetti(); cheer();
-  roundBox($('#ctStage'), n ? '🎉' : '👍', `Зібрано: ${CT.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй зловити ще більше', ctStart, progBest('catch', CT.score) ? '🏆 Новий рекорд!' : `Рекорд: ${PROG.catch}`);
+  roundBox($('#ctStage'), n ? '🎉' : '👍', `Зібрано: ${CT.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй зловити ще більше', ctStart, recLine('catch', CT.score));
   say('Молодець!');
 }
 function ctStart() {
@@ -6932,7 +7207,7 @@ function buSpawn() {
 function buEnd() {
   BU.run = false; clearInterval(BU.timer);
   const n = roundStars(BU.score, 10); confetti(); cheer();
-  roundBox($('#buStage'), n ? '🎉' : '👍', `Лопнуто: ${BU.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй лопнути ще більше', buStart, progBest('bubbles', BU.score) ? '🏆 Новий рекорд!' : `Рекорд: ${PROG.bubbles}`);
+  roundBox($('#buStage'), n ? '🎉' : '👍', `Лопнуто: ${BU.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй лопнути ще більше', buStart, recLine('bubbles', BU.score));
   say('Молодець!');
 }
 function buStart() {
@@ -6963,7 +7238,7 @@ function moEnd() {
   MO.run = false; clearInterval(MO.timer); MO.tmo.forEach(clearTimeout); MO.tmo = [];
   $$('#moHoles .hole').forEach((h) => h.classList.remove('up'));
   const n = roundStars(MO.score, 8); confetti(); cheer();
-  roundBox($('#moStage'), n ? '🎉' : '👍', `Упіймано: ${MO.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй упіймати ще більше', moStart, progBest('mole', MO.score) ? '🏆 Новий рекорд!' : `Рекорд: ${PROG.mole}`);
+  roundBox($('#moStage'), n ? '🎉' : '👍', `Упіймано: ${MO.score}`, n ? `Зірочок у альбом: ${n}` : 'Спробуй упіймати ще більше', moStart, recLine('mole', MO.score));
   say('Молодець!');
 }
 function moPop() {
@@ -7402,7 +7677,7 @@ const stFmt = (sec) => (sec >= 3600 ? `${Math.floor(sec / 3600)} г ${Math.round
 const stDate = (ms) => (ms ? new Date(ms).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' }) : '—');
 /** Рівень / рекорд гри для статистики: «4/6» - рівень 4 з 6, «🏆 31» - рекорд, «№7» - рівень без межі. */
 const PG_RANGE = { memory: [3, 8], count: [5, 10], shape: [1, 3], odd: [3, 4], gone: [3, 7], hide: [3, 6], grid: [2, 8], basket: [2, 6],
-  spairs: [2, 5], order: [3, 6], inst: [3, 6], knock: [3, 8], shadow: [3, 6], findall: [0, 5], digits: [2, 7], diff: [0, 4], same: [0, 4], schulte: [0, 5] };
+  spairs: [2, 5], order: [3, 6], rhythm: [0, 4], treasure: [0, 3], shadow: [3, 6], findall: [0, 5], digits: [2, 7], diff: [0, 4], same: [0, 4], schulte: [0, 5] };
 function stLevel(k) {
   try {
     const of = (v, a, b) => `${Math.min(b, Math.max(a, v)) - a + 1}/${b - a + 1}`;
@@ -7410,7 +7685,8 @@ function stLevel(k) {
     if (PG_RANGE[k]) return PROG[k] == null ? '' : of(PROG[k], PG_RANGE[k][0], PG_RANGE[k][1]);
     switch (k) {
       case 'melody': return PROG.melody ? `🎵 ${PROG.melody - 1}` : '';
-      case 'catch': case 'bubbles': case 'mole': return best(PROG[k]);
+      case 'catch': case 'bubbles': case 'mole': case 'freeze': return best(PROG[k]);
+      case 'piano': return PROG.piano ? `🎹 ${PROG.piano}/4` : '';
       case 'pitch': return of(LS.get('ptLv', 1), 1, 5);
       case 'math': return of(LS.get('mathTop', 1), 1, MT_LV.length);
       case 'mines': return of(LS.get('mnLvl', 0), 0, MN_LV.length - 1);
