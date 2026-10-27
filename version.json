@@ -1,10 +1,9 @@
 {
-  "version": "1.9.5",
+  "version": "1.9.6",
   "date": "2026-10-27",
   "changes": [
-    "Памʼять: дві гри для старших (10–18 років) — 🔁 N-назад і 📝 Список слів, з позначкою «10+»",
-    "N-назад: натискай «Збіг», коли світиться та сама клітинка, що N кроків тому; N росте з влучністю",
-    "Список слів: запамʼятай слова й знайди їх серед удвічі більшого набору; від 6 до 14 слів",
+    "Памʼять 10+: замість «N-назад» — нова гра 🗺️ «Де що лежало»: запамʼятай, де лежать предмети, потім покажи, де був кожен",
+    "«Список слів»: рівні з кроком в одне слово — 5, 6, 7 … 15 слів",
     "Меню: група «🧩 Логіка» тепер перша",
     "Музична заморозка: перед грою два правила з картинками й голосом — торкнись правила, і голос скаже ще раз",
     "Музична заморозка: угорі табличка «🎵 Лопай!» / «❄️ Завмри!», голос каже «Завмри!» і «Лопай!»",
@@ -45,9 +44,8 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
-    "Memorie: două jocuri pentru cei mari (10–18 ani) — 🔁 N-înapoi și 📝 Lista de cuvinte, marcate „10+”",
-    "N-înapoi: apasă „Potrivire” când se aprinde aceeași căsuță ca acum N pași; N crește cu precizia",
-    "Lista de cuvinte: ține minte cuvintele și găsește-le printre de două ori mai multe; de la 6 la 14",
+    "Memorie 10+: în loc de „N-înapoi” — joc nou 🗺️ „Unde era?”: ține minte unde sunt obiectele, apoi arată unde era fiecare",
+    "„Lista de cuvinte”: niveluri cu câte un cuvânt în plus — 5, 6, 7 … 15",
     "Meniu: grupa „🧩 Logică” e acum prima",
     "Statuile muzicale: înainte de joc — două reguli cu imagini și voce; atinge o regulă și vocea o repetă",
     "Statuile muzicale: sus apare „🎵 Sparge!” / „❄️ Îngheață!”, vocea spune „Îngheață!” și „Sparge!”",
@@ -88,9 +86,8 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
-    "Memory: two games for older kids (10–18) — 🔁 N-back and 📝 Word list, marked “10+”",
-    "N-back: tap “Match” when the same square lights up as N steps ago; N grows with accuracy",
-    "Word list: remember the words and find them among twice as many; 6 to 14 words",
+    "Memory 10+: instead of “N-back” — new game 🗺️ “Where was it?”: remember where items are, then show where each one was",
+    "“Word list”: levels go up one word at a time — 5, 6, 7 … 15 words",
     "Menu: the “🧩 Logic” group is now first",
     "Musical freeze: two picture rules with voice before the game — tap a rule to hear it again",
     "Musical freeze: a sign at the top says “🎵 Pop!” / “❄️ Freeze!”, and the voice says “Freeze!” and “Pop!”",
