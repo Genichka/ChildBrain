@@ -1,7 +1,8 @@
 {
-  "version": "1.9.3",
+  "version": "1.9.4",
   "date": "2026-10-26",
   "changes": [
+    "Меню: група «🧩 Логіка» тепер перша",
     "Музична заморозка: перед грою два правила з картинками й голосом — торкнись правила, і голос скаже ще раз",
     "Музична заморозка: угорі табличка «🎵 Лопай!» / «❄️ Завмри!», голос каже «Завмри!» і «Лопай!»",
     "Музична заморозка: у тиші кульки справді замерзають — зупиняються, біліють, на них сніжинка; торкнувся — кулька не лопається, а трусить головою",
@@ -41,6 +42,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Meniu: grupa „🧩 Logică” e acum prima",
     "Statuile muzicale: înainte de joc — două reguli cu imagini și voce; atinge o regulă și vocea o repetă",
     "Statuile muzicale: sus apare „🎵 Sparge!” / „❄️ Îngheață!”, vocea spune „Îngheață!” și „Sparge!”",
     "Statuile muzicale: în liniște baloanele chiar îngheață — se opresc, se albesc, au un fulg; dacă atingi unul, nu se sparge, ci clatină din cap",
@@ -80,6 +82,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Menu: the “🧩 Logic” group is now first",
     "Musical freeze: two picture rules with voice before the game — tap a rule to hear it again",
     "Musical freeze: a sign at the top says “🎵 Pop!” / “❄️ Freeze!”, and the voice says “Freeze!” and “Pop!”",
     "Musical freeze: in the silence balloons really freeze — they stop, turn white and get a snowflake; tap one and it won't pop, it just shakes",
