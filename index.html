@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EnergyUA Junior">
 <title>EnergyUA Junior — ігри для дітей 4–8 років</title>
-<meta name="description" content="44 гри для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
+<meta name="description" content="46 ігор для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -579,6 +579,11 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .t44{background:linear-gradient(170deg,#ffb3a8,#c4162a)}
 .t45{background:linear-gradient(170deg,#c7f0ff,#4aa8ff)}
 .t46{background:linear-gradient(170deg,#ffe9a8,#b8860b)}
+.t47{background:linear-gradient(170deg,#b9c3d6,#4a5a78)}
+.t48{background:linear-gradient(170deg,#d8d0c0,#7a6a4f)}
+/* ігри для старших (10–18) - позначка віку на плитці */
+.tile{position:relative}
+.tile .age{position:absolute;top:5px;right:6px;font-size:10.5px;font-weight:900;line-height:1;padding:3px 6px;border-radius:8px;background:#111217d0;color:#fff}
 /* ---------- тетріс ---------- */
 .tet-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;flex:1;min-height:0}
 #s-tetris{padding:0 4px 4px}
@@ -674,6 +679,23 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .fagrid button.found::after{content:"✓";position:absolute;right:4px;top:0;font-size:18px;font-weight:900;color:var(--grn)}
 .fagrid button.no{animation:shake .4s;border-color:var(--no)}
 /* знайди відмінність: дві однакові сітки, у нижній одна клітинка інша */
+/* n-назад */
+.nbgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(70vw,270px);margin:0 auto}
+.nbgrid i{aspect-ratio:1;border-radius:14px;background:var(--card);border:3px solid var(--line);transition:background .1s}
+.nbgrid i.on{background:var(--blu);border-color:#fff;box-shadow:0 0 18px var(--blu)}
+.nbinfo{text-align:center;color:var(--dim);font-weight:800;font-size:14px;min-height:1.3em}
+.nbhit{display:block;margin:4px auto 0;width:min(80vw,320px);min-height:64px;border-radius:18px;font-size:24px;font-weight:900;
+  background:linear-gradient(170deg,#96d98d,#56a64b);color:#111217;border:0;box-shadow:0 5px 0 #0004;touch-action:none}
+.nbhit:disabled{opacity:.35;box-shadow:none}
+.nbhit.good{background:#73bf69;transform:scale(.96)} .nbhit.bad{background:#f2495c;transform:scale(.96)}
+/* список слів */
+.wdbig{text-align:center;font-size:clamp(34px,10vw,52px);font-weight:900;min-height:1.3em;letter-spacing:.5px}
+.wdbig.in{animation:in .25s}
+.wdgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;max-width:440px;margin:0 auto}
+.wdgrid button{padding:9px 12px;border-radius:12px;background:var(--card);border:2px solid var(--line);font-size:16px;font-weight:800;color:var(--txt)}
+.wdgrid button.ok{background:#73bf6940;border-color:var(--ok)}
+.wdgrid button.no{background:#f2495c33;border-color:var(--no);text-decoration:line-through;opacity:.7}
+.wdgrid button.miss{border-color:var(--yel);border-style:dashed}
 .dfwrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
 .dfgrid{display:grid;gap:6px;width:min(78vw,300px);padding:8px;border-radius:18px;background:var(--card);border:2px solid var(--line)}
 .dfgrid button{aspect-ratio:1;border-radius:12px;background:#ffffff0a;border:2px solid transparent;font-size:var(--dfs,34px);padding:0;line-height:1}
@@ -888,6 +910,8 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
       <button class="tile t15" data-go="basket"><span class="em">🧺</span><span class="nm">Що<br>в кошику?</span></button>
       <button class="tile t17" data-go="order"><span class="em">🚂</span><span class="nm">Як<br>стояли?</span></button>
       <button class="tile t35" data-go="digits"><span class="em">📞</span><span class="nm">Запамʼятай<br>числа</span></button>
+      <button class="tile t47" data-go="nback"><span class="age">10+</span><span class="em">🔁</span><span class="nm">N-назад</span></button>
+      <button class="tile t48" data-go="words"><span class="age">10+</span><span class="em">📝</span><span class="nm">Список<br>слів</span></button>
     </div></div>
     <div class="page" data-grp="Числа"><p class="gdesc">🔢 <b>Числа</b> — рахувати, додавати й множити</p><div class="menu">
       <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
@@ -1178,6 +1202,28 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   <div class="play"><div class="schud" id="scHud"></div><div class="scgrid" id="scGrid"></div></div>
 </section>
 
+<!-- n-назад (10–18) -->
+<section class="scr" id="s-nback">
+  <div class="ask" id="nbAsk">N-назад</div>
+  <div class="play">
+    <div class="nbgrid" id="nbGrid"></div>
+    <div class="nbinfo" id="nbInfo"></div>
+    <div class="row"><button class="btn go" id="nbGo">▶️ Почати</button></div>
+    <button class="nbhit" id="nbHit" disabled>✓ Збіг</button>
+  </div>
+</section>
+
+<!-- список слів (10–18) -->
+<section class="scr" id="s-words">
+  <div class="ask" id="wdAsk">Список слів</div>
+  <div class="play">
+    <div class="wdbig" id="wdBig"></div>
+    <div class="nbinfo" id="wdInfo"></div>
+    <div class="wdgrid" id="wdGrid"></div>
+    <div class="row"><button class="btn go" id="wdGo" hidden>▶️ Ще раз</button></div>
+  </div>
+</section>
+
 <!-- запамʼятай числа -->
 <section class="scr" id="s-digits">
   <div class="ask" id="dgAsk">Запамʼятай числа</div>
@@ -1365,7 +1411,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.9.4';
+const APP_VERSION = '1.9.5';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1658,6 +1704,13 @@ Object.assign(I18N, {
   "Слухай…": { ro: "Ascultă…", en: "Listen…" },
   "▶️ Слухати ще": { ro: "▶️ Ascultă din nou", en: "▶️ Listen again" },
   "Тепер ти!": { ro: "Acum tu!", en: "Your turn!" },
+  "N-назад": { ro: "N-înapoi", en: "N-back" },
+  "Список<br>слів": { ro: "Lista<br>de cuvinte", en: "Word<br>list" },
+  "Список слів": { ro: "Lista de cuvinte", en: "Word list" },
+  "▶️ Почати": { ro: "▶️ Începe", en: "▶️ Start" },
+  "✓ Збіг": { ro: "✓ Potrivire", en: "✓ Match" },
+  "вони зʼявляться по одному": { ro: "apar pe rând", en: "they appear one by one" },
+  "Які слова були?": { ro: "Ce cuvinte au fost?", en: "Which words were there?" },
   "Піаніно": { ro: "Pian", en: "Piano" },
   "Повтори<br>ритм": { ro: "Repetă<br>ritmul", en: "Repeat<br>the rhythm" },
   "Музична<br>заморозка": { ro: "Statuile<br>muzicale", en: "Musical<br>freeze" },
@@ -2056,6 +2109,19 @@ I18N_RE.push(
   [new RegExp("^Зібрано: (\\d+)$"), { ro: "Strâns: {1}", en: "Caught: {1}" }],
   [new RegExp("^Рекорд: (\\d+)$"), { ro: "Record: {1}", en: "Best: {1}" }],
   [new RegExp("^Знайди (\\d+)$"), { ro: "Găsește {1}", en: "Find {1}" }],
+  [new RegExp("^N-назад · N = (\\d+)$"), { ro: "N-înapoi · N = {1}", en: "N-back · N = {1}" }],
+  [new RegExp("^натискай «Збіг», коли світиться та сама клітинка, що (\\d+) (?:крок|кроки|кроків) тому$"), { ro: "apasă „Potrivire” când se aprinde aceeași căsuță ca acum {1} pași", en: "tap “Match” when the same square lights up as {1} steps ago" }],
+  [new RegExp("^Крок (\\d+) / (\\d+)$"), { ro: "Pasul {1} / {2}", en: "Step {1} / {2}" }],
+  [new RegExp("^(🎉|👍) Влучність (\\d+) %$"), { ro: "{1} Precizie {2} %", en: "{1} Accuracy {2} %" }],
+  [new RegExp("^влучив (\\d+) з (\\d+) · пропустив (\\d+) · зайвих (\\d+)$"), { ro: "nimerite {1} din {2} · ratate {3} · în plus {4}", en: "hit {1} of {2} · missed {3} · extra {4}" }],
+  [new RegExp("^Новий рівень: N = (\\d+)$"), { ro: "Nivel nou: N = {1}", en: "New level: N = {1}" }],
+  [new RegExp("^Легше: N = (\\d+)$"), { ro: "Mai ușor: N = {1}", en: "Easier: N = {1}" }],
+  [new RegExp("^Ще раз: N = (\\d+)$"), { ro: "Încă o dată: N = {1}", en: "Again: N = {1}" }],
+  [new RegExp("^Запамʼятай (\\d+) слів$"), { ro: "Ține minte {1} cuvinte", en: "Remember {1} words" }],
+  [new RegExp("^знайди всі (\\d+) · помилитись можна двічі$"), { ro: "găsește toate cele {1} · poți greși de două ori", en: "find all {1} · you may make two mistakes" }],
+  [new RegExp("^(🎉|👍) Знайдено (\\d+) з (\\d+)$"), { ro: "{1} Găsite {2} din {3}", en: "{1} Found {2} of {3}" }],
+  [new RegExp("^помилок: (\\d+)$"), { ro: "greșeli: {1}", en: "mistakes: {1}" }],
+  [new RegExp("^помилок: (\\d+) · далі (\\d+) слів$"), { ro: "greșeli: {1} · urmează {2} cuvinte", en: "mistakes: {1} · next {2} words" }],
   [new RegExp("^постукай (\\d+) (?:рази|разів)$"), { ro: "bate de {1} ori", en: "tap {1} times" }],
   [new RegExp("^Копань: (\\d+)$"), { ro: "Săpături: {1}", en: "Digs: {1}" }],
   [new RegExp("^копань: (\\d+)$"), { ro: "săpături: {1}", en: "digs: {1}" }],
@@ -2395,7 +2461,7 @@ const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
                  basket: 'Що в кошику?', spairs: 'Звукові пари', order: 'Як стояли?',
-                 pitch: 'Високо чи низько?', piano: 'Піаніно', rhythm: 'Повтори ритм', freeze: 'Музична заморозка', treasure: 'Скарб на слух', shadow: 'Чия тінь?', findall: 'Знайди всіх', diff: 'Знайди відмінність', same: 'Такий самий', schulte: 'Числа по порядку', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
+                 pitch: 'Високо чи низько?', piano: 'Піаніно', rhythm: 'Повтори ритм', freeze: 'Музична заморозка', treasure: 'Скарб на слух', shadow: 'Чия тінь?', findall: 'Знайди всіх', nback: 'N-назад', words: 'Список слів', diff: 'Знайди відмінність', same: 'Такий самий', schulte: 'Числа по порядку', digits: 'Запамʼятай числа', catch: 'Лови зірочки', bubbles: 'Бульбашки', mole: 'Хто виглянув?',
                  rec: 'Свої голоси', math: 'Рахуємо', times: 'Таблиця множення', alpha: 'Абетка', nums: 'Цифри й числа', seq: 'Що далі?', maze: 'Лабіринт', sort: 'Розсортуй', puzzle: 'Пʼятнашки', jigsaw: 'Пазли', bye: 'EnergyUA Junior' };
 
 /* ---------- статистика запусків (лише на цьому пристрої) ----------
@@ -7150,6 +7216,114 @@ $('#scGrid').onclick = (e) => {
   afterSay(() => { if (SCR === 'schulte') scNew(); }, 2200);
 };
 
+/* ---------- 7. N-НАЗАД (10–18 років) ----------
+   Тренажер робочої памʼяті (n-back): на сітці 3×3 по черзі світяться клітинки.
+   Натискай «✓ Збіг», коли світиться та сама клітинка, що N кроків тому.
+   20 + N кроків; ~30 % - збіги. Влучність ≥ 80 % - N росте, < 40 % - зменшується (1…6). */
+const NB = { n: 2, seq: [], tgt: [], i: -1, hits: 0, miss: 0, fa: 0, answered: false, run: false, tm: 0, gen: 0 };
+function nbGrid() { $('#nbGrid').innerHTML = Array.from({ length: 9 }, (_, i) => `<i data-c="${i}"></i>`).join(''); }
+function nbIntro() {
+  NB.run = false; clearTimeout(NB.tm); nbGrid();
+  $('#nbAsk').innerHTML = `N-назад · N = ${NB.n}<small>натискай «Збіг», коли світиться та сама клітинка, що ${NB.n} ${NB.n === 1 ? 'крок' : NB.n <= 4 ? 'кроки' : 'кроків'} тому</small>`;
+  $('#nbInfo').textContent = '';
+  $('#nbGo').hidden = false; $('#nbHit').disabled = true;
+}
+function nbStart() {
+  const n = NB.n, L = 20 + n, seq = [];
+  for (let i = 0; i < L; i++) {
+    if (i >= n && Math.random() < .3) seq.push(seq[i - n]);
+    else { let c; do { c = rnd(9); } while (i >= n && c === seq[i - n]); seq.push(c); }
+  }
+  Object.assign(NB, { seq, tgt: seq.map((c, i) => i >= n && c === seq[i - n]), i: -1, hits: 0, miss: 0, fa: 0, run: true, gen: NB.gen + 1 });
+  $('#nbGo').hidden = true; $('#nbHit').disabled = false;
+  nbStep(NB.gen);
+}
+function nbStep(g) {
+  if (g !== NB.gen || !NB.run || SCR !== 'nback') return;
+  if (NB.i >= 0 && NB.tgt[NB.i] && !NB.answered) NB.miss++;          // пропущений збіг
+  NB.i++; NB.answered = false;
+  if (NB.i >= NB.seq.length) { nbEnd(); return; }
+  $$('#nbGrid i.on').forEach((x) => x.classList.remove('on'));
+  const c = $(`#nbGrid i[data-c="${NB.seq[NB.i]}"]`);
+  c.classList.add('on'); beep(520 + NB.seq[NB.i] * 40, .06, 'triangle', .1);
+  setTimeout(() => c.classList.remove('on'), 650);
+  $('#nbInfo').textContent = `Крок ${NB.i + 1} / ${NB.seq.length}`;
+  NB.tm = setTimeout(() => nbStep(g), Math.max(2000, 2700 - NB.n * 120));
+}
+function nbEnd() {
+  NB.run = false; $('#nbHit').disabled = true;
+  $$('#nbGrid i.on').forEach((x) => x.classList.remove('on'));
+  const t = NB.tgt.filter(Boolean).length, score = t ? Math.max(0, (NB.hits - NB.fa) / t) : 0, pct = Math.round(score * 100), was = NB.n;
+  if (score >= .8) NB.n = Math.min(6, NB.n + 1); else if (score < .4) NB.n = Math.max(1, NB.n - 1);
+  progSave('nback', NB.n); const rec = progBest('nbackBest', score >= .8 ? was : 0);
+  $('#nbAsk').innerHTML = `${score >= .8 ? '🎉' : '👍'} Влучність ${pct} %<small>влучив ${NB.hits} з ${t} · пропустив ${NB.miss} · зайвих ${NB.fa}</small>`;
+  $('#nbInfo').textContent = NB.n > was ? `Новий рівень: N = ${NB.n}` : NB.n < was ? `Легше: N = ${NB.n}` : `Ще раз: N = ${NB.n}`;
+  if (score >= .8) memWin(rec ? '🏆 Новий рекорд!' : 'Молодець!'); else oops();
+  $('#nbGo').hidden = false;
+}
+START.nback = () => { NB.n = Math.max(1, progStart('nback', 2, 0)); nbIntro(); };
+STOP.nback = () => { NB.run = false; NB.gen++; clearTimeout(NB.tm); };
+$('#nbGo').onclick = () => { blip(); ac(); nbIntro(); nbStart(); };
+$('#nbHit').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  if (!NB.run || NB.i < NB.n || NB.answered) return;
+  NB.answered = true;
+  const b = $('#nbHit'), ok = NB.tgt[NB.i];
+  if (ok) { NB.hits++; blip(); } else { NB.fa++; oops(); }
+  b.classList.add(ok ? 'good' : 'bad'); setTimeout(() => b.classList.remove('good', 'bad'), 350);
+});
+
+/* ---------- 8. СПИСОК СЛІВ (10–18 років) ----------
+   Слова показуються по одному; потім - удвічі більше слів, серед них треба знайти всі, що були.
+   Рівні: 6 → 8 → 10 → 12 → 14 слів. Усі знайдені й не більше однієї помилки - наступний рівень.
+   Три помилки - кінець спроби. */
+const WD_WORDS = {
+  uk: 'сонце річка ліс гора місто вікно стіл книжка ручка машина потяг літак човен міст дорога поле квітка дерево листок хмара дощ сніг вітер зірка місяць море пісок камінь вогонь вода хліб сир яблуко груша морква цибуля молоко чай кава ложка тарілка чашка ніж годинник телефон лампа ключ двері сходи дах парасоля шапка шарф рукавиця черевик сумка гаманець кошик олівець зошит рюкзак гітара барабан скрипка мʼяч велосипед ракета корабель кіт пес кінь корова вовк лисиця ведмідь заєць сова орел риба жаба метелик бджола павук равлик черепаха',
+  en: 'sun river forest mountain city window table book pen car train plane boat bridge road field flower tree leaf cloud rain snow wind star moon sea sand stone fire water bread cheese apple pear carrot onion milk tea coffee spoon plate cup knife clock phone lamp key door stairs roof umbrella hat scarf glove shoe bag wallet basket pencil notebook backpack guitar drum violin ball bicycle rocket ship cat dog horse cow wolf fox bear rabbit owl eagle fish frog butterfly bee spider snail turtle',
+  ro: 'soare râu pădure munte oraș fereastră masă carte pix mașină tren avion barcă pod drum câmp floare copac frunză nor ploaie zăpadă vânt stea lună mare nisip piatră foc apă pâine brânză măr pară morcov ceapă lapte ceai cafea lingură farfurie cană cuțit ceas telefon lampă cheie ușă scări acoperiș umbrelă căciulă fular mănușă pantof geantă portofel coș creion caiet rucsac chitară tobă vioară minge bicicletă rachetă corabie pisică câine cal vacă lup vulpe urs iepure bufniță vultur pește broască fluture albină păianjen melc broască-țestoasă',
+};
+const WD_LV = [6, 8, 10, 12, 14];
+const WD = { lv: 0, list: [], found: 0, wrong: 0, phase: 'idle', gen: 0 };
+function wdStart() {
+  const g = ++WD.gen, n = WD_LV[WD.lv], all = shuffle((WD_WORDS[LANG] || WD_WORDS.uk).split(' '));
+  WD.list = all.slice(0, n); WD.extra = all.slice(n, 2 * n); WD.found = 0; WD.wrong = 0; WD.phase = 'show';
+  $('#wdGrid').innerHTML = ''; $('#wdGo').hidden = true;
+  $('#wdAsk').innerHTML = `Запамʼятай ${n} слів<small>вони зʼявляться по одному</small>`;
+  let i = 0;
+  const next = () => {
+    if (g !== WD.gen || SCR !== 'words') return;
+    if (i >= n) { wdTest(); return; }
+    $('#wdBig').textContent = WD.list[i]; $('#wdBig').classList.remove('in'); void $('#wdBig').offsetWidth; $('#wdBig').classList.add('in');
+    $('#wdInfo').textContent = `${i + 1} / ${n}`;
+    i++; setTimeout(() => { if (g === WD.gen) { $('#wdBig').textContent = ''; setTimeout(next, 300); } }, 1500);
+  };
+  setTimeout(next, 900);
+}
+function wdTest() {
+  WD.phase = 'test';
+  const n = WD.list.length;
+  $('#wdBig').textContent = ''; $('#wdInfo').textContent = '';
+  $('#wdAsk').innerHTML = `Які слова були?<small>знайди всі ${n} · помилитись можна двічі</small>`;
+  $('#wdGrid').innerHTML = shuffle([...WD.list, ...WD.extra]).map((w) => `<button>${w}</button>`).join('');
+}
+function wdEnd() {
+  WD.phase = 'idle'; const n = WD.list.length, pass = WD.found === n && WD.wrong <= 1;
+  $$('#wdGrid button').forEach((b) => { if (WD.list.includes(b.textContent) && !b.classList.contains('ok')) b.classList.add('miss'); });
+  if (pass) { WD.lv = Math.min(WD_LV.length - 1, WD.lv + 1); progSave('words', WD.lv); memWin('Молодець!'); } else oops();
+  progBest('wordsBest', pass ? n : 0);
+  $('#wdAsk').innerHTML = `${pass ? '🎉' : '👍'} Знайдено ${WD.found} з ${n}<small>помилок: ${WD.wrong}${pass && WD_LV[WD.lv] > n ? ` · далі ${WD_LV[WD.lv]} слів` : ''}</small>`;
+  $('#wdGo').hidden = false;
+}
+START.words = () => { WD.lv = progStart('words', 0); wdStart(); };
+STOP.words = () => { WD.gen++; WD.phase = 'idle'; };
+$('#wdGo').onclick = () => { blip(); wdStart(); };
+$('#wdGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b || WD.phase !== 'test' || b.classList.contains('ok') || b.classList.contains('no')) return;
+  if (WD.list.includes(b.textContent)) { b.classList.add('ok'); WD.found++; blip(); vibe(15); }
+  else { b.classList.add('no'); WD.wrong++; oops(); vibe(80); }
+  if (WD.found === WD.list.length || WD.wrong >= 3) wdEnd();
+};
+
 /* ---------- 6. ЗАПАМʼЯТАЙ ЧИСЛА ---------- */
 const DG = { gen: 0, n: 2, ok: 0, seq: [], pos: 0, busy: true };
 async function dgShow(gen) {
@@ -7732,7 +7906,7 @@ const stFmt = (sec) => (sec >= 3600 ? `${Math.floor(sec / 3600)} г ${Math.round
 const stDate = (ms) => (ms ? new Date(ms).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' }) : '—');
 /** Рівень / рекорд гри для статистики: «4/6» - рівень 4 з 6, «🏆 31» - рекорд, «№7» - рівень без межі. */
 const PG_RANGE = { memory: [3, 8], count: [5, 10], shape: [1, 3], odd: [3, 4], gone: [3, 7], hide: [3, 6], grid: [2, 8], basket: [2, 6],
-  spairs: [2, 5], order: [3, 6], rhythm: [0, 4], treasure: [0, 3], shadow: [3, 6], findall: [0, 5], digits: [2, 7], diff: [0, 4], same: [0, 4], schulte: [0, 5] };
+  spairs: [2, 5], order: [3, 6], rhythm: [0, 4], treasure: [0, 3], shadow: [3, 6], findall: [0, 5], digits: [2, 7], nback: [1, 6], words: [0, 4], diff: [0, 4], same: [0, 4], schulte: [0, 5] };
 function stLevel(k) {
   try {
     const of = (v, a, b) => `${Math.min(b, Math.max(a, v)) - a + 1}/${b - a + 1}`;
