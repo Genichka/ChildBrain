@@ -1410,7 +1410,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.9.6';
+const APP_VERSION = '1.9.7';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1900,6 +1900,7 @@ Object.assign(I18N, {
   "Поволі": { ro: "Încet", en: "Slow" },
   "Звичайно": { ro: "Normal", en: "Normal" },
   "Швидко": { ro: "Repede", en: "Fast" },
+  "Дрібно": { ro: "Mărunt", en: "Tiny" },
   "Збирай яблучка 🍎": { ro: "Adună merele 🍎", en: "Collect the apples 🍎" },
   "Знайди фігуру": { ro: "Găsește forma", en: "Find the shape" },
   "натисни потрібну фігуру": { ro: "apasă forma potrivită", en: "tap the right shape" },
@@ -7503,11 +7504,12 @@ $('#moHoles').addEventListener('pointerdown', (e) => {
 
 /* ================================================================
    ТЕТРІС  (поле на весь екран; тінь-підказка 👻, куди впаде фігурка - вимкнена, поки не ввімкнути;
-   на «Поволі» - лише прості фігури, без «зигзагів»)
+   на «Поволі» - лише прості фігури, без «зигзагів»; на 🐜 «Дрібно» - сітка вдвічі дрібніша:
+   20 клітинок у ширину й удвічі більше рядів, тож фігурки вдвічі менші, а ряд зібрати важче)
    Керування: кнопки ⬅️ 🔄 ➡️ ⬇️ (затисни - повторює), ⏬ - кинути вниз, або пальцем по полю:
    торкнувся - поворот, тягнеш убік - фігурка йде за пальцем, змахнув униз - падає.
    ================================================================ */
-const TT_COLS = 10; let TT_ROWS = 16;   // рядків стільки, скільки влазить на екран (не менше 16)
+let TT_COLS = 10, TT_ROWS = 16;   // ширина - з рівня (10 або 20); рядків стільки, скільки влазить на екран
 const TT_SHAPES = {
   O: { c: '#fade2a', m: [[1, 1], [1, 1]] },
   I: { c: '#5794f2', m: [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]] },
@@ -7521,6 +7523,8 @@ const TT_LV = [
   { k: 'slow', em: '🐢', nm: 'Поволі', ms: 950, set: 'OITLJ', star: 2 },
   { k: 'mid', em: '🐰', nm: 'Звичайно', ms: 680, set: 'OITLJSZ', star: 3 },
   { k: 'fast', em: '🚀', nm: 'Швидко', ms: 430, set: 'OITLJSZ', star: 4 },
+  // складний: клітинки вдвічі менші; падає на клітинку вдвічі частіше, ніж «Звичайно», бо шлях удвічі довший
+  { k: 'tiny', em: '🐜', nm: 'Дрібно', ms: 300, set: 'OITLJSZ', star: 2, cols: 20 },
 ];
 const TET = { paused: false, ghost: LS.get('tetGhost2', false), snd: LS.get('tetSnd', true), lv: LS.get('tetLv', 'slow'), board: [], cur: null, next: null, bag: [], lines: 0, best: LS.get('tetBest', 0),
              over: true, raf: 0, acc: 0, last: 0, cell: 30, flash: null, rep: null };
@@ -7671,13 +7675,14 @@ function ttStart() {
   const wrap = $('#tetBoard'), r = wrap.getBoundingClientRect();
   // поле на весь вільний екран: ширина - уся, рядків - скільки влізе за висотою
   const B = 4;                                 // рамка 2px з кожного боку
+  TT_COLS = ttLv().cols || 10; const k = TT_COLS / 10;   // 🐜 «Дрібно»: k = 2 - усе вдвічі дрібніше
   const freeW = (r.width || 300) - B;
   const freeH = window.innerHeight - (r.top || 90) - ($('#tetPad').offsetHeight || 54) - 12 - B;
   let cssCell = Math.floor(freeW / TT_COLS);
   TT_ROWS = Math.floor(freeH / cssCell);
-  if (TT_ROWS < 16) { TT_ROWS = 16; cssCell = Math.floor(freeH / 16); }
-  TT_ROWS = Math.min(TT_ROWS, 30);
-  cssCell = Math.max(12, cssCell);
+  if (TT_ROWS < 16 * k) { TT_ROWS = 16 * k; cssCell = Math.floor(freeH / TT_ROWS); }
+  TT_ROWS = Math.min(TT_ROWS, 30 * k);
+  cssCell = Math.max(Math.round(12 / k), cssCell);
   c.style.width = cssCell * TT_COLS + B + 'px'; c.style.height = cssCell * TT_ROWS + B + 'px';
   TET.cell = Math.round(cssCell * dpr); c.width = TET.cell * TT_COLS; c.height = TET.cell * TT_ROWS;
   TET.cssCell = cssCell;
@@ -7709,7 +7714,7 @@ $('#tetSnd').onclick = () => { TET.snd = !TET.snd; LS.set('tetSnd', TET.snd); tt
 document.addEventListener('visibilitychange', () => { if (document.hidden && SCR === 'tetris' && !TET.over) ttSetPause(true); });
 START.tetris = () => ttStart();
 STOP.tetris = () => { TET.over = true; cancelAnimationFrame(TET.raf); clearInterval(TET.rep); };
-$('#tetLv').onclick = () => {           // 🐢 → 🐰 → 🚀 → 🐢; нова гра з новою швидкістю
+$('#tetLv').onclick = () => {           // 🐢 → 🐰 → 🚀 → 🐜 → 🐢; нова гра з новою швидкістю / сіткою
   const i = TT_LV.findIndex((l) => l.k === TET.lv), l = TT_LV[(i + 1) % TT_LV.length];
   TET.lv = l.k; LS.set('tetLv', TET.lv); blip(); ttStart(); toast(`${l.em} ${T(l.nm)}`);
 };
