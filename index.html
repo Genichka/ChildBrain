@@ -510,6 +510,10 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 }
 .btn:active{transform:translateY(3px);box-shadow:0 2px 0 #0003}
 .btn.go{background:linear-gradient(170deg,#ffe066,#ffb703);color:#111217;border-color:#0000}
+/* кнопка «🔊 Повторити» внизу ігор, де завдання каже голос */
+.taskrep{display:flex;justify-content:center;padding-top:6px}
+.taskrep .btn{min-width:210px;font-size:18px;font-weight:900}
+.taskrep[hidden]{display:none}
 .inp{
   width:120px;text-align:center;font-size:30px;padding:10px;border-radius:16px;
   background:#0003;border:3px solid var(--line);color:#fff;font-weight:900
@@ -1410,7 +1414,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.9.7';
+const APP_VERSION = '1.9.8';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1555,6 +1559,8 @@ Object.assign(I18N, {
   "Лови зірочки": { ro: "Prinde stelele", en: "Catch the stars" },
   "Хто виглянув?": { ro: "Cine a ieșit?", en: "Who peeked out?" },
   "🔊 Ще раз": { ro: "🔊 Încă o dată", en: "🔊 Again" },
+  "🔊 Повторити": { ro: "🔊 Repetă", en: "🔊 Repeat" },
+  "Повторити завдання": { ro: "Repetă sarcina", en: "Repeat the task" },
   "▶️ Ще раз": { ro: "▶️ Încă o dată", en: "▶️ Play again" },
   "мишка тоненька, ведмідь грубий": { ro: "șoricelul are glas subțire, ursul gros", en: "the mouse is squeaky, the bear is deep" },
   "Яка нота вища?": { ro: "Care notă e mai înaltă?", en: "Which note is higher?" },
@@ -2401,9 +2407,25 @@ function say(text, rate = 0.88) {
   if (VPACK) { vPlayAll(keys, text); return; }
   vpackLoad().then(() => { if (LAST_SAY === text) vPlayAll(keys, text); }, () => ttsSay(parts.join(' '), rate));
 }
+/* 1.9.8: ЗАВДАННЯ ГРИ - окремо від похвали й «Спробуй ще».
+   Гра каже завдання через sayTask(); кнопка «🔊 Повторити» внизу гри (і торкання тексту
+   завдання) повторює саме його, навіть якщо після нього звучало «Спробуй ще».
+   Дитина могла не почути з першого разу - тепер є як перепитати. */
+const TASK = {};
+const TASK_SCR = ['shape', 'count', 'letter', 'odd', 'math', 'times', 'alpha', 'nums', 'seq', 'sort',
+  'gone', 'hide', 'basket', 'order', 'shadow', 'findall', 'diff', 'same', 'schulte'];
+function taskRepUI() { const w = $(`#s-${SCR} .taskrep`); if (w) w.hidden = !TASK[SCR]; }   // немає завдання (напр. «Вчимо») - кнопки не видно
+function sayTask(text, rate) { TASK[SCR] = text; taskRepUI(); say(text, rate); }
+TASK_SCR.forEach((n) => {
+  const sec = $('#s-' + n); if (!sec) return;
+  const w = document.createElement('div'); w.className = 'taskrep'; w.hidden = true;
+  w.innerHTML = '<button class="btn" aria-label="Повторити завдання">🔊 Повторити</button>';
+  w.firstChild.onclick = () => { if (TASK[SCR]) { ac(); say(TASK[SCR]); } };
+  sec.appendChild(w);
+});
 /* Дитина ще не читає - торкнулась завдання, і гра каже його ще раз. */
 document.addEventListener('click', (e) => {
-  if (e.target.closest('.ask') && LAST_SAY && SCR !== 'menu' && SCR !== 'rec' && SCR !== 'album') { ac(); say(LAST_SAY); }
+  if (e.target.closest('.ask') && LAST_SAY && SCR !== 'menu' && SCR !== 'rec' && SCR !== 'album') { ac(); say(TASK[SCR] || LAST_SAY); }
 });
 /** Усі фрази, які гра може сказати зі змінними частинами - для запису голосу.
     Сталі фрази (say('…')) збирає скрипт прямо з тексту гри. */
@@ -2526,6 +2548,7 @@ function go(name) {
   $('#back').setAttribute('aria-label', name === 'menu' ? 'Вихід' : 'Назад');
   document.body.classList.toggle('in-menu', name === 'menu');
   closeDialog();
+  TASK[name] = null; taskRepUI();                       // нова гра - кнопка «Повторити» чекає на завдання
   if (START[name]) START[name]();
   if (name === 'menu' && UPD && updAsked !== UPD.version) setTimeout(askUpdate, 400);
 }
@@ -2677,7 +2700,7 @@ function cntNew() {
   while (opts.size < 3) { const v = 1 + rnd(Math.max(CNT.max, CNT.n + 2)); if (v !== CNT.n) opts.add(v); }
   $('#nums').innerHTML = shuffle([...opts]).map((v) => `<button class="big num" data-v="${v}">${v}</button>`).join('');
   $('#cntAsk').textContent = `Скільки тут ${word}?`;
-  say(`Скільки тут ${word}?`);
+  sayTask(`Скільки тут ${word}?`);
 }
 START.count = () => { CNT.max = progStart('count', 5); cntNew(); };
 $('#nums').onclick = (e) => {
@@ -2728,7 +2751,7 @@ function letNew() {
   while (opts.size < 3) opts.add(pick(LET_L[LANG] ? LET_L[LANG].abc : ABC));
   $('#letters').innerHTML = shuffle([...opts]).map((c) => `<button class="big let" data-c="${c}">${c}</button>`).join('');
   $('#letAsk').innerHTML = 'З якої букви починається?<small>натисни потрібну букву</small>';
-  say(word.toLowerCase());
+  sayTask(word.toLowerCase());
 }
 START.letter = () => letNew();
 $('#letPic').onclick = () => { if (LET.word) say(LET.word.toLowerCase()); };       // торкнись картинки - почуєш слово ще раз
@@ -3355,7 +3378,7 @@ function shpNew() {
   const what = shpAcc(col, form);
   const find = SHP_L[LANG] ? SHP_L[LANG].find : 'Знайди';
   $('#shpAsk').innerHTML = `${find} ${what}<small>натисни потрібну фігуру</small>`;
-  say(find + ' ' + what);
+  sayTask(find + ' ' + what);
 }
 START.shape = () => { SHP.lvl = progStart('shape', 1); SHP.ok = 0; shpNew(); };
 $('#shapes').onclick = (e) => {
@@ -3399,7 +3422,7 @@ function oddNew() {
   $('#odds').innerHTML = shuffle(main.concat([extra])).map((em) =>
     `<button class="big odd" data-e="${em}">${em}</button>`).join('');
   $('#oddAsk').innerHTML = 'Що тут зайве?<small>натисни те, що не підходить</small>';
-  say('Що тут зайве?');
+  sayTask('Що тут зайве?');
 }
 START.odd = () => { ODD.n = progStart('odd', 3); ODD.ok = 0; oddNew(); };
 $('#odds').onclick = (e) => {
@@ -5014,7 +5037,7 @@ function mtNew() {
   $('#mtAsk').innerHTML = `${q.txt}<small>${q.ask}</small>`;
   mtPicture(q);
   $('#mtAns').innerHTML = mtOpts(q.ans, q.L).map((v) => `<button class="big num" data-v="${v}">${v}</button>`).join('');
-  say(q.voice);
+  sayTask(q.voice);
 }
 START.math = () => { MT.ok = 0; mtNew(); };
 $('#mtLv').onclick = (e) => {
@@ -5088,7 +5111,7 @@ function tmNew() {
   $('#tmAsk').innerHTML = `${q.txt}<small>${q.ask}</small>`;
   tmPicture(q);
   $('#tmAns').innerHTML = q.opts.map((v) => `<button class="big num" data-v="${v}">${v}</button>`).join('');
-  say(q.voice);
+  sayTask(q.voice);
 }
 START.times = () => { TM.ok = 0; tmNew(); };
 $('#tmTabs').onclick = (e) => {
@@ -5246,7 +5269,7 @@ function alNew() {
   alProg();
   $('#alAsk').innerHTML = `${q.txt}<small>${q.small}</small>`;
   $('#alAns').innerHTML = q.opts.map((c) => `<button class="big let" data-c="${c}">${c}</button>`).join('');
-  say(q.say);
+  sayTask(q.say);
 }
 function alRender() {
   const learn = AL_S.mode === 'learn';
@@ -5347,7 +5370,7 @@ function nmNew() {
   nmProg();
   $('#nmAsk').innerHTML = `${q.txt}<small>${q.small}</small>`;
   $('#nmAns').innerHTML = q.opts.map((c) => `<button class="big let" data-c="${c}">${c}</button>`).join('');
-  say(q.say);
+  sayTask(q.say);
 }
 function nmRender() {
   const learn = NM_S.mode === 'learn', [lo, hi] = nmLim();
@@ -5527,7 +5550,7 @@ function sqNew() {
   $('#sqProg').innerHTML = Array.from({ length: 5 }, (_, i) => `<i class="${i < SQ.ok ? 'on' : ''}"></i>`).join('');
   $('#sqRow').innerHTML = q.shown.map((e) => `<span>${e}</span>`).join('') + '<span class="q">❓</span>';
   $('#sqAns').innerHTML = q.opts.map((e) => `<button class="big" data-e="${e}">${e}</button>`).join('');
-  say('Що далі?');
+  sayTask('Що далі?');
 }
 START.seq = () => { SQ.ok = 0; sqNew(); };
 $('#sqAns').onclick = (e) => {
@@ -5665,7 +5688,7 @@ function stNew() {
   $('#stProg').innerHTML = Array.from({ length: 5 }, (_, i) => `<i class="${i < ST.ok ? 'on' : ''}"></i>`).join('');
   $('#stItem').textContent = ST.q.item;
   $('#stBaskets').innerHTML = cats.map((c) => `<button class="big srt" data-k="${c.k}"><span>${c.em}</span><small>${T(c.nm)}</small></button>`).join('');
-  say('Куди це покласти?');
+  sayTask('Куди це покласти?');
 }
 START.sort = () => { ST.ok = 0; stNew(); };
 $('#stBaskets').onclick = (e) => {
@@ -6480,7 +6503,7 @@ async function gnNew() {
   $('#gnRow').innerHTML = set.map((e) => `<span class="mcell">${e}</span>`).join('');
   $('#gnAsk').innerHTML = 'Запамʼятай усе<small>зараз щось зникне</small>';
   const ms = 2200 + GN.n * 650;
-  memBar($('#gnBar'), ms); say('Запамʼятай усе');
+  memBar($('#gnBar'), ms); sayTask('Запамʼятай усе');
   await sleep(ms); if (gen !== GN.gen) return;
   $('#gnRow').classList.add('blink'); $('#gnBar').innerHTML = '';
   await sleep(450); if (gen !== GN.gen) return;
@@ -6490,7 +6513,7 @@ async function gnNew() {
   const opts = shuffle([miss, ...shuffle(MP_POOL.filter((e) => !set.includes(e))).slice(0, 2)]);
   $('#gnOpts').innerHTML = opts.map((e) => `<button class="big mopt" data-e="${e}">${e}</button>`).join('');
   $('#gnAsk').innerHTML = 'Що зникло?<small>натисни те, чого не стало</small>';
-  say('Що зникло?');
+  sayTask('Що зникло?');
   GN.busy = false;
 }
 START.gone = () => { GN.n = progStart('gone', 3); GN.ok = 0; gnNew(); };
@@ -6520,7 +6543,7 @@ async function hdNew() {
     `<button class="house open" data-i="${i}" aria-label="будиночок"><span class="door">${a[0]}</span></button>`).join('');
   $('#hdAsk').innerHTML = 'Запамʼятай, хто де живе<small>зараз двері зачиняться</small>';
   const ms = 2200 + HD.n * 800;
-  memBar($('#hdBar'), ms); say('Запамʼятай, хто де живе');
+  memBar($('#hdBar'), ms); sayTask('Запамʼятай, хто де живе');
   await sleep(ms); if (gen !== HD.gen) return;
   $('#hdBar').innerHTML = '';
   $$('#houses .house').forEach((h) => { h.classList.remove('open'); h.querySelector('.door').textContent = ''; });
@@ -6530,7 +6553,7 @@ async function hdNew() {
 function hdNext() {
   HD.cur = HD.ask.shift(); HD.busy = false;
   $('#hdAsk').innerHTML = `Де ${HD.cur[1]}?<small>натисни на будиночок</small>`;
-  say(`Де ${HD.cur[1]}?`);
+  sayTask(`Де ${HD.cur[1]}?`);
 }
 START.hide = () => { HD.n = progStart('hide', 3); HD.ok = 0; hdNew(); };
 STOP.hide = () => { HD.gen++; };
@@ -6602,7 +6625,7 @@ async function bkNew() {
   BK.items = shuffle(MP_POOL).slice(0, BK.n);
   $('#bkOpts').innerHTML = '';
   $('#bkAsk').innerHTML = 'Дивись, що кладемо в кошик';
-  say('Дивись, що кладемо в кошик');
+  sayTask('Дивись, що кладемо в кошик');
   await speechDone(900); if (gen !== BK.gen) return;     // спершу договорити, потім кидати
   const d = $('#bkDrop');
   for (const e of BK.items) {
@@ -6615,7 +6638,7 @@ async function bkNew() {
   const opts = shuffle([...BK.items, ...shuffle(MP_POOL.filter((e) => !BK.items.includes(e))).slice(0, extra)]);
   $('#bkOpts').innerHTML = opts.map((e) => `<button class="big mopt" data-e="${e}">${e}</button>`).join('');
   $('#bkAsk').innerHTML = `Що в кошику?<small>знайди все, що поклали: ${BK.n}</small>`;
-  say('Що в кошику?');
+  sayTask('Що в кошику?');
   BK.busy = false;
 }
 START.basket = () => { BK.n = progStart('basket', 2); BK.ok = 0; bkNew(); };
@@ -6684,13 +6707,13 @@ async function orNew() {
   $('#orRow').innerHTML = OR.seq.map((e) => `<span class="mcell">${e}</span>`).join('');
   $('#orAsk').innerHTML = 'Запамʼятай, як стоять<small>зліва направо</small>';
   const ms = 2000 + OR.n * 800;
-  memBar($('#orBar'), ms); say('Запамʼятай, як стоять');
+  memBar($('#orBar'), ms); sayTask('Запамʼятай, як стоять');
   await sleep(ms); if (gen !== OR.gen) return;
   $('#orBar').innerHTML = '';
   $('#orRow').innerHTML = OR.seq.map(() => '<span class="slot"></span>').join('');
   $('#orPool').innerHTML = shuffle(OR.seq).map((e) => `<button class="big mopt" data-e="${e}">${e}</button>`).join('');
   $('#orAsk').innerHTML = 'Постав так, як було<small>натискай по черзі зліва направо</small>';
-  say('Постав так, як було');
+  sayTask('Постав так, як було');
   OR.busy = false;
 }
 START.order = () => { OR.n = progStart('order', 3); OR.ok = 0; orNew(); };
@@ -7075,7 +7098,7 @@ function shNew() {
   $('#shBig').textContent = SH.cur;
   $('#shOpts').innerHTML = opts.map((e) => `<button class="big shb" data-e="${e}"><span class="sil">${e}</span></button>`).join('');
   $('#shAsk').innerHTML = 'Чия це тінь?<small>знайди, хто так стоїть</small>';
-  say('Чия це тінь?');
+  sayTask('Чия це тінь?');
 }
 START.shadow = () => { SH.ok = 0; SH.n = progStart('shadow', 3); shNew(); };
 $('#shOpts').onclick = (e) => {
@@ -7098,7 +7121,7 @@ function faNew() {
   $('#faGrid').innerHTML = Array.from({ length: cells }, (_, i) => at.has(i)
     ? `<button data-t="1">${FA.tgt}</button>` : `<button>${pick(others)}</button>`).join('');
   $('#faTgt').textContent = FA.tgt;   // що шукати - велике, під текстом завдання
-  faAsk(); say('Знайди всіх');
+  faAsk(); sayTask('Знайди всіх');
 }
 const faAsk = () => { $('#faAsk').innerHTML = `Знайди всіх<small>ще ${FA.left}</small>`; };
 START.findall = () => { FA.lv = progStart('findall', 0); FA.ok = 0; faNew(); };
@@ -7133,7 +7156,7 @@ function dfNew() {
   });
   DF.busy = false;
   $('#dfAsk').innerHTML = 'Знайди відмінність<small>внизу одна картинка інша</small>';
-  say('Знайди відмінність');
+  sayTask('Знайди відмінність');
 }
 START.diff = () => { DF.lv = progStart('diff', 0); DF.ok = 0; dfNew(); };
 ['#dfA', '#dfB'].forEach((id) => { $(id).onclick = (e) => {
@@ -7167,7 +7190,7 @@ function smNew() {
   $('#smTgt').innerHTML = tgt.map((e) => `<span>${e}</span>`).join('');
   $('#smOpts').innerHTML = shuffle([...opts.entries()]).map(([kk, v]) => `<button data-k="${kk}">${v.map((e) => `<span>${e}</span>`).join('')}</button>`).join('');
   $('#smAsk').innerHTML = 'Знайди такий самий ряд<small>порівняй кожну картинку</small>';
-  say('Знайди такий самий ряд');
+  sayTask('Знайди такий самий ряд');
 }
 START.same = () => { SM.lv = progStart('same', 0); SM.ok = 0; smNew(); };
 $('#smOpts').onclick = (e) => {
@@ -7183,7 +7206,7 @@ $('#smOpts').onclick = (e) => {
    Рівні: 1–6, 1–9, 1–12, 1–16, 1–20, 1–25. Час і найкращий час для кожного розміру. */
 const SC_LV = [[3, 2], [3, 3], [4, 3], [4, 4], [5, 4], [5, 5]];   // [стовпців, рядків]
 const SC = { lv: 0, ok: 0, next: 1, n: 0, t0: 0, tm: 0, busy: true };
-const scSayNext = () => say(LANG === 'uk' ? ['Знайди', ...numW(SC.next)] : `Знайди ${SC.next}`);
+const scSayNext = () => sayTask(LANG === 'uk' ? ['Знайди', ...numW(SC.next)] : `Знайди ${SC.next}`);
 function scHud() {
   const s = SC.t0 ? (performance.now() - SC.t0) / 1000 : 0, best = PROG['schT' + SC.n];
   $('#scHud').innerHTML = `<span>⏱ <b>${s.toFixed(1)}</b></span>` + (best ? `<span>🏆 <b>${best.toFixed(1)}</b></span>` : '');
