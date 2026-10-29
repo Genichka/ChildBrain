@@ -1,7 +1,8 @@
 {
-  "version": "1.9.10",
+  "version": "1.9.11",
   "date": "2026-10-29",
   "changes": [
+    "При вході — святковий торт 🎂: «Привіт! Скільки тобі рочків?» Натисни цифру — запаляться свічки, а в меню ігри для старших стануть трохи блідішими. Змінити вік — кнопка 🎂 угорі меню",
     "На кожній плитці меню — маленький значок орієнтовного віку (3+ … 10+); «10+» — жовтий",
     "Нова гра 🌈 «Кольори й фігури» (група «Букви»): окремо 🎨 кольори, окремо 🔷 фігури і 🌈 разом; 👀 Вчимо — торкнись, і голос назве; 🎯 Знайди — завдання голосом, 3 рівні в кожному розділі",
     "Кнопка «🔊 Повторити» внизу 19 ігор, де завдання каже голос (Колір і форма, Скільки?, Перша буква, Рахуємо, Таблиця множення, Абетка, Цифри, памʼять і увага…): не почув з першого разу — натисни, і гра скаже завдання ще раз",
@@ -49,6 +50,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "La intrare — un tort 🎂: „Bună! Câți anișori ai?” Apasă cifra — se aprind lumânările, iar jocurile pentru cei mai mari devin puțin mai palide. Vârsta se schimbă cu butonul 🎂 din meniu",
     "Pe fiecare joc din meniu — o mică etichetă cu vârsta recomandată (3+ … 10+); „10+” e galbenă",
     "Joc nou 🌈 „Culori și forme” (grupa „Litere”): separat 🎨 culori, separat 🔷 forme și 🌈 împreună; 👀 Învățăm — atinge și vocea spune numele; 🎯 Găsește — sarcina e spusă cu voce, 3 niveluri",
     "Butonul „🔊 Repetă” jos în 19 jocuri în care sarcina e spusă cu voce: dacă n-ai auzit prima dată — apasă, și jocul repetă sarcina",
@@ -96,6 +98,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "On start — a birthday cake 🎂: “Hi! How old are you?” Tap the number — the candles light up, and games for older kids get slightly faded. Change the age with the 🎂 button in the menu",
     "Every menu tile now has a small age badge (3+ … 10+); “10+” is yellow",
     "New game 🌈 “Colours and shapes” (Letters group): 🎨 colours, 🔷 shapes and 🌈 both; 👀 Learn — tap and the voice names it; 🎯 Find — spoken task, 3 levels in each part",
     "“🔊 Repeat” button at the bottom of 19 games where the task is spoken: missed it the first time — tap, and the game says the task again",
