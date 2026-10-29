@@ -1,7 +1,8 @@
 {
-  "version": "1.9.8",
+  "version": "1.9.9",
   "date": "2026-10-29",
   "changes": [
+    "Нова гра 🌈 «Кольори й фігури» (група «Букви»): окремо 🎨 кольори, окремо 🔷 фігури і 🌈 разом; 👀 Вчимо — торкнись, і голос назве; 🎯 Знайди — завдання голосом, 3 рівні в кожному розділі",
     "Кнопка «🔊 Повторити» внизу 19 ігор, де завдання каже голос (Колір і форма, Скільки?, Перша буква, Рахуємо, Таблиця множення, Абетка, Цифри, памʼять і увага…): не почув з першого разу — натисни, і гра скаже завдання ще раз",
     "Торкання тексту завдання теж повторює саме завдання, а не «Спробуй ще»",
     "Тетріс: новий складний рівень 🐜 «Дрібно» — сітка вдвічі дрібніша (20 клітинок у ширину), фігурки вдвічі менші. Перемикається кнопкою швидкості: 🐢 → 🐰 → 🚀 → 🐜",
@@ -47,6 +48,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Joc nou 🌈 „Culori și forme” (grupa „Litere”): separat 🎨 culori, separat 🔷 forme și 🌈 împreună; 👀 Învățăm — atinge și vocea spune numele; 🎯 Găsește — sarcina e spusă cu voce, 3 niveluri",
     "Butonul „🔊 Repetă” jos în 19 jocuri în care sarcina e spusă cu voce: dacă n-ai auzit prima dată — apasă, și jocul repetă sarcina",
     "Atingerea textului sarcinii repetă chiar sarcina, nu „Mai încearcă”",
     "Tetris: nivel nou, greu 🐜 „Mărunt” — grilă de două ori mai fină (20 de pătrățele pe lățime), piese de două ori mai mici. Se alege cu butonul de viteză: 🐢 → 🐰 → 🚀 → 🐜",
@@ -92,6 +94,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "New game 🌈 “Colours and shapes” (Letters group): 🎨 colours, 🔷 shapes and 🌈 both; 👀 Learn — tap and the voice names it; 🎯 Find — spoken task, 3 levels in each part",
     "“🔊 Repeat” button at the bottom of 19 games where the task is spoken: missed it the first time — tap, and the game says the task again",
     "Tapping the task text now repeats the task itself, not “Try again”",
     "Tetris: new hard level 🐜 “Tiny” — the grid is twice as fine (20 cells wide), pieces are half the size. Pick it with the speed button: 🐢 → 🐰 → 🚀 → 🐜",

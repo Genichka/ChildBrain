@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EnergyUA Junior">
 <title>EnergyUA Junior — ігри для дітей 4–8 років</title>
-<meta name="description" content="46 ігор для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
+<meta name="description" content="47 ігор для дітей 4–8 років з озвученими завданнями: увага, слух, памʼять, числа, букви, логіка, швидкість. Українською, без реклами, працює без інтернету.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -411,6 +411,23 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .f-square{border-radius:12px}
 .f-tri{clip-path:polygon(50% 3%,97% 95%,3% 95%)}
 .f-star{clip-path:polygon(50% 2%,61% 36%,98% 36%,68% 58%,79% 95%,50% 73%,21% 95%,32% 58%,2% 36%,39% 36%)}
+/* ---------- кольори й фігури ---------- */
+#cfWhat{grid-template-columns:repeat(3,1fr)}
+#cfMode{grid-template-columns:repeat(2,1fr)}
+#cfWhat .mtl,#cfMode .mtl{font-size:15px;padding:4px}
+.cfs{display:block;width:100%;height:100%}
+.cfcard{flex-direction:column;gap:4px;cursor:pointer;min-height:0}
+.cfcard .cfbig{width:110px;height:110px}
+.cfnm{font-size:28px;font-weight:900;text-align:center;line-height:1.1}
+.cfhint{font-size:12.5px;color:var(--dim);font-weight:700}
+.cfgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cfgrid.c3{grid-template-columns:repeat(3,1fr)}
+.cfgrid button{aspect-ratio:1;border-radius:16px;background:var(--card);border:2px solid var(--line);padding:12%;min-height:0}
+.cfgrid button.on{background:#ffd93d33;border-color:var(--yel)}
+.cfgrid .cfmix{grid-column:1/-1;aspect-ratio:auto;padding:10px;font-size:17px;font-weight:900;color:var(--txt)}
+.cfans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;justify-items:center;width:100%;max-width:420px;margin:0 auto}
+.cfans.c2{grid-template-columns:repeat(2,1fr)}
+.cfans .cfo{width:min(112px,27vw);height:min(112px,27vw);padding:16px}
 
 /* ---------- що зайве ---------- */
 .odd{width:96px;height:96px;font-size:46px}
@@ -585,6 +602,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 .t46{background:linear-gradient(170deg,#ffe9a8,#b8860b)}
 .t47{background:linear-gradient(170deg,#b9c3d6,#4a5a78)}
 .t48{background:linear-gradient(170deg,#d8d0c0,#7a6a4f)}
+.t49{background:linear-gradient(170deg,#ff6fae,#a55eea 45%,#1e6bff)}
 /* ігри для старших (10–18) - позначка віку на плитці */
 .tile{position:relative}
 .tile .age{position:absolute;top:5px;right:6px;font-size:10.5px;font-weight:900;line-height:1;padding:3px 6px;border-radius:8px;background:#111217d0;color:#fff}
@@ -922,9 +940,10 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
       <button class="tile t22" data-go="times"><span class="em">✖️</span><span class="nm">Таблиця<br>множення</span></button>
       <button class="tile t24" data-go="nums"><span class="em">🔟</span><span class="nm">Цифри<br>й числа</span></button>
     </div></div>
-    <div class="page" data-grp="Букви"><p class="gdesc">🔤 <b>Букви</b> — упізнавати букви й першу букву слова</p><div class="menu">
+    <div class="page" data-grp="Букви"><p class="gdesc">🔤 <b>Букви</b> — упізнавати букви, кольори й фігури</p><div class="menu">
       <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
       <button class="tile t23" data-go="alpha"><span class="em">🔠</span><span class="nm">Абетка</span></button>
+      <button class="tile t49" data-go="colfig"><span class="em">🌈</span><span class="nm">Кольори<br>й фігури</span></button>
     </div></div>
     <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
       <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
@@ -1262,6 +1281,17 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   <div class="play"><div class="row" id="shapes"></div></div>
 </section>
 
+<!-- кольори й фігури: вчимо окремо й разом -->
+<section class="scr" id="s-colfig">
+  <div class="mtlv" id="cfWhat"></div>
+  <div class="mtlv" id="cfMode"></div>
+  <div class="alcard cfcard" id="cfCard"></div>
+  <div class="cfgrid" id="cfGrid"></div>
+  <div class="mtprog" id="cfProg" hidden></div>
+  <div class="ask" id="cfAsk" hidden></div>
+  <div class="play" id="cfPlay" hidden><div class="cfans" id="cfAns"></div></div>
+</section>
+
 <!-- що зайве -->
 <section class="scr" id="s-odd">
   <div class="ask" id="oddAsk">Що тут зайве?<small>натисни те, що не підходить</small></div>
@@ -1414,7 +1444,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.9.8';
+const APP_VERSION = '1.9.9';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */
@@ -1587,6 +1617,15 @@ Object.assign(I18N, {
   "Букви": { ro: "Litere", en: "Letters" },
   "рахувати, додавати й множити": { ro: "să numeri, să aduni și să înmulțești", en: "counting, adding and multiplying" },
   "упізнавати букви й першу букву слова": { ro: "să recunoști literele și prima literă din cuvânt", en: "recognising letters and the first letter of a word" },
+  "упізнавати букви, кольори й фігури": { ro: "să recunoști literele, culorile și formele", en: "recognising letters, colours and shapes" },
+  "Кольори<br>й фігури": { ro: "Culori<br>și forme", en: "Colours<br>and shapes" },
+  "Кольори й фігури": { ro: "Culori și forme", en: "Colours and shapes" },
+  "🎨 Кольори": { ro: "🎨 Culori", en: "🎨 Colours" },
+  "🔷 Фігури": { ro: "🔷 Forme", en: "🔷 Shapes" },
+  "🌈 Разом": { ro: "🌈 Împreună", en: "🌈 Both" },
+  "Інші": { ro: "Altele", en: "Others" },
+  "торкнись — скажу ще раз": { ro: "atinge — îți spun din nou", en: "tap — I'll say it again" },
+  "натисни потрібний колір": { ro: "apasă culoarea potrivită", en: "tap the right colour" },
   "Логіка": { ro: "Logică", en: "Logic" },
   "Швидкість": { ro: "Viteză", en: "Speed" },
   "розрізняти звуки й запамʼятовувати почуте": { ro: "să deosebești sunetele și să ții minte ce ai auzit", en: "telling sounds apart and remembering what you hear" },
@@ -2413,7 +2452,7 @@ function say(text, rate = 0.88) {
    Дитина могла не почути з першого разу - тепер є як перепитати. */
 const TASK = {};
 const TASK_SCR = ['shape', 'count', 'letter', 'odd', 'math', 'times', 'alpha', 'nums', 'seq', 'sort',
-  'gone', 'hide', 'basket', 'order', 'shadow', 'findall', 'diff', 'same', 'schulte'];
+  'gone', 'hide', 'basket', 'order', 'shadow', 'findall', 'diff', 'same', 'schulte', 'colfig'];
 function taskRepUI() { const w = $(`#s-${SCR} .taskrep`); if (w) w.hidden = !TASK[SCR]; }   // немає завдання (напр. «Вчимо») - кнопки не видно
 function sayTask(text, rate) { TASK[SCR] = text; taskRepUI(); say(text, rate); }
 TASK_SCR.forEach((n) => {
@@ -2479,7 +2518,7 @@ const closeDialog = () => $('#ov').classList.add('hid');
 /* ---------- перемикання екранів ---------- */
 const TITLES = { menu: 'EnergyUA Junior', melody: 'Повтори мелодію', memory: 'Знайди пару', count: 'Скільки?',
                  letter: 'Перша буква', animal: 'Хто як говорить', snake: 'Змійка', tetris: 'Тетріс',
-                 shape: 'Колір і форма', odd: 'Що зайве?', album: 'Мої наліпки',
+                 shape: 'Колір і форма', colfig: 'Кольори й фігури', odd: 'Що зайве?', album: 'Мої наліпки',
                  arcade: 'Зореліт', ttt: 'Хрестики-нулики', mines: 'Сапер',
                  brick: 'Відбивайка', dino: 'Динозаврик', jump: 'Стрибунець',
                  gone: 'Що зникло?', hide: 'Хто сховався?', grid: 'Повтори візерунок',
@@ -3389,6 +3428,194 @@ $('#shapes').onclick = (e) => {
     SHP.ok++;
     if (SHP.ok >= 3 && SHP.lvl < 3) { SHP.lvl++; SHP.ok = 0; progSave('shape', SHP.lvl); }
     afterSay(shpNew, 1400);
+  } else {
+    b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
+    setTimeout(() => b.classList.remove('no'), 500);
+  }
+};
+
+/* ================================================================
+   7б. КОЛЬОРИ Й ФІГУРИ - вчимо окремо кольори, окремо фігури, а потім разом.
+   Угорі вибір: 🎨 Кольори / 🔷 Фігури / 🌈 Разом, під ним 👀 Вчимо / 🎯 Знайди.
+   👀 Вчимо - торкнись кольору чи фігури, і голос назве (картка вгорі - ще раз).
+   🎯 Знайди - гра каже завдання («Знайди синій колір», «Знайди зірку», «Знайди синю зірку»),
+   є кнопка «🔊 Повторити». 5 правильних - зірочка й наступний рівень (3 рівні на кожен розділ):
+   більше варіантів, схожі кольори, фігури різних кольорів, підступні «майже такі самі».
+   ================================================================ */
+// m/f/n - форми прикметника, щоб узгоджувався з фігурою: синій квадрат, синя зірка, синє коло
+const CF_COL = [
+  { id: 'red', css: '#ff3b30', m: 'червоний', f: 'червона', n: 'червоне', ro: ['roșu', 'roșie'], en: 'red', b: 1 },
+  { id: 'org', css: '#ff9500', m: 'помаранчевий', f: 'помаранчева', n: 'помаранчеве', ro: ['portocaliu', 'portocalie'], en: 'orange', b: 1 },
+  { id: 'yel', css: '#ffd60a', m: 'жовтий', f: 'жовта', n: 'жовте', ro: ['galben', 'galbenă'], en: 'yellow', b: 1 },
+  { id: 'grn', css: '#34c759', m: 'зелений', f: 'зелена', n: 'зелене', ro: ['verde', 'verde'], en: 'green', b: 1 },
+  { id: 'lbl', css: '#64d2ff', m: 'блакитний', f: 'блакитна', n: 'блакитне', ro: ['bleu', 'bleu'], en: 'light blue' },
+  { id: 'blu', css: '#1e6bff', m: 'синій', f: 'синя', n: 'синє', ro: ['albastru', 'albastră'], en: 'blue', b: 1 },
+  { id: 'vio', css: '#a55eea', m: 'фіолетовий', f: 'фіолетова', n: 'фіолетове', ro: ['violet', 'violetă'], en: 'purple', b: 1 },
+  { id: 'pnk', css: '#ff6fae', m: 'рожевий', f: 'рожева', n: 'рожеве', ro: ['roz', 'roz'], en: 'pink' },
+  { id: 'brn', css: '#9a5b2e', m: 'коричневий', f: 'коричнева', n: 'коричневе', ro: ['maro', 'maro'], en: 'brown' },
+  { id: 'blk', css: '#141414', m: 'чорний', f: 'чорна', n: 'чорне', ro: ['negru', 'neagră'], en: 'black' },
+  { id: 'wht', css: '#ffffff', m: 'білий', f: 'біла', n: 'біле', ro: ['alb', 'albă'], en: 'white' },
+  { id: 'gry', css: '#9a9aa0', m: 'сірий', f: 'сіра', n: 'сіре', ro: ['gri', 'gri'], en: 'grey' },
+];
+// g - рід (m/f/n), acc - знахідний відмінок («Знайди зірку»); ro: [без артикля, з артиклем, жіночий?]
+const CF_FORM = [
+  { id: 'circle', g: 'n', nm: 'коло', acc: 'коло', ro: ['cerc', 'cercul', 0], en: 'circle', b: 1,
+    svg: '<circle cx="50" cy="50" r="42"/>' },
+  { id: 'square', g: 'm', nm: 'квадрат', acc: 'квадрат', ro: ['pătrat', 'pătratul', 0], en: 'square', b: 1,
+    svg: '<rect x="12" y="12" width="76" height="76" rx="7"/>' },
+  { id: 'tri', g: 'm', nm: 'трикутник', acc: 'трикутник', ro: ['triunghi', 'triunghiul', 0], en: 'triangle', b: 1,
+    svg: '<polygon points="50,7 95,90 5,90"/>' },
+  { id: 'star', g: 'f', nm: 'зірка', acc: 'зірку', ro: ['stea', 'steaua', 1], en: 'star', b: 1,
+    svg: '<polygon points="50,3 61,37 97,37 68,58 79,94 50,73 21,94 32,58 3,37 39,37"/>' },
+  { id: 'rect', g: 'm', nm: 'прямокутник', acc: 'прямокутник', ro: ['dreptunghi', 'dreptunghiul', 0], en: 'rectangle',
+    svg: '<rect x="4" y="25" width="92" height="50" rx="6"/>' },
+  { id: 'oval', g: 'm', nm: 'овал', acc: 'овал', ro: ['oval', 'ovalul', 0], en: 'oval',
+    svg: '<ellipse cx="50" cy="50" rx="46" ry="30"/>' },
+  { id: 'rhomb', g: 'm', nm: 'ромб', acc: 'ромб', ro: ['romb', 'rombul', 0], en: 'diamond',
+    svg: '<polygon points="50,3 90,50 50,97 10,50"/>' },
+  { id: 'heart', g: 'n', nm: 'серце', acc: 'серце', ro: ['inimă', 'inima', 1], en: 'heart',
+    svg: '<path d="M50 90C22 70 4 54 4 33C4 17 16 7 30 7C40 7 47 13 50 21C53 13 60 7 70 7C84 7 96 17 96 33C96 54 78 70 50 90Z"/>' },
+];
+const CF_WHAT = [['col', '🎨 Кольори'], ['form', '🔷 Фігури'], ['both', '🌈 Разом']];
+const CF_MODE = [['learn', '👀 Вчимо'], ['find', '🎯 Знайди']];
+const CF_NEED = 5;
+const CF = { what: LS.get('cfWhat', 'col'), mode: LS.get('cfMode', 'learn'), lv: 0, ok: 0, busy: false, q: null, cur: null, mix: [] };
+/** Кольорова фігура в SVG (обвідка - щоб чорне було видно на темному, а біле - на світлому). */
+const cfSvg = (f, c, cls = '') => `<svg class="cfs ${cls}" viewBox="0 0 100 100" aria-hidden="true"><g fill="${c.css}" stroke="#ffffff59" stroke-width="3" stroke-linejoin="round">${f.svg}</g></svg>`;
+const CF_BLOB = CF_FORM[0];   // колір показуємо круглою «плямою фарби»
+/* Назви трьома мовами */
+function cfColName(c) { return LANG === 'en' ? c.en : LANG === 'ro' ? c.ro[0] : c.m; }
+function cfFormName(f) { return LANG === 'en' ? f.en : LANG === 'ro' ? f.ro[0] : f.nm; }
+function cfBothName(c, f) {
+  if (LANG === 'en') return `${c.en} ${f.en}`;
+  if (LANG === 'ro') return `${f.ro[1]} ${c.ro[f.ro[2]]}`;
+  return `${c[f.g]} ${f.nm}`;
+}
+function cfTask(kind, c, f) {
+  if (LANG === 'en') return kind === 'col' ? `Find ${c.en}` : kind === 'form' ? `Find the ${f.en}` : `Find the ${c.en} ${f.en}`;
+  if (LANG === 'ro') return kind === 'col' ? `Găsește culoarea ${c.ro[1]}` : kind === 'form' ? `Găsește ${f.ro[1]}` : `Găsește ${f.ro[1]} ${c.ro[f.ro[2]]}`;
+  if (kind === 'col') return `Знайди ${c.m} колір`;
+  if (kind === 'form') return `Знайди ${f.acc}`;
+  const adj = f.g === 'f' ? c.f.replace(/а$/, 'у').replace(/я$/, 'ю') : c[f.g];
+  return `Знайди ${adj} ${f.acc}`;
+}
+const CF_HINT = { col: 'натисни потрібний колір', form: 'натисни потрібну фігуру', both: 'натисни потрібну фігуру' };
+/* Рівні: [скільки варіантів, з якого набору] */
+const cfPool = (arr, lv) => (lv === 0 ? arr.filter((x) => x.b) : arr);
+function cfMake() {
+  const lv = CF.lv, n = [3, 4, 6][lv];
+  if (CF.what === 'col') {
+    const pool = cfPool(CF_COL, lv), c = pick(pool);
+    let opts = [c];
+    if (lv === 2) {   // підступні пари: червоний-рожевий, синій-блакитний, сірий-білий...
+      const twin = { red: 'pnk', pnk: 'red', blu: 'lbl', lbl: 'blu', gry: 'wht', wht: 'gry', org: 'brn', brn: 'org', vio: 'pnk', blk: 'gry', grn: 'yel', yel: 'org' }[c.id];
+      const t = CF_COL.find((x) => x.id === twin); if (t) opts.push(t);
+    }
+    opts = opts.concat(shuffle(pool.filter((x) => !opts.includes(x))).slice(0, n - opts.length));
+    return { key: c.id, say: cfTask('col', c), opts: shuffle(opts).map((x) => ({ k: x.id, c: x, f: CF_BLOB })) };
+  }
+  if (CF.what === 'form') {
+    const pool = cfPool(CF_FORM, lv), f = pick(pool), one = pick(CF_COL.filter((c) => c.b));
+    let opts = [f];
+    if (lv === 2) {   // схожі фігури поруч: квадрат-прямокутник, коло-овал, ромб-квадрат
+      const twin = { square: 'rect', rect: 'square', circle: 'oval', oval: 'circle', rhomb: 'square', tri: 'rhomb', star: 'heart', heart: 'star' }[f.id];
+      const t = CF_FORM.find((x) => x.id === twin); if (t) opts.push(t);
+    }
+    opts = opts.concat(shuffle(pool.filter((x) => !opts.includes(x))).slice(0, n - opts.length));
+    // на 3-му рівні фігури різних кольорів - треба дивитись саме на форму
+    return { key: f.id, say: cfTask('form', null, f),
+      opts: shuffle(opts).map((x) => ({ k: x.id, c: lv === 2 ? pick(CF_COL.filter((c) => c.id !== 'blk')) : one, f: x })) };
+  }
+  // разом: на 1-му рівні різниця лише в кольорі або лише у формі; далі - змішано й підступно
+  const cols = cfPool(CF_COL, lv), forms = cfPool(CF_FORM, lv), c = pick(cols), f = pick(forms), key = c.id + '|' + f.id;
+  const seen = new Set([key]), opts = [{ c, f }];
+  const add = (cc, ff) => { const k = cc.id + '|' + ff.id; if (!seen.has(k) && opts.length < n) { seen.add(k); opts.push({ c: cc, f: ff }); } };
+  if (lv === 0) {
+    if (Math.random() < 0.5) shuffle(cols.filter((x) => x !== c)).forEach((x) => add(x, f));
+    else shuffle(forms.filter((x) => x !== f)).forEach((x) => add(c, x));
+  } else {
+    add(pick(cols.filter((x) => x !== c)), f); add(c, pick(forms.filter((x) => x !== f)));   // «майже такі самі»
+    let guard = 0; while (opts.length < n && guard++ < 300) add(pick(cols), pick(forms));
+  }
+  return { key, say: cfTask('both', c, f), opts: shuffle(opts).map((o) => ({ k: o.c.id + '|' + o.f.id, c: o.c, f: o.f })) };
+}
+function cfTabs() {
+  $('#cfWhat').innerHTML = CF_WHAT.map(([m, t]) => `<button class="mtl${m === CF.what ? ' on' : ''}" data-w="${m}">${T(t)}</button>`).join('');
+  $('#cfMode').innerHTML = CF_MODE.map(([m, t]) => `<button class="mtl${m === CF.mode ? ' on' : ''}" data-m="${m}">${T(t)}</button>`).join('');
+}
+const cfKey = () => 'cf_' + CF.what;
+/* ---- 👀 Вчимо ---- */
+function cfItems() {
+  if (CF.what === 'col') return CF_COL.map((c) => ({ c, f: CF_BLOB, name: cfColName(c) }));
+  if (CF.what === 'form') { const c = CF_COL[5]; return CF_FORM.map((f) => ({ c, f, name: cfFormName(f) })); }
+  if (!CF.mix.length) {   // разом - 9 різних кольорових фігур, кнопка «🔀 Інші» перемішує
+    const s = new Set(); let guard = 0;
+    while (CF.mix.length < 9 && guard++ < 300) {
+      const c = pick(CF_COL), f = pick(CF_FORM), k = c.id + f.id;
+      if (!s.has(k) && !CF.mix.some((x) => x.c === c)) { s.add(k); CF.mix.push({ c, f }); }
+    }
+  }
+  return CF.mix.map((o) => ({ c: o.c, f: o.f, name: cfBothName(o.c, o.f) }));
+}
+function cfCard() {
+  const it = CF.cur; if (!it) return;
+  $('#cfCard').innerHTML = `${cfSvg(it.f, it.c, 'cfbig')}<span class="cfnm">${it.name}</span><span class="cfhint">🔊 ${T('торкнись — скажу ще раз')}</span>`;
+}
+function cfLearn() {
+  const items = cfItems();
+  if (!CF.cur || !items.some((x) => x.name === CF.cur.name)) CF.cur = items[0];
+  $('#cfGrid').className = 'cfgrid' + (CF.what === 'col' ? ' c4' : CF.what === 'form' ? ' c4' : ' c3');
+  $('#cfGrid').innerHTML = items.map((x, i) => `<button data-i="${i}" class="${x.name === CF.cur.name ? 'on' : ''}" aria-label="${x.name}">${cfSvg(x.f, x.c)}</button>`).join('') +
+    (CF.what === 'both' ? `<button class="cfmix" data-mix="1">🔀 ${T('Інші')}</button>` : '');
+  cfCard();
+}
+/* ---- 🎯 Знайди ---- */
+function cfProg() {
+  $('#cfProg').innerHTML = `${T('Рівень')} <b>${CF.lv + 1}</b>/3 ` + Array.from({ length: CF_NEED }, (_, i) => `<i class="${i < CF.ok ? 'on' : ''}"></i>`).join('');
+}
+function cfNew() {
+  const q = CF.q = cfMake(); CF.busy = false;
+  cfProg();
+  $('#cfAsk').innerHTML = `${q.say}<small>${T(CF_HINT[CF.what])}</small>`;
+  $('#cfAns').className = 'cfans' + (q.opts.length === 4 ? ' c2' : ' c3');
+  $('#cfAns').innerHTML = q.opts.map((o) => `<button class="big cfo" data-k="${o.k}" aria-label="${CF.what === 'col' ? cfColName(o.c) : CF.what === 'form' ? cfFormName(o.f) : cfBothName(o.c, o.f)}">${cfSvg(o.f, o.c)}</button>`).join('');
+  sayTask(q.say);
+}
+function cfRender() {
+  const learn = CF.mode === 'learn';
+  cfTabs();
+  $('#cfCard').hidden = $('#cfGrid').hidden = !learn;
+  $('#cfProg').hidden = $('#cfAsk').hidden = $('#cfPlay').hidden = learn;
+  if (learn) { TASK.colfig = null; taskRepUI(); cfLearn(); }
+  else { CF.lv = progStart(cfKey(), 0); CF.ok = 0; cfNew(); }
+}
+START.colfig = () => { CF.mix = []; CF.cur = null; cfRender(); };
+$('#cfWhat').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); CF.what = b.dataset.w; LS.set('cfWhat', CF.what); CF.cur = null; CF.mix = []; cfRender();
+};
+$('#cfMode').onclick = (e) => {
+  const b = e.target.closest('.mtl'); if (!b) return;
+  blip(); CF.mode = b.dataset.m; LS.set('cfMode', CF.mode); cfRender();
+};
+$('#cfGrid').onclick = (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.mix) { blip(); CF.mix = []; CF.cur = null; cfLearn(); return; }
+  const it = cfItems()[+b.dataset.i]; if (!it) return;
+  CF.cur = it; $$('#cfGrid button').forEach((x) => x.classList.toggle('on', x === b));
+  cfCard(); ac(); say(it.name);
+};
+$('#cfCard').onclick = () => { if (CF.cur) { ac(); say(CF.cur.name); } };
+$('#cfAns').onclick = (e) => {
+  const b = e.target.closest('.cfo'); if (!b || CF.busy) return;
+  if (b.dataset.k === CF.q.key) {
+    CF.busy = true; b.classList.add('ok'); cheer(); vibe(40);
+    say('Так!');
+    if (++CF.ok >= CF_NEED) {           // 5 правильних - зірочка й наступний рівень
+      addStar(); confetti(); CF.ok = 0;
+      if (CF.lv < 2) { CF.lv++; progSave(cfKey(), CF.lv); toast(`⭐ ${T('Рівень')} ${CF.lv + 1}`); }
+    }
+    afterSay(() => { if (SCR === 'colfig' && CF.mode === 'find') cfNew(); }, 1200);
   } else {
     b.classList.add('no'); oops(); vibe(120); say('Спробуй ще');
     setTimeout(() => b.classList.remove('no'), 500);
@@ -7944,6 +8171,8 @@ function stLevel(k) {
     if (PG_RANGE[k]) return PROG[k] == null ? '' : of(PROG[k], PG_RANGE[k][0], PG_RANGE[k][1]);
     switch (k) {
       case 'melody': return PROG.melody ? `🎵 ${PROG.melody - 1}` : '';
+      case 'colfig': { const v = ['cf_col', 'cf_form', 'cf_both'].map((x) => (PROG[x] == null ? 0 : PROG[x] + 1));
+        return v.some(Boolean) ? `🎨${v[0] || '–'} 🔷${v[1] || '–'} 🌈${v[2] || '–'}` : ''; }
       case 'catch': case 'bubbles': case 'mole': case 'freeze': return best(PROG[k]);
       case 'piano': return PROG.piano ? `🎹 ${PROG.piano}/4` : '';
       case 'pitch': return of(LS.get('ptLv', 1), 1, 5);
