@@ -606,6 +606,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 /* ігри для старших (10–18) - позначка віку на плитці */
 .tile{position:relative}
 .tile .age{position:absolute;top:5px;right:6px;font-size:10.5px;font-weight:900;line-height:1;padding:3px 6px;border-radius:8px;background:#111217d0;color:#fff}
+.tile .age.teen{background:#ffd93d;color:#111217}   /* 10+ - помітніше: для старших */
 /* ---------- тетріс ---------- */
 .tet-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;flex:1;min-height:0}
 #s-tetris{padding:0 4px 4px}
@@ -895,65 +896,65 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
   </div>
   <div class="pages" id="pages">
     <div class="page" data-grp="Логіка"><p class="gdesc">🧩 <b>Логіка</b> — думати наперед і робити висновки</p><div class="menu">
-      <button class="tile t10" data-go="ttt"><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
-      <button class="tile t11" data-go="mines"><span class="em">💣</span><span class="nm">Сапер</span></button>
-      <button class="tile t25" data-go="seq"><span class="em">🔷</span><span class="nm">Що<br>далі?</span></button>
-      <button class="tile t26" data-go="maze"><span class="em">🐭</span><span class="nm">Лабіринт</span></button>
-      <button class="tile t27" data-go="sort"><span class="em">🧺</span><span class="nm">Розсортуй</span></button>
-      <button class="tile t28" data-go="puzzle"><span class="em">🔲</span><span class="nm">Пʼятнашки</span></button>
-      <button class="tile t29" data-go="jigsaw"><span class="em">🖼️</span><span class="nm">Пазли</span></button>
-      <button class="tile t39" data-go="tetris"><span class="em">🧱</span><span class="nm">Тетріс</span></button>
+      <button class="tile t10" data-go="ttt"><span class="age">5+</span><span class="em">⭕</span><span class="nm">Хрестики-<br>нулики</span></button>
+      <button class="tile t11" data-go="mines"><span class="age">7+</span><span class="em">💣</span><span class="nm">Сапер</span></button>
+      <button class="tile t25" data-go="seq"><span class="age">4+</span><span class="em">🔷</span><span class="nm">Що<br>далі?</span></button>
+      <button class="tile t26" data-go="maze"><span class="age">4+</span><span class="em">🐭</span><span class="nm">Лабіринт</span></button>
+      <button class="tile t27" data-go="sort"><span class="age">4+</span><span class="em">🧺</span><span class="nm">Розсортуй</span></button>
+      <button class="tile t28" data-go="puzzle"><span class="age">6+</span><span class="em">🔲</span><span class="nm">Пʼятнашки</span></button>
+      <button class="tile t29" data-go="jigsaw"><span class="age">4+</span><span class="em">🖼️</span><span class="nm">Пазли</span></button>
+      <button class="tile t39" data-go="tetris"><span class="age">5+</span><span class="em">🧱</span><span class="nm">Тетріс</span></button>
     </div></div>
     <div class="page" data-grp="Увага"><p class="gdesc">👀 <b>Увага</b> — помічати колір, форму, зайве й відсутнє</p><div class="menu">
-      <button class="tile t7" data-go="shape"><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
-      <button class="tile t8" data-go="odd"><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
-      <button class="tile t12" data-go="gone"><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
-      <button class="tile t33" data-go="shadow"><span class="em">👤</span><span class="nm">Чия<br>тінь?</span></button>
-      <button class="tile t34" data-go="findall"><span class="em">🔎</span><span class="nm">Знайди<br>всіх</span></button>
-      <button class="tile t40" data-go="diff"><span class="em">🪞</span><span class="nm">Знайди<br>відмінність</span></button>
-      <button class="tile t41" data-go="same"><span class="em">🎯</span><span class="nm">Такий<br>самий</span></button>
-      <button class="tile t42" data-go="schulte"><span class="em">🔢</span><span class="nm">Числа по<br>порядку</span></button>
+      <button class="tile t7" data-go="shape"><span class="age">4+</span><span class="em">🎨</span><span class="nm">Колір<br>і форма</span></button>
+      <button class="tile t8" data-go="odd"><span class="age">4+</span><span class="em">🧩</span><span class="nm">Що<br>зайве?</span></button>
+      <button class="tile t12" data-go="gone"><span class="age">4+</span><span class="em">🔍</span><span class="nm">Що<br>зникло?</span></button>
+      <button class="tile t33" data-go="shadow"><span class="age">4+</span><span class="em">👤</span><span class="nm">Чия<br>тінь?</span></button>
+      <button class="tile t34" data-go="findall"><span class="age">4+</span><span class="em">🔎</span><span class="nm">Знайди<br>всіх</span></button>
+      <button class="tile t40" data-go="diff"><span class="age">5+</span><span class="em">🪞</span><span class="nm">Знайди<br>відмінність</span></button>
+      <button class="tile t41" data-go="same"><span class="age">5+</span><span class="em">🎯</span><span class="nm">Такий<br>самий</span></button>
+      <button class="tile t42" data-go="schulte"><span class="age">6+</span><span class="em">🔢</span><span class="nm">Числа по<br>порядку</span></button>
     </div></div>
     <div class="page" data-grp="Слух"><p class="gdesc">👂 <b>Слух</b> — розрізняти звуки й запамʼятовувати почуте</p><div class="menu">
-      <button class="tile t5" data-go="animal"><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
-      <button class="tile t1" data-go="melody"><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
-      <button class="tile t16" data-go="spairs"><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
-      <button class="tile t31" data-go="pitch"><span class="em">🎼</span><span class="nm">Високо<br>чи низько?</span></button>
-      <button class="tile t43" data-go="piano"><span class="em">🎹</span><span class="nm">Піаніно</span></button>
-      <button class="tile t44" data-go="rhythm"><span class="em">🥁</span><span class="nm">Повтори<br>ритм</span></button>
-      <button class="tile t45" data-go="freeze"><span class="em">🧊</span><span class="nm">Музична<br>заморозка</span></button>
-      <button class="tile t46" data-go="treasure"><span class="em">💎</span><span class="nm">Скарб<br>на слух</span></button>
+      <button class="tile t5" data-go="animal"><span class="age">3+</span><span class="em">🐮</span><span class="nm">Хто як<br>говорить</span></button>
+      <button class="tile t1" data-go="melody"><span class="age">4+</span><span class="em">🎵</span><span class="nm">Повтори<br>мелодію</span></button>
+      <button class="tile t16" data-go="spairs"><span class="age">4+</span><span class="em">🎧</span><span class="nm">Звукові<br>пари</span></button>
+      <button class="tile t31" data-go="pitch"><span class="age">5+</span><span class="em">🎼</span><span class="nm">Високо<br>чи низько?</span></button>
+      <button class="tile t43" data-go="piano"><span class="age">4+</span><span class="em">🎹</span><span class="nm">Піаніно</span></button>
+      <button class="tile t44" data-go="rhythm"><span class="age">5+</span><span class="em">🥁</span><span class="nm">Повтори<br>ритм</span></button>
+      <button class="tile t45" data-go="freeze"><span class="age">4+</span><span class="em">🧊</span><span class="nm">Музична<br>заморозка</span></button>
+      <button class="tile t46" data-go="treasure"><span class="age">5+</span><span class="em">💎</span><span class="nm">Скарб<br>на слух</span></button>
     </div></div>
     <div class="page" data-grp="Памʼять"><p class="gdesc">🧠 <b>Памʼять</b> — запамʼятати, де що лежить і як стояло</p><div class="menu">
-      <button class="tile t2" data-go="memory"><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
-      <button class="tile t13" data-go="hide"><span class="em">🏠</span><span class="nm">Хто<br>сховався?</span></button>
-      <button class="tile t14" data-go="grid"><span class="em">🟩</span><span class="nm">Повтори<br>візерунок</span></button>
-      <button class="tile t15" data-go="basket"><span class="em">🧺</span><span class="nm">Що<br>в кошику?</span></button>
-      <button class="tile t17" data-go="order"><span class="em">🚂</span><span class="nm">Як<br>стояли?</span></button>
-      <button class="tile t35" data-go="digits"><span class="em">📞</span><span class="nm">Запамʼятай<br>числа</span></button>
-      <button class="tile t47" data-go="where"><span class="age">10+</span><span class="em">🗺️</span><span class="nm">Де що<br>лежало</span></button>
-      <button class="tile t48" data-go="words"><span class="age">10+</span><span class="em">📝</span><span class="nm">Список<br>слів</span></button>
+      <button class="tile t2" data-go="memory"><span class="age">4+</span><span class="em">🃏</span><span class="nm">Знайди<br>пару</span></button>
+      <button class="tile t13" data-go="hide"><span class="age">4+</span><span class="em">🏠</span><span class="nm">Хто<br>сховався?</span></button>
+      <button class="tile t14" data-go="grid"><span class="age">5+</span><span class="em">🟩</span><span class="nm">Повтори<br>візерунок</span></button>
+      <button class="tile t15" data-go="basket"><span class="age">4+</span><span class="em">🧺</span><span class="nm">Що<br>в кошику?</span></button>
+      <button class="tile t17" data-go="order"><span class="age">5+</span><span class="em">🚂</span><span class="nm">Як<br>стояли?</span></button>
+      <button class="tile t35" data-go="digits"><span class="age">6+</span><span class="em">📞</span><span class="nm">Запамʼятай<br>числа</span></button>
+      <button class="tile t47" data-go="where"><span class="age teen">10+</span><span class="em">🗺️</span><span class="nm">Де що<br>лежало</span></button>
+      <button class="tile t48" data-go="words"><span class="age teen">10+</span><span class="em">📝</span><span class="nm">Список<br>слів</span></button>
     </div></div>
     <div class="page" data-grp="Числа"><p class="gdesc">🔢 <b>Числа</b> — рахувати, додавати й множити</p><div class="menu">
-      <button class="tile t3" data-go="count"><span class="em">🔢</span><span class="nm">Скільки?</span></button>
-      <button class="tile t21" data-go="math"><span class="em">🧮</span><span class="nm">Рахуємо</span></button>
-      <button class="tile t22" data-go="times"><span class="em">✖️</span><span class="nm">Таблиця<br>множення</span></button>
-      <button class="tile t24" data-go="nums"><span class="em">🔟</span><span class="nm">Цифри<br>й числа</span></button>
+      <button class="tile t3" data-go="count"><span class="age">4+</span><span class="em">🔢</span><span class="nm">Скільки?</span></button>
+      <button class="tile t21" data-go="math"><span class="age">5+</span><span class="em">🧮</span><span class="nm">Рахуємо</span></button>
+      <button class="tile t22" data-go="times"><span class="age">7+</span><span class="em">✖️</span><span class="nm">Таблиця<br>множення</span></button>
+      <button class="tile t24" data-go="nums"><span class="age">4+</span><span class="em">🔟</span><span class="nm">Цифри<br>й числа</span></button>
     </div></div>
     <div class="page" data-grp="Букви"><p class="gdesc">🔤 <b>Букви</b> — упізнавати букви, кольори й фігури</p><div class="menu">
-      <button class="tile t4" data-go="letter"><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
-      <button class="tile t23" data-go="alpha"><span class="em">🔠</span><span class="nm">Абетка</span></button>
-      <button class="tile t49" data-go="colfig"><span class="em">🌈</span><span class="nm">Кольори<br>й фігури</span></button>
+      <button class="tile t4" data-go="letter"><span class="age">5+</span><span class="em">🔤</span><span class="nm">Перша<br>буква</span></button>
+      <button class="tile t23" data-go="alpha"><span class="age">5+</span><span class="em">🔠</span><span class="nm">Абетка</span></button>
+      <button class="tile t49" data-go="colfig"><span class="age">3+</span><span class="em">🌈</span><span class="nm">Кольори<br>й фігури</span></button>
     </div></div>
     <div class="page" data-grp="Швидкість"><p class="gdesc">⚡ <b>Швидкість</b> — реакція й точність рухів</p><div class="menu">
-      <button class="tile t9" data-go="arcade"><span class="em">🚀</span><span class="nm">Зореліт</span></button>
-      <button class="tile t18" data-go="brick"><span class="em">🧱</span><span class="nm">Відбивайка</span></button>
-      <button class="tile t19" data-go="dino"><span class="em">🦖</span><span class="nm">Динозаврик</span></button>
-      <button class="tile t6" data-go="snake"><span class="em">🐍</span><span class="nm">Змійка</span></button>
-      <button class="tile t20" data-go="jump"><span class="em">🐸</span><span class="nm">Стрибунець</span></button>
-      <button class="tile t36" data-go="catch"><span class="em">⭐</span><span class="nm">Лови<br>зірочки</span></button>
-      <button class="tile t37" data-go="bubbles"><span class="em">🫧</span><span class="nm">Бульбашки</span></button>
-      <button class="tile t38" data-go="mole"><span class="em">🐹</span><span class="nm">Хто<br>виглянув?</span></button>
+      <button class="tile t9" data-go="arcade"><span class="age">6+</span><span class="em">🚀</span><span class="nm">Зореліт</span></button>
+      <button class="tile t18" data-go="brick"><span class="age">5+</span><span class="em">🧱</span><span class="nm">Відбивайка</span></button>
+      <button class="tile t19" data-go="dino"><span class="age">4+</span><span class="em">🦖</span><span class="nm">Динозаврик</span></button>
+      <button class="tile t6" data-go="snake"><span class="age">5+</span><span class="em">🐍</span><span class="nm">Змійка</span></button>
+      <button class="tile t20" data-go="jump"><span class="age">5+</span><span class="em">🐸</span><span class="nm">Стрибунець</span></button>
+      <button class="tile t36" data-go="catch"><span class="age">4+</span><span class="em">⭐</span><span class="nm">Лови<br>зірочки</span></button>
+      <button class="tile t37" data-go="bubbles"><span class="age">3+</span><span class="em">🫧</span><span class="nm">Бульбашки</span></button>
+      <button class="tile t38" data-go="mole"><span class="age">4+</span><span class="em">🐹</span><span class="nm">Хто<br>виглянув?</span></button>
     </div></div>
   </div>
   <p class="menu-note">Обирай гру й грай. Зірочки збираються в альбом наліпок ⭐</p>
@@ -1444,7 +1445,7 @@ body:has(#s-jigsaw.on) .top .stars{min-height:40px;padding:4px 12px;border-radiu
 
 <script>
 'use strict';
-const APP_VERSION = '1.9.9';
+const APP_VERSION = '1.9.10';
 const ICON_EXIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 21H5.5A2.5 2.5 0 0 1 3 18.5v-13A2.5 2.5 0 0 1 5.5 3h4"/><path d="M16 16.5l4.5-4.5L16 7.5"/><path d="M20.5 12H9.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Заголовок у стилі WordHunter: «EnergyUA» сірим, «Junior» синім, перед ним - блискавка каналу */

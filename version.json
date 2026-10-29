@@ -1,7 +1,8 @@
 {
-  "version": "1.9.9",
+  "version": "1.9.10",
   "date": "2026-10-29",
   "changes": [
+    "На кожній плитці меню — маленький значок орієнтовного віку (3+ … 10+); «10+» — жовтий",
     "Нова гра 🌈 «Кольори й фігури» (група «Букви»): окремо 🎨 кольори, окремо 🔷 фігури і 🌈 разом; 👀 Вчимо — торкнись, і голос назве; 🎯 Знайди — завдання голосом, 3 рівні в кожному розділі",
     "Кнопка «🔊 Повторити» внизу 19 ігор, де завдання каже голос (Колір і форма, Скільки?, Перша буква, Рахуємо, Таблиця множення, Абетка, Цифри, памʼять і увага…): не почув з першого разу — натисни, і гра скаже завдання ще раз",
     "Торкання тексту завдання теж повторює саме завдання, а не «Спробуй ще»",
@@ -48,6 +49,7 @@
     "Зірочки за складені ряди, рекорд запамʼятовується"
   ],
   "changes_ro": [
+    "Pe fiecare joc din meniu — o mică etichetă cu vârsta recomandată (3+ … 10+); „10+” e galbenă",
     "Joc nou 🌈 „Culori și forme” (grupa „Litere”): separat 🎨 culori, separat 🔷 forme și 🌈 împreună; 👀 Învățăm — atinge și vocea spune numele; 🎯 Găsește — sarcina e spusă cu voce, 3 niveluri",
     "Butonul „🔊 Repetă” jos în 19 jocuri în care sarcina e spusă cu voce: dacă n-ai auzit prima dată — apasă, și jocul repetă sarcina",
     "Atingerea textului sarcinii repetă chiar sarcina, nu „Mai încearcă”",
@@ -94,6 +96,7 @@
     "Steluțe pentru rânduri, recordul se păstrează"
   ],
   "changes_en": [
+    "Every menu tile now has a small age badge (3+ … 10+); “10+” is yellow",
     "New game 🌈 “Colours and shapes” (Letters group): 🎨 colours, 🔷 shapes and 🌈 both; 👀 Learn — tap and the voice names it; 🎯 Find — spoken task, 3 levels in each part",
     "“🔊 Repeat” button at the bottom of 19 games where the task is spoken: missed it the first time — tap, and the game says the task again",
     "Tapping the task text now repeats the task itself, not “Try again”",
