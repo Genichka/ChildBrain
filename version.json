@@ -1,22 +1,13 @@
 {
-  "version": "1.9.12",
-  "date": "2026-11-04",
+  "version": "1.10.0",
+  "date": "2026-11-06",
   "changes": [
-    "Вікно оновлення більше не вилазить за екран: список змін прокручується, кнопки «Оновити» і «Пізніше» завжди видно",
-    "🎂 При вході гра питає, скільки дитині рочків, і підказує ігри під вік",
-    "🌈 Нова гра «Кольори й фігури»; на кожній грі — значок віку",
-    "🔊 Кнопка «Повторити» завдання в 19 іграх"
+    "📱 На головній — QR-код: наведи камеру іншого телефона, і гра відкриється там; під кодом — посилання"
   ],
   "changes_ro": [
-    "Fereastra de actualizare nu mai iese din ecran: lista se derulează, butoanele «Actualizează» și «Mai târziu» se văd mereu",
-    "🎂 La intrare jocul întreabă câți anișori are copilul și arată jocurile potrivite vârstei",
-    "🌈 Joc nou «Culori și forme»; pe fiecare joc — eticheta de vârstă",
-    "🔊 Butonul «Repetă» sarcina în 19 jocuri"
+    "📱 Pe ecranul principal — cod QR: îndreaptă camera altui telefon și jocul se deschide acolo; sub cod — linkul"
   ],
   "changes_en": [
-    "The update window no longer runs off the screen: the list scrolls, and the Update and Later buttons are always visible",
-    "🎂 On start the game asks the child's age and highlights games for that age",
-    "🌈 New game “Colours and shapes”; an age badge on every game",
-    "🔊 “Repeat” task button in 19 games"
+    "📱 QR code on the main screen: point another phone's camera at it and the game opens there; the link is right below"
   ]
 }
