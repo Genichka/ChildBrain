@@ -135,7 +135,7 @@
   дрібне тремтіння висоти й шум-придих. У «няв» форманти їдуть від «і» до «ау» — саме цей переїзд і впізнається як кіт,
   а бекання вівці та іржання тримаються на частому тремтінні гучності.
 - **Голос читає кожне завдання** — «Знайди синю зірку», «Скільки тут яблук?», «Де котик?». Дитина 4 років ще не читає, тож
-  усі фрази гри (530 записів; довгі завдання гра складає з них, як зі слів) наперед записані українським голосом і лежать поруч із грою в одному файлі `voice.pack` — звучать на будь-якому
+  усі фрази гри (834 записи; довгі завдання гра складає з них, як зі слів) наперед записані українським голосом і лежать поруч із грою в одному файлі `voice.pack` — звучать на будь-якому
   телефоні, навіть без українського голосу в налаштуваннях і без інтернету. **Торкнись тексту завдання — гра скаже його ще раз.**
 - **Помилок не існує.** Неправильна відповідь — це мʼяке «спробуй ще», без втрати балів і без «Game over».
 - **Зірочки ⭐** за кожне виконане завдання. П'ять зірочок — нова наліпка в альбом (усього 20).
@@ -174,12 +174,12 @@
 ## Голос завдань
 
 Записано синтезатором [ukrainian-tts](https://github.com/robinhad/ukrainian-tts) (голос «Тетяна»), повністю офлайн,
-з перевіркою наголосів. Усі фрази — mp3 підряд в одному файлі `voice.pack` (один файл легко залити й з телефона);
+з перевіркою наголосів (у 1.10.1 наголоси нових фраз поставлено вручну). Усі фрази — mp3 підряд в одному файлі `voice.pack` (один файл легко залити й з телефона);
 де яка фраза лежить, записано в самій грі (`VOICE_IDX`: відбиток тексту → зсув і довжина). Грає через Web Audio —
 той самий звуковий движок, що й ефекти гри, тож браузер його не блокує.
 Для фрази, якої немає в записах, гра бере український голос телефона, якщо він є.
 
-Перевірити: батьківський куточок → там написано «Голос: записаний (530 фраз) — ✅ завантажено».
+Перевірити: батьківський куточок → там написано «Голос: записаний (834 фрази) — ✅ завантажено».
 Якщо там ❌ — файлу `voice.pack` немає поруч з `index.html` у репозиторії.
 
 - Код ukrainian-tts — MIT, © 2021 Yurii Paniv; навчання моделі — Yurii Paniv.
@@ -187,7 +187,7 @@
 - Наголоси — [ukrainian-word-stress](https://github.com/lang-uk/ukrainian-word-stress) (MIT, lang-uk) і
   [ukrainian-accentor](https://github.com/egorsmkv/ukrainian-accentor) (MIT, Bohdan Mykhailenko, Yehor Smoliakov).
 
-Офлайн-кеш (`sw.js`) зберігає `voice.pack` (~4 МБ) при першому відкритті гри.
+Офлайн-кеш (`sw.js`) зберігає `voice.pack` (~6 МБ) при першому відкритті гри.
 
 ## Заставка
 
@@ -245,37 +245,37 @@
 | 🐦 соловей | [Common Nightingale #2](https://bigsoundbank.com/common-nightingale-2-s3087.html) | `nightingale.mp3` |
 | 🪰 муха | [Fly and Glass](https://bigsoundbank.com/fly-and-glass-s0759.html) | `fly.mp3` |
 
-### Ще 22 — дикі тварини (з 1.1.0)
+### Ще 22 — дикі тварини (з 1.1.0; у 1.10.1 одинадцять замінено)
 
 Диких тварин на BigSoundBank немає, тож вони звідси:
 
 - **Служба національних парків США (NPS)** і **U.S. Fish & Wildlife Service** — роботи федерального уряду США, **суспільне надбання**;
-- **[SoundBible.com](https://soundbible.com)** — або суспільне надбання, або **CC BY 3.0**. Для CC BY автора *обовʼязково* вказати — тому в грі, на екрані «🎤 Свої голоси», внизу є подяка авторам.
+- **[Wikimedia Commons](https://commons.wikimedia.org)** (з 1.10.1, замість SoundBible.com, який перестав віддавати файли) — суспільне надбання, CC0, а частина під **CC BY / CC BY-SA**. Для CC BY автора *обовʼязково* вказати — тому в грі, на екрані «🎤 Свої голоси», внизу є подяка авторам. Wikimedia дозволяє грі читати звук напряму, тож тихі записи гра підсилює, а грає з того місця, де звучить сама тварина (поле `t0`), а не з тиші на початку файлу.
 
 | Тварина | Запис | Автор · ліцензія | Файл у `sounds/` |
 |---|---|---|---|
-| 🐻 ведмідь | [запис](https://soundbible.com/241) | U.S. Fish & Wildlife Service · public domain | `bear.mp3` |
+| 🐻 ведмідь | [Grizzly Bears Roar](https://commons.wikimedia.org/wiki/File:Yellowstone_sound_library_-_Grizzly_Bears_Roar_-_001.mp3) | NPS & MSU Acoustic Atlas / Jennifer Jerrett · public domain | `bear.mp3` |
 | 🦊 лисиця | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLMJ23200837redfox.mp3) | NPS / Shan Burson · public domain | `fox.mp3` |
 | 🐿️ білка | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLSGYredsquirrel2004320.mp3) | NPS / Shan Burson · public domain | `squirrel.mp3` |
-| 🦁 лев | [запис](https://soundbible.com/1272) | Mike Koenig, SoundBible.com · CC BY 3.0 | `lion.mp3` |
-| 🐘 слон | [запис](https://soundbible.com/1136) | Mike Koenig, SoundBible.com · CC BY 3.0 | `elephant.mp3` |
-| 🐒 мавпа | [запис](https://soundbible.com/1188) | Mike Koenig, SoundBible.com · CC BY 3.0 | `monkey.mp3` |
-| 🐯 тигр | [запис](https://soundbible.com/1485) | Mike Koenig, SoundBible.com · CC BY 3.0 | `tiger.mp3` |
+| 🦁 лев | [Lion roaring](https://commons.wikimedia.org/wiki/File:Lion_raring-sound1TamilNadu178.ogg) | Wikimedia Commons · public domain | `lion.mp3` |
+| 🐘 слон | [Elephant trumpeting](https://commons.wikimedia.org/wiki/File:Elephant_voice_-_trumpeting.ogg) | Wikimedia Commons · CC0 | `elephant.mp3` |
+| 🐒 мавпа | [Chimpanzee pant-hoot](https://commons.wikimedia.org/wiki/File:Pant-hoot_call_made_by_a_male_chimpanzee.ogg) | Pawel Fedurek et al. · CC BY 4.0 | `monkey.mp3` |
+| 🐯 тигр | [Tiger](https://commons.wikimedia.org/wiki/File:Tiger_Mad.ogg), запасний — [angry tiger](https://commons.wikimedia.org/wiki/File:439280_schots_angry-tiger.wav) | Bilberryerer · CC BY-SA 4.0; schots · CC0 | `tiger.mp3` |
 | 🪿 гусак | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-CanadaGoose.mp3) | NPS · public domain | `goose.mp3` |
 | 🦃 індик | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/romo-WITUROMO5192016AlluvialFan.mp3) | NPS Rocky Mountain / J. Job | `turkey.mp3` |
-| 🕊️ голуб | [запис](https://soundbible.com/1850) | Mike Koenig, SoundBible.com · CC BY 3.0 | `dove.mp3` |
-| 🦟 комар | [запис](https://soundbible.com/398) | Mike Koenig, SoundBible.com · CC BY 3.0 | `mosquito.mp3` |
+| 🕊️ голуб | [Dove cooing](https://commons.wikimedia.org/wiki/File:Dove_cooing.ogg) | Wikimedia Commons · public domain | `dove.mp3` |
+| 🦟 комар | [Mosquito attack](https://commons.wikimedia.org/wiki/File:Mosquito_attack.ogg) | Yesthatbruce · CC0 | `mosquito.mp3` |
 | 🦌 олень | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-ElkBuglingGRSA.mp3) | NPS · public domain | `deer.mp3` |
 | 🦅 орел | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-BaldEagleYELL.mp3) | NPS · public domain | `eagle.mp3` |
-| 🦢 лебідь | [запис](https://soundbible.com/275) | U.S. Fish & Wildlife Service · public domain | `swan.mp3` |
+| 🦢 лебідь | [Trumpeter Swan](https://commons.wikimedia.org/wiki/File:Cygnus_buccinator_-_Trumpeter_Swan_XC96531.mp3) | Jonathon Jongsma (xeno-canto) · CC BY-SA 3.0 | `swan.mp3` |
 | 🐳 кит | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-HumpbackGLBA.mp3) | NPS Glacier Bay · public domain | `whale.mp3` |
-| 🦭 тюлень | [запис](https://soundbible.com/142) | Mike Koenig, SoundBible.com · CC BY 3.0 | `seal.mp3` |
+| 🦭 тюлень | [запис](https://www.nps.gov/nps-audiovideo/audiovideo/c014d5aa-ed06-4d04-9f12-517fd2041065.mp3) | NPS · public domain | `seal.mp3` |
 | 🐊 крокодил | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-AlligatorEVER1.mp3) | NPS Everglades · public domain | `crocodile.mp3` |
-| 🐍 змія | [запис](https://soundbible.com/237) | U.S. Fish & Wildlife Service · public domain | `snake.mp3` |
-| 🦍 горила | [запис](https://soundbible.com/1149) | SoundBible.com · public domain | `gorilla.mp3` |
+| 🐍 змія | [Rattlesnake](https://commons.wikimedia.org/wiki/File:Rattlesnake.ogg) | Wikimedia Commons · public domain | `snake.mp3` |
+| 🐺 вовк | [Wolf howls](https://commons.wikimedia.org/wiki/File:Wolf_howls.ogg) | Wikimedia Commons · public domain | `wolf.mp3` |
 | 🦬 зубр | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/imr/avElement/yell-YELLMM8K2005914Bison.mp3) | NPS / Shan Burson · public domain | `bison.mp3` |
 | 🦇 кажан | [запис](https://www.nps.gov/nps-audiovideo/legacy/mp3/nri/avElement/nri-SpottedBatYOSE.mp3) | NPS Yosemite · public domain | `bat.mp3` |
-| 🦚 павич | [запис](https://soundbible.com/1430) | Caroline Ford, SoundBible.com · CC BY 3.0 | `peacock.mp3` |
+| 🦚 павич | [Pavo cristatus call](https://commons.wikimedia.org/wiki/File:Pavo_cristatus_(call).ogg), запасний — [Indian Peafowl](https://commons.wikimedia.org/wiki/File:Indian_Peafowl.ogg) | Wikimedia Commons · public domain | `peacock.mp3` |
 
 У кожної дикої тварини є ще й запасна адреса (крім кількох): якщо головна не відповідає — гра пробує другу, а вже потім синтез.
 
@@ -288,8 +288,9 @@
 Схожі на слух не стоять в одному завданні: лев і тигр, ведмідь і горила, комар і муха,
 гусак і лебідь, зубр і корова тощо.
 
-🐷 **Свинки** й 🐺 **вовка** серед вільних записів немає (є лише людська імітація свині),
-тож вони лишаються синтезованими.
+🐷 **Свинки** серед вільних записів немає (є лише людська імітація), тож вона синтезована.
+🐺 **Вовк** з 1.10.1 — справжнє виття (синтез лишився запасним). 🦍 **Горили** вільного запису
+не знайшлося — у грі її немає, доки батьки не запишуть свій голос («🎤 Свої голоси»).
 
 Звуки, які дитина на слух не розрізнить (бджілка й муха, мишка й курча, соловей
 і папуга), в одному завданні не випадають. Тварин, чий емодзі старий телефон не
@@ -304,10 +305,12 @@
 1. **Свій запис** батьків. Батьківський куточок → **🎤 Свої голоси** → біля тварини 🎤,
    сказати в мікрофон (до 4 с). Лежить лише на цьому пристрої.
 2. **Файл у папці `sounds/`** поруч із грою. Працює **без інтернету**.
-3. **Той самий запис з інтернету** — напряму з BigSoundBank, NPS чи SoundBible. Працює одразу, нічого
+3. **Той самий запис з інтернету** — напряму з BigSoundBank, NPS чи Wikimedia Commons. Працює одразу, нічого
    класти не треба, але потрібен інтернет.
 4. **Синтез.** Якщо нічого з переліченого не вийшло — або запис не почав грати
-   за 2,5 секунди — гра синтезує звук сама.
+   за 2,5 секунди — гра синтезує звук сама (є для дванадцяти свійських тварин).
+5. **Голос.** Для решти записаний голос «Тетяна» вимовляє, як тварина говорить: «угу-угу», «га-га-га».
+   До 1.10.1 ці слова не були записані — і без українського голосу в телефоні тварина мовчала.
 
 ### Щоб звуки працювали й офлайн
 
@@ -321,10 +324,10 @@ powershell -ExecutionPolicy Bypass -File .\get-sounds.ps1
 ## Технічне
 
 - Один файл `index.html` — уся гра всередині, без бібліотек.
-- Мелодії, ефекти й голоси свинки та вовка синтезуються через Web Audio API. Решта тварин — справжні записи (див. вище).
+- Мелодії, ефекти й голос свинки синтезуються через Web Audio API. Решта тварин — справжні записи (див. вище).
 - PWA: можна додати на головний екран і грати в літаку (`sw.js` кешує оболонку).
 - Прогрес (зірочки, наліпки, рекорди й швидкість у змійці та тетрісі, свої записи, мова) зберігається в `localStorage` лише на цьому пристрої.
-- Запити в мережу: перевірка `sounds/cow.mp3` при вході в «Хто як говорить» (немає папки — у консолі буде 404, це нормально), записи тварин з BigSoundBank, nps.gov і soundbible.com, якщо папки `sounds/` немає, і кнопка «Оновити» в батьківському куточку.
+- Запити в мережу: перевірка `sounds/cow.mp3` при вході в «Хто як говорить» (немає папки — у консолі буде 404, це нормально), записи тварин з BigSoundBank, nps.gov і upload.wikimedia.org, якщо папки `sounds/` немає, і кнопка «Оновити» в батьківському куточку.
 
 ### Файли
 
@@ -336,7 +339,7 @@ version.json               номер найновішої версії й що 
 icon-192.png
 icon-512.png
 icon-maskable-512.png
-voice.pack                 записаний голос завдань (530 фраз в одному файлі)
+voice.pack                 записаний голос завдань (834 фрази в одному файлі)
 energyua-logo.svg          логотип каналу EnergyUA
 get-sounds.ps1             скрипт, що завантажує справжні записи тварин у sounds/
 sounds/                    необовʼязково — справжні записи тварин
@@ -351,6 +354,14 @@ sounds/                    необовʼязково — справжні за�
 ---
 
 ## Що нового
+
+### 1.10.1 — голос у «Кольорах і фігурах», звуки тварин
+
+- **🌈 Кольори й фігури:** гра мовчала — жодна назва кольору, фігури чи завдання («Знайди синій колір», «Знайди рожевий овал») не була записана, і гра чекала на український голос телефона, якого здебільшого немає. Тепер записано все: 12 кольорів, 8 фігур, 96 кольорових фігур і всі завдання — той самий голос «Тетяна».
+- **Голос і в інших місцях:** торт 🎂 («Привіт! Скільки тобі рочків?», «Тобі пʼять рочків!», «Ось ігри саме для тебе!»), 40 слів абетки (акула, апельсин, автобус…), «Яка буква пропущена?», «Яке число пропущене?», «Знайди відмінність», «Знайди такий самий ряд», «Бос переможений!». У `voice.pack` тепер 834 фрази.
+- **🐾 Хто як говорить і 🎧 Звукові пари:** одинадцять тварин мовчали — SoundBible.com перестав віддавати файли (ведмідь, лев, слон, мавпа, тигр, голуб, комар, лебідь, змія, горила, павич). Десять отримали справжні записи з Wikimedia Commons; гра грає саме голос тварини (пропускає тишу на початку файлу) і вирівнює гучність. 🐺 Вовк тепер справжній, а не синтезований. 🦍 Горилу, для якої вільного запису немає, гра не показує, доки батьки не запишуть свій голос.
+- **Ніколи не мовчить:** якщо запис тварини не завантажився, голос вимовляє, як вона говорить («мууу», «угу-угу») — усі 42 звуконаслідування записані.
+- Прибрано мертві запасні адреси — раніше кожна давала 2,5 с тиші, поки гра не перейде до наступної.
 
 ### 1.9.12 — вікно оновлення завжди вміщається
 

@@ -1,13 +1,20 @@
 {
-  "version": "1.10.0",
-  "date": "2026-11-06",
+  "version": "1.10.1",
+  "date": "2026-11-19",
   "changes": [
-    "📱 На головній — QR-код: наведи камеру іншого телефона, і гра відкриється там; під кодом — посилання"
+    "🌈 Кольори й фігури тепер говорять: записано всі кольори, фігури й завдання",
+    "🎂 Голос у торті, 40 слів абетки й завдання «Знайди відмінність», «Яке число пропущене?»",
+    "🐾 Хто як говорить: 10 тварин, що мовчали, звучать справжніми записами; 🐺 вовк — справжній",
+    "🔇 Тварина більше не мовчить: якщо запис не завантажився, голос скаже «угу-угу»"
   ],
   "changes_ro": [
-    "📱 Pe ecranul principal — cod QR: îndreaptă camera altui telefon și jocul se deschide acolo; sub cod — linkul"
+    "🌈 Culori și forme vorbesc acum (doar în ucraineană e voce înregistrată)",
+    "🐾 Cine cum vorbește: 10 animale care tăceau au acum înregistrări reale; 🐺 lupul e real",
+    "🔇 Animalul nu mai tace dacă înregistrarea nu s-a încărcat"
   ],
   "changes_en": [
-    "📱 QR code on the main screen: point another phone's camera at it and the game opens there; the link is right below"
+    "🌈 Colours & shapes now talk (recorded voice in Ukrainian)",
+    "🐾 Who says what: 10 silent animals now have real recordings; 🐺 the wolf is real",
+    "🔇 An animal is never silent: if its recording fails, the voice says its sound"
   ]
 }
