@@ -1,20 +1,22 @@
 {
-  "version": "1.10.1",
-  "date": "2026-11-19",
+  "version": "1.11.0",
+  "date": "2026-11-20",
   "changes": [
-    "🌈 Кольори й фігури тепер говорять: записано всі кольори, фігури й завдання",
-    "🎂 Голос у торті, 40 слів абетки й завдання «Знайди відмінність», «Яке число пропущене?»",
-    "🐾 Хто як говорить: 10 тварин, що мовчали, звучать справжніми записами; 🐺 вовк — справжній",
-    "🔇 Тварина більше не мовчить: якщо запис не завантажився, голос скаже «угу-угу»"
+    "📱 Після заставки — картка з QR-кодом і посиланням на гру, «Поділитися посиланням» і група EnergyUA в Telegram; «Пропустити» — одразу до ігор",
+    "📱 Відкрити QR ще раз — кнопка «QR» внизу меню",
+    "🎂 Меню «Скільки тобі рочків?» прибрано — усі ігри однаково яскраві",
+    "🌈 Кольори й фігури тепер говорять: записано всі кольори, фігури й завдання"
   ],
   "changes_ro": [
+    "📱 După intro — card cu cod QR și link spre joc, «Trimite linkul» și grupul EnergyUA pe Telegram; «Sari peste» — direct la jocuri",
+    "🎂 Meniul «Câți anișori ai?» a fost scos — toate jocurile sunt la fel de vii",
     "🌈 Culori și forme vorbesc acum (doar în ucraineană e voce înregistrată)",
-    "🐾 Cine cum vorbește: 10 animale care tăceau au acum înregistrări reale; 🐺 lupul e real",
-    "🔇 Animalul nu mai tace dacă înregistrarea nu s-a încărcat"
+    "🐾 Cine cum vorbește: 10 animale care tăceau au acum înregistrări reale; 🐺 lupul e real"
   ],
   "changes_en": [
+    "📱 After the intro — a card with the QR code and game link, «Share the link» and the EnergyUA group on Telegram; «Skip» goes straight to the games",
+    "🎂 The «How old are you?» menu is gone — all games look equally bright",
     "🌈 Colours & shapes now talk (recorded voice in Ukrainian)",
-    "🐾 Who says what: 10 silent animals now have real recordings; 🐺 the wolf is real",
-    "🔇 An animal is never silent: if its recording fails, the voice says its sound"
+    "🐾 Who says what: 10 silent animals now have real recordings; 🐺 the wolf is real"
   ]
 }
